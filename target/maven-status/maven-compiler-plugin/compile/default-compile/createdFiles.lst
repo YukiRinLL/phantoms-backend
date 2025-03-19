@@ -1,2 +1,5 @@
-com\phantoms\phantomsbackend\controller\PingController.class
-com\phantoms\phantomsbackend\PhantomsBackendApplication.class
+com\phantoms\phantomsbackend\service\UserService.class
+com\phantoms\phantomsbackend\dto\UserDTO.class
+com\phantoms\phantomsbackend\entity\Message.class
+com\phantoms\phantomsbackend\dto\ImageDTO.class
+com\phantoms\phantomsbackend\controller\UserController.class
