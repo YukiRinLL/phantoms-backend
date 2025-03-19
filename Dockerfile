@@ -1,5 +1,5 @@
 # 使用 OpenJDK 作为基础镜像
-FROM openjdk:21-jre
+FROM openjdk:23-jdk-bookworm
 
 # 将 JAR 包复制到容器中
 COPY target/phantoms-backend-1.0-SNAPSHOT.jar /app/phantoms-backend.jar
