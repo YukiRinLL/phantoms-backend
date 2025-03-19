@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="update Dockerfile using JDK 21">
+    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="update Dockerfile using JDK 17">
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -127,7 +127,23 @@
       <option name="project" value="LOCAL" />
       <updated>1742351504957</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="update Dockerfile using JDK 23">
+      <option name="closed" value="true" />
+      <created>1742351696848</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1742351696848</updated>
+    </task>
+    <task id="LOCAL-00005" summary="update Dockerfile using JDK 17">
+      <option name="closed" value="true" />
+      <created>1742351805570</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1742351805570</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -143,8 +159,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />
-    <MESSAGE value="update Dockerfile using JDK 23" />
     <MESSAGE value="update Dockerfile using JDK 21" />
-    <option name="LAST_COMMIT_MESSAGE" value="update Dockerfile using JDK 21" />
+    <MESSAGE value="update Dockerfile using JDK 23" />
+    <MESSAGE value="update Dockerfile using JDK 17" />
+    <option name="LAST_COMMIT_MESSAGE" value="update Dockerfile using JDK 17" />
   </component>
 </project>
