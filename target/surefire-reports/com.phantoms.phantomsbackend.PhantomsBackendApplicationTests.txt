@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.phantoms.phantomsbackend.PhantomsBackendApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.646 s - in com.phantoms.phantomsbackend.PhantomsBackendApplicationTests
