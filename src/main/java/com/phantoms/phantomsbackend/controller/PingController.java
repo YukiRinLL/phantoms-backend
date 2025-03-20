@@ -1,5 +1,10 @@
 package com.phantoms.phantomsbackend.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@Tag(name = "Ping Controller", description = "Provides health check and ping endpoints")
 public class PingController {
 
     @Autowired
@@ -23,6 +29,11 @@ public class PingController {
     private JdbcTemplate jdbcTemplate;
 
     @GetMapping("/ping")
+    @Operation(summary = "Ping endpoint", description = "Returns a simple ping response to check if the server is up.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Ping successful",
+                            content = @Content(schema = @Schema(implementation = Map.class)))
+            })
     public ResponseEntity<Map<String, Object>> ping() {
         Map<String, Object> response = new HashMap<>();
         response.put("status", "UP");
@@ -34,6 +45,11 @@ public class PingController {
     }
 
     @GetMapping("/health")
+    @Operation(summary = "Health check endpoint", description = "Checks the health of the application, including database connectivity.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Health check successful",
+                            content = @Content(schema = @Schema(implementation = Map.class)))
+            })
     public ResponseEntity<Map<String, Object>> healthCheck() {
         Map<String, Object> healthResponse = new HashMap<>();
         healthResponse.put("timestamp", LocalDateTime.now());
@@ -62,6 +78,16 @@ public class PingController {
         return ResponseEntity.ok(healthResponse);
     }
 
+    @GetMapping("/hello")
+    @Operation(summary = "Hello endpoint", description = "Returns a simple hello message.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Hello message",
+                            content = @Content(schema = @Schema(implementation = String.class)))
+            })
+    public String hello() {
+        return "Hello, Phantoms!";
+    }
+
     private Map<String, String> getSystemDetails() {
         Map<String, String> details = new HashMap<>();
         details.put("java.version", System.getProperty("java.version"));
@@ -74,10 +100,5 @@ public class PingController {
         details.put("user.country", System.getProperty("user.country"));
 
         return details;
-    }
-
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello, Phantoms!";
     }
 }

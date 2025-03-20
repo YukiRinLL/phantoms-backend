@@ -10,5 +10,6 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\dto\MessageDTO.ja
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\entity\Image.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\UserController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\dto\UserDTO.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\config\SwaggerConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\PingController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\UserService.java
