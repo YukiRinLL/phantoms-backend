@@ -1,7 +1,7 @@
 package com.phantoms.phantomsbackend.service.impl;
 
-import com.phantoms.phantomsbackend.dto.UserDTO;
-import com.phantoms.phantomsbackend.entity.User;
+import com.phantoms.phantomsbackend.pojo.dto.UserDTO;
+import com.phantoms.phantomsbackend.pojo.entity.User;
 import com.phantoms.phantomsbackend.repository.UserRepository;
 import com.phantoms.phantomsbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

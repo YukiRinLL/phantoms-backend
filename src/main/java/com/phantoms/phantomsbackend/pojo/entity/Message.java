@@ -1,4 +1,4 @@
-package com.phantoms.phantomsbackend.entity;
+package com.phantoms.phantomsbackend.pojo.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
