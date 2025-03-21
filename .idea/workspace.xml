@@ -4,41 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="Keep Render Service Alive">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/EmailUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/EmailController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/EmailService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/EmailServiceImpl.java" afterDir="false" />
+    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="add email function">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/bean/ResultInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/config/SwaggerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/SwaggerConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/dto/ImageDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/dto/ImageDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/dto/MessageDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/dto/MessageDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/dto/UserDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/dto/UserProfileDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/dto/UserProfileDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/entity/Image.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/Image.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/entity/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/Message.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/entity/UserProfile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/UserProfile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/EmailController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/EmailController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/Image.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/Image.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/UserProfile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/UserProfile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/EmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/EmailServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/EmailServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/UserServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/UserController$UpdateUserRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/UserController$UpdateUserRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/UserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/dto/ImageDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/dto/MessageDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/dto/UserDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/dto/UserProfileDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/entity/Image.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/entity/Message.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/entity/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/entity/UserProfile.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/repository/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/repository/UserRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/UserService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/impl/UserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/impl/UserServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-03-20T10-46-48_134.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-03-20T10-52-02_421.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +96,7 @@
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/PIS-P01-Server02",
+    "last_opened_file_path": "D:/phantoms-backend/src/main/resources",
     "onboarding.tips.debug.path": "D:/phantoms-backend/src/main/java/com/phantoms/Main.java",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
@@ -118,23 +106,24 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\phantoms-backend\src\main\resources" />
       <recent name="D:\phantoms-backend\.github\workflows" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\dto" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.phantoms.phantomsbackend.common.bean" />
       <recent name="com.phantoms.phantomsbackend.controller" />
       <recent name="com.phantoms.phantomsbackend.service.impl" />
       <recent name="com.phantoms.phantomsbackend.service" />
       <recent name="com.phantoms.phantomsbackend.config" />
-      <recent name="com.phantoms.phantomsbackend.repository" />
     </key>
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="mvn clean compile" />
       <command value="mvn -X clean install" />
-      <command value="mvn dependency:tree" />
       <command value="mvn clean install" />
+      <command value="mvn dependency:tree" />
     </option>
   </component>
   <component name="RunManager" selected="Application.PhantomsBackendApplication">
@@ -277,7 +266,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742524769384</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="add email function">
+      <option name="closed" value="true" />
+      <created>1742539387964</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1742539387964</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -299,6 +296,7 @@
     <MESSAGE value="re-construct previous crud APIs" />
     <MESSAGE value="add Users APIs" />
     <MESSAGE value="Keep Render Service Alive" />
-    <option name="LAST_COMMIT_MESSAGE" value="Keep Render Service Alive" />
+    <MESSAGE value="add email function" />
+    <option name="LAST_COMMIT_MESSAGE" value="add email function" />
   </component>
 </project>
