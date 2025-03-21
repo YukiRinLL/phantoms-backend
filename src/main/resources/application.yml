@@ -16,10 +16,17 @@ spring:
 #    url: jdbc:postgresql://db.qnwhrdsnwhrdivakvvex.supabase.co:5432/postgres
 #    username: postgres
 #    password: LUOCANYUlcy20000506YukiRinLL
+
     # Supabase Transaction Pooler mode
     url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
     username: postgres.qnwhrdsnwhrdivakvvex
     password: LUOCANYUlcy20000506YukiRinLL
+
+    # Supabase Session pooler mode
+#    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1
+#    username: postgres.qnwhrdsnwhrdivakvvex
+#    password: LUOCANYUlcy20000506YukiRinLL
+#    driver-class-name: org.postgresql.Driver
 
     hikari:
       idle-timeout: 30000
@@ -27,8 +34,8 @@ spring:
       connection-timeout: 30000
       pool-name: SupabasePool
 
-      maximum-pool-size: 2
-      minimum-idle: 1
+      maximum-pool-size: 20
+      minimum-idle: 10
       data-source-properties:
         # 禁用 HikariCP 的预编译语句缓存
         preparedStatementCacheQueries: 0
@@ -60,3 +67,13 @@ spring:
           ssl:
             enable: true
           auth: true
+
+# Spring Boot Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    enable:
+      jdbc: true
