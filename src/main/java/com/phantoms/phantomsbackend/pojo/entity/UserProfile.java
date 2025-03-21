@@ -27,7 +27,7 @@ public class UserProfile {
     private String data;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "uploaded_by")
     private String uploadedBy;

@@ -4,6 +4,7 @@ import com.phantoms.phantomsbackend.pojo.dto.UserDTO;
 import com.phantoms.phantomsbackend.pojo.entity.User;
 import com.phantoms.phantomsbackend.repository.UserRepository;
 import com.phantoms.phantomsbackend.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,9 +59,7 @@ public class UserServiceImpl implements UserService {
 
     private UserDTO convertToDTO(User user) {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setEmail(user.getEmail());
+        BeanUtils.copyProperties(user, userDTO);
         return userDTO;
     }
 }
