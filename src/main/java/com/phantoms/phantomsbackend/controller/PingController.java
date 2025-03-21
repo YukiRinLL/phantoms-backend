@@ -1,5 +1,7 @@
 package com.phantoms.phantomsbackend.controller;
 
+import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.HikariPoolMXBean;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -45,11 +47,6 @@ public class PingController {
     }
 
     @GetMapping("/health")
-    @Operation(summary = "Health check endpoint", description = "Checks the health of the application, including database connectivity.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Health check successful",
-                            content = @Content(schema = @Schema(implementation = Map.class)))
-            })
     public ResponseEntity<Map<String, Object>> healthCheck() {
         Map<String, Object> healthResponse = new HashMap<>();
         healthResponse.put("timestamp", LocalDateTime.now());
@@ -65,6 +62,19 @@ public class PingController {
                 dbDetails.put("databaseProductName", connection.getMetaData().getDatabaseProductName());
                 dbDetails.put("databaseProductVersion", connection.getMetaData().getDatabaseProductVersion());
                 healthResponse.put("databaseDetails", dbDetails);
+
+                // 添加连接池状态信息
+                HikariPoolMXBean poolStats = ((HikariDataSource) dataSource).getHikariPoolMXBean();
+                if (poolStats != null) {
+                    Map<String, Object> poolDetails = new HashMap<>();
+                    poolDetails.put("activeConnections", poolStats.getActiveConnections());
+                    poolDetails.put("idleConnections", poolStats.getIdleConnections());
+                    poolDetails.put("totalConnections", poolStats.getTotalConnections());
+                    poolDetails.put("threadsAwaitingConnection", poolStats.getThreadsAwaitingConnection());
+                    healthResponse.put("connectionPoolDetails", poolDetails);
+                } else {
+                    healthResponse.put("connectionPoolDetails", "Unable to get pool stats");
+                }
             }
         } catch (SQLException e) {
             healthResponse.put("database", "DOWN");
