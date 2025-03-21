@@ -1,0 +1,62 @@
+server:
+  port: 8080
+
+# log4j2
+logging:
+  level:
+    org.springframework: DEBUG
+    springfox: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.postgresql: DEBUG
+
+spring:
+  datasource:
+    # Supabase Direct Connection mode
+#    url: jdbc:postgresql://db.qnwhrdsnwhrdivakvvex.supabase.co:5432/postgres
+#    username: postgres
+#    password: LUOCANYUlcy20000506YukiRinLL
+    # Supabase Transaction Pooler mode
+    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
+    username: postgres.qnwhrdsnwhrdivakvvex
+    password: LUOCANYUlcy20000506YukiRinLL
+
+    hikari:
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      pool-name: SupabasePool
+
+      maximum-pool-size: 2
+      minimum-idle: 1
+      data-source-properties:
+        # 禁用 HikariCP 的预编译语句缓存
+        preparedStatementCacheQueries: 0
+        preparedStatementCacheSizeMiB: 0
+
+  jpa:
+    # Hibernate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        bytecode:
+          provider: bytebuddy
+        format_sql: true
+    show-sql: true
+
+# E-mail (QQ 邮箱配置)
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: 944989026@qq.com
+    password: qixiimerghhhbcga
+    from:
+      name: Phantoms Official
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+          auth: true
