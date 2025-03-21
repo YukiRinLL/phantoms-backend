@@ -1,4 +1,4 @@
-package com.phantoms.phantomsbackend.dto;
+package com.phantoms.phantomsbackend.pojo.dto;
 
 import lombok.Data;
 

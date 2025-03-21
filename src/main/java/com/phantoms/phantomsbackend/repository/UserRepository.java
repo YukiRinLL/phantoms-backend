@@ -1,6 +1,6 @@
 package com.phantoms.phantomsbackend.repository;
 
-import com.phantoms.phantomsbackend.entity.User;
+import com.phantoms.phantomsbackend.pojo.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

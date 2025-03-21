@@ -1,6 +1,6 @@
 package com.phantoms.phantomsbackend.service;
 
-import com.phantoms.phantomsbackend.dto.UserDTO;
+import com.phantoms.phantomsbackend.pojo.dto.UserDTO;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.phantoms.phantomsbackend.dto;
+package com.phantoms.phantomsbackend.pojo.dto;
 
 import lombok.Data;
 
@@ -6,13 +6,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-public class UserProfileDTO {
+public class ImageDTO {
     private UUID id;
-    private UUID legacyUserId;
-    private UUID userId;
     private String name;
     private String data;
     private LocalDateTime createdAt;
     private String uploadedBy;
-
 }

@@ -1,6 +1,6 @@
 package com.phantoms.phantomsbackend.controller;
 
-import com.phantoms.phantomsbackend.dto.UserDTO;
+import com.phantoms.phantomsbackend.pojo.dto.UserDTO;
 import com.phantoms.phantomsbackend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
