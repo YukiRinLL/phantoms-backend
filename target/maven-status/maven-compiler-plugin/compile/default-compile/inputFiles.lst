@@ -14,6 +14,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\Swa
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\EmailController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\UserController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\EmailUtil.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\dto\NewUserRequestDTO.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\PingController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\bean\ResultInfo.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\EmailService.java

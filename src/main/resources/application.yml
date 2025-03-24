@@ -57,8 +57,8 @@ spring:
   mail:
     host: smtp.qq.com
     port: 465
-    username: 944989026@qq.com
-    password: qixiimerghhhbcga
+    username: 3146672611@qq.com
+    password: aecgjhbyertddcfe
     from:
       name: Phantoms Official
     properties:
@@ -67,6 +67,14 @@ spring:
           ssl:
             enable: true
           auth: true
+
+# swagger
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
 
 # Spring Boot Actuator
 management:
