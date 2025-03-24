@@ -4,16 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="replace .properties with yml">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/dto/NewUserRequestDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/email/defaultEmailTemplate.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/email/welcomeEmailTemplate.html" afterDir="false" />
+    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="HTML Email functions">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/AuthUserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/AuthUser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/AuthUserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/AuthUserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/EmailUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/EmailUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/EmailController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/EmailController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/dto/NewUserRequestDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/EmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/EmailServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/EmailServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/email/welcomeEmailTemplate.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/email/welcomeEmailTemplate.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/repository/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/repository/UserRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/impl/UserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/impl/UserServiceImpl.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,11 +106,11 @@
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\dto" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.phantoms.phantomsbackend.pojo.dto" />
-      <recent name="com.phantoms.phantomsbackend.common.bean" />
       <recent name="com.phantoms.phantomsbackend.controller" />
-      <recent name="com.phantoms.phantomsbackend.service.impl" />
       <recent name="com.phantoms.phantomsbackend.service" />
+      <recent name="com.phantoms.phantomsbackend.repository" />
+      <recent name="com.phantoms.phantomsbackend.pojo.entity" />
+      <recent name="com.phantoms.phantomsbackend.pojo.dto" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -294,7 +301,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742550253222</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="HTML Email functions">
+      <option name="closed" value="true" />
+      <created>1742785838808</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1742785838808</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -320,6 +335,7 @@
     <MESSAGE value="add log4j &amp; ResultInfo" />
     <MESSAGE value="fix Supabase Transaction Pooler mode" />
     <MESSAGE value="replace .properties with yml" />
-    <option name="LAST_COMMIT_MESSAGE" value="replace .properties with yml" />
+    <MESSAGE value="HTML Email functions" />
+    <option name="LAST_COMMIT_MESSAGE" value="HTML Email functions" />
   </component>
 </project>
