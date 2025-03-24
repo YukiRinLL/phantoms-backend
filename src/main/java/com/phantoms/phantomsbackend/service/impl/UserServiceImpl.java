@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
+//        user.setPassword(userDTO.getPassword()); // 确保设置密码
         User savedUser = userRepository.save(user);
         return convertToDTO(savedUser);
     }
@@ -43,6 +45,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
+//        user.setPassword(userDTO.get()); // 确保更新密码
         User updatedUser = userRepository.save(user);
         return convertToDTO(updatedUser);
     }
@@ -55,6 +58,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUsers(List<UUID> ids) {
         ids.forEach(this::deleteUser);
+    }
+
+    @Override
+    public UserDTO findByEmail(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            return convertToDTO(userOptional.get());
+        } else {
+            throw new RuntimeException("User not found with email: " + email);
+        }
     }
 
     private UserDTO convertToDTO(User user) {
