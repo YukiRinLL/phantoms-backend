@@ -5,11 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="replace .properties with yml">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/dto/NewUserRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/email/defaultEmailTemplate.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/email/welcomeEmailTemplate.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/EmailUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/EmailUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/EmailController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/EmailController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/PingController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/PingController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +83,7 @@
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/phantoms-backend/src/main/resources",
+    "last_opened_file_path": "D:/phantoms-backend/src/main/resources/templates/email",
     "onboarding.tips.debug.path": "D:/phantoms-backend/src/main/java/com/phantoms/Main.java",
     "project.structure.last.edited": "Problems",
     "project.structure.proportion": "0.15",
@@ -89,16 +93,17 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\phantoms-backend\src\main\resources\templates\email" />
       <recent name="D:\phantoms-backend\src\main\resources" />
       <recent name="D:\phantoms-backend\.github\workflows" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\dto" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.phantoms.phantomsbackend.pojo.dto" />
       <recent name="com.phantoms.phantomsbackend.common.bean" />
       <recent name="com.phantoms.phantomsbackend.controller" />
       <recent name="com.phantoms.phantomsbackend.service.impl" />
       <recent name="com.phantoms.phantomsbackend.service" />
-      <recent name="com.phantoms.phantomsbackend.config" />
     </key>
   </component>
   <component name="RunAnythingCache">
