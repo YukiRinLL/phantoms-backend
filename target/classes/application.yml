@@ -1,0 +1,96 @@
+server:
+  port: 8080
+
+# log4j2
+logging:
+  level:
+    org.springframework: DEBUG
+    springfox: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.postgresql: DEBUG
+
+spring:
+  datasource:
+    # Supabase Direct Connection mode
+#    url: jdbc:postgresql://db.qnwhrdsnwhrdivakvvex.supabase.co:5432/postgres
+#    username: postgres
+#    password: LUOCANYUlcy20000506YukiRinLL
+
+    # Supabase Transaction Pooler mode
+    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
+    username: postgres.qnwhrdsnwhrdivakvvex
+    password: LUOCANYUlcy20000506YukiRinLL
+
+    # Supabase Session pooler mode
+#    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1
+#    username: postgres.qnwhrdsnwhrdivakvvex
+#    password: LUOCANYUlcy20000506YukiRinLL
+#    driver-class-name: org.postgresql.Driver
+
+    hikari:
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      pool-name: SupabasePool
+
+      maximum-pool-size: 20
+      minimum-idle: 10
+      data-source-properties:
+        # 禁用 HikariCP 的预编译语句缓存
+        preparedStatementCacheQueries: 0
+        preparedStatementCacheSizeMiB: 0
+        prepareThreshold: 0  # Disable prepared statement caching
+
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        bytecode:
+          provider: bytebuddy
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+
+  # E-mail (QQ 邮箱配置)
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: 3146672611@qq.com
+    password: aecgjhbyertddcfe
+    from:
+      name: Phantoms Official
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+          auth: true
+
+# swagger
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+# Spring Boot Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    enable:
+      jdbc: true
+
+xivapi:
+  base-url: "https://v2.xivapi.com/api"
