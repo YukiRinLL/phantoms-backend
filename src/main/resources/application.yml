@@ -40,20 +40,26 @@ spring:
         # 禁用 HikariCP 的预编译语句缓存
         preparedStatementCacheQueries: 0
         preparedStatementCacheSizeMiB: 0
+        prepareThreshold: 0  # Disable prepared statement caching
 
   jpa:
-    # Hibernate
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update
     properties:
       hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+        jdbc:
+          lob:
+            non_contextual_creation: true
         bytecode:
           provider: bytebuddy
         format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
     show-sql: true
 
-# E-mail (QQ 邮箱配置)
+
+  # E-mail (QQ 邮箱配置)
   mail:
     host: smtp.qq.com
     port: 465
@@ -85,3 +91,6 @@ management:
   metrics:
     enable:
       jdbc: true
+
+xivapi:
+  base-url: "https://v2.xivapi.com/api"
