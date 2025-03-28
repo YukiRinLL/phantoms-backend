@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users", schema = "auth")
@@ -11,8 +12,8 @@ import java.time.LocalDateTime;
 public class AuthUser {
 
     @Id
-    @Column(name = "id")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(name = "instance_id")
     private String instanceId;
@@ -96,7 +97,7 @@ public class AuthUser {
     private String emailChangeTokenCurrent;
 
     @Column(name = "email_change_confirm_status")
-    private String emailChangeConfirmStatus;
+    private short emailChangeConfirmStatus;
 
     @Column(name = "banned_until")
     private LocalDateTime bannedUntil;
