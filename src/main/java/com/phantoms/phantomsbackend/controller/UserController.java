@@ -1,6 +1,7 @@
 package com.phantoms.phantomsbackend.controller;
 
 import com.phantoms.phantomsbackend.pojo.dto.UserDTO;
+import com.phantoms.phantomsbackend.pojo.dto.UserWithAvatarDTO;
 import com.phantoms.phantomsbackend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -82,6 +83,26 @@ public class UserController {
 //        userService.deleteUsers(ids);
 //        return ResponseEntity.noContent().build();
 //    }
+
+    @GetMapping("/with-avatar/{userId}")
+    @Operation(summary = "Get user with avatar by userId", description = "Retrieves a user with avatar by their unique userId.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User retrieved successfully",
+                            content = @Content(schema = @Schema(implementation = UserWithAvatarDTO.class)))
+            })
+    public ResponseEntity<UserWithAvatarDTO> getUserWithAvatarByUserId(@PathVariable UUID userId) {
+        return ResponseEntity.ok(userService.getUserWithAvatarByUserId(userId));
+    }
+
+    @GetMapping("/with-avatar/all")
+    @Operation(summary = "Get all users with avatar", description = "Retrieves a list of all users with avatar.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Users retrieved successfully",
+                            content = @Content(schema = @Schema(implementation = UserWithAvatarDTO.class), mediaType = "application/json"))
+            })
+    public ResponseEntity<List<UserWithAvatarDTO>> getAllUsersWithAvatar() {
+        return ResponseEntity.ok(userService.getAllUsersWithAvatar());
+    }
 
     @Data
     public static class IdRequest {
