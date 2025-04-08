@@ -1,7 +1,10 @@
 package com.phantoms.phantomsbackend.service.impl;
 
 import com.phantoms.phantomsbackend.pojo.dto.UserDTO;
+import com.phantoms.phantomsbackend.pojo.dto.UserWithAvatarDTO;
 import com.phantoms.phantomsbackend.pojo.entity.User;
+import com.phantoms.phantomsbackend.pojo.entity.UserProfile;
+import com.phantoms.phantomsbackend.repository.UserProfileRepository;
 import com.phantoms.phantomsbackend.repository.UserRepository;
 import com.phantoms.phantomsbackend.service.UserService;
 import org.springframework.beans.BeanUtils;
@@ -19,12 +22,16 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserProfileRepository userProfileRepository;
+
     @Override
     public UserDTO createUser(UserDTO userDTO) {
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
-//        user.setPassword(userDTO.getPassword()); // 确保设置密码
+        // 确保设置密码
+        // user.setPassword(userDTO.getPassword());
         User savedUser = userRepository.save(user);
         return convertToDTO(savedUser);
     }
@@ -45,7 +52,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
-//        user.setPassword(userDTO.get()); // 确保更新密码
+        // 确保更新密码
+        // user.setPassword(userDTO.getPassword());
         User updatedUser = userRepository.save(user);
         return convertToDTO(updatedUser);
     }
@@ -70,9 +78,43 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public UserWithAvatarDTO getUserWithAvatarByUserId(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        UserProfile userProfile = userProfileRepository.findByUserId(userId).orElse(null);
+        return convertToUserWithAvatarDTO(user, userProfile);
+    }
+
+    @Override
+    public UserWithAvatarDTO getUserWithAvatarByLegacyUserId(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        UserProfile userProfile = userProfileRepository.findByLegacyUserId(userId).orElse(null);
+        return convertToUserWithAvatarDTO(user, userProfile);
+    }
+
+    @Override
+    public List<UserWithAvatarDTO> getAllUsersWithAvatar() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(user -> {
+                    UserProfile userProfile = userProfileRepository.findByUserId(user.getUserId()).orElse(null);
+                    return convertToUserWithAvatarDTO(user, userProfile);
+                })
+                .collect(Collectors.toList());
+    }
+
     private UserDTO convertToDTO(User user) {
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user, userDTO);
         return userDTO;
+    }
+
+    private UserWithAvatarDTO convertToUserWithAvatarDTO(User user, UserProfile userProfile) {
+        UserWithAvatarDTO userWithAvatarDTO = new UserWithAvatarDTO();
+        BeanUtils.copyProperties(user, userWithAvatarDTO);
+        if (userProfile != null) {
+            userWithAvatarDTO.setAvatar(userProfile.getData());
+        }
+        return userWithAvatarDTO;
     }
 }

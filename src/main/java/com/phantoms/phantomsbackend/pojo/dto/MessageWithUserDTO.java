@@ -6,13 +6,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-public class UserProfileDTO {
-    private UUID id;
-    private UUID legacyUserId;
+public class MessageWithUserDTO {
+    private UUID messageId;
     private UUID userId;
-    private String name;
-    private String data;
+    private String username;
+    private String email;
+    private String avatar;
+    private String message;
     private LocalDateTime createdAt;
-    private String uploadedBy;
-
 }
