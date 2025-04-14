@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="fullfill APIs">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/WebConfig.java" afterDir="false" />
+    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="add WebConfig">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/UserController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,7 +199,7 @@
       <workItem from="1744109032584" duration="41000" />
       <workItem from="1744163783651" duration="4261000" />
       <workItem from="1744184731267" duration="374000" />
-      <workItem from="1744596458280" duration="4384000" />
+      <workItem from="1744596458280" duration="6199000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -421,7 +417,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744108880136</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="add WebConfig">
+      <option name="closed" value="true" />
+      <created>1744601373741</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1744601373742</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -454,7 +458,8 @@
     <MESSAGE value="XIVAPI Client" />
     <MESSAGE value="add utils" />
     <MESSAGE value="fullfill APIs" />
-    <option name="LAST_COMMIT_MESSAGE" value="fullfill APIs" />
+    <MESSAGE value="add WebConfig" />
+    <option name="LAST_COMMIT_MESSAGE" value="add WebConfig" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
