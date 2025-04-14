@@ -8,6 +8,7 @@ com\phantoms\phantomsbackend\common\excel\HeadWidthHandler.class
 com\phantoms\phantomsbackend\common\utils\PIS\CustomLocalDateTimeDeserializer.class
 com\phantoms\phantomsbackend\common\utils\PIS\ServletUtils.class
 com\phantoms\phantomsbackend\common\bean\ApiResponse.class
+com\phantoms\phantomsbackend\common\config\WebConfig.class
 com\phantoms\phantomsbackend\common\bean\SearchResult.class
 com\phantoms\phantomsbackend\exception\GlobalExceptionHandler.class
 com\phantoms\phantomsbackend\pojo\entity\Image.class
