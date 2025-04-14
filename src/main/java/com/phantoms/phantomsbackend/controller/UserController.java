@@ -24,15 +24,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    @Operation(summary = "Create a new user", description = "Creates a new user with the provided details.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "User created successfully",
-                            content = @Content(schema = @Schema(implementation = UserDTO.class)))
-            })
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-        return ResponseEntity.ok(userService.createUser(userDTO));
-    }
+//    @PostMapping
+//    @Operation(summary = "Create a new user", description = "Creates a new user with the provided details.",
+//            responses = {
+//                    @ApiResponse(responseCode = "200", description = "User created successfully",
+//                            content = @Content(schema = @Schema(implementation = UserDTO.class)))
+//            })
+//    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+//        return ResponseEntity.ok(userService.createUser(userDTO));
+//    }
 
     @GetMapping
     @Operation(summary = "Get user by ID", description = "Retrieves a user by their unique ID.",
