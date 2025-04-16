@@ -1,5 +1,6 @@
 package com.phantoms.phantomsbackend.common.utils;
 
+import cn.leancloud.LCACL;
 import cn.leancloud.LCException;
 import cn.leancloud.LCObject;
 import cn.leancloud.LCQuery;
@@ -8,14 +9,21 @@ import io.reactivex.Observable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LeanCloudUtils {
 
-    // KV Storage: Store key-value pairs
-    public static boolean storeKV(String key, String value) {
+    // Store key-value pairs with ACL
+    public static boolean storeKV(String key, String value, String userId) {
         LCObject kvObject = new LCObject("KVStore");
         kvObject.put("key", key);
         kvObject.put("value", value);
+
+        LCACL acl = new LCACL();
+        acl.setReadAccess(userId, true);
+        acl.setWriteAccess(userId, true);
+        kvObject.setACL(acl);
+
         Observable<? extends LCObject> observable = kvObject.saveInBackground();
         try {
             observable.blockingFirst();
@@ -26,15 +34,22 @@ public class LeanCloudUtils {
         }
     }
 
-    // KV Storage: Retrieve key-value pairs
-    public static String getKV(String key) {
+    // Retrieve key-value pairs with permission check
+    public static String getKV(String key, String userId) {
         LCQuery<LCObject> query = new LCQuery<>("KVStore");
         query.whereEqualTo("key", key);
         Observable<List<LCObject>> observable = query.findInBackground();
         try {
             List<LCObject> results = observable.blockingFirst();
             if (!results.isEmpty()) {
-                return results.get(0).getString("value");
+                LCObject kvObject = results.get(0);
+                LCACL acl = kvObject.getACL();
+                if (acl != null && acl.getReadAccess(userId)) {
+                    return kvObject.getString("value");
+                } else {
+                    System.out.println("No permission to read this object.");
+                    return null;
+                }
             } else {
                 return null;
             }
@@ -44,8 +59,8 @@ public class LeanCloudUtils {
         }
     }
 
-    // KV Storage: Update key-value pairs
-    public static boolean updateKV(String key, String newValue) {
+    // Update key-value pairs with permission check
+    public static boolean updateKV(String key, String newValue, String userId) {
         LCQuery<LCObject> query = new LCQuery<>("KVStore");
         query.whereEqualTo("key", key);
         Observable<List<LCObject>> observable = query.findInBackground();
@@ -53,10 +68,16 @@ public class LeanCloudUtils {
             List<LCObject> results = observable.blockingFirst();
             if (!results.isEmpty()) {
                 LCObject kvObject = results.get(0);
-                kvObject.put("value", newValue);
-                Observable<? extends LCObject> updateObservable = kvObject.saveInBackground();
-                updateObservable.blockingFirst();
-                return true;
+                LCACL acl = kvObject.getACL();
+                if (acl != null && acl.getWriteAccess(userId)) {
+                    kvObject.put("value", newValue);
+                    Observable<? extends LCObject> updateObservable = kvObject.saveInBackground();
+                    updateObservable.blockingFirst();
+                    return true;
+                } else {
+                    System.out.println("No permission to update this object.");
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -66,8 +87,8 @@ public class LeanCloudUtils {
         }
     }
 
-    // KV Storage: Delete key-value pairs
-    public static boolean deleteKV(String key) {
+    // Delete key-value pairs with permission check
+    public static boolean deleteKV(String key, String userId) {
         LCQuery<LCObject> query = new LCQuery<>("KVStore");
         query.whereEqualTo("key", key);
         Observable<List<LCObject>> observable = query.findInBackground();
@@ -75,10 +96,17 @@ public class LeanCloudUtils {
             List<LCObject> results = observable.blockingFirst();
             if (!results.isEmpty()) {
                 LCObject kvObject = results.get(0);
-                Observable<LCNull> deleteObservable = kvObject.deleteInBackground();
-                deleteObservable.blockingFirst();
-                return true;
+                LCACL acl = kvObject.getACL();
+                if (acl != null && acl.getWriteAccess(userId)) {
+                    Observable<LCNull> deleteObservable = kvObject.deleteInBackground();
+                    deleteObservable.blockingFirst();
+                    return true;
+                } else {
+                    System.out.println("No permission to delete this object.");
+                    return false;
+                }
             } else {
+                System.out.println("No record found for key: " + key);
                 return false;
             }
         } catch (Exception e) {
@@ -87,11 +115,17 @@ public class LeanCloudUtils {
         }
     }
 
-    // Structured Data Storage: Create an object
-    public static boolean createObject(String className, String key, String value) {
+    // Create an object with ACL
+    public static boolean createObject(String className, String key, String value, String userId) {
         LCObject object = new LCObject(className);
         object.put("key", key);
         object.put("value", value);
+
+        LCACL acl = new LCACL();
+        acl.setReadAccess(userId, true);
+        acl.setWriteAccess(userId, true);
+        object.setACL(acl);
+
         Observable<? extends LCObject> observable = object.saveInBackground();
         try {
             observable.blockingFirst();
@@ -102,43 +136,61 @@ public class LeanCloudUtils {
         }
     }
 
-    // Structured Data Storage: Query objects
-    public static List<LCObject> queryObject(String className, String key, String value) {
+    // Query objects with permission check
+    public static List<LCObject> queryObject(String className, String key, String value, String userId) {
         LCQuery<LCObject> query = new LCQuery<>(className);
         query.whereEqualTo("key", key);
         Observable<List<LCObject>> observable = query.findInBackground();
         try {
-            return observable.blockingFirst();
+            List<LCObject> results = observable.blockingFirst();
+            return results.stream()
+                    .filter(obj -> {
+                        LCACL acl = obj.getACL();
+                        return acl != null && acl.getReadAccess(userId);
+                    })
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             System.out.println("Query failed: " + e.getMessage());
             return Collections.emptyList();
         }
     }
 
-    // Structured Data Storage: Update an object
-    public static boolean updateObject(String className, String objectId, String key, String newValue) {
+    // Update an object with permission check
+    public static boolean updateObject(String className, String objectId, String key, String newValue, String userId) {
         LCObject object = LCObject.createWithoutData(className, objectId);
-        object.put("value", newValue);
-        Observable<? extends LCObject> observable = object.saveInBackground();
-        try {
-            observable.blockingFirst();
-            return true;
-        } catch (Exception e) {
-            System.out.println("Object update failed: " + e.getMessage());
+        LCACL acl = object.getACL();
+        if (acl != null && acl.getWriteAccess(userId)) {
+            object.put("value", newValue);
+            Observable<? extends LCObject> observable = object.saveInBackground();
+            try {
+                observable.blockingFirst();
+                return true;
+            } catch (Exception e) {
+                System.out.println("Object update failed: " + e.getMessage());
+                return false;
+            }
+        } else {
+            System.out.println("No permission to update this object.");
             return false;
         }
     }
 
-    // Structured Data Storage: Delete an object
-    public static boolean deleteObject(String className, String objectId) {
+    // Delete an object with permission check
+    public static boolean deleteObject(String className, String objectId, String userId) {
         LCObject object = LCObject.createWithoutData(className, objectId);
-        Observable<LCNull> observable = object.deleteInBackground();
-        try {
-            observable.blockingFirst();
-            return true; // 操作成功
-        } catch (Exception e) {
-            System.out.println("Object deletion failed: " + e.getMessage());
-            return false; // 操作失败
+        LCACL acl = object.getACL();
+        if (acl != null && acl.getWriteAccess(userId)) {
+            Observable<LCNull> observable = object.deleteInBackground();
+            try {
+                observable.blockingFirst();
+                return true;
+            } catch (Exception e) {
+                System.out.println("Object deletion failed: " + e.getMessage());
+                return false;
+            }
+        } else {
+            System.out.println("No permission to delete this object.");
+            return false;
         }
     }
 }
