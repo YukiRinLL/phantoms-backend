@@ -1,4 +1,4 @@
-//package com.phantoms.phantomsbackend.config;
+//package com.phantoms.phantomsbackend.common.config;
 //
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
