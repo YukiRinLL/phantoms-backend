@@ -94,3 +94,11 @@ management:
 
 xivapi:
   base-url: "https://v2.xivapi.com/api"
+
+
+leancloud:
+  app-id: "4NeSS81j4KK0uyYULpfk52yh-gzGzoHsz"
+  app-key: "1xNZMz1XUVSLDTAv3XoVBgni"
+  server-url: "https://4ness81j.lc-cn-n1-shared.com"
+  # 开启 LeanCloud SDK 调试日志
+  log-level: "DEBUG"

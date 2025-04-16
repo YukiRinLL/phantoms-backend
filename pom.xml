@@ -205,6 +205,25 @@
             <version>1.14</version>
         </dependency>
 
+        <!-- LeanCloud 数据存储服务 -->
+        <dependency>
+            <groupId>cn.leancloud</groupId>
+            <artifactId>storage-core</artifactId>
+            <version>8.2.28</version>
+        </dependency>
+        <!-- LeanCloud 即时通讯与推送服务 -->
+        <dependency>
+            <groupId>cn.leancloud</groupId>
+            <artifactId>realtime-core</artifactId>
+            <version>8.2.28</version>
+        </dependency>
+        <!-- RxJava 用于异步操作 -->
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>2.2.21</version>
+        </dependency>
+
         <!-- 排除 Spring Boot 默认的 Logback 依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
