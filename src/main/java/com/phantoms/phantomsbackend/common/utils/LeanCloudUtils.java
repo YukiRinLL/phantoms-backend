@@ -19,10 +19,10 @@ public class LeanCloudUtils {
         kvObject.put("key", key);
         kvObject.put("value", value);
 
-        LCACL acl = new LCACL();
-        acl.setReadAccess(userId, true);
-        acl.setWriteAccess(userId, true);
-        kvObject.setACL(acl);
+//        LCACL acl = new LCACL();
+//        acl.setReadAccess(userId, true);
+//        acl.setWriteAccess(userId, true);
+//        kvObject.setACL(acl);
 
         Observable<? extends LCObject> observable = kvObject.saveInBackground();
         try {
@@ -43,13 +43,13 @@ public class LeanCloudUtils {
             List<LCObject> results = observable.blockingFirst();
             if (!results.isEmpty()) {
                 LCObject kvObject = results.get(0);
-                LCACL acl = kvObject.getACL();
-                if (acl != null && acl.getReadAccess(userId)) {
+//                LCACL acl = kvObject.getACL();
+//                if (acl != null && acl.getReadAccess(userId)) {
                     return kvObject.getString("value");
-                } else {
-                    System.out.println("No permission to read this object.");
-                    return null;
-                }
+//                } else {
+//                    System.out.println("No permission to read this object.");
+//                    return null;
+//                }
             } else {
                 return null;
             }
@@ -65,19 +65,19 @@ public class LeanCloudUtils {
         query.whereEqualTo("key", key);
         Observable<List<LCObject>> observable = query.findInBackground();
         try {
-            List<LCObject> results = observable.blockingFirst();
+            List<LCObject> results = observable.blockingFirst();//TODO bug:这里获取不到数据
             if (!results.isEmpty()) {
                 LCObject kvObject = results.get(0);
-                LCACL acl = kvObject.getACL();
-                if (acl != null && acl.getWriteAccess(userId)) {
+//                LCACL acl = kvObject.getACL();
+//                if (acl != null && acl.getWriteAccess(userId)) {
                     kvObject.put("value", newValue);
                     Observable<? extends LCObject> updateObservable = kvObject.saveInBackground();
                     updateObservable.blockingFirst();
                     return true;
-                } else {
-                    System.out.println("No permission to update this object.");
-                    return false;
-                }
+//                } else {
+//                    System.out.println("No permission to update this object.");
+//                    return false;
+//                }
             } else {
                 return false;
             }
