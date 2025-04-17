@@ -4,16 +4,166 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="add LeanCloud">
+    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="LeanCloud fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/PhantomsBackendApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/bean/ApiResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/bean/ResultInfo$Status.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/bean/ResultInfo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/bean/SearchResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/bean/SearchResult.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/config/XIVAPIConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/excel/AbstractExcelExport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/excel/AbstractExcelImport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/excel/HeadWidthHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/excel/MergeHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/excel/RowHeightWriteHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/exception/ServiceException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/jasper/AbstractReport$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/jasper/AbstractReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/jasper/JasperModel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/jasper/JasperReport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/jasper/ReportDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/jasper/ReportException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/jasper/ReportModel$ContentType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/jasper/ReportModel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/EmailUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/Arith.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/CaptchaUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/CharToImageUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/Convert.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/CreateShareCodeImg.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/CsvUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/CustomLocalDateTimeDeserializer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/DataPremissionHelper$Premissions.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/DataPremissionHelper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/DateRange.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/DateTransform.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/DateUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/ExcelExportUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/ExcelFillCellMergeStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/ExcelMergeCustomerCellHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/ExcelUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/FileUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/FileUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/HttpUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/IpUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/IsWeekSame.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/MD5Utils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/Md5Util.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/MonthSheetWriteHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/NameAndPasswordEncodeUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/ParseCodeUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/ServletUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/SpringUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/StringUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/TimeUtils$DateStyle.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/PIS/TimeUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/TH/DateUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/TH/ExcelUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/TH/MyIdGenerator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/TH/NumericUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/TH/ValidateUtils$Result$ResultBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/TH/ValidateUtils$Result.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/TH/ValidateUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/XIVAPIClient$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/XIVAPIClient$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/XIVAPIClient$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/XIVAPIClient$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/utils/XIVAPIClient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/AuthUserController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/EmailController$AuthUserEmailDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/EmailController$EmailContent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/EmailController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/MessageController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/PingController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/UserController$IdRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/UserController$UpdateUserRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/UserController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/XIVAPIController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/exception/GlobalExceptionHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/pojo/dto/ImageDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/pojo/dto/MessageDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/pojo/dto/MessageWithUserDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/pojo/dto/UserDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/pojo/dto/UserWithAvatarDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/pojo/entity/AuthUser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/pojo/entity/Image.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/pojo/entity/Message.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/pojo/entity/User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/pojo/entity/UserProfile.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/repository/AuthUserRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/repository/MessageRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/repository/UserProfileRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/repository/UserRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/service/AuthUserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/service/EmailService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/service/MessageService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/service/UserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/service/XIVAPIService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/service/impl/AuthUserServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/service/impl/EmailServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/service/impl/MessageServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/service/impl/UserServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/service/impl/XIVAPIServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/log4j2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/templates/email/defaultEmailTemplate.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/templates/email/welcomeEmailTemplate.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/phantoms-backend/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/phantoms-backend/com/phantoms/phantomsbackend/PhantomsBackendApplicationTests.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LeanCloudUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LeanCloudUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/LeanCloudController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/LeanCloudController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/LeanCloudService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/LeanCloudService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/LeanCloudServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/LeanCloudServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/PhantomsBackendApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/common/bean/ApiResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/common/bean/ResultInfo$Status.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/common/bean/ResultInfo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/common/bean/SearchResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/common/bean/SearchResult.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/common/config/XIVAPIConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/common/utils/EmailUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/common/utils/XIVAPIClient$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/common/utils/XIVAPIClient$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/common/utils/XIVAPIClient$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/common/utils/XIVAPIClient$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/common/utils/XIVAPIClient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/AuthUserController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/EmailController$AuthUserEmailDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/EmailController$EmailContent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/EmailController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/PingController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/UserController$IdRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/UserController$UpdateUserRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/UserController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/XIVAPIController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/exception/GlobalExceptionHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/pojo/dto/ImageDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/pojo/dto/MessageDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/pojo/dto/UserDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/pojo/entity/AuthUser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/pojo/entity/Image.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/pojo/entity/Message.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/pojo/entity/User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/pojo/entity/UserProfile.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/repository/AuthUserRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/repository/UserRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/AuthUserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/EmailService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/UserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/XIVAPIService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/impl/AuthUserServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/impl/EmailServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/impl/UserServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/service/impl/XIVAPIServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/log4j2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/email/defaultEmailTemplate.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/email/welcomeEmailTemplate.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/phantoms/phantomsbackend/PhantomsBackendApplicationTests.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +248,7 @@
     &quot;Spring Boot.PhantomsBackendApplication.executor&quot;: &quot;Debug&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/phantoms-backend/src/main/java/com/phantoms/phantomsbackend/common/config&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/phantoms-backend&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -134,9 +284,9 @@
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="mvn clean compile" />
-      <command value="mvn -X clean install" />
       <command value="mvn clean install" />
       <command value="mvn dependency:tree" />
+      <command value="mvn -X clean install" />
     </option>
   </component>
   <component name="RunManager" selected="Spring Boot.PhantomsBackendApplication">
@@ -207,7 +357,8 @@
       <workItem from="1744184731267" duration="374000" />
       <workItem from="1744596458280" duration="6376000" />
       <workItem from="1744609836508" duration="4840000" />
-      <workItem from="1744769468416" duration="13471000" />
+      <workItem from="1744769468416" duration="13720000" />
+      <workItem from="1744854057713" duration="4639000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -449,7 +600,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744786899027</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="LeanCloud fix">
+      <option name="closed" value="true" />
+      <created>1744788870707</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1744788870707</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -485,7 +644,8 @@
     <MESSAGE value="add WebConfig" />
     <MESSAGE value="close Create a new user API" />
     <MESSAGE value="add LeanCloud" />
-    <option name="LAST_COMMIT_MESSAGE" value="add LeanCloud" />
+    <MESSAGE value="LeanCloud fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="LeanCloud fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -514,6 +674,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/LeanCloudConfig.java</url>
           <line>24</line>
           <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LeanCloudUtils.java</url>
+          <line>42</line>
+          <option name="timeStamp" value="19" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="org.springframework.dao.IncorrectResultSizeDataAccessException" package="org.springframework.dao" />
