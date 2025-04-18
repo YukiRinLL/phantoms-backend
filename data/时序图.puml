@@ -1,0 +1,48 @@
+@startuml
+actor User as 用户
+participant EmailController as 邮件控制器
+participant EmailService as 邮件服务
+participant EmailUtil as 邮件工具
+participant UserService as 用户服务
+participant AuthUserService as 认证用户服务
+participant UserDTO as 用户数据传输对象
+participant AuthUser as 认证用户实体
+
+用户 -> 邮件控制器: 发送邮件请求 (发送给所有用户)
+activate 邮件控制器
+邮件控制器 -> 邮件服务: sendEmailToAllUsers(subject, text)
+activate 邮件服务
+邮件服务 -> 用户服务: getAllUsers()
+activate 用户服务
+用户服务 --> 邮件服务: 返回用户列表
+deactivate 用户服务
+邮件服务 -> 邮件工具: sendSimpleEmail(email, subject, text) [循环每个用户]
+activate 邮件工具
+邮件工具 --> 邮件服务: 邮件发送完成
+deactivate 邮件工具
+邮件服务 --> 邮件控制器: 邮件发送完成
+deactivate 邮件服务
+邮件控制器 --> 用户: 返回结果 (邮件已发送给所有用户)
+deactivate 邮件控制器
+
+用户 -> 邮件控制器: 发送邮件请求 (发送认证用户详情)
+activate 邮件控制器
+邮件控制器 -> 邮件服务: sendAuthUserDetailEmail(email)
+activate 邮件服务
+邮件服务 -> 认证用户服务: getUserByEmail(email)
+activate 认证用户服务
+认证用户服务 --> 邮件服务: 返回认证用户信息
+deactivate 认证用户服务
+邮件服务 -> 用户服务: findByEmail(email)
+activate 用户服务
+用户服务 --> 邮件服务: 返回用户信息
+deactivate 用户服务
+邮件服务 -> 邮件工具: sendWelcomeHtmlEmail(email, subject, templateVariables)
+activate 邮件工具
+邮件工具 --> 邮件服务: 邮件发送完成
+deactivate 邮件工具
+邮件服务 --> 邮件控制器: 邮件发送完成
+deactivate 邮件服务
+邮件控制器 --> 用户: 返回结果 (认证用户详情邮件已发送)
+deactivate 邮件控制器
+@enduml
