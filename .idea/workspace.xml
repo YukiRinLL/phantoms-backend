@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="LeanCloud fix">
-      <change afterPath="$PROJECT_DIR$/data/时序图.puml" afterDir="false" />
+    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="add PlantUML">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -203,7 +202,7 @@
       <workItem from="1744769468416" duration="13720000" />
       <workItem from="1744854057713" duration="4869000" />
       <workItem from="1744860786977" duration="17000" />
-      <workItem from="1744940721545" duration="388000" />
+      <workItem from="1744940721545" duration="1659000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -469,7 +468,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744859109577</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="add PlantUML">
+      <option name="closed" value="true" />
+      <created>1744941141588</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1744941141588</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -506,7 +513,8 @@
     <MESSAGE value="close Create a new user API" />
     <MESSAGE value="add LeanCloud" />
     <MESSAGE value="LeanCloud fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="LeanCloud fix" />
+    <MESSAGE value="add PlantUML" />
+    <option name="LAST_COMMIT_MESSAGE" value="add PlantUML" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
