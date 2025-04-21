@@ -65,7 +65,7 @@ public class LeanCloudUtils {
         query.whereEqualTo("key", key);
         Observable<List<LCObject>> observable = query.findInBackground();
         try {
-            List<LCObject> results = observable.blockingFirst();//TODO bug:这里获取不到数据
+            List<LCObject> results = observable.blockingFirst();
             if (!results.isEmpty()) {
                 LCObject kvObject = results.get(0);
 //                LCACL acl = kvObject.getACL();
@@ -96,15 +96,15 @@ public class LeanCloudUtils {
             List<LCObject> results = observable.blockingFirst();
             if (!results.isEmpty()) {
                 LCObject kvObject = results.get(0);
-                LCACL acl = kvObject.getACL();
-                if (acl != null && acl.getWriteAccess(userId)) {
+//                LCACL acl = kvObject.getACL();
+//                if (acl != null && acl.getWriteAccess(userId)) {
                     Observable<LCNull> deleteObservable = kvObject.deleteInBackground();
                     deleteObservable.blockingFirst();
                     return true;
-                } else {
-                    System.out.println("No permission to delete this object.");
-                    return false;
-                }
+//                } else {
+//                    System.out.println("No permission to delete this object.");
+//                    return false;
+//                }
             } else {
                 System.out.println("No record found for key: " + key);
                 return false;
