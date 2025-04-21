@@ -292,23 +292,37 @@ public class LeanCloudUtils {
     public static <T> boolean updateObject(String className, String objectId, T object, String userId) {
         LCObject lcObject = LCObject.createWithoutData(className, objectId);
 
-        // 使用反射解析对象字段并设置到 LCObject
-        List<Field> allFields = getAllFields(object.getClass());
-        for (Field field : allFields) {
-            field.setAccessible(true);
-            try {
-                Object value = field.get(object);
-                if (value != null) { // 避免存储 null 值
-                    if (isLeanCloudSupportedType(value)) {
-                        lcObject.put(field.getName(), value);
-                    } else {
-                        lcObject.put(field.getName(), value.toString());
-                        System.out.println("[cast to String]Unsupported field type: " + field.getName() + " with value: " + value);
-                    }
+        // 使用 LCObject 的方法直接设置字段
+        if (object instanceof Map) {
+            Map<?, ?> map = (Map<?, ?>) object;
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                Object key = entry.getKey();
+                Object value = entry.getValue();
+                if (isLeanCloudSupportedType(value)) {
+                    lcObject.put(key.toString(), value);
+                } else {
+                    System.out.println("Unsupported field type: " + key + " with value: " + value);
                 }
-            } catch (IllegalAccessException e) {
-                System.out.println("Failed to access field: " + field.getName());
-                return false;
+            }
+        } else {
+            // 使用反射获取所有字段（包括父类字段）
+            List<Field> allFields = getAllFields(object.getClass());
+            for (Field field : allFields) {
+                field.setAccessible(true); // 确保字段可访问
+                try {
+                    Object value = field.get(object);
+                    if (value != null) { // 避免存储 null 值
+                        if (isLeanCloudSupportedType(value)) {
+                            lcObject.put(field.getName(), value);
+                        } else {
+                            lcObject.put(field.getName(), value.toString());
+                            System.out.println("[cast to String]Unsupported field type: " + field.getName() + " with value: " + value);
+                        }
+                    }
+                } catch (IllegalAccessException e) {
+                    System.out.println("Failed to access field: " + field.getName());
+                    return false;
+                }
             }
         }
 
