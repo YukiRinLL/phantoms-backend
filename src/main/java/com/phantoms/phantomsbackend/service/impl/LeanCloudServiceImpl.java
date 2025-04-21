@@ -1,11 +1,11 @@
 package com.phantoms.phantomsbackend.service.impl;
 
-import cn.leancloud.LCObject;
+import java.util.List;
+
 import com.phantoms.phantomsbackend.common.utils.LeanCloudUtils;
 import com.phantoms.phantomsbackend.service.LeanCloudService;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class LeanCloudServiceImpl implements LeanCloudService {
@@ -31,22 +31,27 @@ public class LeanCloudServiceImpl implements LeanCloudService {
     }
 
     @Override
-    public boolean createObject(String className, String key, String value, String userId) {
-        return LeanCloudUtils.createObject(className, key, value, userId);
+    public <T> boolean storeObject(String className, T object, String userId) {
+        return LeanCloudUtils.createObject(className, object, userId);
     }
 
     @Override
-    public List<LCObject> queryObject(String className, String key, String value, String userId) {
-        return LeanCloudUtils.queryObject(className, key, value, userId);
+    public <T> T getObject(String className, String objectId, Class<T> clazz, String userId) {
+        return LeanCloudUtils.queryObject(className, "objectId", objectId, userId, clazz).stream().findFirst().orElse(null);
     }
 
     @Override
-    public boolean updateObject(String className, String objectId, String key, String newValue, String userId) {
-        return LeanCloudUtils.updateObject(className, objectId, key, newValue, userId);
+    public <T> boolean updateObject(String className, String objectId, T object, String userId) {
+        return LeanCloudUtils.updateObject(className, objectId, object, userId);
     }
 
     @Override
     public boolean deleteObject(String className, String objectId, String userId) {
         return LeanCloudUtils.deleteObject(className, objectId, userId);
+    }
+
+    @Override
+    public <T> List<T> queryObject(String className, String key, Object value, Class<T> clazz, String userId) {
+        return LeanCloudUtils.queryObject(className, key, value, userId, clazz);
     }
 }

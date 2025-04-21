@@ -7,6 +7,9 @@ import cn.leancloud.LCQuery;
 import cn.leancloud.types.LCNull;
 import io.reactivex.Observable;
 
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -115,18 +118,45 @@ public class LeanCloudUtils {
         }
     }
 
-    // Create an object with ACL
-    public static boolean createObject(String className, String key, String value, String userId) {
-        LCObject object = new LCObject(className);
-        object.put("key", key);
-        object.put("value", value);
 
-        LCACL acl = new LCACL();
-        acl.setReadAccess(userId, true);
-        acl.setWriteAccess(userId, true);
-        object.setACL(acl);
 
-        Observable<? extends LCObject> observable = object.saveInBackground();
+    // 泛型方法：创建对象
+    public static <T> boolean createObject(String className, T object, String userId) {
+        LCObject lcObject = new LCObject(className);
+
+        // 获取目标对象
+        Object targetObject = getTargetObject(object);
+
+        // 获取所有字段（包括父类字段）
+        List<Field> allFields = getAllFields(targetObject.getClass());
+
+        for (Field field : allFields) {
+            field.setAccessible(true); // 确保字段可访问
+            try {
+                // 尝试通过 get 方法获取字段值
+                Object value = getFieldValue(targetObject, field);
+                if (value != null) { // 避免存储 null 值
+                    // 检查字段类型并处理
+                    if (isLeanCloudSupportedType(value)) {
+                        lcObject.put(field.getName(), value);
+                    } else {
+                        lcObject.put(field.getName(), value.toString());
+                        System.out.println("[cast to String]Unsupported field type: " + field.getName() + " with value: " + value);
+                    }
+                }
+            } catch (IllegalAccessException e) {
+                System.out.println("Failed to access field: " + field.getName());
+                return false;
+            }
+        }
+
+        // 设置 ACL
+//        LCACL acl = new LCACL();
+//        acl.setReadAccess(userId, true);
+//        acl.setWriteAccess(userId, true);
+//        lcObject.setACL(acl);
+
+        Observable<? extends LCObject> observable = lcObject.saveInBackground();
         try {
             observable.blockingFirst();
             return true;
@@ -136,18 +166,92 @@ public class LeanCloudUtils {
         }
     }
 
-    // Query objects with permission check
-    public static List<LCObject> queryObject(String className, String key, String value, String userId) {
+    private static boolean isLeanCloudSupportedType(Object value) {
+        return (value instanceof String)
+            || (value instanceof Number)
+            || (value instanceof Boolean)
+            || (value instanceof Date)
+//            || (value instanceof LCObject)
+//            || (value instanceof List)
+//            || (value instanceof Set)
+    ;}
+
+    // 获取代理对象的目标对象
+    private static Object getTargetObject(Object object) {
+        if (object == null) {
+            return null;
+        }
+
+        // 如果 object 是 java.lang.reflect.Proxy 生成的代理对象
+        if (Proxy.isProxyClass(object.getClass())) {
+            try {
+                Field h = object.getClass().getDeclaredField("h");
+                h.setAccessible(true);
+                InvocationHandler handler = (InvocationHandler) h.get(object);
+
+                Field target = handler.getClass().getDeclaredField("target");
+                target.setAccessible(true);
+                return target.get(handler);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 如果 object 是 CGLIB 生成的代理对象
+        if (object.getClass().getName().contains("$$")) {
+            try {
+                Field callbackField = object.getClass().getDeclaredField("CGLIB$CALLBACK_0");
+                callbackField.setAccessible(true);
+                Object callback = callbackField.get(object);
+
+                Field targetField = callback.getClass().getDeclaredField("CGLIB$CALLBACK_0");
+                targetField.setAccessible(true);
+                return targetField.get(callback);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 如果 object 不是代理对象，直接返回
+        return object;
+    }
+
+    // 递归获取所有字段（包括父类字段）
+    private static List<Field> getAllFields(Class<?> clazz) {
+        List<Field> fields = new ArrayList<>();
+        while (clazz != null) {
+            fields.addAll(List.of(clazz.getDeclaredFields()));
+            clazz = clazz.getSuperclass();
+        }
+        return fields;
+    }
+
+    // 尝试通过 get 方法获取字段值
+    private static Object getFieldValue(Object object, Field field) throws IllegalAccessException {
+        try {
+            String getterName = "get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
+            Method getterMethod = object.getClass().getMethod(getterName);
+            return getterMethod.invoke(object);
+        } catch (NoSuchMethodException | InvocationTargetException e) {
+            // 如果没有 get 方法，直接访问字段
+            return field.get(object);
+        }
+    }
+
+    // 泛型方法：查询对象
+    public static <T> List<T> queryObject(String className, String key, Object value, String userId, Class<T> clazz) {
         LCQuery<LCObject> query = new LCQuery<>(className);
-        query.whereEqualTo("key", key);
+        query.whereEqualTo(key, value);
+
         Observable<List<LCObject>> observable = query.findInBackground();
         try {
             List<LCObject> results = observable.blockingFirst();
             return results.stream()
-                    .filter(obj -> {
-                        LCACL acl = obj.getACL();
-                        return acl != null && acl.getReadAccess(userId);
-                    })
+//                .filter(obj -> {
+//                    LCACL acl = obj.getACL();
+//                    return acl != null && acl.getReadAccess(userId);
+//                })
+                    .map(obj -> convertToGenericObject(obj, clazz))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             System.out.println("Query failed: " + e.getMessage());
@@ -155,42 +259,74 @@ public class LeanCloudUtils {
         }
     }
 
-    // Update an object with permission check
-    public static boolean updateObject(String className, String objectId, String key, String newValue, String userId) {
-        LCObject object = LCObject.createWithoutData(className, objectId);
-        LCACL acl = object.getACL();
-        if (acl != null && acl.getWriteAccess(userId)) {
-            object.put("value", newValue);
-            Observable<? extends LCObject> observable = object.saveInBackground();
+    // 泛型方法：更新对象
+    public static <T> boolean updateObject(String className, String objectId, T object, String userId) {
+        LCObject lcObject = LCObject.createWithoutData(className, objectId);
+
+        // 使用反射解析对象字段并设置到 LCObject
+        Field[] fields = object.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
             try {
-                observable.blockingFirst();
-                return true;
-            } catch (Exception e) {
-                System.out.println("Object update failed: " + e.getMessage());
+                lcObject.put(field.getName(), field.get(object));
+            } catch (IllegalAccessException e) {
+                System.out.println("Failed to access field: " + field.getName());
                 return false;
             }
-        } else {
-            System.out.println("No permission to update this object.");
+        }
+
+        // 检查权限（可选）
+//    LCACL acl = lcObject.getACL();
+//    if (acl != null && acl.getWriteAccess(userId)) {
+        Observable<? extends LCObject> observable = lcObject.saveInBackground();
+        try {
+            observable.blockingFirst();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Object update failed: " + e.getMessage());
             return false;
+        }
+//    } else {
+//        System.out.println("No permission to update this object.");
+//        return false;
+//    }
+    }
+
+    // 泛型方法：删除对象
+    public static boolean deleteObject(String className, String objectId, String userId) {
+        LCObject lcObject = LCObject.createWithoutData(className, objectId);
+
+        // 检查权限（可选）
+//    LCACL acl = lcObject.getACL();
+//    if (acl != null && acl.getWriteAccess(userId)) {
+        Observable<LCNull> observable = lcObject.deleteInBackground();
+        try {
+            observable.blockingFirst();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Object deletion failed: " + e.getMessage());
+            return false;
+        }
+//    } else {
+//        System.out.println("No permission to delete this object.");
+//        return false;
+//    }
+    }
+
+    // 辅助方法：将 LCObject 转换为泛型对象
+    private static <T> T convertToGenericObject(LCObject lcObject, Class<T> clazz) {
+        try {
+            T genericObject = clazz.getDeclaredConstructor().newInstance();
+            Field[] fields = clazz.getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                field.set(genericObject, lcObject.get(field.getName()));
+            }
+            return genericObject;
+        } catch (Exception e) {
+            System.out.println("Failed to convert LCObject to generic object: " + e.getMessage());
+            return null;
         }
     }
 
-    // Delete an object with permission check
-    public static boolean deleteObject(String className, String objectId, String userId) {
-        LCObject object = LCObject.createWithoutData(className, objectId);
-        LCACL acl = object.getACL();
-        if (acl != null && acl.getWriteAccess(userId)) {
-            Observable<LCNull> observable = object.deleteInBackground();
-            try {
-                observable.blockingFirst();
-                return true;
-            } catch (Exception e) {
-                System.out.println("Object deletion failed: " + e.getMessage());
-                return false;
-            }
-        } else {
-            System.out.println("No permission to delete this object.");
-            return false;
-        }
-    }
 }

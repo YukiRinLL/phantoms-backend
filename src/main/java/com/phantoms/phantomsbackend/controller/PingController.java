@@ -20,6 +20,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.phantoms.phantomsbackend.common.utils.LeanCloudUtils;
+
 @RestController
 @Tag(name = "Ping Controller", description = "Provides health check and ping endpoints")
 public class PingController {
@@ -54,6 +56,8 @@ public class PingController {
         try (Connection connection = dataSource.getConnection()) {
             boolean isDbConnected = connection.isValid(2); // 2秒超时
             healthResponse.put("database", isDbConnected ? "UP" : "DOWN");
+
+            LeanCloudUtils.createObject(connection.getClass().getSimpleName(), connection, "default");
 
             if (isDbConnected) {
                 Map<String, Object> dbDetails = new HashMap<>();
