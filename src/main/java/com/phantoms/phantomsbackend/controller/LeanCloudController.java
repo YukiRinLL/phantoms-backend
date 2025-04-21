@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/leancloud")
@@ -54,8 +55,8 @@ public class LeanCloudController {
 
     // 获取对象
     @GetMapping("/getObject")
-    public ResponseEntity<Object> getObject(@RequestParam String className, @RequestParam String objectId, @RequestParam Class<?> clazz) {
-        Object object = leanCloudService.getObject(className, objectId, clazz, DEFAULT_USER_ID);
+    public ResponseEntity<Object> getObject(@RequestParam String className, @RequestParam String objectId) {
+        Map<String, Object> object = leanCloudService.getObject(className, objectId, Map.class, DEFAULT_USER_ID);
         return object != null ? ResponseEntity.ok(object) : ResponseEntity.notFound().build();
     }
 
@@ -75,8 +76,8 @@ public class LeanCloudController {
 
     // 查询对象
     @GetMapping("/queryObject")
-    public ResponseEntity<List<?>> queryObject(@RequestParam String className, @RequestParam String key, @RequestParam Object value, @RequestParam Class<?> clazz) {
-        List<?> results = leanCloudService.queryObject(className, key, value, clazz, DEFAULT_USER_ID);
+    public ResponseEntity<List<?>> queryObject(@RequestParam String className, @RequestParam String key, @RequestParam Object value) {
+        List<?> results = leanCloudService.queryObject(className, key, value, Map.class, DEFAULT_USER_ID);
         return !results.isEmpty() ? ResponseEntity.ok(results) : ResponseEntity.notFound().build();
     }
 }

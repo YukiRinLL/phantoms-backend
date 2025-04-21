@@ -126,27 +126,40 @@ public class LeanCloudUtils {
 
         // 获取目标对象
         Object targetObject = getTargetObject(object);
-
-        // 获取所有字段（包括父类字段）
-        List<Field> allFields = getAllFields(targetObject.getClass());
-
-        for (Field field : allFields) {
-            field.setAccessible(true); // 确保字段可访问
-            try {
-                // 尝试通过 get 方法获取字段值
-                Object value = getFieldValue(targetObject, field);
-                if (value != null) { // 避免存储 null 值
-                    // 检查字段类型并处理
-                    if (isLeanCloudSupportedType(value)) {
-                        lcObject.put(field.getName(), value);
-                    } else {
-                        lcObject.put(field.getName(), value.toString());
-                        System.out.println("[cast to String]Unsupported field type: " + field.getName() + " with value: " + value);
-                    }
+        // 检查目标对象是否是 Map
+        if (targetObject instanceof Map) {
+            Map<?, ?> map = (Map<?, ?>) targetObject;
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                Object key = entry.getKey();
+                Object value = entry.getValue();
+                if (isLeanCloudSupportedType(value)) {
+                    lcObject.put(key.toString(), value);
+                } else {
+                    System.out.println("Unsupported field type: " + key + " with value: " + value);
                 }
-            } catch (IllegalAccessException e) {
-                System.out.println("Failed to access field: " + field.getName());
-                return false;
+            }
+        } else {
+            // 获取所有字段（包括父类字段）
+            List<Field> allFields = getAllFields(targetObject.getClass());
+
+            for (Field field : allFields) {
+                field.setAccessible(true); // 确保字段可访问
+                try {
+                    // 尝试通过 get 方法获取字段值
+                    Object value = getFieldValue(targetObject, field);
+                    if (value != null) { // 避免存储 null 值
+                        // 检查字段类型并处理
+                        if (isLeanCloudSupportedType(value)) {
+                            lcObject.put(field.getName(), value);
+                        } else {
+                            lcObject.put(field.getName(), value.toString());
+                            System.out.println("[cast to String]Unsupported field type: " + field.getName() + " with value: " + value);
+                        }
+                    }
+                } catch (IllegalAccessException e) {
+                    System.out.println("Failed to access field: " + field.getName());
+                    return false;
+                }
             }
         }
 
@@ -175,13 +188,11 @@ public class LeanCloudUtils {
 //            || (value instanceof List)
 //            || (value instanceof Set)
     ;}
-
     // 获取代理对象的目标对象
     private static Object getTargetObject(Object object) {
         if (object == null) {
             return null;
         }
-
         // 如果 object 是 java.lang.reflect.Proxy 生成的代理对象
         if (Proxy.isProxyClass(object.getClass())) {
             try {
@@ -196,7 +207,6 @@ public class LeanCloudUtils {
                 e.printStackTrace();
             }
         }
-
         // 如果 object 是 CGLIB 生成的代理对象
         if (object.getClass().getName().contains("$$")) {
             try {
@@ -211,11 +221,9 @@ public class LeanCloudUtils {
                 e.printStackTrace();
             }
         }
-
         // 如果 object 不是代理对象，直接返回
         return object;
     }
-
     // 递归获取所有字段（包括父类字段）
     private static List<Field> getAllFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<>();
@@ -225,7 +233,6 @@ public class LeanCloudUtils {
         }
         return fields;
     }
-
     // 尝试通过 get 方法获取字段值
     private static Object getFieldValue(Object object, Field field) throws IllegalAccessException {
         try {
@@ -259,16 +266,46 @@ public class LeanCloudUtils {
         }
     }
 
+    private static <T> T convertToGenericObject(LCObject lcObject, Class<T> clazz) {
+        try {
+            if (clazz == Map.class) {
+                Map<String, Object> map = new HashMap<>();
+                for (String key : lcObject.getServerData().keySet()) {
+                    map.put(key, lcObject.get(key));
+                }
+                return clazz.cast(map);
+            } else {
+                T genericObject = clazz.getDeclaredConstructor().newInstance();
+                Field[] fields = clazz.getDeclaredFields();
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                    field.set(genericObject, lcObject.get(field.getName()));
+                }
+                return genericObject;
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to convert LCObject to generic object: " + e.getMessage());
+            return null;
+        }
+    }
     // 泛型方法：更新对象
     public static <T> boolean updateObject(String className, String objectId, T object, String userId) {
         LCObject lcObject = LCObject.createWithoutData(className, objectId);
 
         // 使用反射解析对象字段并设置到 LCObject
-        Field[] fields = object.getClass().getDeclaredFields();
-        for (Field field : fields) {
+        List<Field> allFields = getAllFields(object.getClass());
+        for (Field field : allFields) {
             field.setAccessible(true);
             try {
-                lcObject.put(field.getName(), field.get(object));
+                Object value = field.get(object);
+                if (value != null) { // 避免存储 null 值
+                    if (isLeanCloudSupportedType(value)) {
+                        lcObject.put(field.getName(), value);
+                    } else {
+                        lcObject.put(field.getName(), value.toString());
+                        System.out.println("[cast to String]Unsupported field type: " + field.getName() + " with value: " + value);
+                    }
+                }
             } catch (IllegalAccessException e) {
                 System.out.println("Failed to access field: " + field.getName());
                 return false;
@@ -312,21 +349,4 @@ public class LeanCloudUtils {
 //        return false;
 //    }
     }
-
-    // 辅助方法：将 LCObject 转换为泛型对象
-    private static <T> T convertToGenericObject(LCObject lcObject, Class<T> clazz) {
-        try {
-            T genericObject = clazz.getDeclaredConstructor().newInstance();
-            Field[] fields = clazz.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                field.set(genericObject, lcObject.get(field.getName()));
-            }
-            return genericObject;
-        } catch (Exception e) {
-            System.out.println("Failed to convert LCObject to generic object: " + e.getMessage());
-            return null;
-        }
-    }
-
 }
