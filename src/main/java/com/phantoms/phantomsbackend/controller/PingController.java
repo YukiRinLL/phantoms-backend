@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +38,12 @@ public class PingController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private RedisConnectionFactory redisConnectionFactory;
+
     @Value("${app.version:unknown}")
     private String appVersion;
 
@@ -56,7 +64,7 @@ public class PingController {
     }
 
     @GetMapping("/health")
-    @Operation(summary = "Health Check endpoint", description = "Returns the health status of the application, including database and LeanCloud status.",
+    @Operation(summary = "Health Check endpoint", description = "Returns the health status of the application, including database, Redis, and LeanCloud status.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Health status",
                             content = @Content(schema = @Schema(implementation = Map.class)))
@@ -65,6 +73,7 @@ public class PingController {
         Map<String, Object> healthResponse = new HashMap<>();
         healthResponse.put("timestamp", LocalDateTime.now());
 
+        // 检查数据库连接
         try (Connection connection = dataSource.getConnection()) {
             boolean isDbConnected = connection.isValid(2); // 2秒超时
             healthResponse.put("database", isDbConnected ? "UP" : "DOWN");
@@ -95,6 +104,16 @@ public class PingController {
             healthResponse.put("databaseError", e.getMessage());
             e.printStackTrace();
         }
+
+        // 检查 Redis 连接
+        boolean isRedisConnected = false;
+        try (org.springframework.data.redis.connection.RedisConnection connection = redisConnectionFactory.getConnection()) {
+            isRedisConnected = "PONG".equals(connection.ping());
+        } catch (Exception e) {
+            healthResponse.put("redisError", e.getMessage());
+            e.printStackTrace();
+        }
+        healthResponse.put("redis", isRedisConnected ? "UP" : "DOWN");
 
         // 检查 LeanCloud 状态
         boolean isLeanCloudConnected = false;

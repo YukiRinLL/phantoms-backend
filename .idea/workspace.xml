@@ -4,18 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="add RedisConfig">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="add version &amp; leancloud check APIs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phantoms-backend/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/PingController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/PingController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/PingController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/PingController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" afterDir="false" />
@@ -93,6 +86,7 @@
     "Maven.phantoms-backend [org.apache.maven.plugins:maven-deploy-plugin:3.0.0:deploy].executor": "Run",
     "Maven.phantoms-backend [org.apache.maven.plugins:maven-install-plugin:3.0.1:install].executor": "Run",
     "Maven.phantoms-backend [package].executor": "Run",
+    "Maven.phantoms-backend [validate].executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
@@ -218,7 +212,7 @@
       <workItem from="1744860786977" duration="17000" />
       <workItem from="1744940721545" duration="2962000" />
       <workItem from="1745201931407" duration="14664000" />
-      <workItem from="1745291478122" duration="6800000" />
+      <workItem from="1745291478122" duration="8490000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -540,7 +534,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745302617880</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="add version &amp; leancloud check APIs">
+      <option name="closed" value="true" />
+      <created>1745306299697</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1745306299697</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -558,7 +560,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="initial commit" />
     <MESSAGE value="update Dockerfile using JDK 21" />
     <MESSAGE value="update Dockerfile using JDK 21" />
     <MESSAGE value="update Dockerfile using JDK 23" />
@@ -583,7 +584,8 @@
     <MESSAGE value="fix PlantUML getObject" />
     <MESSAGE value="fix PlantUML Object functions" />
     <MESSAGE value="add RedisConfig" />
-    <option name="LAST_COMMIT_MESSAGE" value="add RedisConfig" />
+    <MESSAGE value="add version &amp; leancloud check APIs" />
+    <option name="LAST_COMMIT_MESSAGE" value="add version &amp; leancloud check APIs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
