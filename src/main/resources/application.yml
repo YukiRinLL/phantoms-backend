@@ -6,6 +6,7 @@ logging:
   level:
     org.springframework: DEBUG
     springfox: DEBUG
+    org.springframework.data.redis: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.postgresql: DEBUG
@@ -58,7 +59,6 @@ spring:
       ddl-auto: validate
     show-sql: true
 
-
   # E-mail (QQ 邮箱配置)
   mail:
     host: smtp.qq.com
@@ -73,6 +73,19 @@ spring:
           ssl:
             enable: true
           auth: true
+  data:
+    # Redis
+    redis:
+      # Redis
+      # Render Internal Redis URL
+#      url: redis://red-d03imhre5dus73ab817g:6379
+      # External Redis URL
+#      url: rediss://red-d03imhre5dus73ab817g:OXtvQrLbJ1WXXdjXMEVknm1hPnW8XFAo@oregon-keyvalue.render.com:6379
+      scheme: rediss  # 表示使用加密连接
+      host: oregon-keyvalue.render.com
+      port: 6379
+      username: red-d03imhre5dus73ab817g
+      password: OXtvQrLbJ1WXXdjXMEVknm1hPnW8XFAo
 
 # swagger
 springdoc:
