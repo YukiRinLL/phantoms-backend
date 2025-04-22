@@ -81,11 +81,13 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\PIS\
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\TH\MyIdGenerator.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\jasper\ReportException.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\jasper\ReportModel.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\RedisConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\PIS\RedisUtil.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\PIS\TimeUtils.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\SwaggerConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\impl\MessageServiceImpl.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\PIS\CaptchaUtil.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\RedisUtil.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\TH\DateUtils.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\UserProfileRepository.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\jasper\AbstractReport.java

@@ -4,12 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="fix PlantUML Object functions">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/RedisConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RedisUtil.java" afterDir="false" />
+    <list default="true" id="75efa391-4787-46c2-ad45-52cc30fbb88d" name="Changes" comment="add RedisConfig">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phantoms-backend/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/PingController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/controller/PingController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/PingController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phantoms/phantomsbackend/controller/PingController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,7 +218,7 @@
       <workItem from="1744860786977" duration="17000" />
       <workItem from="1744940721545" duration="2962000" />
       <workItem from="1745201931407" duration="14664000" />
-      <workItem from="1745291478122" duration="3231000" />
+      <workItem from="1745291478122" duration="6800000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -522,7 +532,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745222447704</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="add RedisConfig">
+      <option name="closed" value="true" />
+      <created>1745302617880</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1745302617880</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -564,7 +582,8 @@
     <MESSAGE value="fix PlantUML createObject" />
     <MESSAGE value="fix PlantUML getObject" />
     <MESSAGE value="fix PlantUML Object functions" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix PlantUML Object functions" />
+    <MESSAGE value="add RedisConfig" />
+    <option name="LAST_COMMIT_MESSAGE" value="add RedisConfig" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -628,11 +647,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LeanCloudUtils.java</url>
           <line>103</line>
           <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java</url>
-          <line>59</line>
-          <option name="timeStamp" value="32" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="org.springframework.dao.IncorrectResultSizeDataAccessException" package="org.springframework.dao" />

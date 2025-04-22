@@ -22,6 +22,7 @@ com\phantoms\phantomsbackend\service\XIVAPIService.class
 com\phantoms\phantomsbackend\common\utils\PIS\FileUtil.class
 com\phantoms\phantomsbackend\common\utils\TH\DateUtils.class
 com\phantoms\phantomsbackend\common\utils\TH\NumericUtil.class
+com\phantoms\phantomsbackend\common\config\RedisConfig.class
 com\phantoms\phantomsbackend\common\jasper\ReportModel$ContentType.class
 com\phantoms\phantomsbackend\common\bean\SearchResponse.class
 com\phantoms\phantomsbackend\controller\AuthUserController.class
@@ -36,6 +37,7 @@ com\phantoms\phantomsbackend\controller\EmailController$EmailContent.class
 com\phantoms\phantomsbackend\pojo\entity\User.class
 com\phantoms\phantomsbackend\controller\UserController.class
 com\phantoms\phantomsbackend\common\utils\PIS\NameAndPasswordEncodeUtil.class
+com\phantoms\phantomsbackend\common\utils\RedisUtil.class
 com\phantoms\phantomsbackend\repository\MessageRepository.class
 com\phantoms\phantomsbackend\service\EmailService.class
 com\phantoms\phantomsbackend\common\utils\PIS\SpringUtils.class
