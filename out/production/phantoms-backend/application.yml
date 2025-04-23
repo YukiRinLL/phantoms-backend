@@ -113,3 +113,10 @@ leancloud:
   server-url: "https://4ness81j.lc-cn-n1-shared.com"
   # 开启 LeanCloud SDK 调试日志
   log-level: "DEBUG"
+
+d1:
+  api-url: https://api.cloudflare.com
+  account-id: 0e7f3f296b75e9770c65d0d0fa73d7d7
+  database-id: 0ad9906c-ec63-4111-b741-647627eee096
+  api-token: XfJvEzGOKAMIn18NRE5MvkqU4C64s_ic3iNXRk1y
+  log-level: WARNING

@@ -14,6 +14,24 @@
         <version>3.1.4</version>
     </parent>
 
+    <repositories>
+        <!-- 阿里云 Maven 镜像仓库 -->
+        <repository>
+            <id>aliyun</id>
+            <url>https://maven.aliyun.com/repository/central</url>
+        </repository>
+        <!-- Maven 中央仓库 -->
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- Spring Boot Web Starter -->
         <dependency>
@@ -68,6 +86,18 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.1</version>
+        </dependency>
+        <!-- D1 Driver (outdated) -->
+<!--        <dependency>-->
+<!--            <groupId>org.isaacmcfadyen</groupId>-->
+<!--            <artifactId>d1-jdbc-driver</artifactId>-->
+<!--            <version>1.1.1</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>co.casterlabs</groupId>
+            <artifactId>d1-java</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>

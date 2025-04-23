@@ -15,7 +15,9 @@ com\phantoms\phantomsbackend\pojo\entity\Image.class
 com\phantoms\phantomsbackend\pojo\dto\ImageDTO.class
 com\phantoms\phantomsbackend\controller\EmailController$AuthUserEmailDTO.class
 com\phantoms\phantomsbackend\common\excel\AbstractExcelImport.class
+com\phantoms\phantomsbackend\controller\D1Controller.class
 com\phantoms\phantomsbackend\common\bean\ResultInfo$Status.class
+com\phantoms\phantomsbackend\common\config\D1Properties.class
 com\phantoms\phantomsbackend\service\UserService.class
 com\phantoms\phantomsbackend\common\utils\XIVAPIClient$2.class
 com\phantoms\phantomsbackend\service\XIVAPIService.class
@@ -46,6 +48,7 @@ com\phantoms\phantomsbackend\common\utils\LeanCloudUtils.class
 com\phantoms\phantomsbackend\service\impl\MessageServiceImpl.class
 com\phantoms\phantomsbackend\common\utils\PIS\CharToImageUtils.class
 com\phantoms\phantomsbackend\common\utils\PIS\Convert.class
+com\phantoms\phantomsbackend\common\config\JacksonConfig.class
 com\phantoms\phantomsbackend\common\jasper\ReportDto.class
 com\phantoms\phantomsbackend\controller\EmailController.class
 com\phantoms\phantomsbackend\common\jasper\ReportModel.class
@@ -55,6 +58,7 @@ com\phantoms\phantomsbackend\common\config\XIVAPIConfig.class
 com\phantoms\phantomsbackend\pojo\entity\Message.class
 com\phantoms\phantomsbackend\common\utils\PIS\MonthSheetWriteHandler.class
 com\phantoms\phantomsbackend\common\jasper\ReportException.class
+com\phantoms\phantomsbackend\common\utils\D1Util.class
 com\phantoms\phantomsbackend\controller\MessageController.class
 com\phantoms\phantomsbackend\common\utils\XIVAPIClient$1.class
 com\phantoms\phantomsbackend\common\excel\MergeHandler.class
@@ -64,6 +68,7 @@ com\phantoms\phantomsbackend\repository\UserProfileRepository.class
 com\phantoms\phantomsbackend\common\bean\ResultInfo.class
 com\phantoms\phantomsbackend\common\jasper\AbstractReport.class
 com\phantoms\phantomsbackend\service\MessageService.class
+com\phantoms\phantomsbackend\service\impl\D1ServiceImpl.class
 com\phantoms\phantomsbackend\common\exception\ServiceException.class
 com\phantoms\phantomsbackend\pojo\entity\UserProfile.class
 com\phantoms\phantomsbackend\common\excel\AbstractExcelExport.class
@@ -72,6 +77,7 @@ com\phantoms\phantomsbackend\common\utils\TH\MyIdGenerator.class
 com\phantoms\phantomsbackend\common\utils\PIS\ExcelUtils.class
 com\phantoms\phantomsbackend\common\utils\PIS\DateUtils.class
 com\phantoms\phantomsbackend\common\utils\PIS\StringUtils.class
+com\phantoms\phantomsbackend\service\D1Service.class
 com\phantoms\phantomsbackend\controller\LeanCloudController.class
 com\phantoms\phantomsbackend\common\utils\PIS\MD5Utils.class
 com\phantoms\phantomsbackend\service\LeanCloudService.class
@@ -102,6 +108,7 @@ com\phantoms\phantomsbackend\controller\UserController$UpdateUserRequest.class
 com\phantoms\phantomsbackend\common\config\LeanCloudConfig.class
 com\phantoms\phantomsbackend\common\utils\PIS\DataPremissionHelper$Premissions.class
 com\phantoms\phantomsbackend\common\utils\PIS\CaptchaUtil.class
+com\phantoms\phantomsbackend\common\serializer\JsonArraySerializer.class
 com\phantoms\phantomsbackend\common\utils\PIS\TimeUtils$DateStyle.class
 com\phantoms\phantomsbackend\common\jasper\JasperReport.class
 com\phantoms\phantomsbackend\common\utils\XIVAPIClient$4.class

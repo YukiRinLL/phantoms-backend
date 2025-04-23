@@ -6,5 +6,9 @@
       <user-name>postgres.qnwhrdsnwhrdivakvvex</user-name>
       <schema-mapping />
     </data-source>
+    <data-source name="0@red-d03imhre5dus73ab817g" uuid="0c4672f4-49be-45fa-a353-4b5dbf1914b4">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="REDIS" />
+      <schema-mapping />
+    </data-source>
   </component>
 </project>
