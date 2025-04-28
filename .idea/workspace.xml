@@ -4,10 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="gitignore">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/phantoms-backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/phantoms-backend.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/config/JacksonConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/phantoms-backend/com/phantoms/phantomsbackend/common/config/JacksonConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/JacksonConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/JacksonConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,11 +122,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\phantoms-backend" />
       <recent name="D:\phantoms-backend\data" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common" />
-      <recent name="D:\phantoms-backend\src\main\resources\templates\email" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.phantoms.phantomsbackend" />
@@ -194,7 +200,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="" name="Changes" comment="" />
+      <changelist id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="gitignore" />
       <created>1742290735209</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -222,7 +228,8 @@
       <workItem from="1745404652924" duration="412000" />
       <workItem from="1745457995657" duration="1869000" />
       <workItem from="1745570495732" duration="843000" />
-      <workItem from="1745804026723" duration="1125000" />
+      <workItem from="1745804026723" duration="2043000" />
+      <workItem from="1745828804241" duration="1718000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -584,7 +591,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745571285830</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="gitignore">
+      <option name="closed" value="true" />
+      <created>1745821444786</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1745821444786</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -619,7 +634,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="re-construct previous crud APIs" />
     <MESSAGE value="add Users APIs" />
     <MESSAGE value="Keep Render Service Alive" />
     <MESSAGE value="add email function" />
@@ -644,7 +658,8 @@
     <MESSAGE value="add redis check APIs" />
     <MESSAGE value="add cloudflare D1 features" />
     <MESSAGE value="add jackson-datatype-jsr310 to fix Jackson not support Java 8 java.time.LocalDateTime" />
-    <option name="LAST_COMMIT_MESSAGE" value="add jackson-datatype-jsr310 to fix Jackson not support Java 8 java.time.LocalDateTime" />
+    <MESSAGE value="gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="gitignore" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
