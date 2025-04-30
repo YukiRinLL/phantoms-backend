@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="gitignore">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update lib">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -114,11 +114,14 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\phantoms-backend" />
       <recent name="D:\phantoms-backend\data" />
+      <recent name="D:\phantoms-backend" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\phantoms-backend\lib" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.phantoms.phantomsbackend" />
@@ -222,6 +225,9 @@
       <workItem from="1745570495732" duration="843000" />
       <workItem from="1745804026723" duration="2043000" />
       <workItem from="1745828804241" duration="1718000" />
+      <workItem from="1745976747931" duration="1167000" />
+      <workItem from="1745985293559" duration="127000" />
+      <workItem from="1745991935984" duration="882000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -591,7 +597,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745821444786</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="update lib">
+      <option name="closed" value="true" />
+      <created>1745920473546</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1745920473546</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -626,7 +640,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add Users APIs" />
     <MESSAGE value="Keep Render Service Alive" />
     <MESSAGE value="add email function" />
     <MESSAGE value="add log4j &amp; ResultInfo" />
@@ -651,7 +664,8 @@
     <MESSAGE value="add cloudflare D1 features" />
     <MESSAGE value="add jackson-datatype-jsr310 to fix Jackson not support Java 8 java.time.LocalDateTime" />
     <MESSAGE value="gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="gitignore" />
+    <MESSAGE value="update lib" />
+    <option name="LAST_COMMIT_MESSAGE" value="update lib" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -14,7 +14,7 @@ echo "Running git lfs prune to clean up old LFS files..."
 git lfs prune
 ```
 
-也可以知性根目录下的setup-hooks脚本来还原备份文件
+也可以执行根目录下的setup-hooks脚本来还原备份文件
 
 备份文件:[post-commit](post-commit)
 
