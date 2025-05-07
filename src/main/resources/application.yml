@@ -17,18 +17,18 @@ logging:
 spring:
   datasource:
     # Supabase Direct Connection mode
-#    url: jdbc:postgresql://db.qnwhrdsnwhrdivakvvex.supabase.co:5432/postgres
+#    url: jdbc:postgresql://db.utylywymjmizpjrojbxp.supabase.co:5432/postgres
 #    username: postgres
 #    password: LUOCANYUlcy20000506YukiRinLL
 
     # Supabase Transaction Pooler mode
     url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
-    username: postgres.qnwhrdsnwhrdivakvvex
+    username: postgres.utylywymjmizpjrojbxp
     password: LUOCANYUlcy20000506YukiRinLL
 
     # Supabase Session pooler mode
-#    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1
-#    username: postgres.qnwhrdsnwhrdivakvvex
+#    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
+#    username: postgres.utylywymjmizpjrojbxp
 #    password: LUOCANYUlcy20000506YukiRinLL
 #    driver-class-name: org.postgresql.Driver
 
