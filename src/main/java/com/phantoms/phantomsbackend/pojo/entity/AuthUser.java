@@ -15,8 +15,8 @@ public class AuthUser {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "instance_id")
-    private String instanceId;
+    @Column(name = "instance_id", columnDefinition = "UUID")
+    private UUID instanceId;
 
     @Column(name = "aud")
     private String aud;
@@ -60,10 +60,10 @@ public class AuthUser {
     @Column(name = "last_sign_in_at")
     private LocalDateTime lastSignInAt;
 
-    @Column(name = "raw_app_meta_data")
+    @Column(name = "raw_app_meta_data", columnDefinition = "jsonb")
     private String rawAppMetaData;
 
-    @Column(name = "raw_user_meta_data")
+    @Column(name = "raw_user_meta_data", columnDefinition = "jsonb")
     private String rawUserMetaData;
 
     @Column(name = "is_super_admin")
@@ -116,5 +116,4 @@ public class AuthUser {
 
     @Column(name = "is_anonymous")
     private boolean isAnonymous;
-
 }
