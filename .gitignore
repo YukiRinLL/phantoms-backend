@@ -47,7 +47,7 @@ build/
 .idea
 *.iml
 *.ipr
-out
+#out
 gen
 
 # 编译输出目录
