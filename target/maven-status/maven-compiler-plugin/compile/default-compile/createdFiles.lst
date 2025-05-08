@@ -54,6 +54,7 @@ com\phantoms\phantomsbackend\controller\EmailController.class
 com\phantoms\phantomsbackend\common\jasper\ReportModel.class
 com\phantoms\phantomsbackend\common\utils\EmailUtil.class
 com\phantoms\phantomsbackend\service\impl\LeanCloudServiceImpl.class
+com\phantoms\phantomsbackend\service\scheduler\HealthCheckScheduler.class
 com\phantoms\phantomsbackend\common\config\XIVAPIConfig.class
 com\phantoms\phantomsbackend\pojo\entity\Message.class
 com\phantoms\phantomsbackend\common\utils\PIS\MonthSheetWriteHandler.class
@@ -103,6 +104,7 @@ com\phantoms\phantomsbackend\common\utils\PIS\DateTransform.class
 com\phantoms\phantomsbackend\controller\UserController$IdRequest.class
 com\phantoms\phantomsbackend\repository\AuthUserRepository.class
 com\phantoms\phantomsbackend\common\utils\PIS\IpUtils.class
+com\phantoms\phantomsbackend\common\config\SchedulingConfig.class
 com\phantoms\phantomsbackend\common\utils\PIS\IsWeekSame.class
 com\phantoms\phantomsbackend\controller\UserController$UpdateUserRequest.class
 com\phantoms\phantomsbackend\common\config\LeanCloudConfig.class

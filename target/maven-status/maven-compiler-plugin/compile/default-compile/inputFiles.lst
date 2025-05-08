@@ -21,6 +21,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\XIVA
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\exception\ServiceException.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\LeanCloudController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\PIS\Convert.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\scheduler\HealthCheckScheduler.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\MessageController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\AuthUserService.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\TH\NumericUtil.java
@@ -38,6 +39,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\AuthU
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\bean\ResultInfo.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\excel\RowHeightWriteHandler.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\User.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\SchedulingConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\WebConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\excel\MergeHandler.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\D1Controller.java
