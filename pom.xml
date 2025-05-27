@@ -33,6 +33,13 @@
     </repositories>
 
     <dependencies>
+        <!-- TeaVM -->
+        <dependency>
+            <groupId>org.teavm</groupId>
+            <artifactId>teavm-classlib</artifactId>
+            <version>0.11.0</version>
+        </dependency>
+
         <!-- Spring Boot Web Starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -286,6 +293,18 @@
 
     <build>
         <plugins>
+<!--            <plugin>-->
+<!--                <groupId>org.teavm</groupId>-->
+<!--                <artifactId>teavm-maven-plugin</artifactId>-->
+<!--                <version>0.11.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>compile</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
