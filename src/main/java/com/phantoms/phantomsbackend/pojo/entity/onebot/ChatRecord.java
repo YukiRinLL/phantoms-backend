@@ -18,10 +18,10 @@ public class ChatRecord {
     @Column(name = "message_type")
     private String messageType;
 
-    @Column(name = "user_id")
+    @Column(name = "qq_user_id")
     private Long qqUserId;
 
-    @Column(name = "group_id")
+    @Column(name = "qq_group_id")
     private Long qqGroupId;
 
     @Column(name = "message")

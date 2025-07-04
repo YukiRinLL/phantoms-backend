@@ -23,8 +23,8 @@ public class OneBotController {
 
         // 获取消息类型和消息内容
         String messageType = (String) requestBody.get("message_type");
-        Long userId = requestBody.get("user_id") != null ? Long.valueOf(requestBody.get("user_id").toString()) : null;
-        Long groupId = requestBody.get("group_id") != null ? Long.valueOf(requestBody.get("group_id").toString()) : null;
+        Long userId = requestBody.get("qq_user_id") != null ? Long.valueOf(requestBody.get("qq_user_id").toString()) : null;
+        Long groupId = requestBody.get("qq_group_id") != null ? Long.valueOf(requestBody.get("qq_group_id").toString()) : null;
         String message = (String) requestBody.get("message");
 
         // 创建ChatRecord对象并保存到数据库
