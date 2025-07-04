@@ -8,6 +8,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\D1P
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\PIS\FileUtil.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\PIS\DateTransform.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\PIS\IpUtils.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\OneBotController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\bean\SearchResponse.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\TH\ValidateUtils.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\UserProfile.java
@@ -43,6 +44,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\Sch
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\WebConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\excel\MergeHandler.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\D1Controller.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\onebot\ChatRecord.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\UserRepository.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\PIS\DateUtils.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\jasper\ReportModel.java
@@ -55,6 +57,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\D1Service
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\EmailService.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\PIS\ExcelUtils.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\PIS\ParseCodeUtil.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\onebot\ChatRecordRepository.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\jasper\ReportDto.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\PIS\HttpUtils.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\PIS\ExcelFillCellMergeStrategy.java

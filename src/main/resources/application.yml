@@ -103,6 +103,13 @@ management:
     enable:
       jdbc: true
 
+#Napcat QQ
+shiro:
+  ws:
+    server:
+      enable: true
+      url: "/ws"
+
 xivapi:
   base-url: "https://v2.xivapi.com/api"
 

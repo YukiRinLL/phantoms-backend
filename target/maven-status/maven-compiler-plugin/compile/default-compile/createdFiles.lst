@@ -35,6 +35,7 @@ com\phantoms\phantomsbackend\pojo\dto\UserDTO.class
 com\phantoms\phantomsbackend\pojo\dto\MessageDTO.class
 com\phantoms\phantomsbackend\pojo\entity\AuthUser.class
 com\phantoms\phantomsbackend\common\utils\TH\ValidateUtils.class
+com\phantoms\phantomsbackend\repository\onebot\ChatRecordRepository.class
 com\phantoms\phantomsbackend\controller\EmailController$EmailContent.class
 com\phantoms\phantomsbackend\pojo\entity\User.class
 com\phantoms\phantomsbackend\controller\UserController.class
@@ -94,8 +95,10 @@ com\phantoms\phantomsbackend\controller\XIVAPIController.class
 com\phantoms\phantomsbackend\common\utils\PIS\DataPremissionHelper.class
 com\phantoms\phantomsbackend\common\jasper\JasperModel.class
 com\phantoms\phantomsbackend\common\utils\PIS\ParseCodeUtil.class
+com\phantoms\phantomsbackend\controller\OneBotController.class
 com\phantoms\phantomsbackend\common\utils\PIS\ExcelExportUtil.class
 com\phantoms\phantomsbackend\common\utils\PIS\TimeUtils.class
+com\phantoms\phantomsbackend\pojo\entity\onebot\ChatRecord.class
 com\phantoms\phantomsbackend\common\jasper\AbstractReport$1.class
 com\phantoms\phantomsbackend\PhantomsBackendApplication.class
 com\phantoms\phantomsbackend\service\AuthUserService.class

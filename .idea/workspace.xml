@@ -4,15 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add HealthCheckScheduler">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add TeaVM dependence">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/onebot/ChatRecord.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/onebot/ChatRecordRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/git.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.phantoms.phantomsbackend.PhantomsBackendApplicationTests.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +99,7 @@
     "Spring Boot.PhantomsBackendApplication.executor": "Debug",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/ffxiv_phantoms_mainpage_vue",
+    "last_opened_file_path": "D:/FFXIV_Phantoms_MainPage",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -136,11 +135,11 @@
       <recent name="com.phantoms.phantomsbackend" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.phantoms.phantomsbackend.repository.onebot" />
+      <recent name="com.phantoms.phantomsbackend.controller" />
       <recent name="com.phantoms.phantomsbackend.common.config" />
       <recent name="com.phantoms.phantomsbackend.common.serializer" />
-      <recent name="com.phantoms.phantomsbackend.controller" />
       <recent name="com.phantoms.phantomsbackend.service.impl" />
-      <recent name="com.phantoms.phantomsbackend.service" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -239,14 +238,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00005" summary="update Dockerfile using JDK 17">
-      <option name="closed" value="true" />
-      <created>1742351805570</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1742351805570</updated>
     </task>
     <task id="LOCAL-00006" summary="update Dockerfile using JDK 17">
       <option name="closed" value="true" />
@@ -632,7 +623,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746684079662</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="add TeaVM dependence">
+      <option name="closed" value="true" />
+      <created>1748333214250</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1748333214250</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -654,7 +653,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/main" />
+                        <option value="main" />
                       </list>
                     </value>
                   </entry>
@@ -667,7 +666,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix Supabase Transaction Pooler mode" />
     <MESSAGE value="replace .properties with yml" />
     <MESSAGE value="HTML Email functions" />
     <MESSAGE value="XIVAPI Client" />
@@ -692,7 +690,8 @@
     <MESSAGE value="update README.md" />
     <MESSAGE value="update supabase conf" />
     <MESSAGE value="add HealthCheckScheduler" />
-    <option name="LAST_COMMIT_MESSAGE" value="add HealthCheckScheduler" />
+    <MESSAGE value="add TeaVM dependence" />
+    <option name="LAST_COMMIT_MESSAGE" value="add TeaVM dependence" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
