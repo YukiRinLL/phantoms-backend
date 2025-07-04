@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,16 +27,24 @@ public class OneBotController {
         try {
             // 获取消息类型和消息内容
             String messageType = (String) requestBody.get("message_type");
-            Long userId = requestBody.get("qq_user_id") != null ? Long.valueOf(requestBody.get("qq_user_id").toString()) : null;
-            Long groupId = requestBody.get("qq_group_id") != null ? Long.valueOf(requestBody.get("qq_group_id").toString()) : null;
-            String message = (String) requestBody.get("message");
+            Long userId = requestBody.get("user_id") != null ? Long.valueOf(requestBody.get("user_id").toString()) : null;
+            Long groupId = requestBody.get("group_id") != null ? Long.valueOf(requestBody.get("group_id").toString()) : null;
 
-            // 类型检查和错误处理
-            if (!(messageType instanceof String)) {
-                throw new IllegalArgumentException("message_type must be a string");
-            }
-            if (!(message instanceof String)) {
-                throw new IllegalArgumentException("message must be a string");
+            // 检查message字段是否为List
+            Object messageObj = requestBody.get("message");
+            String message;
+            if (messageObj instanceof List) {
+                // 如果是List，尝试将List中的第一个元素作为消息内容
+                List<?> messageList = (List<?>) messageObj;
+                if (!messageList.isEmpty()) {
+                    message = messageList.get(0).toString();
+                } else {
+                    message = "";
+                }
+            } else if (messageObj instanceof String) {
+                message = (String) messageObj;
+            } else {
+                throw new IllegalArgumentException("message must be a string or a list");
             }
 
             // 创建ChatRecord对象并保存到数据库
