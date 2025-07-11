@@ -2,7 +2,7 @@
 _phantoms Java backend_
 
 ## 系统架构图:
-![Phantoms.jpg](Phantoms.jpg)
+![Phantoms.jpg](data/Phantoms.jpg)
 
 ## 开发备注:
 PS:由于Github的lfs存储空间有限，所以每次提交代码不保留旧版本文件

@@ -8,8 +8,10 @@ server:
 logging:
   level:
     org.springframework: DEBUG
-    springfox: DEBUG
+    org.springframework.web.socket: TRACE
+    org.springframework.messaging: TRACE
     org.springframework.data.redis: DEBUG
+    springfox: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.postgresql: DEBUG
@@ -108,7 +110,7 @@ shiro:
   ws:
     server:
       enable: true
-      url: "/ws"
+      url: "/shiro/ws"
 
 xivapi:
   base-url: "https://v2.xivapi.com/api"
