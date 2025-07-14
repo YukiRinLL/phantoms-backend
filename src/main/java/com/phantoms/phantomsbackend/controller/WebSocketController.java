@@ -7,40 +7,35 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class WebSocketController {
 
-    @MessageMapping("/hello") // 客户端发送消息的目的地
-    @SendTo("/topic/greetings") // 订阅此目的地的客户端都能收到消息
+    /**
+     * 客户端发送 /app/hello，服务器处理后再广播到 /topic/greetings
+     */
+    @MessageMapping("/hello")
+    @SendTo("/topic/greetings")
     public Greeting greeting(HelloMessage message) throws Exception {
         Thread.sleep(1000); // 模拟延迟
         return new Greeting("Hello, " + message.getName() + "!");
     }
 
-    public class HelloMessage {
+    /* ====== 两个 DTO 必须声明为 static ====== */
+
+    public static class HelloMessage {
         private String name;
-        public HelloMessage() {
-        }
-        public HelloMessage(String name) {
-            this.name = name;
-        }
-        public String getName() {
-            return name;
-        }
-        public void setName(String name) {
-            this.name = name;
-        }
+
+        public HelloMessage() {}
+        public HelloMessage(String name) { this.name = name; }
+
+        public String getName() { return name; }
+        public void setName(String name) { this.name = name; }
     }
 
-    public class Greeting {
+    public static class Greeting {
         private String content;
-        public Greeting() {
-        }
-        public Greeting(String content) {
-            this.content = content;
-        }
-        public String getContent() {
-            return content;
-        }
-        public void setContent(String content) {
-            this.content = content;
-        }
+
+        public Greeting() {}
+        public Greeting(String content) { this.content = content; }
+
+        public String getContent() { return content; }
+        public void setContent(String content) { this.content = content; }
     }
 }

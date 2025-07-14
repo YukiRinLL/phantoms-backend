@@ -4,24 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add sys struct pic">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/NativeWsConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/WebSocketConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/WebSocketController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/webSocketTest.html" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="test ws">
+      <change afterPath="$PROJECT_DIR$/src/test/STOMP-Test.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/stomp.umd.min.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phantoms.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/data/Phantoms.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/WebSocketController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/WebSocketController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/webSocketTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/webSocketTest.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +97,7 @@
     "Spring Boot.PhantomsBackendApplication.executor": "Debug",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/phantoms-backend",
+    "last_opened_file_path": "D:/phantoms-backend/src/test",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -132,11 +120,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\phantoms-backend\src\test" />
       <recent name="D:\phantoms-backend" />
       <recent name="D:\phantoms-backend\data" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils" />
-      <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\phantoms-backend\data" />
@@ -249,14 +237,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00012" summary="Keep Render Service Alive">
-      <option name="closed" value="true" />
-      <created>1742524769384</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1742524769384</updated>
     </task>
     <task id="LOCAL-00013" summary="add email function">
       <option name="closed" value="true" />
@@ -642,7 +622,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751608992144</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="test ws">
+      <option name="closed" value="true" />
+      <created>1752227059206</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1752227059206</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -677,7 +665,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="XIVAPI Client" />
     <MESSAGE value="add utils" />
     <MESSAGE value="fullfill APIs" />
     <MESSAGE value="add WebConfig" />
@@ -702,7 +689,8 @@
     <MESSAGE value="add TeaVM dependence" />
     <MESSAGE value="add Napcat QQ &amp; chatRecord" />
     <MESSAGE value="add sys struct pic" />
-    <option name="LAST_COMMIT_MESSAGE" value="add sys struct pic" />
+    <MESSAGE value="test ws" />
+    <option name="LAST_COMMIT_MESSAGE" value="test ws" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
