@@ -1,33 +1,33 @@
-name: Keep Render Service Alive
-
-on:
-  schedule:
-    - cron: '*/15 * * * *'  # 每15分钟运行一次
-  workflow_dispatch:  # 允许手动触发
-
-jobs:
-  keep-alive:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Send GET request
-        id: health-check
-        run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" https://phantoms-backend.onrender.com/health)
-          if [ "$response" -ne 200 ]; then
-            echo "Health check failed with status code $response"
-            echo "::set-output name=status::failure"
-            exit 1
-          else
-            echo "Health check succeeded"
-            echo "::set-output name=status::success"
-          fi
-
-#      - name: Send email on failure
-#        if: steps.health-check.outputs.status == 'failure'
-#        uses: sendgrid/sendgrid-action@v1
-#        with:
-#          api_key: ${{ secrets.SENDGRID_API_KEY }} #使用SendGrid服务
-#          to: recipient@example.com
-#          from: sender@example.com
-#          subject: Health Check Failed
-#          text: The health check for https://phantoms-backend.onrender.com/health failed with status code ${{ steps.health-check.outputs.status }}.
+#name: Keep Render Service Alive
+#
+#on:
+#  schedule:
+#    - cron: '*/15 * * * *'  # 每15分钟运行一次
+#  workflow_dispatch:  # 允许手动触发
+#
+#jobs:
+#  keep-alive:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Send GET request
+#        id: health-check
+#        run: |
+#          response=$(curl -s -o /dev/null -w "%{http_code}" https://phantoms-backend.onrender.com/health)
+#          if [ "$response" -ne 200 ]; then
+#            echo "Health check failed with status code $response"
+#            echo "::set-output name=status::failure"
+#            exit 1
+#          else
+#            echo "Health check succeeded"
+#            echo "::set-output name=status::success"
+#          fi
+#
+##      - name: Send email on failure
+##        if: steps.health-check.outputs.status == 'failure'
+##        uses: sendgrid/sendgrid-action@v1
+##        with:
+##          api_key: ${{ secrets.SENDGRID_API_KEY }} #使用SendGrid服务
+##          to: recipient@example.com
+##          from: sender@example.com
+##          subject: Health Check Failed
+##          text: The health check for https://phantoms-backend.onrender.com/health failed with status code ${{ steps.health-check.outputs.status }}.
