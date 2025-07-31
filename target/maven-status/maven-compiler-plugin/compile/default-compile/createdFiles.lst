@@ -9,6 +9,7 @@ com\phantoms\phantomsbackend\common\utils\PIS\CustomLocalDateTimeDeserializer.cl
 com\phantoms\phantomsbackend\common\utils\PIS\ServletUtils.class
 com\phantoms\phantomsbackend\common\bean\ApiResponse.class
 com\phantoms\phantomsbackend\common\config\WebConfig.class
+com\phantoms\phantomsbackend\mapper\UserProfileMapper.class
 com\phantoms\phantomsbackend\common\bean\SearchResult.class
 com\phantoms\phantomsbackend\exception\GlobalExceptionHandler.class
 com\phantoms\phantomsbackend\pojo\entity\Image.class
@@ -50,15 +51,18 @@ com\phantoms\phantomsbackend\common\utils\PIS\CsvUtil.class
 com\phantoms\phantomsbackend\common\utils\LeanCloudUtils.class
 com\phantoms\phantomsbackend\service\impl\MessageServiceImpl.class
 com\phantoms\phantomsbackend\common\utils\PIS\CharToImageUtils.class
+com\phantoms\phantomsbackend\common\config\MySQLConfig.class
 com\phantoms\phantomsbackend\common\utils\PIS\Convert.class
 com\phantoms\phantomsbackend\common\config\JacksonConfig.class
 com\phantoms\phantomsbackend\common\jasper\ReportDto.class
 com\phantoms\phantomsbackend\controller\EmailController.class
+com\phantoms\phantomsbackend\mapper\onebot\ChatRecordMapper.class
 com\phantoms\phantomsbackend\common\jasper\ReportModel.class
 com\phantoms\phantomsbackend\common\utils\EmailUtil.class
 com\phantoms\phantomsbackend\service\impl\LeanCloudServiceImpl.class
 com\phantoms\phantomsbackend\service\scheduler\HealthCheckScheduler.class
 com\phantoms\phantomsbackend\common\config\XIVAPIConfig.class
+com\phantoms\phantomsbackend\mapper\MessageMapper.class
 com\phantoms\phantomsbackend\pojo\entity\Message.class
 com\phantoms\phantomsbackend\common\utils\PIS\MonthSheetWriteHandler.class
 com\phantoms\phantomsbackend\common\jasper\ReportException.class
@@ -68,9 +72,11 @@ com\phantoms\phantomsbackend\common\utils\XIVAPIClient$1.class
 com\phantoms\phantomsbackend\common\excel\MergeHandler.class
 com\phantoms\phantomsbackend\controller\WebSocketController$HelloMessage.class
 com\phantoms\phantomsbackend\pojo\dto\MessageWithUserDTO.class
+com\phantoms\phantomsbackend\service\scheduler\DataSyncScheduler.class
 com\phantoms\phantomsbackend\common\utils\TH\ExcelUtil.class
 com\phantoms\phantomsbackend\repository\UserProfileRepository.class
 com\phantoms\phantomsbackend\common\bean\ResultInfo.class
+com\phantoms\phantomsbackend\mapper\AuthUserMapper.class
 com\phantoms\phantomsbackend\common\jasper\AbstractReport.class
 com\phantoms\phantomsbackend\service\MessageService.class
 com\phantoms\phantomsbackend\service\impl\D1ServiceImpl.class
@@ -85,8 +91,10 @@ com\phantoms\phantomsbackend\common\utils\PIS\StringUtils.class
 com\phantoms\phantomsbackend\service\D1Service.class
 com\phantoms\phantomsbackend\controller\LeanCloudController.class
 com\phantoms\phantomsbackend\common\utils\PIS\MD5Utils.class
+com\phantoms\phantomsbackend\mapper\ImageMapper.class
 com\phantoms\phantomsbackend\service\LeanCloudService.class
 com\phantoms\phantomsbackend\common\utils\PIS\FileUtils.class
+com\phantoms\phantomsbackend\mapper\UserMapper.class
 com\phantoms\phantomsbackend\common\utils\TH\ValidateUtils$Result$ResultBuilder.class
 com\phantoms\phantomsbackend\common\utils\XIVAPIClient$3.class
 com\phantoms\phantomsbackend\common\utils\PIS\Arith.class
@@ -105,6 +113,7 @@ com\phantoms\phantomsbackend\pojo\entity\onebot\ChatRecord.class
 com\phantoms\phantomsbackend\common\jasper\AbstractReport$1.class
 com\phantoms\phantomsbackend\PhantomsBackendApplication.class
 com\phantoms\phantomsbackend\service\AuthUserService.class
+com\phantoms\phantomsbackend\common\config\PostgreSQLConfig.class
 com\phantoms\phantomsbackend\common\excel\RowHeightWriteHandler.class
 com\phantoms\phantomsbackend\controller\WebSocketController.class
 com\phantoms\phantomsbackend\common\utils\PIS\DateTransform.class
