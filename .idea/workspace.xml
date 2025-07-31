@@ -4,7 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="switch supabase to Phantoms_DB_Reboot" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="switch supabase to Phantoms_DB_Reboot">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/MySQLConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/PostgreSQLConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/mapper/AuthUserMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/mapper/ImageMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/mapper/MessageMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/mapper/UserMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/mapper/UserProfileMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/mapper/onebot/ChatRecordMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DataSyncScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/AuthUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/AuthUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/Image.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/Image.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/UserProfile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/UserProfile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/onebot/ChatRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/onebot/ChatRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -129,11 +148,11 @@
       <recent name="com.phantoms.phantomsbackend" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.phantoms.phantomsbackend.controller" />
+      <recent name="com.phantoms.phantomsbackend.service.scheduler" />
+      <recent name="com.phantoms.phantomsbackend.mapper" />
       <recent name="com.phantoms.phantomsbackend.common.config" />
+      <recent name="com.phantoms.phantomsbackend.controller" />
       <recent name="com.phantoms.phantomsbackend.repository.onebot" />
-      <recent name="com.phantoms.phantomsbackend.common.serializer" />
-      <recent name="com.phantoms.phantomsbackend.service.impl" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -232,22 +251,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00015" summary="fix Supabase Transaction Pooler mode">
-      <option name="closed" value="true" />
-      <created>1742548828459</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1742548828459</updated>
-    </task>
-    <task id="LOCAL-00016" summary="fix Supabase Transaction Pooler mode">
-      <option name="closed" value="true" />
-      <created>1742548965585</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1742548965585</updated>
     </task>
     <task id="LOCAL-00017" summary="replace .properties with yml">
       <option name="closed" value="true" />
@@ -625,7 +628,23 @@
       <option name="project" value="LOCAL" />
       <updated>1753931862465</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="switch supabase to Phantoms_DB_Reboot">
+      <option name="closed" value="true" />
+      <created>1753931948272</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1753931948272</updated>
+    </task>
+    <task id="LOCAL-00065" summary="switch supabase to Phantoms_DB_Reboot">
+      <option name="closed" value="true" />
+      <created>1753932151947</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1753932151947</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -18,21 +18,28 @@ logging:
 
 spring:
   datasource:
-    # Supabase Direct Connection mode
-#    url: jdbc:postgresql://db.dshmbsawwrbuycnivcjs.supabase.co:5432/postgres
-#    username: postgres
-#    password: LUOCANYU
+    postgres:
+      # Supabase Direct Connection mode
+      #    url: jdbc:postgresql://db.dshmbsawwrbuycnivcjs.supabase.co:5432/postgres
+      #    username: postgres
+      #    password: LUOCANYU
 
-    # Supabase Transaction Pooler mode
-    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
-    username: postgres.dshmbsawwrbuycnivcjs
-    password: LUOCANYU
+      # Supabase Transaction Pooler mode
+      url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
+      username: postgres.dshmbsawwrbuycnivcjs
+      password: LUOCANYU
 
-    # Supabase Session pooler mode
-#    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres?pgbouncer=true&connection_limit=1
-#    username: postgres.dshmbsawwrbuycnivcjs
-#    password: LUOCANYU
-#    driver-class-name: org.postgresql.Driver
+      # Supabase Session pooler mode
+      #    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres?pgbouncer=true&connection_limit=1
+      #    username: postgres.dshmbsawwrbuycnivcjs
+      #    password: LUOCANYU
+      #    driver-class-name: org.postgresql.Driver
+
+    mysql:
+      jdbc-url: jdbc:mysql://localhost:3306/mysql_db?useSSL=false&serverTimezone=UTC
+      username: mysql_user
+      password: mysql_password
+      driver-class-name: com.mysql.cj.jdbc.Driver
 
     hikari:
       idle-timeout: 30000
