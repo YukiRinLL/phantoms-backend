@@ -18,7 +18,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "com.phantoms.phantomsbackend.repository.postgres",
+        basePackages = "com.phantoms.phantomsbackend.repository",
         entityManagerFactoryRef = "postgresEntityManagerFactory",
         transactionManagerRef = "postgresTransactionManager"
 )
@@ -37,7 +37,7 @@ public class PostgreSQLConfig {
             @Qualifier("postgresDataSource") DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
-        em.setPackagesToScan("com.phantoms.phantomsbackend.entity.postgres");
+        em.setPackagesToScan("com.phantoms.phantomsbackend.pojo.entity");
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         em.setJpaProperties(additionalProperties());
         return em;
