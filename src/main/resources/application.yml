@@ -6,6 +6,8 @@ server:
 
 # log4j2
 logging:
+  file:
+    name: logs/phantoms-backend.log
   level:
     org.springframework: DEBUG
     org.springframework.web.socket: TRACE

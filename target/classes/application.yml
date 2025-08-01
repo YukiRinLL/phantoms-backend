@@ -6,6 +6,8 @@ server:
 
 # log4j2
 logging:
+  file:
+    name: logs/phantoms-backend.log
   level:
     org.springframework: DEBUG
     org.springframework.web.socket: TRACE
@@ -36,9 +38,9 @@ spring:
       #    driver-class-name: org.postgresql.Driver
 
     mysql:
-      jdbc-url: jdbc:mysql://localhost:3306/mysql_db?useSSL=false&serverTimezone=UTC
-      username: mysql_user
-      password: mysql_password
+      jdbc-url: jdbc:mysql://sql.wsfdb.cn:3306/YukiRinLLPhantomBackup?useSSL=false&serverTimezone=UTC
+      username: YukiRinLLPhantomBackup
+      password: LUOCANYU
       driver-class-name: com.mysql.cj.jdbc.Driver
 
     hikari:

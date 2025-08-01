@@ -13,6 +13,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
@@ -38,7 +39,18 @@ public class PostgreSQLConfig {
         em.setDataSource(dataSource);
         em.setPackagesToScan("com.phantoms.phantomsbackend.entity.postgres");
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        em.setJpaProperties(additionalProperties());
         return em;
+    }
+
+    private Properties additionalProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        properties.setProperty("hibernate.jdbc.lob.non_contextual_creation", "true");
+        properties.setProperty("hibernate.bytecode.provider", "bytebuddy");
+        properties.setProperty("hibernate.format_sql", "true");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        return properties;
     }
 
     @Primary
