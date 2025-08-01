@@ -47,6 +47,18 @@ public class PingController {
     @Value("${app.version:unknown}")
     private String appVersion;
 
+    @Value("${spring.datasource.postgres.url}")
+    private String postgresUrl;
+
+    @Value("${spring.datasource.postgres.username}")
+    private String postgresUsername;
+
+    @Value("${spring.datasource.postgres.password}")
+    private String postgresPassword;
+
+    @Value("${spring.datasource.postgres.driver-class-name}")
+    private String postgresDriverClassName;
+
     @GetMapping("/ping")
     @Operation(summary = "Ping endpoint", description = "Returns a simple ping response to check if the server is up.",
             responses = {
@@ -72,6 +84,12 @@ public class PingController {
     public ResponseEntity<Map<String, Object>> healthCheck() {
         Map<String, Object> healthResponse = new HashMap<>();
         healthResponse.put("timestamp", LocalDateTime.now());
+
+        // 打印配置文件中的值
+        healthResponse.put("postgresUrl", postgresUrl);
+        healthResponse.put("postgresUsername", postgresUsername);
+        healthResponse.put("postgresPassword", postgresPassword);
+        healthResponse.put("postgresDriverClassName", postgresDriverClassName);
 
         // 检查数据库连接
         try (Connection connection = dataSource.getConnection()) {

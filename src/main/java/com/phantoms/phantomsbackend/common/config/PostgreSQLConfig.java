@@ -1,6 +1,9 @@
 package com.phantoms.phantomsbackend.common.config;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -24,11 +27,37 @@ import java.util.Properties;
 )
 public class PostgreSQLConfig {
 
+    @Value("${spring.datasource.postgres.url}")
+    private String postgresUrl;
+
+    @Value("${spring.datasource.postgres.username}")
+    private String postgresUsername;
+
+    @Value("${spring.datasource.postgres.password}")
+    private String postgresPassword;
+
+    @Value("${spring.datasource.postgres.driver-class-name}")
+    private String postgresDriverClassName;
+
     @Primary
     @Bean(name = "postgresDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.postgres")
     public DataSource dataSource() {
-        return DataSourceBuilder.create().build();
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl(postgresUrl);
+        hikariConfig.setUsername(postgresUsername);
+        hikariConfig.setPassword(postgresPassword);
+        hikariConfig.setDriverClassName(postgresDriverClassName);
+        hikariConfig.setPoolName("PostgresPool");
+        hikariConfig.setMaximumPoolSize(20);
+        hikariConfig.setMinimumIdle(10);
+        hikariConfig.setIdleTimeout(30000);
+        hikariConfig.setMaxLifetime(1800000);
+        hikariConfig.setConnectionTimeout(30000);
+        hikariConfig.addDataSourceProperty("preparedStatementCacheQueries", 0);
+        hikariConfig.addDataSourceProperty("preparedStatementCacheSizeMiB", 0);
+        hikariConfig.addDataSourceProperty("prepareThreshold", 0);
+
+        return new HikariDataSource(hikariConfig);
     }
 
     @Primary

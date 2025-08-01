@@ -30,6 +30,7 @@ spring:
       url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
       username: postgres.dshmbsawwrbuycnivcjs
       password: LUOCANYU
+      driver-class-name: org.postgresql.Driver
 
       # Supabase Session pooler mode
       #    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres?pgbouncer=true&connection_limit=1
@@ -38,7 +39,7 @@ spring:
       #    driver-class-name: org.postgresql.Driver
 
     mysql:
-      jdbc-url: jdbc:mysql://sql.wsfdb.cn:3306/YukiRinLLPhantomBackup?useSSL=false&serverTimezone=UTC
+      url: jdbc:mysql://sql.wsfdb.cn:3306/YukiRinLLPhantomBackup?useSSL=false&serverTimezone=UTC
       username: YukiRinLLPhantomBackup
       password: LUOCANYU
       driver-class-name: com.mysql.cj.jdbc.Driver
