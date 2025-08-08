@@ -1,8 +1,12 @@
 package com.phantoms.phantomsbackend.common.config;
 
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.phantoms.phantomsbackend.mapper.typehandlers.UUIDTypeHandler;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.TypeHandler;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
@@ -17,6 +21,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
+import java.util.UUID;
 
 @Configuration
 @MapperScan(basePackages = "com.phantoms.phantomsbackend.mapper", sqlSessionFactoryRef = "mysqlSqlSessionFactory")
@@ -58,7 +63,26 @@ public class MySQLConfig {
     public SqlSessionFactory sqlSessionFactory(@Qualifier("mysqlDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
+
+        // 注册 MyBatis-Plus 的 BaseMapper
+        sessionFactory.setTypeAliasesPackage("com.phantoms.phantomsbackend.pojo.model");
+        // sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));
+
+        // 注册自定义类型处理器
+        TypeHandler<UUID> uuidTypeHandler = new UUIDTypeHandler();
+        sessionFactory.setTypeHandlers(uuidTypeHandler);
+
+        // ensure MyBatis-Plus plugins are loaded
+        sessionFactory.setPlugins(new MybatisPlusInterceptor());
+
         return sessionFactory.getObject();
+    }
+
+    @Bean
+    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
+        return interceptor;
     }
 
     @Bean(name = "mysqlSqlSessionTemplate")

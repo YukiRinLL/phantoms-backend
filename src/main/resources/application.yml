@@ -97,6 +97,14 @@ spring:
       # External Redis URL
       url: rediss://red-d03imhre5dus73ab817g:OXtvQrLbJ1WXXdjXMEVknm1hPnW8XFAo@oregon-keyvalue.render.com:6379
 
+mybatis-plus:
+  global-config:
+    db-config:
+      field-strategy: not_null # 只映射实体中有值的字段
+      id-type: assign_uuid # 使用 UUID 作为主键
+  configuration:
+    map-underscore-to-camel-case: true # 自动映射下划线到驼峰
+
 # swagger
 springdoc:
   api-docs:

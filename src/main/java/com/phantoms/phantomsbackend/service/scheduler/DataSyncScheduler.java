@@ -42,12 +42,13 @@ public class DataSyncScheduler {
     @Autowired
     private ChatRecordMapper chatRecordMapper;
 
-    @Scheduled(cron = "0 0 2 * * ?")
+    @Scheduled(fixedRate = 60000) // 每分钟执行一次
+//    @Scheduled(cron = "0 0 2 * * ?") //2 AM everyday
     public void syncData() {
-        syncAuthUsers();
-        syncMessages();
-        syncUserProfiles();
-        syncChatRecords();
+//        syncAuthUsers();
+//        syncMessages();
+//        syncUserProfiles();
+//        syncChatRecords();
     }
 
     private void syncAuthUsers() {

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@TableName(value = "chat_records", schema = "onebot")
+@TableName(value = "chat_records")
 public class ChatRecordModel {
     @TableId(type = IdType.ASSIGN_UUID)
     private UUID id;

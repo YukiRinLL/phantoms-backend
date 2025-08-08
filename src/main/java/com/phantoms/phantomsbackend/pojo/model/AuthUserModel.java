@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@TableName(value = "users", schema = "auth")
+@TableName(value = "users")
 public class AuthUserModel {
     @TableId(type = IdType.ASSIGN_UUID)
     private UUID id;
