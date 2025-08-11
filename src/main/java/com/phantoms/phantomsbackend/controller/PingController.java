@@ -88,7 +88,7 @@ public class PingController {
         // 打印配置文件中的值
         healthResponse.put("postgresUrl", postgresUrl);
         healthResponse.put("postgresUsername", postgresUsername);
-        healthResponse.put("postgresPassword", postgresPassword);
+//        healthResponse.put("postgresPassword", postgresPassword);
         healthResponse.put("postgresDriverClassName", postgresDriverClassName);
 
         // 检查数据库连接
