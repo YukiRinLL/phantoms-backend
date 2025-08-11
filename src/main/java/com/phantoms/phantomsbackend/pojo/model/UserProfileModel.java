@@ -4,19 +4,18 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @TableName("user_profile")
 public class UserProfileModel {
     @TableId(type = IdType.ASSIGN_UUID)
-    private UUID id;
+    private String id;
 
     @TableField("legacy_user_id")
-    private UUID legacyUserId;
+    private String legacyUserId;
 
     @TableField("user_id")
-    private UUID userId;
+    private String userId;
 
     @TableField("name")
     private String name;

@@ -66,11 +66,12 @@ public class MySQLConfig {
 
         // 注册 MyBatis-Plus 的 BaseMapper
         sessionFactory.setTypeAliasesPackage("com.phantoms.phantomsbackend.pojo.model");
-        // sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));
+        // sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/*.xml\""));
+        // sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:com/phantoms/phantomsbackend/mapper/*.java"));
 
         // 注册自定义类型处理器
-        TypeHandler<UUID> uuidTypeHandler = new UUIDTypeHandler();
-        sessionFactory.setTypeHandlers(uuidTypeHandler);
+        TypeHandler<?>[] typeHandlers = new TypeHandler<?>[] { new UUIDTypeHandler() };
+        sessionFactory.setTypeHandlers(typeHandlers);
 
         // ensure MyBatis-Plus plugins are loaded
         sessionFactory.setPlugins(new MybatisPlusInterceptor());

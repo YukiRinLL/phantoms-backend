@@ -4,13 +4,12 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
-@TableName(value = "chat_records")
+@TableName("chat_records")
 public class ChatRecordModel {
     @TableId(type = IdType.ASSIGN_UUID)
-    private UUID id;
+    private String id;
 
     @TableField("message_type")
     private String messageType;

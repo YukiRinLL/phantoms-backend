@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phantoms.phantomsbackend.mapper.AuthUserMapper">
+
+    <!-- 插入用户 -->
+    <insert id="insert" parameterType="com.phantoms.phantomsbackend.pojo.model.AuthUserModel">
+        INSERT INTO users (
+        id,
+        instance_id,
+        aud,
+        role,
+        email,
+        encrypted_password,
+        email_confirmed_at,
+        invited_at,
+        confirmation_token,
+        confirmation_sent_at,
+        recovery_token,
+        recovery_sent_at,
+        email_change_token_new,
+        email_change,
+        email_change_sent_at,
+        last_sign_in_at,
+        raw_app_meta_data,
+        raw_user_meta_data,
+        is_super_admin,
+        created_at,
+        updated_at,
+        phone,
+        phone_confirmed_at,
+        phone_change,
+        phone_change_token,
+        phone_change_sent_at,
+        confirmed_at,
+        email_change_token_current,
+        email_change_confirm_status,
+        banned_until,
+        reauthentication_token,
+        reauthentication_sent_at,
+        is_sso_user,
+        deleted_at,
+        is_anonymous
+        ) VALUES (
+        #{id},
+        #{instanceId},
+        #{aud},
+        #{role},
+        #{email},
+        #{encryptedPassword},
+        #{emailConfirmedAt},
+        #{invitedAt},
+        #{confirmationToken},
+        #{confirmationSentAt},
+        #{recoveryToken},
+        #{recoverySentAt},
+        #{emailChangeTokenNew},
+        #{emailChange},
+        #{emailChangeSentAt},
+        #{lastSignInAt},
+        #{rawAppMetaData},
+        #{rawUserMetaData},
+        #{isSuperAdmin},
+        #{createdAt},
+        #{updatedAt},
+        #{phone},
+        #{phoneConfirmedAt},
+        #{phoneChange},
+        #{phoneChangeToken},
+        #{phoneChangeSentAt},
+        #{confirmedAt},
+        #{emailChangeTokenCurrent},
+        #{emailChangeConfirmStatus},
+        #{bannedUntil},
+        #{reauthenticationToken},
+        #{reauthenticationSentAt},
+        #{isSsoUser},
+        #{deletedAt},
+        #{isAnonymous}
+        )
+    </insert>
+
+    <!-- 根据ID查询用户 -->
+    <select id="selectById" parameterType="java.util.UUID" resultType="com.phantoms.phantomsbackend.pojo.model.AuthUserModel">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+
+    <!-- 更新用户 -->
+    <update id="updateById" parameterType="com.phantoms.phantomsbackend.pojo.model.AuthUserModel">
+        UPDATE users
+        SET
+        instance_id = #{instanceId},
+        aud = #{aud},
+        role = #{role},
+        email = #{email},
+        encrypted_password = #{encryptedPassword},
+        email_confirmed_at = #{emailConfirmedAt},
+        invited_at = #{invitedAt},
+        confirmation_token = #{confirmationToken},
+        confirmation_sent_at = #{confirmationSentAt},
+        recovery_token = #{recoveryToken},
+        recovery_sent_at = #{recoverySentAt},
+        email_change_token_new = #{emailChangeTokenNew},
+        email_change = #{emailChange},
+        email_change_sent_at = #{emailChangeSentAt},
+        last_sign_in_at = #{lastSignInAt},
+        raw_app_meta_data = #{rawAppMetaData},
+        raw_user_meta_data = #{rawUserMetaData},
+        is_super_admin = #{isSuperAdmin},
+        updated_at = #{updatedAt},
+        phone = #{phone},
+        phone_confirmed_at = #{phoneConfirmedAt},
+        phone_change = #{phoneChange},
+        phone_change_token = #{phoneChangeToken},
+        phone_change_sent_at = #{phoneChangeSentAt},
+        confirmed_at = #{confirmedAt},
+        email_change_token_current = #{emailChangeTokenCurrent},
+        email_change_confirm_status = #{emailChangeConfirmStatus},
+        banned_until = #{bannedUntil},
+        reauthentication_token = #{reauthenticationToken},
+        reauthentication_sent_at = #{reauthenticationSentAt},
+        is_sso_user = #{isSsoUser},
+        deleted_at = #{deletedAt},
+        is_anonymous = #{isAnonymous}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除用户 -->
+    <delete id="deleteById" parameterType="java.util.UUID">
+        DELETE FROM users WHERE id = #{id}
+    </delete>
+
+</mapper>

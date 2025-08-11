@@ -3,13 +3,11 @@ package com.phantoms.phantomsbackend.pojo.model;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
 @TableName("users")
 public class UserModel {
     @TableId(type = IdType.ASSIGN_UUID)
-    private UUID id;
+    private String id;
 
     @TableField("username")
     private String username;
@@ -21,5 +19,5 @@ public class UserModel {
     private String email;
 
     @TableField("user_id")
-    private UUID userId;
+    private String userId;
 }

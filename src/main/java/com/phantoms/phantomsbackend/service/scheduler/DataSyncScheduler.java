@@ -16,6 +16,7 @@ import com.phantoms.phantomsbackend.mapper.MessageMapper;
 import com.phantoms.phantomsbackend.mapper.UserProfileMapper;
 import com.phantoms.phantomsbackend.mapper.onebot.ChatRecordMapper;
 import com.phantoms.phantomsbackend.repository.onebot.ChatRecordRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class DataSyncScheduler {
     public void syncData() {
 //        syncAuthUsers();
 //        syncMessages();
-//        syncUserProfiles();
+        syncUserProfiles();
 //        syncChatRecords();
     }
 
@@ -55,41 +56,7 @@ public class DataSyncScheduler {
         List<AuthUser> authUsers = authUserRepository.findAll();
         for (AuthUser authUser : authUsers) {
             AuthUserModel authUserModel = new AuthUserModel();
-            authUserModel.setId(authUser.getId());
-            authUserModel.setInstanceId(authUser.getInstanceId());
-            authUserModel.setAud(authUser.getAud());
-            authUserModel.setRole(authUser.getRole());
-            authUserModel.setEmail(authUser.getEmail());
-            authUserModel.setEncryptedPassword(authUser.getEncryptedPassword());
-            authUserModel.setEmailConfirmedAt(authUser.getEmailConfirmedAt());
-            authUserModel.setInvitedAt(authUser.getInvitedAt());
-            authUserModel.setConfirmationToken(authUser.getConfirmationToken());
-            authUserModel.setConfirmationSentAt(authUser.getConfirmationSentAt());
-            authUserModel.setRecoveryToken(authUser.getRecoveryToken());
-            authUserModel.setRecoverySentAt(authUser.getRecoverySentAt());
-            authUserModel.setEmailChangeTokenNew(authUser.getEmailChangeTokenNew());
-            authUserModel.setEmailChange(authUser.getEmailChange());
-            authUserModel.setEmailChangeSentAt(authUser.getEmailChangeSentAt());
-            authUserModel.setLastSignInAt(authUser.getLastSignInAt());
-            authUserModel.setRawAppMetaData(authUser.getRawAppMetaData());
-            authUserModel.setRawUserMetaData(authUser.getRawUserMetaData());
-            authUserModel.setIsSuperAdmin(authUser.getIsSuperAdmin());
-            authUserModel.setCreatedAt(authUser.getCreatedAt());
-            authUserModel.setUpdatedAt(authUser.getUpdatedAt());
-            authUserModel.setPhone(authUser.getPhone());
-            authUserModel.setPhoneConfirmedAt(authUser.getPhoneConfirmedAt());
-            authUserModel.setPhoneChange(authUser.getPhoneChange());
-            authUserModel.setPhoneChangeToken(authUser.getPhoneChangeToken());
-            authUserModel.setPhoneChangeSentAt(authUser.getPhoneChangeSentAt());
-            authUserModel.setConfirmedAt(authUser.getConfirmedAt());
-            authUserModel.setEmailChangeTokenCurrent(authUser.getEmailChangeTokenCurrent());
-            authUserModel.setEmailChangeConfirmStatus(authUser.getEmailChangeConfirmStatus());
-            authUserModel.setBannedUntil(authUser.getBannedUntil());
-            authUserModel.setReauthenticationToken(authUser.getReauthenticationToken());
-            authUserModel.setReauthenticationSentAt(authUser.getReauthenticationSentAt());
-            authUserModel.setSsoUser(authUser.isSsoUser());
-            authUserModel.setDeletedAt(authUser.getDeletedAt());
-            authUserModel.setAnonymous(authUser.isAnonymous());
+            BeanUtils.copyProperties(authUser,authUserModel);
             authUserMapper.insert(authUserModel);
         }
     }
@@ -98,11 +65,7 @@ public class DataSyncScheduler {
         List<Message> messages = messageRepository.findAll();
         for (Message message : messages) {
             MessageModel messageModel = new MessageModel();
-            messageModel.setId(message.getId());
-            messageModel.setLegacyUserId(message.getLegacyUserId());
-            messageModel.setUserId(message.getUserId());
-            messageModel.setMessage(message.getMessage());
-            messageModel.setCreatedAt(message.getCreatedAt());
+            BeanUtils.copyProperties(message,messageModel);
             messageMapper.insert(messageModel);
         }
     }
@@ -111,13 +74,10 @@ public class DataSyncScheduler {
         List<UserProfile> userProfiles = userProfileRepository.findAll();
         for (UserProfile userProfile : userProfiles) {
             UserProfileModel userProfileModel = new UserProfileModel();
-            userProfileModel.setId(userProfile.getId());
-            userProfileModel.setLegacyUserId(userProfile.getLegacyUserId());
-            userProfileModel.setUserId(userProfile.getUserId());
-            userProfileModel.setName(userProfile.getName());
-            userProfileModel.setData(userProfile.getData());
-            userProfileModel.setCreatedAt(userProfile.getCreatedAt());
-            userProfileModel.setUploadedBy(userProfile.getUploadedBy());
+            BeanUtils.copyProperties(userProfile,userProfileModel);
+            userProfileModel.setId(String.valueOf(userProfile.getId()));
+            userProfileModel.setUserId(String.valueOf(userProfile.getUserId()));
+            userProfileModel.setLegacyUserId(String.valueOf(userProfile.getLegacyUserId()));
             userProfileMapper.insert(userProfileModel);
         }
     }
@@ -126,14 +86,7 @@ public class DataSyncScheduler {
         List<ChatRecord> chatRecords = chatRecordRepository.findAll();
         for (ChatRecord chatRecord : chatRecords) {
             ChatRecordModel chatRecordModel = new ChatRecordModel();
-            chatRecordModel.setId(chatRecord.getId());
-            chatRecordModel.setMessageType(chatRecord.getMessageType());
-            chatRecordModel.setQqUserId(chatRecord.getUserId());
-            chatRecordModel.setQqGroupId(chatRecord.getGroupId());
-            chatRecordModel.setMessage(chatRecord.getMessage());
-            chatRecordModel.setTimestamp(chatRecord.getTimestamp());
-            chatRecordModel.setCreatedAt(chatRecord.getCreatedAt());
-            chatRecordModel.setUpdatedAt(chatRecord.getUpdatedAt());
+            BeanUtils.copyProperties(chatRecord,chatRecordModel);
             chatRecordMapper.insert(chatRecordModel);
         }
     }

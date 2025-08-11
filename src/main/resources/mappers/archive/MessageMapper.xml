@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phantoms.phantomsbackend.mapper.MessageMapper">
+
+    <!-- 插入消息 -->
+    <insert id="insert" parameterType="com.phantoms.phantomsbackend.pojo.model.MessageModel">
+        INSERT INTO messages (
+        id,
+        legacy_user_id,
+        user_id,
+        message,
+        created_at
+        ) VALUES (
+        #{id},
+        #{legacyUserId},
+        #{userId},
+        #{message},
+        #{createdAt}
+        )
+    </insert>
+
+    <!-- 根据ID查询消息 -->
+    <select id="selectById" parameterType="java.util.UUID" resultType="com.phantoms.phantomsbackend.pojo.model.MessageModel">
+        SELECT * FROM messages WHERE id = #{id}
+    </select>
+
+    <!-- 更新消息 -->
+    <update id="updateById" parameterType="com.phantoms.phantomsbackend.pojo.model.MessageModel">
+        UPDATE messages
+        SET
+        legacy_user_id = #{legacyUserId},
+        user_id = #{userId},
+        message = #{message}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除消息 -->
+    <delete id="deleteById" parameterType="java.util.UUID">
+        DELETE FROM messages WHERE id = #{id}
+    </delete>
+
+</mapper>

@@ -4,7 +4,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="added mysql with mybatis plus" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="added mysql with mybatis plus">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/mappers/archive/AuthUserMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/mappers/archive/ChatRecordMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/mappers/archive/ImageMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/mappers/archive/MessageMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/mappers/archive/UserMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/mappers/archive/UserProfileMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/phantoms/phantomsbackend/MySQLConnectionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/MySQLConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/MySQLConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/model/AuthUserModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/model/AuthUserModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/model/ImageModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/model/ImageModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/model/MessageModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/model/MessageModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/model/UserModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/model/UserModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/model/UserProfileModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/model/UserProfileModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/model/onebot/ChatRecordModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/model/onebot/ChatRecordModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DataSyncScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DataSyncScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/application.properties" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -64,6 +90,9 @@
     "Application.PhantomsBackendApplication.executor": "Debug",
     "Application.XIVAPIExample.executor": "Debug",
     "Docker.Dockerfile.executor": "Run",
+    "JUnit.MySQLConnectionTest.executor": "Run",
+    "JUnit.MySQLConnectionTest.testMySQLConnection.executor": "Run",
+    "JUnit.PhantomsBackendApplicationTests.testMapper.executor": "Run",
     "JUnit.XIVAPIExample.executor": "Coverage",
     "Maven.phantoms-backend [-X,clean,install].executor": "Run",
     "Maven.phantoms-backend [clean,compile].executor": "Run",
@@ -104,7 +133,7 @@
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.keymap",
     "vue.rearranger.settings.migration": "true",
-    "应用程序.PhantomsBackendApplication.executor": "Run"
+    "应用程序.PhantomsBackendApplication.executor": "Debug"
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
@@ -115,13 +144,14 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\phantoms-backend\src\test\java\com\phantoms\phantomsbackend" />
+      <recent name="D:\phantoms-backend\src\main\resources\mappers" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\MP" />
       <recent name="D:\phantoms-backend\src\test" />
       <recent name="D:\phantoms-backend" />
-      <recent name="D:\phantoms-backend\data" />
-      <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\phantoms-backend\src\main\resources\mappers\archive" />
       <recent name="D:\phantoms-backend\data" />
       <recent name="D:\phantoms-backend\lib" />
     </key>
@@ -159,6 +189,53 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MySQLConnectionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="phantoms-backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.phantoms.phantomsbackend.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.phantoms.phantomsbackend" />
+      <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.MySQLConnectionTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MySQLConnectionTest.testMySQLConnection" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="phantoms-backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.phantoms.phantomsbackend.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.phantoms.phantomsbackend" />
+      <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.MySQLConnectionTest" />
+      <option name="METHOD_NAME" value="testMySQLConnection" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PhantomsBackendApplicationTests.testMapper" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="phantoms-backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.phantoms.phantomsbackend.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.phantoms.phantomsbackend" />
+      <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.PhantomsBackendApplicationTests" />
+      <option name="METHOD_NAME" value="testMapper" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="PhantomsBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="phantoms-backend" />
@@ -185,6 +262,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="应用程序.PhantomsBackendApplication" />
+        <item itemvalue="JUnit.MySQLConnectionTest.testMySQLConnection" />
+        <item itemvalue="JUnit.MySQLConnectionTest" />
+        <item itemvalue="JUnit.PhantomsBackendApplicationTests.testMapper" />
         <item itemvalue="Docker.Dockerfile" />
       </list>
     </recent_temporary>
@@ -232,14 +312,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00024" summary="add utils">
-      <option name="closed" value="true" />
-      <created>1744078371107</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1744078371107</updated>
     </task>
     <task id="LOCAL-00025" summary="add utils">
       <option name="closed" value="true" />
@@ -625,7 +697,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754640480865</updated>
     </task>
-    <option name="localTasksCounter" value="73" />
+    <task id="LOCAL-00073" summary="added mysql with mybatis plus">
+      <option name="closed" value="true" />
+      <created>1754642572020</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1754642572020</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -739,6 +819,26 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LeanCloudUtils.java</url>
           <line>103</line>
           <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DataSyncScheduler.java</url>
+          <line>76</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DataSyncScheduler.java</url>
+          <line>80</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DataSyncScheduler.java</url>
+          <line>59</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DataSyncScheduler.java</url>
+          <line>58</line>
+          <option name="timeStamp" value="32" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="org.springframework.dao.IncorrectResultSizeDataAccessException" package="org.springframework.dao" />

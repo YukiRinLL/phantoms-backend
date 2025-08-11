@@ -4,16 +4,15 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
-@TableName(value = "users")
+@TableName("users")
 public class AuthUserModel {
     @TableId(type = IdType.ASSIGN_UUID)
-    private UUID id;
+    private String id;
 
     @TableField("instance_id")
-    private UUID instanceId;
+    private String instanceId;
 
     @TableField("aud")
     private String aud;

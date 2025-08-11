@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phantoms.phantomsbackend.mapper.onebot.ChatRecordMapper">
+
+    <!-- 插入聊天记录 -->
+    <insert id="insert" parameterType="com.phantoms.phantomsbackend.pojo.model.onebot.ChatRecordModel">
+        INSERT INTO chat_records (
+        id,
+        message_type,
+        qq_user_id,
+        qq_group_id,
+        message,
+        timestamp,
+        created_at,
+        updated_at
+        ) VALUES (
+        #{id},
+        #{messageType},
+        #{qqUserId},
+        #{qqGroupId},
+        #{message},
+        #{timestamp},
+        #{createdAt},
+        #{updatedAt}
+        )
+    </insert>
+
+    <!-- 根据ID查询聊天记录 -->
+    <select id="selectById" parameterType="java.util.UUID" resultType="com.phantoms.phantomsbackend.pojo.model.onebot.ChatRecordModel">
+        SELECT * FROM chat_records WHERE id = #{id}
+    </select>
+
+    <!-- 更新聊天记录 -->
+    <update id="updateById" parameterType="com.phantoms.phantomsbackend.pojo.model.onebot.ChatRecordModel">
+        UPDATE chat_records
+        SET
+        message_type = #{messageType},
+        qq_user_id = #{qqUserId},
+        qq_group_id = #{qqGroupId},
+        message = #{message},
+        timestamp = #{timestamp},
+        updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除聊天记录 -->
+    <delete id="deleteById" parameterType="java.util.UUID">
+        DELETE FROM chat_records WHERE id = #{id}
+    </delete>
+
+</mapper>
