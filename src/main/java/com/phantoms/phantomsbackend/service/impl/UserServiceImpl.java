@@ -4,8 +4,8 @@ import com.phantoms.phantomsbackend.pojo.dto.UserDTO;
 import com.phantoms.phantomsbackend.pojo.dto.UserWithAvatarDTO;
 import com.phantoms.phantomsbackend.pojo.entity.User;
 import com.phantoms.phantomsbackend.pojo.entity.UserProfile;
-import com.phantoms.phantomsbackend.repository.UserProfileRepository;
-import com.phantoms.phantomsbackend.repository.UserRepository;
+import com.phantoms.phantomsbackend.repository.primary.PrimaryUserProfileRepository;
+import com.phantoms.phantomsbackend.repository.primary.PrimaryUserRepository;
 import com.phantoms.phantomsbackend.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private PrimaryUserRepository userRepository;
 
     @Autowired
-    private UserProfileRepository userProfileRepository;
+    private PrimaryUserProfileRepository userProfileRepository;
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {

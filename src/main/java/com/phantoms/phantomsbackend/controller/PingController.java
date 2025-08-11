@@ -47,16 +47,16 @@ public class PingController {
     @Value("${app.version:unknown}")
     private String appVersion;
 
-    @Value("${spring.datasource.postgres.url}")
+    @Value("${spring.datasource.primary.url}")
     private String postgresUrl;
 
-    @Value("${spring.datasource.postgres.username}")
+    @Value("${spring.datasource.primary.username}")
     private String postgresUsername;
 
-    @Value("${spring.datasource.postgres.password}")
+    @Value("${spring.datasource.primary.password}")
     private String postgresPassword;
 
-    @Value("${spring.datasource.postgres.driver-class-name}")
+    @Value("${spring.datasource.primary.driver-class-name}")
     private String postgresDriverClassName;
 
     @GetMapping("/ping")

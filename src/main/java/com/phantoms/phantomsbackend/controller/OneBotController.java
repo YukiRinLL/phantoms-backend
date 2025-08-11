@@ -1,7 +1,7 @@
 package com.phantoms.phantomsbackend.controller;
 
 import com.phantoms.phantomsbackend.pojo.entity.onebot.ChatRecord;
-import com.phantoms.phantomsbackend.repository.onebot.ChatRecordRepository;
+import com.phantoms.phantomsbackend.repository.primary.onebot.PrimaryChatRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class OneBotController {
 
     @Autowired
-    private ChatRecordRepository chatRecordRepository;
+    private PrimaryChatRecordRepository chatRecordRepository;
 
     @PostMapping("/onebot")
     public ResponseEntity<String> handleOneBotRequest(@RequestBody Map<String, Object> requestBody) {

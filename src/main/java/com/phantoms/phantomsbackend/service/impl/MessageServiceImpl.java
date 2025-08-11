@@ -4,30 +4,31 @@ import com.phantoms.phantomsbackend.pojo.dto.MessageWithUserDTO;
 import com.phantoms.phantomsbackend.pojo.dto.UserWithAvatarDTO;
 import com.phantoms.phantomsbackend.pojo.entity.Message;
 import com.phantoms.phantomsbackend.pojo.entity.User;
-import com.phantoms.phantomsbackend.repository.MessageRepository;
-import com.phantoms.phantomsbackend.repository.UserRepository;
+import com.phantoms.phantomsbackend.repository.primary.PrimaryMessageRepository;
+import com.phantoms.phantomsbackend.repository.primary.PrimaryUserRepository;
 import com.phantoms.phantomsbackend.service.MessageService;
 import com.phantoms.phantomsbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class MessageServiceImpl implements MessageService {
 
     @Autowired
-    private MessageRepository messageRepository;
+    private PrimaryMessageRepository messageRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private PrimaryUserRepository userRepository;
 
     @Autowired
     private UserService userService;
 
     @Override
+    @Transactional("primaryAuthUserRepository")
     public List<MessageWithUserDTO> getAllMessagesWithUserDetails() {
         List<Message> messages = messageRepository.findAll();
         return messages.stream()

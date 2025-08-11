@@ -4,20 +4,8 @@ import com.phantoms.phantomsbackend.pojo.entity.AuthUser;
 import com.phantoms.phantomsbackend.pojo.entity.Message;
 import com.phantoms.phantomsbackend.pojo.entity.UserProfile;
 import com.phantoms.phantomsbackend.pojo.entity.onebot.ChatRecord;
-import com.phantoms.phantomsbackend.pojo.model.AuthUserModel;
-import com.phantoms.phantomsbackend.pojo.model.MessageModel;
-import com.phantoms.phantomsbackend.pojo.model.UserProfileModel;
-import com.phantoms.phantomsbackend.pojo.model.onebot.ChatRecordModel;
-import com.phantoms.phantomsbackend.repository.AuthUserRepository;
-import com.phantoms.phantomsbackend.repository.MessageRepository;
-import com.phantoms.phantomsbackend.repository.UserProfileRepository;
-import com.phantoms.phantomsbackend.mapper.AuthUserMapper;
-import com.phantoms.phantomsbackend.mapper.MessageMapper;
-import com.phantoms.phantomsbackend.mapper.UserProfileMapper;
-import com.phantoms.phantomsbackend.mapper.onebot.ChatRecordMapper;
-import com.phantoms.phantomsbackend.repository.onebot.ChatRecordRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -27,67 +15,62 @@ import java.util.List;
 public class DataSyncScheduler {
 
     @Autowired
-    private AuthUserRepository authUserRepository;
+    @Qualifier("primaryAuthUserRepository")
+    private com.phantoms.phantomsbackend.repository.primary.PrimaryAuthUserRepository primaryAuthUserRepository;
+
     @Autowired
-    private MessageRepository messageRepository;
+    @Qualifier("secondaryAuthUserRepository")
+    private com.phantoms.phantomsbackend.repository.secondary.SecondaryAuthUserRepository secondaryAuthUserRepository;
+
     @Autowired
-    private UserProfileRepository userProfileRepository;
+    @Qualifier("primaryMessageRepository")
+    private com.phantoms.phantomsbackend.repository.primary.PrimaryMessageRepository primaryMessageRepository;
+
     @Autowired
-    private ChatRecordRepository chatRecordRepository;
+    @Qualifier("secondaryMessageRepository")
+    private com.phantoms.phantomsbackend.repository.secondary.SecondaryMessageRepository secondaryMessageRepository;
+
     @Autowired
-    private AuthUserMapper authUserMapper;
+    @Qualifier("primaryUserProfileRepository")
+    private com.phantoms.phantomsbackend.repository.primary.PrimaryUserProfileRepository primaryUserProfileRepository;
+
     @Autowired
-    private MessageMapper messageMapper;
+    @Qualifier("secondaryUserProfileRepository")
+    private com.phantoms.phantomsbackend.repository.secondary.SecondaryUserProfileRepository secondaryUserProfileRepository;
+
     @Autowired
-    private UserProfileMapper userProfileMapper;
+    @Qualifier("primaryChatRecordRepository")
+    private com.phantoms.phantomsbackend.repository.primary.onebot.PrimaryChatRecordRepository primaryChatRecordRepository;
+
     @Autowired
-    private ChatRecordMapper chatRecordMapper;
+    @Qualifier("secondaryChatRecordRepository")
+    private com.phantoms.phantomsbackend.repository.secondary.onebot.SecondaryChatRecordRepository secondaryChatRecordRepository;
 
     @Scheduled(fixedRate = 60000) // 每分钟执行一次
-//    @Scheduled(cron = "0 0 2 * * ?") //2 AM everyday
     public void syncData() {
-//        syncAuthUsers();
-//        syncMessages();
+        syncAuthUsers();
+        syncMessages();
         syncUserProfiles();
-//        syncChatRecords();
+        syncChatRecords();
     }
 
     private void syncAuthUsers() {
-        List<AuthUser> authUsers = authUserRepository.findAll();
-        for (AuthUser authUser : authUsers) {
-            AuthUserModel authUserModel = new AuthUserModel();
-            BeanUtils.copyProperties(authUser,authUserModel);
-            authUserMapper.insert(authUserModel);
-        }
+        List<AuthUser> authUsers = primaryAuthUserRepository.findAll();
+        secondaryAuthUserRepository.saveAll(authUsers);
     }
 
     private void syncMessages() {
-        List<Message> messages = messageRepository.findAll();
-        for (Message message : messages) {
-            MessageModel messageModel = new MessageModel();
-            BeanUtils.copyProperties(message,messageModel);
-            messageMapper.insert(messageModel);
-        }
+        List<Message> messages = primaryMessageRepository.findAll();
+        secondaryMessageRepository.saveAll(messages);
     }
 
     private void syncUserProfiles() {
-        List<UserProfile> userProfiles = userProfileRepository.findAll();
-        for (UserProfile userProfile : userProfiles) {
-            UserProfileModel userProfileModel = new UserProfileModel();
-            BeanUtils.copyProperties(userProfile,userProfileModel);
-            userProfileModel.setId(String.valueOf(userProfile.getId()));
-            userProfileModel.setUserId(String.valueOf(userProfile.getUserId()));
-            userProfileModel.setLegacyUserId(String.valueOf(userProfile.getLegacyUserId()));
-            userProfileMapper.insert(userProfileModel);
-        }
+        List<UserProfile> userProfiles = primaryUserProfileRepository.findAll();
+        secondaryUserProfileRepository.saveAll(userProfiles);
     }
 
     private void syncChatRecords() {
-        List<ChatRecord> chatRecords = chatRecordRepository.findAll();
-        for (ChatRecord chatRecord : chatRecords) {
-            ChatRecordModel chatRecordModel = new ChatRecordModel();
-            BeanUtils.copyProperties(chatRecord,chatRecordModel);
-            chatRecordMapper.insert(chatRecordModel);
-        }
+        List<ChatRecord> chatRecords = primaryChatRecordRepository.findAll();
+        secondaryChatRecordRepository.saveAll(chatRecords);
     }
 }

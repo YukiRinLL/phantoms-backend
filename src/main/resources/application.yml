@@ -20,7 +20,7 @@ logging:
 
 spring:
   datasource:
-    postgres:
+    primary:
       # Supabase Direct Connection mode
       #    url: jdbc:postgresql://db.dshmbsawwrbuycnivcjs.supabase.co:5432/postgres
       #    username: postgres
@@ -38,9 +38,11 @@ spring:
       #    password: LUOCANYU
       #    driver-class-name: org.postgresql.Driver
 
-    mysql:
-      url: jdbc:mysql://sql.wsfdb.cn:3306/YukiRinLLPhantomBackup?useSSL=false&serverTimezone=UTC
-      username: YukiRinLLPhantomBackup
+    secondary:
+#      url: jdbc:mysql://sql.wsfdb.cn:3306/YukiRinLLPhantomBackup?useSSL=false&serverTimezone=UTC
+#      username: YukiRinLLPhantomBackup
+      url: jdbc:mysql://db4free.net:3306/phantoms_db?useSSL=false&serverTimezone=UTC
+      username: yukirinll
       password: LUOCANYU
       driver-class-name: com.mysql.cj.jdbc.Driver
 
