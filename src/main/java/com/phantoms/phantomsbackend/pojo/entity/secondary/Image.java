@@ -1,18 +1,17 @@
-package com.phantoms.phantomsbackend.pojo.entity;
+package com.phantoms.phantomsbackend.pojo.entity.secondary;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
+@Entity(name = "SecondaryImage")
+@Table(name = "images", schema = "phantoms_db")
 @Data
-@Entity
-@Table(name = "images")
 public class Image {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private String id;
 
     @Column(nullable = false)
     private String name;
@@ -21,7 +20,7 @@ public class Image {
     private String data;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @Column(name = "uploaded_by")
     private String uploadedBy;

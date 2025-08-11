@@ -2,8 +2,8 @@ package com.phantoms.phantomsbackend.service.impl;
 
 import com.phantoms.phantomsbackend.pojo.dto.MessageWithUserDTO;
 import com.phantoms.phantomsbackend.pojo.dto.UserWithAvatarDTO;
-import com.phantoms.phantomsbackend.pojo.entity.Message;
-import com.phantoms.phantomsbackend.pojo.entity.User;
+import com.phantoms.phantomsbackend.pojo.entity.primary.Message;
+import com.phantoms.phantomsbackend.pojo.entity.primary.User;
 import com.phantoms.phantomsbackend.repository.primary.PrimaryMessageRepository;
 import com.phantoms.phantomsbackend.repository.primary.PrimaryUserRepository;
 import com.phantoms.phantomsbackend.service.MessageService;

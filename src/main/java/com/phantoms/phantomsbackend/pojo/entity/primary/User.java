@@ -1,4 +1,4 @@
-package com.phantoms.phantomsbackend.pojo.entity;
+package com.phantoms.phantomsbackend.pojo.entity.primary;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-@Entity
+@Entity(name = "PrimaryUser")
 @Table(name = "users")
 public class User {
     @Id

@@ -1,4 +1,4 @@
-package com.phantoms.phantomsbackend.pojo.entity.onebot;
+package com.phantoms.phantomsbackend.pojo.entity.primary.onebot;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "PrimaryChatRecord")
 @Table(name = "chat_records", schema = "onebot")
 @Data
 public class ChatRecord {

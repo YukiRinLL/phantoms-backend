@@ -1,24 +1,23 @@
-package com.phantoms.phantomsbackend.pojo.entity;
+package com.phantoms.phantomsbackend.pojo.entity.secondary;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
+@Entity(name = "SecondaryUserProfile")
+@Table(name = "user_profile", schema = "phantoms_db")
 @Data
-@Entity
-@Table(name = "user_profile")
 public class UserProfile {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private String id;
 
     @Column(name = "legacy_user_id")
-    private UUID legacyUserId;
+    private String legacyUserId;
 
     @Column(name = "user_id")
-    private UUID userId;
+    private String userId;
 
     @Column(nullable = false)
     private String name;
@@ -27,7 +26,7 @@ public class UserProfile {
     private String data;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @Column(name = "uploaded_by")
     private String uploadedBy;

@@ -1,7 +1,7 @@
 package com.phantoms.phantomsbackend.service;
 
 
-import com.phantoms.phantomsbackend.pojo.entity.AuthUser;
+import com.phantoms.phantomsbackend.pojo.entity.primary.AuthUser;
 
 import java.util.List;
 import java.util.Optional;

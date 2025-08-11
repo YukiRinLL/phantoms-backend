@@ -1,12 +1,11 @@
 package com.phantoms.phantomsbackend.repository.secondary;
 
-import com.phantoms.phantomsbackend.pojo.entity.AuthUser;
+import com.phantoms.phantomsbackend.pojo.entity.secondary.AuthUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository("secondaryAuthUserRepository")
-public interface SecondaryAuthUserRepository extends JpaRepository<AuthUser, UUID> {
+public interface SecondaryAuthUserRepository extends JpaRepository<AuthUser, String> {
     Optional<AuthUser> findByEmail(String email);
 }

@@ -1,4 +1,4 @@
-package com.phantoms.phantomsbackend.pojo.entity;
+package com.phantoms.phantomsbackend.pojo.entity.primary;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "PrimaryAuthUser")
 @Table(name = "users", schema = "auth")
 @Data
 public class AuthUser {

@@ -1,0 +1,28 @@
+package com.phantoms.phantomsbackend.pojo.entity.primary;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Data
+@Entity(name = "PrimaryImage")
+@Table(name = "images")
+public class Image {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String data;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "uploaded_by")
+    private String uploadedBy;
+}

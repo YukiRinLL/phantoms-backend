@@ -1,4 +1,4 @@
-package com.phantoms.phantomsbackend.pojo.entity;
+package com.phantoms.phantomsbackend.pojo.entity.primary;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@Entity
-@Table(name = "messages")
-public class Message {
+@Entity(name = "PrimaryUserProfile")
+@Table(name = "user_profile")
+public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -21,8 +21,14 @@ public class Message {
     private UUID userId;
 
     @Column(nullable = false)
-    private String message;
+    private String name;
+
+    @Column(nullable = false)
+    private String data;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "uploaded_by")
+    private String uploadedBy;
 }

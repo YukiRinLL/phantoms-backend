@@ -1,6 +1,6 @@
 package com.phantoms.phantomsbackend.controller;
 
-import com.phantoms.phantomsbackend.pojo.entity.AuthUser;
+import com.phantoms.phantomsbackend.pojo.entity.primary.AuthUser;
 import com.phantoms.phantomsbackend.service.AuthUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

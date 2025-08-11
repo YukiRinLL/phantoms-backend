@@ -19,6 +19,8 @@ logging:
     org.postgresql: DEBUG
 
 spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   datasource:
     primary:
       # Supabase Direct Connection mode
@@ -41,7 +43,7 @@ spring:
     secondary:
 #      url: jdbc:mysql://sql.wsfdb.cn:3306/YukiRinLLPhantomBackup?useSSL=false&serverTimezone=UTC
 #      username: YukiRinLLPhantomBackup
-      url: jdbc:mysql://db4free.net:3306/phantoms_db?useSSL=false&serverTimezone=UTC
+      url: jdbc:mysql://db4free.net:3306/phantoms_db
       username: yukirinll
       password: LUOCANYU
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -65,7 +67,10 @@ spring:
       hibernate:
         temp:
           use_jdbc_metadata_defaults: false
+        order_inserts: true
+        order_updates: true
         jdbc:
+          batch_size: 50
           lob:
             non_contextual_creation: true
         bytecode:

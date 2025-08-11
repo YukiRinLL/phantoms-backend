@@ -2,7 +2,7 @@ package com.phantoms.phantomsbackend.service.impl;
 
 import com.phantoms.phantomsbackend.common.utils.EmailUtil;
 import com.phantoms.phantomsbackend.pojo.dto.UserDTO;
-import com.phantoms.phantomsbackend.pojo.entity.AuthUser;
+import com.phantoms.phantomsbackend.pojo.entity.primary.AuthUser;
 import com.phantoms.phantomsbackend.service.AuthUserService;
 import com.phantoms.phantomsbackend.service.EmailService;
 import com.phantoms.phantomsbackend.service.UserService;
