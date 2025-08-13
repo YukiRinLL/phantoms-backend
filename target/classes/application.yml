@@ -1,0 +1,162 @@
+app:
+  version: 1.0.0
+
+server:
+  port: 8080
+
+# log4j2
+logging:
+  file:
+    name: logs/phantoms-backend.log
+  level:
+    org.springframework: DEBUG
+    org.springframework.web.socket: TRACE
+    org.springframework.messaging: TRACE
+    org.springframework.data.redis: DEBUG
+    springfox: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.postgresql: DEBUG
+
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  datasource:
+    primary:
+      # Supabase Direct Connection mode
+      #    url: jdbc:postgresql://db.dshmbsawwrbuycnivcjs.supabase.co:5432/postgres
+      #    username: postgres
+      #    password: LUOCANYU
+
+      # Supabase Transaction Pooler mode
+      url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
+      username: postgres.dshmbsawwrbuycnivcjs
+      password: LUOCANYU
+      driver-class-name: org.postgresql.Driver
+
+      # Supabase Session pooler mode
+      #    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres?pgbouncer=true&connection_limit=1
+      #    username: postgres.dshmbsawwrbuycnivcjs
+      #    password: LUOCANYU
+      #    driver-class-name: org.postgresql.Driver
+
+    secondary:
+#      url: jdbc:mysql://sql.wsfdb.cn:3306/YukiRinLLPhantomBackup?useSSL=false&serverTimezone=UTC
+#      username: YukiRinLLPhantomBackup
+#      password: LUOCANYU
+
+#      url: jdbc:mysql://db4free.net:3306/phantoms_db
+#      username: yukirinll
+#      password: LUOCANYU
+
+      url: jdbc:mysql://mysql2.sqlpub.com:3307/phantoms_db?allowPublicKeyRetrieval=true
+      username: yukirinll
+      password: ACy2qDomjU1zMxFB
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+    hikari:
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      pool-name: SupabasePool
+
+      maximum-pool-size: 20
+      minimum-idle: 10
+      data-source-properties:
+        # 禁用 HikariCP 的预编译语句缓存
+        preparedStatementCacheQueries: 0
+        preparedStatementCacheSizeMiB: 0
+        prepareThreshold: 0  # Disable prepared statement caching
+
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          batch_size: 50
+          lob:
+            non_contextual_creation: true
+        bytecode:
+          provider: bytebuddy
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  # E-mail (QQ 邮箱配置)
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: 3146672611@qq.com
+    password: aecgjhbyertddcfe
+    from:
+      name: Phantoms Official
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+          auth: true
+  data:
+    # Redis
+    redis:
+      # Redis
+      # Render Internal Redis URL
+#      url: redis://red-d03imhre5dus73ab817g:6379
+      # External Redis URL
+      url: rediss://red-d03imhre5dus73ab817g:OXtvQrLbJ1WXXdjXMEVknm1hPnW8XFAo@oregon-keyvalue.render.com:6379
+
+mybatis-plus:
+  global-config:
+    db-config:
+      field-strategy: not_null # 只映射实体中有值的字段
+      id-type: assign_uuid # 使用 UUID 作为主键
+  configuration:
+    map-underscore-to-camel-case: true # 自动映射下划线到驼峰
+
+# swagger
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+# Spring Boot Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    enable:
+      jdbc: true
+
+#Napcat QQ
+shiro:
+  ws:
+    server:
+      enable: true
+      url: "/shiro/ws"
+
+xivapi:
+  base-url: "https://v2.xivapi.com/api"
+
+
+leancloud:
+  app-id: "4NeSS81j4KK0uyYULpfk52yh-gzGzoHsz"
+  app-key: "1xNZMz1XUVSLDTAv3XoVBgni"
+  server-url: "https://4ness81j.lc-cn-n1-shared.com"
+  # 开启 LeanCloud SDK 调试日志
+  log-level: "DEBUG"
+
+d1:
+  api-url: https://api.cloudflare.com
+  account-id: 0e7f3f296b75e9770c65d0d0fa73d7d7
+  database-id: 0ad9906c-ec63-4111-b741-647627eee096
+  api-token: XfJvEzGOKAMIn18NRE5MvkqU4C64s_ic3iNXRk1y
+  log-level: WARNING
