@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 public class DataSyncScheduler {
 
-    private static final Logger logger = LoggerFactory.getLogger("");
+    private static final Logger logger = LoggerFactory.getLogger(DataSyncScheduler.class);
 
     @Autowired
     @Qualifier("secondaryEntityManagerFactory")
@@ -59,13 +59,31 @@ public class DataSyncScheduler {
     @Qualifier("secondaryChatRecordRepository")
     private com.phantoms.phantomsbackend.repository.secondary.onebot.SecondaryChatRecordRepository secondaryChatRecordRepository;
 
+    @Autowired
+    @Qualifier("primaryUserRepository")
+    private com.phantoms.phantomsbackend.repository.primary.PrimaryUserRepository primaryUserRepository;
+
+    @Autowired
+    @Qualifier("secondaryUserRepository")
+    private com.phantoms.phantomsbackend.repository.secondary.SecondaryUserRepository secondaryUserRepository;
+
+    @Autowired
+    @Qualifier("primaryPasswordRepository")
+    private com.phantoms.phantomsbackend.repository.primary.PrimaryPasswordRepository primaryPasswordRepository;
+
+    @Autowired
+    @Qualifier("secondaryPasswordRepository")
+    private com.phantoms.phantomsbackend.repository.secondary.SecondaryPasswordRepository secondaryPasswordRepository;
+
     @Scheduled(fixedRate = 600000) // 每10分钟执行一次
     public void syncData() {
         syncAuthUsers();
-        syncMessages();
+        syncUsers();
+        syncPasswords();
         syncUserProfiles();
-//        syncChatRecords();
-        logger.info("All sync job success.");
+        syncMessages();
+        syncChatRecords();
+        logger.info("All sync jobs completed successfully.");
     }
 
     private void syncAuthUsers() {
@@ -74,6 +92,22 @@ public class DataSyncScheduler {
                 .map(this::convertToSecondaryAuthUser)
                 .collect(Collectors.toList());
         secondaryAuthUserRepository.saveAll(secondaryAuthUsers);
+    }
+
+    private void syncUsers() {
+        List<com.phantoms.phantomsbackend.pojo.entity.primary.User> primaryUsers = primaryUserRepository.findAll();
+        List<com.phantoms.phantomsbackend.pojo.entity.secondary.User> secondaryUsers = primaryUsers.stream()
+                .map(this::convertToSecondaryUser)
+                .collect(Collectors.toList());
+        secondaryUserRepository.saveAll(secondaryUsers);
+    }
+
+    private void syncPasswords() {
+        List<com.phantoms.phantomsbackend.pojo.entity.primary.Password> primaryPasswords = primaryPasswordRepository.findAll();
+        List<com.phantoms.phantomsbackend.pojo.entity.secondary.Password> secondaryPasswords = primaryPasswords.stream()
+                .map(this::convertToSecondaryPassword)
+                .collect(Collectors.toList());
+        secondaryPasswordRepository.saveAll(secondaryPasswords);
     }
 
     private void syncMessages() {
@@ -86,7 +120,6 @@ public class DataSyncScheduler {
 
     private void syncUserProfiles() {
         List<com.phantoms.phantomsbackend.pojo.entity.primary.UserProfile> primaryUserProfiles = primaryUserProfileRepository.findAll();
-        System.out.println(primaryUserProfiles);
         List<com.phantoms.phantomsbackend.pojo.entity.secondary.UserProfile> secondaryUserProfiles = primaryUserProfiles.stream()
                 .map(this::convertToSecondaryUserProfile)
                 .collect(Collectors.toList());
@@ -99,6 +132,7 @@ public class DataSyncScheduler {
         // 使用并行流转换数据
         List<com.phantoms.phantomsbackend.pojo.entity.secondary.onebot.ChatRecord> secondaryChatRecords = primaryChatRecords.parallelStream()
                 .map(this::convertToSecondaryChatRecord)
+                .filter(record -> !secondaryChatRecordRepository.existsById(record.getId())) // 检查是否已存在
                 .collect(Collectors.toList());
 
         // 使用 EntityManager 批量插入
@@ -135,6 +169,22 @@ public class DataSyncScheduler {
         BeanUtils.copyProperties(primaryChatRecord, secondaryChatRecord);
         secondaryChatRecord.setId(primaryChatRecord.getId().toString());
         return secondaryChatRecord;
+    }
+
+    private com.phantoms.phantomsbackend.pojo.entity.secondary.User convertToSecondaryUser(com.phantoms.phantomsbackend.pojo.entity.primary.User primaryUser) {
+        com.phantoms.phantomsbackend.pojo.entity.secondary.User secondaryUser = new com.phantoms.phantomsbackend.pojo.entity.secondary.User();
+        BeanUtils.copyProperties(primaryUser, secondaryUser);
+        secondaryUser.setId(primaryUser.getId().toString());
+        secondaryUser.setUserId(primaryUser.getUserId().toString());
+        return secondaryUser;
+    }
+
+    private com.phantoms.phantomsbackend.pojo.entity.secondary.Password convertToSecondaryPassword(com.phantoms.phantomsbackend.pojo.entity.primary.Password primaryPassword) {
+        com.phantoms.phantomsbackend.pojo.entity.secondary.Password secondaryPassword = new com.phantoms.phantomsbackend.pojo.entity.secondary.Password();
+        BeanUtils.copyProperties(primaryPassword, secondaryPassword);
+        secondaryPassword.setUserId(primaryPassword.getUserId().toString());
+        secondaryPassword.setLegacyUserId(primaryPassword.getLegacyUserId().toString());
+        return secondaryPassword;
     }
 
     private com.phantoms.phantomsbackend.pojo.entity.secondary.AuthUser convertToSecondaryAuthUser(com.phantoms.phantomsbackend.pojo.entity.primary.AuthUser primaryAuthUser) {

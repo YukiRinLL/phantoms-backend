@@ -43,9 +43,15 @@ spring:
     secondary:
 #      url: jdbc:mysql://sql.wsfdb.cn:3306/YukiRinLLPhantomBackup?useSSL=false&serverTimezone=UTC
 #      username: YukiRinLLPhantomBackup
-      url: jdbc:mysql://db4free.net:3306/phantoms_db
+#      password: LUOCANYU
+
+#      url: jdbc:mysql://db4free.net:3306/phantoms_db
+#      username: yukirinll
+#      password: LUOCANYU
+
+      url: jdbc:mysql://mysql2.sqlpub.com:3307/phantoms_db?allowPublicKeyRetrieval=true
       username: yukirinll
-      password: LUOCANYU
+      password: ACy2qDomjU1zMxFB
       driver-class-name: com.mysql.cj.jdbc.Driver
 
     hikari:

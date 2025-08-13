@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity(name = "SecondaryUser")
-@Table(name = "users", schema = "phantoms_db")
+@Table(name = "legacy_users", schema = "phantoms_db")
 @Data
 public class User {
 
