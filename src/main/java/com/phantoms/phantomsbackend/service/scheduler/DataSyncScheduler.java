@@ -75,7 +75,8 @@ public class DataSyncScheduler {
     @Qualifier("secondaryPasswordRepository")
     private com.phantoms.phantomsbackend.repository.secondary.SecondaryPasswordRepository secondaryPasswordRepository;
 
-    @Scheduled(fixedRate = 600000) // 每10分钟执行一次
+//    @Scheduled(fixedRate = 600000) // 每10分钟执行一次
+    @Scheduled(cron = "0 0 */2 * * ?") // 每两小时执行一次，整点执行
     public void syncData() {
         syncAuthUsers();
         syncUsers();
