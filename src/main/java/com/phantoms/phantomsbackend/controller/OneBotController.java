@@ -1,7 +1,9 @@
 package com.phantoms.phantomsbackend.controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.ChatRecord;
 import com.phantoms.phantomsbackend.service.OneBotService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +27,26 @@ public class OneBotController {
             // 调用服务层处理请求
             ChatRecord chatRecord = oneBotService.processOneBotRequest(requestBody);
 
+            // 使用 JSONObject 构建 JSON 响应
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("status", "ok");
+            JSONObject data = new JSONObject();
+            data.put("id", chatRecord.getId());
+            jsonResponse.put("data", data);
+
             // 返回 JSON 格式的响应
-            return ResponseEntity.ok("{\"status\":\"ok\",\"data\":{\"id\":" + chatRecord.getId() + "}}");
+            return ResponseEntity.ok(jsonResponse.toString());
         } catch (Exception e) {
             // 记录错误日志
             System.err.println("Error processing request: " + e.getMessage());
+
+            // 使用 JSONObject 构建 JSON 错误响应
+            JSONObject jsonError = new JSONObject();
+            jsonError.put("status", "failed");
+            jsonError.put("error", e.getMessage());
+
             // 返回 JSON 格式的错误响应
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"status\":\"failed\",\"error\":\"" + e.getMessage() + "\"}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonError.toString());
         }
     }
 

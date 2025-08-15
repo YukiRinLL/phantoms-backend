@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix OneBotController ResponseEntity as Json format">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/WebConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/onebot/PrimaryChatRecordRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/onebot/PrimaryChatRecordRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add chat records api">
+      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -294,22 +289,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00034" summary="add PlantUML">
-      <option name="closed" value="true" />
-      <created>1744941141588</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1744941141588</updated>
-    </task>
-    <task id="LOCAL-00035" summary="add PlantUML">
-      <option name="closed" value="true" />
-      <created>1744942675452</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1744942675452</updated>
     </task>
     <task id="LOCAL-00036" summary="fix PlantUML KVStore">
       <option name="closed" value="true" />
@@ -687,7 +666,23 @@
       <option name="project" value="LOCAL" />
       <updated>1755238652033</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="add chat records api">
+      <option name="closed" value="true" />
+      <created>1755245395778</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1755245395778</updated>
+    </task>
+    <task id="LOCAL-00084" summary="add chat records api">
+      <option name="closed" value="true" />
+      <created>1755245507283</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1755245507283</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -722,7 +717,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix PlantUML KVStore" />
     <MESSAGE value="fix PlantUML createObject" />
     <MESSAGE value="fix PlantUML getObject" />
     <MESSAGE value="fix PlantUML Object functions" />
@@ -747,7 +741,8 @@
     <MESSAGE value="add legacy user info sync" />
     <MESSAGE value="update HealthCheckScheduler" />
     <MESSAGE value="fix OneBotController ResponseEntity as Json format" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix OneBotController ResponseEntity as Json format" />
+    <MESSAGE value="add chat records api" />
+    <option name="LAST_COMMIT_MESSAGE" value="add chat records api" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
