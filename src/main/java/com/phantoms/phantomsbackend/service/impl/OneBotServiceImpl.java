@@ -1,9 +1,11 @@
 package com.phantoms.phantomsbackend.service.impl;
 
+import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
 import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.ChatRecord;
 import com.phantoms.phantomsbackend.repository.primary.onebot.PrimaryChatRecordRepository;
 import com.phantoms.phantomsbackend.service.OneBotService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,6 +17,12 @@ public class OneBotServiceImpl implements OneBotService {
 
     @Autowired
     private PrimaryChatRecordRepository chatRecordRepository;
+
+    @Autowired
+    private NapCatQQUtil napCatQQUtil;
+
+    @Value("${napcat.default-group-id}")
+    private String defaultGroupId;
 
     @Override
     public ChatRecord processOneBotRequest(Map<String, Object> requestBody) throws Exception {
@@ -58,5 +66,11 @@ public class OneBotServiceImpl implements OneBotService {
     public List<ChatRecord> getLatestMessages(int limit) {
         // 查询最新的几条消息，只返回 type=text 的消息
         return chatRecordRepository.findTopByOrderByCreatedAtDescWithText(limit);
+    }
+
+    @Override
+    public void sendGroupMessageWithDefaultGroup(String message, String groupId) throws Exception {
+        String targetGroupId = groupId != null ? groupId : defaultGroupId;
+        napCatQQUtil.sendGroupMessage(targetGroupId, message);
     }
 }

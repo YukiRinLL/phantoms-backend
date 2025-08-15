@@ -65,4 +65,21 @@ public class OneBotController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @PostMapping("/onebot/send-to-group")
+    public ResponseEntity<String> sendToDefaultGroup(@RequestBody String message, @RequestParam(required = false) String groupId) {
+        try {
+            // 调用服务层发送消息到默认群聊或指定群聊
+            oneBotService.sendGroupMessageWithDefaultGroup(message, groupId);
+
+            // 返回成功响应
+            return ResponseEntity.ok("{\"status\":\"ok\"}");
+        } catch (Exception e) {
+            // 记录错误日志
+            System.err.println("Error sending message to default group: " + e.getMessage());
+
+            // 返回错误响应
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"status\":\"failed\",\"error\":\"" + e.getMessage() + "\"}");
+        }
+    }
 }

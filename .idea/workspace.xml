@@ -4,14 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix OneBotController json format">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/NapCatQQUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/phantoms/phantomsbackend/NapCatQQTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add NapCatQQUtil">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/log4j2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/email/defaultEmailTemplate.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/email/welcomeEmailTemplate.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/application.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +126,7 @@
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.keymap",
     "vue.rearranger.settings.migration": "true",
-    "应用程序.NapCatQQTest.executor": "Run",
+    "应用程序.NapCatQQTest.executor": "Debug",
     "应用程序.PhantomsBackendApplication.executor": "Debug"
   },
   "keyToStringList": {
@@ -161,7 +170,7 @@
       <command value="mvn clean package" />
     </option>
   </component>
-  <component name="RunManager" selected="应用程序.NapCatQQTest">
+  <component name="RunManager" selected="应用程序.PhantomsBackendApplication">
     <configuration name="NapCatQQTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.NapCatQQTest" />
       <module name="phantoms-backend" />
@@ -252,10 +261,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="应用程序.PhantomsBackendApplication" />
         <item itemvalue="应用程序.NapCatQQTest" />
         <item itemvalue="TestNG.NapCatQQTest" />
         <item itemvalue="JUnit.NapCatQQTest" />
-        <item itemvalue="应用程序.PhantomsBackendApplication" />
         <item itemvalue="JUnit.MySQLConnectionTest.testMySQLConnection" />
       </list>
     </recent_temporary>
@@ -303,14 +312,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00037" summary="fix PlantUML createObject">
-      <option name="closed" value="true" />
-      <created>1745219657985</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1745219657985</updated>
     </task>
     <task id="LOCAL-00038" summary="fix PlantUML getObject">
       <option name="closed" value="true" />
@@ -696,7 +697,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755248354896</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="add NapCatQQUtil">
+      <option name="closed" value="true" />
+      <created>1755251817834</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1755251817835</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -731,7 +740,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix PlantUML getObject" />
     <MESSAGE value="fix PlantUML Object functions" />
     <MESSAGE value="add RedisConfig" />
     <MESSAGE value="add redis check APIs" />
@@ -756,7 +764,8 @@
     <MESSAGE value="fix OneBotController ResponseEntity as Json format" />
     <MESSAGE value="add chat records api" />
     <MESSAGE value="fix OneBotController json format" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix OneBotController json format" />
+    <MESSAGE value="add NapCatQQUtil" />
+    <option name="LAST_COMMIT_MESSAGE" value="add NapCatQQUtil" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
