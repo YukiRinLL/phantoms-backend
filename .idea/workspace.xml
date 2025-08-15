@@ -4,15 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add legacy user info sync">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update HealthCheckScheduler">
+      <change afterPath="$PROJECT_DIR$/data/Data extraction/visitor_stats_rows.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HealthCheckScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HealthCheckScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/TODO.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/log4j2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/email/defaultEmailTemplate.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/email/welcomeEmailTemplate.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phantoms.drawio" beforeDir="false" afterPath="$PROJECT_DIR$/data/Phantoms.drawio" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/WebSocketConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/WebSocketConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,74 +66,75 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.PhantomsBackendApplication.executor&quot;: &quot;Debug&quot;,
-    &quot;Application.XIVAPIExample.executor&quot;: &quot;Debug&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.MySQLConnectionTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.MySQLConnectionTest.testMySQLConnection.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.PhantomsBackendApplicationTests.testMapper.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.XIVAPIExample.executor&quot;: &quot;Coverage&quot;,
-    &quot;Maven.phantoms-backend [-X,clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [clean,compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [clean,package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [dependency:tree].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [deploy].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [org.apache.maven.plugins:maven-clean-plugin:3.2.0:clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [org.apache.maven.plugins:maven-compiler-plugin:3.10.1:compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [org.apache.maven.plugins:maven-deploy-plugin:3.0.0:deploy].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [org.apache.maven.plugins:maven-install-plugin:3.0.1:install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [validate].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [verify].executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;Spring Boot.PhantomsBackendApplication.executor&quot;: &quot;Debug&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/phantoms-backend/src/main/resources&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;D:/phantoms-backend/src/main/java/com/phantoms/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;项目&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;应用程序.PhantomsBackendApplication.executor&quot;: &quot;Debug&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.PhantomsBackendApplication.executor": "Debug",
+    "Application.XIVAPIExample.executor": "Debug",
+    "Docker.Dockerfile.executor": "Run",
+    "JUnit.MySQLConnectionTest.executor": "Run",
+    "JUnit.MySQLConnectionTest.testMySQLConnection.executor": "Run",
+    "JUnit.PhantomsBackendApplicationTests.testMapper.executor": "Run",
+    "JUnit.XIVAPIExample.executor": "Coverage",
+    "Maven.phantoms-backend [-X,clean,install].executor": "Run",
+    "Maven.phantoms-backend [clean,compile].executor": "Run",
+    "Maven.phantoms-backend [clean,install].executor": "Run",
+    "Maven.phantoms-backend [clean,package].executor": "Run",
+    "Maven.phantoms-backend [clean].executor": "Run",
+    "Maven.phantoms-backend [compile].executor": "Run",
+    "Maven.phantoms-backend [dependency:tree].executor": "Run",
+    "Maven.phantoms-backend [deploy].executor": "Run",
+    "Maven.phantoms-backend [install].executor": "Run",
+    "Maven.phantoms-backend [org.apache.maven.plugins:maven-clean-plugin:3.2.0:clean].executor": "Run",
+    "Maven.phantoms-backend [org.apache.maven.plugins:maven-compiler-plugin:3.10.1:compile].executor": "Run",
+    "Maven.phantoms-backend [org.apache.maven.plugins:maven-deploy-plugin:3.0.0:deploy].executor": "Run",
+    "Maven.phantoms-backend [org.apache.maven.plugins:maven-install-plugin:3.0.1:install].executor": "Run",
+    "Maven.phantoms-backend [package].executor": "Run",
+    "Maven.phantoms-backend [validate].executor": "Run",
+    "Maven.phantoms-backend [verify].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "Spring Boot.PhantomsBackendApplication.executor": "Debug",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/phantoms-backend/data/Data extraction",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "D:/phantoms-backend/src/main/java/com/phantoms/Main.java",
+    "project.structure.last.edited": "项目",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true",
+    "应用程序.PhantomsBackendApplication.executor": "Debug"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;java.sql.Driver&quot;,
-      &quot;0545e1c4-d0e1-4d8a-9496-a5a03d11dafc&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "java.sql.Driver",
+      "0545e1c4-d0e1-4d8a-9496-a5a03d11dafc"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\phantoms-backend\data\Data extraction" />
       <recent name="D:\phantoms-backend\src\main\resources" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\secondary" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config" />
-      <recent name="D:\phantoms-backend\src\test\java\com\phantoms\phantomsbackend" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\phantoms-backend\src\main\resources\mappers\archive" />
+      <recent name="D:\phantoms-backend" />
       <recent name="D:\phantoms-backend\data" />
+      <recent name="D:\phantoms-backend\src\main\resources\mappers\archive" />
       <recent name="D:\phantoms-backend\lib" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
@@ -295,30 +294,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00030" summary="add LeanCloud">
-      <option name="closed" value="true" />
-      <created>1744786899027</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1744786899027</updated>
-    </task>
-    <task id="LOCAL-00031" summary="LeanCloud fix">
-      <option name="closed" value="true" />
-      <created>1744788870707</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1744788870707</updated>
-    </task>
-    <task id="LOCAL-00032" summary="LeanCloud fix">
-      <option name="closed" value="true" />
-      <created>1744859056411</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1744859056411</updated>
     </task>
     <task id="LOCAL-00033" summary="LeanCloud fix">
       <option name="closed" value="true" />
@@ -688,7 +663,31 @@
       <option name="project" value="LOCAL" />
       <updated>1755070620299</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="update HealthCheckScheduler">
+      <option name="closed" value="true" />
+      <created>1755072831309</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1755072831309</updated>
+    </task>
+    <task id="LOCAL-00080" summary="update HealthCheckScheduler">
+      <option name="closed" value="true" />
+      <created>1755072946604</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1755072946604</updated>
+    </task>
+    <task id="LOCAL-00081" summary="update HealthCheckScheduler">
+      <option name="closed" value="true" />
+      <created>1755073148915</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1755073148915</updated>
+    </task>
+    <option name="localTasksCounter" value="82" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -723,7 +722,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="LeanCloud fix" />
     <MESSAGE value="add PlantUML" />
     <MESSAGE value="fix PlantUML KVStore" />
     <MESSAGE value="fix PlantUML createObject" />
@@ -748,7 +746,8 @@
     <MESSAGE value="added mysql with mybatis plus" />
     <MESSAGE value="fix secondary datasource" />
     <MESSAGE value="add legacy user info sync" />
-    <option name="LAST_COMMIT_MESSAGE" value="add legacy user info sync" />
+    <MESSAGE value="update HealthCheckScheduler" />
+    <option name="LAST_COMMIT_MESSAGE" value="update HealthCheckScheduler" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
