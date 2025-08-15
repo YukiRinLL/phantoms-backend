@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update HealthCheckScheduler">
-      <change afterPath="$PROJECT_DIR$/data/Data extraction/visitor_stats_rows.csv" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix OneBotController ResponseEntity as Json format">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Phantoms.drawio" beforeDir="false" afterPath="$PROJECT_DIR$/data/Phantoms.drawio" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/WebSocketConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/WebSocketConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/WebConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/onebot/PrimaryChatRecordRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/onebot/PrimaryChatRecordRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,11 +141,11 @@
       <recent name="com.phantoms.phantomsbackend" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.phantoms.phantomsbackend.service.impl" />
+      <recent name="com.phantoms.phantomsbackend.service" />
       <recent name="com.phantoms.phantomsbackend.repository.secondary" />
       <recent name="com.phantoms.phantomsbackend.repository.primary" />
       <recent name="com.phantoms.phantomsbackend.pojo.entity.secondary" />
-      <recent name="com.phantoms.phantomsbackend.pojo.entity.primary" />
-      <recent name="com.phantoms.phantomsbackend.common.config" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -294,14 +294,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00033" summary="LeanCloud fix">
-      <option name="closed" value="true" />
-      <created>1744859109577</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1744859109577</updated>
     </task>
     <task id="LOCAL-00034" summary="add PlantUML">
       <option name="closed" value="true" />
@@ -687,7 +679,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755073148915</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="fix OneBotController ResponseEntity as Json format">
+      <option name="closed" value="true" />
+      <created>1755238652033</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1755238652033</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -722,7 +722,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add PlantUML" />
     <MESSAGE value="fix PlantUML KVStore" />
     <MESSAGE value="fix PlantUML createObject" />
     <MESSAGE value="fix PlantUML getObject" />
@@ -747,7 +746,8 @@
     <MESSAGE value="fix secondary datasource" />
     <MESSAGE value="add legacy user info sync" />
     <MESSAGE value="update HealthCheckScheduler" />
-    <option name="LAST_COMMIT_MESSAGE" value="update HealthCheckScheduler" />
+    <MESSAGE value="fix OneBotController ResponseEntity as Json format" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix OneBotController ResponseEntity as Json format" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

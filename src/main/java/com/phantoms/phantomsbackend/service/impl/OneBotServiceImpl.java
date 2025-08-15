@@ -53,4 +53,10 @@ public class OneBotServiceImpl implements OneBotService {
 
         return chatRecord;
     }
+
+    @Override
+    public List<ChatRecord> getLatestMessages(int limit) {
+        // 查询最新的几条消息，只返回 type=text 的消息
+        return chatRecordRepository.findTopByOrderByCreatedAtDescWithText(limit);
+    }
 }
