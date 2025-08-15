@@ -142,6 +142,10 @@ shiro:
     server:
       enable: true
       url: "/shiro/ws"
+#NapCatQQUtil
+napcat:
+  http-server-url: https://vnerwrlxoxkd.ap-southeast-1.clawcloudrun.com
+  access-token: 7saligia
 
 xivapi:
   base-url: "https://v2.xivapi.com/api"

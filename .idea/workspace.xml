@@ -4,8 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add chat records api">
-      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix OneBotController json format">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/NapCatQQUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/phantoms/phantomsbackend/NapCatQQTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +74,7 @@
     "Docker.Dockerfile.executor": "Run",
     "JUnit.MySQLConnectionTest.executor": "Run",
     "JUnit.MySQLConnectionTest.testMySQLConnection.executor": "Run",
+    "JUnit.NapCatQQTest.executor": "Run",
     "JUnit.PhantomsBackendApplicationTests.testMapper.executor": "Run",
     "JUnit.XIVAPIExample.executor": "Coverage",
     "Maven.phantoms-backend [-X,clean,install].executor": "Run",
@@ -95,9 +102,10 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "Spring Boot.PhantomsBackendApplication.executor": "Debug",
+    "TestNG.NapCatQQTest.executor": "Run",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/phantoms-backend/data/Data extraction",
+    "last_opened_file_path": "D:/phantoms-backend/src/test/java/com/phantoms/phantomsbackend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -109,6 +117,7 @@
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.keymap",
     "vue.rearranger.settings.migration": "true",
+    "应用程序.NapCatQQTest.executor": "Run",
     "应用程序.PhantomsBackendApplication.executor": "Debug"
   },
   "keyToStringList": {
@@ -120,11 +129,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\phantoms-backend\src\test\java\com\phantoms\phantomsbackend" />
       <recent name="D:\phantoms-backend\data\Data extraction" />
       <recent name="D:\phantoms-backend\src\main\resources" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\secondary" />
-      <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\phantoms-backend" />
@@ -136,11 +145,11 @@
       <recent name="com.phantoms.phantomsbackend" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.phantoms.phantomsbackend.common.utils" />
       <recent name="com.phantoms.phantomsbackend.service.impl" />
       <recent name="com.phantoms.phantomsbackend.service" />
       <recent name="com.phantoms.phantomsbackend.repository.secondary" />
       <recent name="com.phantoms.phantomsbackend.repository.primary" />
-      <recent name="com.phantoms.phantomsbackend.pojo.entity.secondary" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -152,9 +161,9 @@
       <command value="mvn clean package" />
     </option>
   </component>
-  <component name="RunManager" selected="应用程序.PhantomsBackendApplication">
-    <configuration name="PhantomsBackendApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.PhantomsBackendApplication" />
+  <component name="RunManager" selected="应用程序.NapCatQQTest">
+    <configuration name="NapCatQQTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.NapCatQQTest" />
       <module name="phantoms-backend" />
       <extension name="coverage">
         <pattern>
@@ -166,7 +175,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MySQLConnectionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="PhantomsBackendApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.PhantomsBackendApplication" />
       <module name="phantoms-backend" />
       <extension name="coverage">
         <pattern>
@@ -174,9 +184,6 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.phantoms.phantomsbackend" />
-      <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.MySQLConnectionTest" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -197,7 +204,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PhantomsBackendApplicationTests.testMapper" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="NapCatQQTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="phantoms-backend" />
       <extension name="coverage">
         <pattern>
@@ -206,9 +213,8 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.phantoms.phantomsbackend" />
-      <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.PhantomsBackendApplicationTests" />
-      <option name="METHOD_NAME" value="testMapper" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.NapCatQQTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -221,14 +227,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="buildOnly" value="true" />
-          <option name="sourceFilePath" value="Dockerfile" />
-        </settings>
-      </deployment>
-      <method v="2" />
+    <configuration name="NapCatQQTest" type="TestNG" temporary="true" nameIsGenerated="true">
+      <module name="phantoms-backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.phantoms.phantomsbackend.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.phantoms.phantomsbackend" />
+      <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.NapCatQQTest" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
       <deployment type="dockerfile">
@@ -238,11 +252,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="应用程序.NapCatQQTest" />
+        <item itemvalue="TestNG.NapCatQQTest" />
+        <item itemvalue="JUnit.NapCatQQTest" />
         <item itemvalue="应用程序.PhantomsBackendApplication" />
         <item itemvalue="JUnit.MySQLConnectionTest.testMySQLConnection" />
-        <item itemvalue="JUnit.MySQLConnectionTest" />
-        <item itemvalue="JUnit.PhantomsBackendApplicationTests.testMapper" />
-        <item itemvalue="Docker.Dockerfile" />
       </list>
     </recent_temporary>
   </component>
@@ -289,14 +303,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00036" summary="fix PlantUML KVStore">
-      <option name="closed" value="true" />
-      <created>1745205442805</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1745205442805</updated>
     </task>
     <task id="LOCAL-00037" summary="fix PlantUML createObject">
       <option name="closed" value="true" />
@@ -682,7 +688,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755245507283</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <task id="LOCAL-00085" summary="fix OneBotController json format">
+      <option name="closed" value="true" />
+      <created>1755248354896</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1755248354896</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -717,7 +731,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix PlantUML createObject" />
     <MESSAGE value="fix PlantUML getObject" />
     <MESSAGE value="fix PlantUML Object functions" />
     <MESSAGE value="add RedisConfig" />
@@ -742,7 +755,8 @@
     <MESSAGE value="update HealthCheckScheduler" />
     <MESSAGE value="fix OneBotController ResponseEntity as Json format" />
     <MESSAGE value="add chat records api" />
-    <option name="LAST_COMMIT_MESSAGE" value="add chat records api" />
+    <MESSAGE value="fix OneBotController json format" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix OneBotController json format" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
