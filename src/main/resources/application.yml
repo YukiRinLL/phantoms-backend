@@ -146,7 +146,7 @@ shiro:
 napcat:
   http-server-url: https://vnerwrlxoxkd.ap-southeast-1.clawcloudrun.com
   access-token: 7saligia
-  default-group-id: 595883141
+  default-group-id: 787909466
 
 xivapi:
   base-url: "https://v2.xivapi.com/api"
