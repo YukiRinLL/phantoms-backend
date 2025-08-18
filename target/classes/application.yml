@@ -45,13 +45,13 @@ spring:
 #      username: YukiRinLLPhantomBackup
 #      password: LUOCANYU
 
-      url: jdbc:mysql://db4free.net:3306/phantoms_db
-      username: yukirinll
-      password: LUOCANYU
-
-#      url: jdbc:mysql://mysql2.sqlpub.com:3307/phantoms_db?allowPublicKeyRetrieval=true
+#      url: jdbc:mysql://db4free.net:3306/phantoms_db
 #      username: yukirinll
-#      password: ACy2qDomjU1zMxFB
+#      password: LUOCANYU
+
+      url: jdbc:mysql://mysql2.sqlpub.com:3307/phantoms_db?allowPublicKeyRetrieval=true
+      username: yukirinll
+      password: ACy2qDomjU1zMxFB
       driver-class-name: com.mysql.cj.jdbc.Driver
 
     hikari:

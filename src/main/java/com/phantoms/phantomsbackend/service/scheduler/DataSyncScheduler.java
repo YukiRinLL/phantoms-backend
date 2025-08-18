@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,8 +76,8 @@ public class DataSyncScheduler {
     @Qualifier("secondaryPasswordRepository")
     private com.phantoms.phantomsbackend.repository.secondary.SecondaryPasswordRepository secondaryPasswordRepository;
 
-//    @Scheduled(fixedRate = 600000) // 每10分钟执行一次
-    @Scheduled(cron = "0 0 */2 * * ?") // 每两小时执行一次，整点执行
+    @Scheduled(fixedRate = 600000) // 每10分钟执行一次
+//    @Scheduled(cron = "0 0 */2 * * ?") // 每两小时执行一次，整点执行
     public void syncData() {
         syncAuthUsers();
         syncUsers();
@@ -128,6 +129,27 @@ public class DataSyncScheduler {
     }
 
     private void syncChatRecords() {
+        LocalDateTime twelveHoursAgo = LocalDateTime.now().minusHours(12);
+        Pageable pageable = PageRequest.of(0, 1000); // 每页1000条
+        Page<com.phantoms.phantomsbackend.pojo.entity.primary.onebot.ChatRecord> page;
+        do {
+            page = primaryChatRecordRepository.findByUpdatedAtAfter(twelveHoursAgo, pageable);
+            List<com.phantoms.phantomsbackend.pojo.entity.primary.onebot.ChatRecord> primaryChatRecords = page.getContent();
+
+            // 使用并行流转换数据
+            List<com.phantoms.phantomsbackend.pojo.entity.secondary.onebot.ChatRecord> secondaryChatRecords = primaryChatRecords.parallelStream()
+                    .map(this::convertToSecondaryChatRecord)
+                    .filter(record -> !secondaryChatRecordRepository.existsById(record.getId())) // 检查是否已存在
+                    .collect(Collectors.toList());
+
+            // 使用 EntityManager 批量插入
+            batchInsert(secondaryChatRecords);
+            pageable = page.nextPageable();
+        } while (page.hasNext());
+        logger.info("ChatRecords synced successfully.");
+    }
+
+    private void syncAllChatRecords() {
         List<com.phantoms.phantomsbackend.pojo.entity.primary.onebot.ChatRecord> primaryChatRecords = primaryChatRecordRepository.findAll();
 
         // 使用并行流转换数据
@@ -140,7 +162,6 @@ public class DataSyncScheduler {
         batchInsert(secondaryChatRecords);
         logger.info("ChatRecords synced successfully.");
     }
-
     private void batchInsert(List<com.phantoms.phantomsbackend.pojo.entity.secondary.onebot.ChatRecord> secondaryChatRecords) {
         int batchSize = 500; // 每批插入 500 条记录
         EntityManager entityManager = entityManagerFactory.createEntityManager();

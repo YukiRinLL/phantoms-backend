@@ -4,16 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add send group message API">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/primary/onebot/UserMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/onebot/UserMessageRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add UserMessage record">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/BaseRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/secondary/BaseRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/onebot/PrimaryChatRecordRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/onebot/PrimaryChatRecordRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DataSyncScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DataSyncScheduler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/application.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,11 +144,11 @@
       <recent name="com.phantoms.phantomsbackend" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.phantoms.phantomsbackend.repository.primary.onebot" />
+      <recent name="com.phantoms.phantomsbackend.repository.secondary" />
       <recent name="com.phantoms.phantomsbackend.repository.primary" />
+      <recent name="com.phantoms.phantomsbackend.repository.primary.onebot" />
       <recent name="com.phantoms.phantomsbackend.common.utils" />
       <recent name="com.phantoms.phantomsbackend.service.impl" />
-      <recent name="com.phantoms.phantomsbackend.service" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -305,14 +302,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00039" summary="fix PlantUML Object functions">
-      <option name="closed" value="true" />
-      <created>1745222447704</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1745222447704</updated>
     </task>
     <task id="LOCAL-00040" summary="add RedisConfig">
       <option name="closed" value="true" />
@@ -698,7 +687,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755253020609</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="add UserMessage record">
+      <option name="closed" value="true" />
+      <created>1755505060181</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1755505060182</updated>
+    </task>
+    <option name="localTasksCounter" value="89" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -733,7 +730,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add RedisConfig" />
     <MESSAGE value="add redis check APIs" />
     <MESSAGE value="add redis check APIs" />
     <MESSAGE value="add cloudflare D1 features" />
@@ -758,7 +754,8 @@
     <MESSAGE value="fix OneBotController json format" />
     <MESSAGE value="add NapCatQQUtil" />
     <MESSAGE value="add send group message API" />
-    <option name="LAST_COMMIT_MESSAGE" value="add send group message API" />
+    <MESSAGE value="add UserMessage record" />
+    <option name="LAST_COMMIT_MESSAGE" value="add UserMessage record" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
