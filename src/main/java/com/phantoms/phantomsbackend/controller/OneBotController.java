@@ -1,10 +1,12 @@
 package com.phantoms.phantomsbackend.controller;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.phantoms.phantomsbackend.common.utils.PIS.StringUtils;
 import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.ChatRecord;
 import com.phantoms.phantomsbackend.service.OneBotService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class OneBotController {
 
     @Autowired
     private OneBotService oneBotService;
+
+    @Value("${napcat.default-group-id}")
+    private String defaultGroupId;
 
     @PostMapping("/onebot")
     public ResponseEntity<String> handleOneBotRequest(@RequestBody Map<String, Object> requestBody) {
@@ -67,18 +72,32 @@ public class OneBotController {
     }
 
     @PostMapping("/onebot/send-to-group")
-    public ResponseEntity<String> sendToDefaultGroup(@RequestBody String message, @RequestParam(required = false) String groupId) {
+    public ResponseEntity<String> sendToGroup(@RequestBody Map<String, Object> requestBody, @RequestParam(required = false) String groupId) {
         try {
-            // 调用服务层发送消息到默认群聊或指定群聊
+            if(StringUtils.isEmpty(groupId)){
+                groupId = defaultGroupId;
+            }
+
+            // Extract message and system information
+            String message = (String) requestBody.get("message");
+            Map<String, Object> systemInfo = (Map<String, Object>) requestBody.get("systemInfo");
+
+            // Log system information for investigation purposes
+            System.out.println("System Information: " + systemInfo);
+
+            // Save the message and system information to the database
+            oneBotService.saveUserMessage(message, Long.valueOf(groupId.toString()), systemInfo);
+
+            // Send the message to the default group
             oneBotService.sendGroupMessageWithDefaultGroup(message, groupId);
 
-            // 返回成功响应
+            // Return success response
             return ResponseEntity.ok("{\"status\":\"ok\"}");
         } catch (Exception e) {
-            // 记录错误日志
-            System.err.println("Error sending message to default group: " + e.getMessage());
+            // Log error
+            System.err.println("Error sending message to group: " + e.getMessage());
 
-            // 返回错误响应
+            // Return error response
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"status\":\"failed\",\"error\":\"" + e.getMessage() + "\"}");
         }
     }
