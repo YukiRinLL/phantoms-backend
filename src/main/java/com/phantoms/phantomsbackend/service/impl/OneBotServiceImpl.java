@@ -104,7 +104,7 @@ public class OneBotServiceImpl implements OneBotService {
         userMessage.setScreenWidth((Integer) device.getOrDefault("screenWidth", 0));
         userMessage.setScreenHeight((Integer) device.getOrDefault("screenHeight", 0));
         userMessage.setColorDepth((Integer) device.getOrDefault("colorDepth", 0));
-        userMessage.setPixelRatio((Double) device.getOrDefault("pixelRatio", 0.0));
+        userMessage.setPixelRatio(getDoubleValue(device, "pixelRatio", 0.0));
         userMessage.setOrientation((String) device.getOrDefault("orientation", ""));
         userMessage.setAvailableMemory((Integer) device.getOrDefault("availableMemory", 0));
         userMessage.setHardwareConcurrency((Integer) device.getOrDefault("hardwareConcurrency", 0));
@@ -113,24 +113,17 @@ public class OneBotServiceImpl implements OneBotService {
         Map<String, Object> network = (Map<String, Object>) systemInfo.getOrDefault("network", new HashMap<>());
         Map<String, Object> connection = (Map<String, Object>) network.getOrDefault("connection", new HashMap<>());
         userMessage.setConnectionType((String) connection.getOrDefault("effectiveType", ""));
-        userMessage.setDownlink((Double) connection.getOrDefault("downlink", 0.0));
+        userMessage.setDownlink(getDoubleValue(connection, "downlink", 0.0));
         userMessage.setEffectiveType((String) connection.getOrDefault("effectiveType", ""));
-
-        // Fix the conversion of rtt from Integer to double
-        Object rttValue = connection.getOrDefault("rtt", 0);
-        if (rttValue instanceof Integer) {
-            userMessage.setRtt(((Integer) rttValue).doubleValue());
-        } else {
-            userMessage.setRtt(0.0);
-        }
+        userMessage.setRtt(getDoubleValue(connection, "rtt", 0.0));
 
         // Extract nested battery information
         Map<String, Object> battery = (Map<String, Object>) systemInfo.getOrDefault("battery", new HashMap<>());
         Map<String, Object> status = (Map<String, Object>) battery.getOrDefault("status", new HashMap<>());
         userMessage.setBatteryCharging((Boolean) status.getOrDefault("charging", false));
-        userMessage.setBatteryLevel((Double) status.getOrDefault("level", 0.0));
-        userMessage.setBatteryChargingTime((Double) status.getOrDefault("chargingTime", 0.0));
-        userMessage.setBatteryDischargingTime((Double) status.getOrDefault("dischargingTime", 0.0));
+        userMessage.setBatteryLevel(getDoubleValue(status, "level", 0.0));
+        userMessage.setBatteryChargingTime(getDoubleValue(status, "chargingTime", 0.0));
+        userMessage.setBatteryDischargingTime(getDoubleValue(status, "dischargingTime", 0.0));
 
         // Extract timezone
         userMessage.setTimeZone((String) systemInfo.getOrDefault("timezone", ""));
@@ -141,26 +134,28 @@ public class OneBotServiceImpl implements OneBotService {
 
         // Extract geolocation
         Map<String, Object> geolocation = (Map<String, Object>) systemInfo.getOrDefault("geolocation", new HashMap<>());
-        userMessage.setLatitude((Double) geolocation.getOrDefault("latitude", 0.0));
-        userMessage.setLongitude((Double) geolocation.getOrDefault("longitude", 0.0));
-
-        // Fix the conversion of accuracy from Integer to double
-        Object accuracyValue = geolocation.getOrDefault("accuracy", 0.0);
-        if (accuracyValue instanceof Integer) {
-            userMessage.setAccuracy(((Integer) accuracyValue).doubleValue());
-        } else if (accuracyValue instanceof Double) {
-            userMessage.setAccuracy((Double) accuracyValue);
-        } else {
-            userMessage.setAccuracy(0.0);
-        }
-
-        userMessage.setAltitude((Double) geolocation.getOrDefault("altitude", 0.0));
-        userMessage.setAltitudeAccuracy((Double) geolocation.getOrDefault("altitudeAccuracy", 0.0));
-        userMessage.setHeading((Double) geolocation.getOrDefault("heading", 0.0));
-        userMessage.setSpeed((Double) geolocation.getOrDefault("speed", 0.0));
+        userMessage.setLatitude(getDoubleValue(geolocation, "latitude", 0.0));
+        userMessage.setLongitude(getDoubleValue(geolocation, "longitude", 0.0));
+        userMessage.setAccuracy(getDoubleValue(geolocation, "accuracy", 0.0));
+        userMessage.setAltitude(getDoubleValue(geolocation, "altitude", 0.0));
+        userMessage.setAltitudeAccuracy(getDoubleValue(geolocation, "altitudeAccuracy", 0.0));
+        userMessage.setHeading(getDoubleValue(geolocation, "heading", 0.0));
+        userMessage.setSpeed(getDoubleValue(geolocation, "speed", 0.0));
 
         userMessage.setTimestamp(LocalDateTime.now());
 
         userMessageRepository.save(userMessage);
+    }
+
+    // 通用方法：从Map中获取并转换为double
+    private double getDoubleValue(Map<String, Object> map, String key, double defaultValue) {
+        Object value = map.getOrDefault(key, defaultValue);
+        if (value instanceof Integer) {
+            return ((Integer) value).doubleValue();
+        } else if (value instanceof Double) {
+            return (Double) value;
+        } else {
+            return defaultValue;
+        }
     }
 }
