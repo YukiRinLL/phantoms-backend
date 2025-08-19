@@ -4,8 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="OneBotService add getDoubleValue function">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="OneBotServiceImpl fix bug">
+      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/git.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-08-19T11-58-16_688.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/application.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -297,14 +304,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00045" summary="add jackson-datatype-jsr310 to fix Jackson not support Java 8 java.time.LocalDateTime">
-      <option name="closed" value="true" />
-      <created>1745571285830</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1745571285830</updated>
     </task>
     <task id="LOCAL-00046" summary="gitignore">
       <option name="closed" value="true" />
@@ -690,7 +689,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755575916742</updated>
     </task>
-    <option name="localTasksCounter" value="94" />
+    <task id="LOCAL-00094" summary="OneBotServiceImpl fix bug">
+      <option name="closed" value="true" />
+      <created>1755585169765</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1755585169765</updated>
+    </task>
+    <option name="localTasksCounter" value="95" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -725,7 +732,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add jackson-datatype-jsr310 to fix Jackson not support Java 8 java.time.LocalDateTime" />
     <MESSAGE value="gitignore" />
     <MESSAGE value="update lib" />
     <MESSAGE value="update README.md" />
@@ -750,7 +756,8 @@
     <MESSAGE value="update syncChatRecords by twelveHoursAgo as pageable" />
     <MESSAGE value="update default-group-id" />
     <MESSAGE value="OneBotService add getDoubleValue function" />
-    <option name="LAST_COMMIT_MESSAGE" value="OneBotService add getDoubleValue function" />
+    <MESSAGE value="OneBotServiceImpl fix bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="OneBotServiceImpl fix bug" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
