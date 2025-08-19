@@ -1,6 +1,9 @@
 package com.phantoms.phantomsbackend.controller;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.phantoms.phantomsbackend.common.utils.PIS.StringUtils;
 import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.ChatRecord;
 import com.phantoms.phantomsbackend.service.OneBotService;
@@ -17,11 +20,17 @@ import java.util.Map;
 @RestController
 public class OneBotController {
 
-    @Autowired
-    private OneBotService oneBotService;
-
     @Value("${napcat.default-group-id}")
     private String defaultGroupId;
+
+    @Autowired
+    private final OneBotService oneBotService;
+    private final ObjectMapper objectMapper;
+
+    public OneBotController(OneBotService oneBotService, ObjectMapper objectMapper) {
+        this.oneBotService = oneBotService;
+        this.objectMapper = objectMapper;
+    }
 
     @PostMapping("/onebot")
     public ResponseEntity<String> handleOneBotRequest(@RequestBody Map<String, Object> requestBody) {
@@ -30,14 +39,19 @@ public class OneBotController {
 
         try {
             // 调用服务层处理请求
-            ChatRecord chatRecord = oneBotService.processOneBotRequest(requestBody);
+            List<ChatRecord> chatRecords = oneBotService.processOneBotRequest(requestBody);
 
-            // 使用 JSONObject 构建 JSON 响应
-            JSONObject jsonResponse = new JSONObject();
+            // 使用 Jackson 构建 JSON 响应
+            ObjectNode jsonResponse = objectMapper.createObjectNode();
             jsonResponse.put("status", "ok");
-            JSONObject data = new JSONObject();
-            data.put("id", chatRecord.getId());
-            jsonResponse.put("data", data);
+
+            ArrayNode data = objectMapper.createArrayNode();
+            for (ChatRecord chatRecord : chatRecords) {
+                ObjectNode recordJson = objectMapper.createObjectNode();
+                recordJson.put("id", chatRecord.getId().toString());
+                data.add(recordJson);
+            }
+            jsonResponse.set("data", data);
 
             // 返回 JSON 格式的响应
             return ResponseEntity.ok(jsonResponse.toString());
@@ -45,8 +59,8 @@ public class OneBotController {
             // 记录错误日志
             System.err.println("Error processing request: " + e.getMessage());
 
-            // 使用 JSONObject 构建 JSON 错误响应
-            JSONObject jsonError = new JSONObject();
+            // 使用 Jackson 构建 JSON 错误响应
+            ObjectNode jsonError = objectMapper.createObjectNode();
             jsonError.put("status", "failed");
             jsonError.put("error", e.getMessage());
 

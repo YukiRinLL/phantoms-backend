@@ -32,7 +32,7 @@ public class OneBotServiceImpl implements OneBotService {
     private String defaultGroupId;
 
     @Override
-    public ChatRecord processOneBotRequest(Map<String, Object> requestBody) throws Exception {
+    public List<ChatRecord> processOneBotRequest(Map<String, Object> requestBody) throws Exception {
         // 获取消息类型和消息内容
         String messageType = (String) requestBody.get("message_type");
         Long userId = requestBody.get("user_id") != null ? Long.valueOf(requestBody.get("user_id").toString()) : null;
@@ -40,33 +40,39 @@ public class OneBotServiceImpl implements OneBotService {
 
         // 检查message字段是否为List
         Object messageObj = requestBody.get("message");
-        String message;
+        List<ChatRecord> chatRecords = new ArrayList<>();
         if (messageObj instanceof List) {
-            // 如果是List，尝试将List中的第一个元素作为消息内容
+            // 如果是List，将List中的每个元素分别保存为一条ChatRecord
             List<?> messageList = (List<?>) messageObj;
-            if (!messageList.isEmpty()) {
-                message = messageList.get(0).toString();
-            } else {
-                message = "";
+            for (Object messageElement : messageList) {
+                ChatRecord chatRecord = new ChatRecord();
+                chatRecord.setMessageType(messageType);
+                chatRecord.setUserId(userId);
+                chatRecord.setGroupId(groupId);
+                chatRecord.setMessage(messageElement.toString());
+                chatRecord.setTimestamp(LocalDateTime.now());
+                chatRecord.setCreatedAt(LocalDateTime.now());
+                chatRecord.setUpdatedAt(LocalDateTime.now());
+                chatRecordRepository.save(chatRecord);
+                chatRecords.add(chatRecord);
             }
         } else if (messageObj instanceof String) {
-            message = (String) messageObj;
+            // 如果是String，直接保存为一条ChatRecord
+            ChatRecord chatRecord = new ChatRecord();
+            chatRecord.setMessageType(messageType);
+            chatRecord.setUserId(userId);
+            chatRecord.setGroupId(groupId);
+            chatRecord.setMessage((String) messageObj);
+            chatRecord.setTimestamp(LocalDateTime.now());
+            chatRecord.setCreatedAt(LocalDateTime.now());
+            chatRecord.setUpdatedAt(LocalDateTime.now());
+            chatRecordRepository.save(chatRecord);
+            chatRecords.add(chatRecord);
         } else {
             throw new IllegalArgumentException("message must be a string or a list");
         }
 
-        // 创建ChatRecord对象并保存到数据库
-        ChatRecord chatRecord = new ChatRecord();
-        chatRecord.setMessageType(messageType);
-        chatRecord.setUserId(userId);
-        chatRecord.setGroupId(groupId);
-        chatRecord.setMessage(message);
-        chatRecord.setTimestamp(LocalDateTime.now());
-        chatRecord.setCreatedAt(LocalDateTime.now());
-        chatRecord.setUpdatedAt(LocalDateTime.now());
-        chatRecordRepository.save(chatRecord);
-
-        return chatRecord;
+        return chatRecords;
     }
 
     @Override
