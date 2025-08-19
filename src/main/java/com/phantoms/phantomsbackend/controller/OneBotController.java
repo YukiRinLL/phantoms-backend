@@ -85,6 +85,22 @@ public class OneBotController {
         }
     }
 
+    @GetMapping("/onebot/latest/text")
+    public ResponseEntity<List<ChatRecord>> getLatestTextMessages(@RequestParam(defaultValue = "30") int limit) {
+        try {
+            // 调用服务层获取最新的几条消息
+            List<ChatRecord> latestMessages = oneBotService.getLatestTextMessages(limit);
+
+            // 返回 JSON 格式的响应
+            return ResponseEntity.ok(latestMessages);
+        } catch (Exception e) {
+            // 记录错误日志
+            System.err.println("Error fetching latest messages: " + e.getMessage());
+            // 返回错误响应
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
     @PostMapping("/onebot/send-to-group")
     public ResponseEntity<String> sendToGroup(@RequestBody Map<String, Object> requestBody, @RequestParam(required = false) String groupId) {
         try {
