@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update default-group-id">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="OneBotService add getDoubleValue function">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -112,7 +112,7 @@
     "settings.editor.selected.configurable": "preferences.keymap",
     "vue.rearranger.settings.migration": "true",
     "应用程序.NapCatQQTest.executor": "Debug",
-    "应用程序.PhantomsBackendApplication.executor": "Run"
+    "应用程序.PhantomsBackendApplication.executor": "Debug"
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
@@ -297,22 +297,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00043" summary="add cloudflare D1 features">
-      <option name="closed" value="true" />
-      <created>1745379074473</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1745379074473</updated>
-    </task>
-    <task id="LOCAL-00044" summary="add jackson-datatype-jsr310 to fix Jackson not support Java 8 java.time.LocalDateTime">
-      <option name="closed" value="true" />
-      <created>1745571221216</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1745571221216</updated>
     </task>
     <task id="LOCAL-00045" summary="add jackson-datatype-jsr310 to fix Jackson not support Java 8 java.time.LocalDateTime">
       <option name="closed" value="true" />
@@ -690,7 +674,23 @@
       <option name="project" value="LOCAL" />
       <updated>1755507599656</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="OneBotService add getDoubleValue function">
+      <option name="closed" value="true" />
+      <created>1755575839468</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1755575839468</updated>
+    </task>
+    <task id="LOCAL-00093" summary="OneBotService add getDoubleValue function">
+      <option name="closed" value="true" />
+      <created>1755575916742</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1755575916742</updated>
+    </task>
+    <option name="localTasksCounter" value="94" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -725,7 +725,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add cloudflare D1 features" />
     <MESSAGE value="add jackson-datatype-jsr310 to fix Jackson not support Java 8 java.time.LocalDateTime" />
     <MESSAGE value="gitignore" />
     <MESSAGE value="update lib" />
@@ -750,7 +749,8 @@
     <MESSAGE value="add UserMessage record" />
     <MESSAGE value="update syncChatRecords by twelveHoursAgo as pageable" />
     <MESSAGE value="update default-group-id" />
-    <option name="LAST_COMMIT_MESSAGE" value="update default-group-id" />
+    <MESSAGE value="OneBotService add getDoubleValue function" />
+    <option name="LAST_COMMIT_MESSAGE" value="OneBotService add getDoubleValue function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -799,11 +799,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java</url>
           <line>91</line>
           <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java</url>
-          <line>163</line>
-          <option name="timeStamp" value="43" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="org.springframework.dao.IncorrectResultSizeDataAccessException" package="org.springframework.dao" />

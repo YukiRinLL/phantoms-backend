@@ -149,6 +149,9 @@ public class OneBotServiceImpl implements OneBotService {
 
     // 通用方法：从Map中获取并转换为double
     private double getDoubleValue(Map<String, Object> map, String key, double defaultValue) {
+        if (map == null) {
+            return defaultValue;
+        }
         Object value = map.getOrDefault(key, defaultValue);
         if (value instanceof Integer) {
             return ((Integer) value).doubleValue();
