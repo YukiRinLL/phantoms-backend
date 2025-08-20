@@ -1,6 +1,5 @@
 package com.phantoms.phantomsbackend.service.scheduler;
 
-import com.phantoms.phantomsbackend.common.utils.PIS.DateUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;

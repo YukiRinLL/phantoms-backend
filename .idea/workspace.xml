@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add ImageProxy">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="remove tools">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -297,14 +297,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00051" summary="update supabase conf">
-      <option name="closed" value="true" />
-      <created>1746590113032</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1746590113032</updated>
     </task>
     <task id="LOCAL-00052" summary="add HealthCheckScheduler">
       <option name="closed" value="true" />
@@ -690,7 +682,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755601270359</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <task id="LOCAL-00100" summary="add ImageProxy">
+      <option name="closed" value="true" />
+      <created>1755655319985</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1755655319985</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -725,7 +725,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update README.md" />
     <MESSAGE value="update supabase conf" />
     <MESSAGE value="add HealthCheckScheduler" />
     <MESSAGE value="add TeaVM dependence" />
@@ -749,8 +748,9 @@
     <MESSAGE value="OneBotService add getDoubleValue function" />
     <MESSAGE value="OneBotServiceImpl fix bug" />
     <MESSAGE value="OneBot chatRecord API fix type=reply case" />
-    <MESSAGE value="add ImageProxy" />
-    <option name="LAST_COMMIT_MESSAGE" value="add ImageProxy" />
+    <MESSAGE value="remove tools" />
+    <MESSAGE value="remove tools" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove tools" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
