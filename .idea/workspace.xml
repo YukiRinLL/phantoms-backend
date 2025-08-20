@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="imageProxy with Pool,Streaming,size limit">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/ImageProxyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/ImageProxyController.java" afterDir="false" />
-    </list>
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="rollback proxyImage API" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -298,14 +295,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00054" summary="add TeaVM dependence">
-      <option name="closed" value="true" />
-      <created>1748333214250</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1748333214250</updated>
     </task>
     <task id="LOCAL-00055" summary="add Napcat QQ &amp; chatRecord">
       <option name="closed" value="true" />
@@ -691,7 +680,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755659585963</updated>
     </task>
-    <option name="localTasksCounter" value="103" />
+    <task id="LOCAL-00103" summary="rollback proxyImage API">
+      <option name="closed" value="true" />
+      <created>1755675088357</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1755675088357</updated>
+    </task>
+    <option name="localTasksCounter" value="104" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -726,7 +723,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add HealthCheckScheduler" />
     <MESSAGE value="add TeaVM dependence" />
     <MESSAGE value="add Napcat QQ &amp; chatRecord" />
     <MESSAGE value="add sys struct pic" />
@@ -751,7 +747,8 @@
     <MESSAGE value="remove tools" />
     <MESSAGE value="remove tools" />
     <MESSAGE value="imageProxy with Pool,Streaming,size limit" />
-    <option name="LAST_COMMIT_MESSAGE" value="imageProxy with Pool,Streaming,size limit" />
+    <MESSAGE value="rollback proxyImage API" />
+    <option name="LAST_COMMIT_MESSAGE" value="rollback proxyImage API" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
