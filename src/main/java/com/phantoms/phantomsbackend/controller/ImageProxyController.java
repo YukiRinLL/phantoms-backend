@@ -51,9 +51,9 @@ public class ImageProxyController {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
                 long contentLength = response.body().contentLength();
-                if (contentLength > 10 * 1024 * 1024) { // 限制图片大小为10MB
-                    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(null);
-                }
+//                if (contentLength > 10 * 1024 * 1024) { // 限制图片大小为10MB
+//                    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(null);
+//                }
 
                 StreamingResponseBody stream = outputStream -> {
                     try (InputStream inputStream = response.body().byteStream()) {
@@ -61,8 +61,8 @@ public class ImageProxyController {
                         int bytesRead;
                         while ((bytesRead = inputStream.read(buffer)) != -1) {
                             outputStream.write(buffer, 0, bytesRead);
+                            outputStream.flush();
                         }
-                        outputStream.flush();
                     } catch (IOException e) {
                         throw new RuntimeException("Failed to stream response", e);
                     }

@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="remove tools">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="imageProxy with Pool,Streaming,size limit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/ImageProxyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/ImageProxyController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/git.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-08-20T11-12-49_695.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/application.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -298,22 +306,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00052" summary="add HealthCheckScheduler">
-      <option name="closed" value="true" />
-      <created>1746672670332</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1746672670333</updated>
-    </task>
-    <task id="LOCAL-00053" summary="add HealthCheckScheduler">
-      <option name="closed" value="true" />
-      <created>1746684079662</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1746684079662</updated>
     </task>
     <task id="LOCAL-00054" summary="add TeaVM dependence">
       <option name="closed" value="true" />
@@ -691,7 +683,23 @@
       <option name="project" value="LOCAL" />
       <updated>1755655319985</updated>
     </task>
-    <option name="localTasksCounter" value="101" />
+    <task id="LOCAL-00101" summary="imageProxy with Pool,Streaming,size limit">
+      <option name="closed" value="true" />
+      <created>1755659556151</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1755659556151</updated>
+    </task>
+    <task id="LOCAL-00102" summary="imageProxy with Pool,Streaming,size limit">
+      <option name="closed" value="true" />
+      <created>1755659585963</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1755659585963</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -726,7 +734,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update supabase conf" />
     <MESSAGE value="add HealthCheckScheduler" />
     <MESSAGE value="add TeaVM dependence" />
     <MESSAGE value="add Napcat QQ &amp; chatRecord" />
@@ -751,7 +758,8 @@
     <MESSAGE value="OneBot chatRecord API fix type=reply case" />
     <MESSAGE value="remove tools" />
     <MESSAGE value="remove tools" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove tools" />
+    <MESSAGE value="imageProxy with Pool,Streaming,size limit" />
+    <option name="LAST_COMMIT_MESSAGE" value="imageProxy with Pool,Streaming,size limit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
