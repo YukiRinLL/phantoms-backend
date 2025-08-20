@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="OneBot chatRecord API fix type=reply case">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/ImageProxyController.java" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add ImageProxy">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -301,22 +297,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00049" summary="update supabase conf">
-      <option name="closed" value="true" />
-      <created>1746588788238</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1746588788238</updated>
-    </task>
-    <task id="LOCAL-00050" summary="update supabase conf">
-      <option name="closed" value="true" />
-      <created>1746589785199</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1746589785199</updated>
     </task>
     <task id="LOCAL-00051" summary="update supabase conf">
       <option name="closed" value="true" />
@@ -694,7 +674,23 @@
       <option name="project" value="LOCAL" />
       <updated>1755595368923</updated>
     </task>
-    <option name="localTasksCounter" value="98" />
+    <task id="LOCAL-00098" summary="add ImageProxy">
+      <option name="closed" value="true" />
+      <created>1755601185096</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1755601185097</updated>
+    </task>
+    <task id="LOCAL-00099" summary="add ImageProxy">
+      <option name="closed" value="true" />
+      <created>1755601270359</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1755601270359</updated>
+    </task>
+    <option name="localTasksCounter" value="100" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -729,7 +725,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update lib" />
     <MESSAGE value="update README.md" />
     <MESSAGE value="update supabase conf" />
     <MESSAGE value="add HealthCheckScheduler" />
@@ -754,7 +749,8 @@
     <MESSAGE value="OneBotService add getDoubleValue function" />
     <MESSAGE value="OneBotServiceImpl fix bug" />
     <MESSAGE value="OneBot chatRecord API fix type=reply case" />
-    <option name="LAST_COMMIT_MESSAGE" value="OneBot chatRecord API fix type=reply case" />
+    <MESSAGE value="add ImageProxy" />
+    <option name="LAST_COMMIT_MESSAGE" value="add ImageProxy" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -798,16 +794,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java</url>
           <line>131</line>
           <option name="timeStamp" value="40" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/ImageProxyController.java</url>
-          <line>46</line>
-          <option name="timeStamp" value="50" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/ImageProxyController.java</url>
-          <line>47</line>
-          <option name="timeStamp" value="51" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="org.springframework.dao.IncorrectResultSizeDataAccessException" package="org.springframework.dao" />
