@@ -169,10 +169,10 @@ public class NapCatQQTest {
      */
     public static void main(String[] args) throws IOException {
         // 测试发送私聊消息
-        sendPrivateMessage("944989026", "Hello, this is a private message!");
+        sendPrivateMessage("944989026", "Phantoms NapCat Test sendPrivateMessage");
 
         // 测试发送群消息
-        sendGroupMessage("595883141", "Hello, this is a group message!");
+        sendGroupMessage("595883141", "Phantoms NapCat Test sendGroupMessage");
 
         // 测试获取好友列表
         getFriendList();
