@@ -40,6 +40,9 @@ public class ImageProxyController {
                 .build();
     }
 
+    /*
+    * 图片代理对内存消耗过大，不要在Rrnder上使用这个接口方法，会导致OOM
+    * */
     @GetMapping("/proxy/image")
     public ResponseEntity<byte[]> proxyImage(@RequestParam String url) throws IOException {
         URL imageUrl = new URL(url);
