@@ -1,3 +1,4 @@
+com\phantoms\phantomsbackend\service\impl\RisingStonesServiceImpl.class
 com\phantoms\phantomsbackend\common\utils\XIVAPIClient.class
 com\phantoms\phantomsbackend\repository\secondary\SecondaryPasswordRepository.class
 com\phantoms\phantomsbackend\service\impl\UserServiceImpl.class
@@ -47,6 +48,7 @@ com\phantoms\phantomsbackend\common\jasper\ReportModel.class
 com\phantoms\phantomsbackend\common\utils\EmailUtil.class
 com\phantoms\phantomsbackend\service\impl\LeanCloudServiceImpl.class
 com\phantoms\phantomsbackend\service\scheduler\HealthCheckScheduler.class
+com\phantoms\phantomsbackend\common\utils\RisingStonesUtils.class
 com\phantoms\phantomsbackend\common\config\XIVAPIConfig.class
 com\phantoms\phantomsbackend\common\jasper\ReportException.class
 com\phantoms\phantomsbackend\common\utils\D1Util.class
@@ -86,12 +88,15 @@ com\phantoms\phantomsbackend\controller\XIVAPIController.class
 com\phantoms\phantomsbackend\repository\secondary\SecondaryAuthUserRepository.class
 com\phantoms\phantomsbackend\common\jasper\JasperModel.class
 com\phantoms\phantomsbackend\controller\OneBotController.class
+com\phantoms\phantomsbackend\controller\RisingStonesController.class
 com\phantoms\phantomsbackend\common\jasper\AbstractReport$1.class
 com\phantoms\phantomsbackend\PhantomsBackendApplication.class
 com\phantoms\phantomsbackend\service\AuthUserService.class
 com\phantoms\phantomsbackend\controller\WebSocketController.class
 com\phantoms\phantomsbackend\controller\UserController$IdRequest.class
 com\phantoms\phantomsbackend\repository\secondary\SecondaryUserRepository.class
+com\phantoms\phantomsbackend\service\RisingStonesService.class
+com\phantoms\phantomsbackend\common\utils\RisingStonesLoginTool.class
 com\phantoms\phantomsbackend\service\OneBotService.class
 com\phantoms\phantomsbackend\common\config\SchedulingConfig.class
 com\phantoms\phantomsbackend\common\utils\NapCatQQUtil.class
