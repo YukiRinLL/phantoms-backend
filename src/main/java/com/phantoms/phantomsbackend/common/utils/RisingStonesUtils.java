@@ -4,13 +4,13 @@ import okhttp3.*;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RisingStonesUtils {
 
     private static final Logger logger = Logger.getLogger(RisingStonesUtils.class.getName());
-
     private static final String BASE_URL = "https://apiff14risingstones.web.sdo.com/api/home/";
 
     private static final OkHttpClient client = new OkHttpClient();
@@ -49,11 +49,10 @@ public class RisingStonesUtils {
                 .url(url)
                 .header("User-Agent", "Mozilla/5.0 (Linux; Android 12; V2218A Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36 DaoYu/9.4.14")
                 .header("authorization", daoyuToken)
-                .header("accept", "application/json, text/plain, */*")
+                .header("accept", "application/json, text/plain, /")
                 .header("accept-encoding", "gzip, deflate")
                 .header("Cookie", cookie)
                 .build();
-
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 logger.log(Level.SEVERE, "Unexpected code {0} for getting guild info", response.code());
@@ -88,5 +87,17 @@ public class RisingStonesUtils {
             logger.log(Level.FINE, "Guild member response: {0}", responseBody);
             return JSONObject.parseObject(responseBody);
         }
+    }
+
+    private static String getAllCookies(Response response) {
+        StringBuilder cookies = new StringBuilder();
+        List<String> cookieHeaders = response.headers("Set-Cookie");
+        for (String header : cookieHeaders) {
+            if (cookies.length() > 0) {
+                cookies.append("; ");
+            }
+            cookies.append(header.split(";")[0]); // Only take the cookie name=value part
+        }
+        return cookies.toString();
     }
 }
