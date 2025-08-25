@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update NapCatQQTest.java">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RisingStonesController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/RisingStonesService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/RisingStonesServiceImpl.java" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add RisingStones functions">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -301,22 +297,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00057" summary="add Napcat QQ &amp; chatRecord">
-      <option name="closed" value="true" />
-      <created>1751597568240</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1751597568240</updated>
-    </task>
-    <task id="LOCAL-00058" summary="add Napcat QQ &amp; chatRecord">
-      <option name="closed" value="true" />
-      <created>1751599288013</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1751599288013</updated>
     </task>
     <task id="LOCAL-00059" summary="add Napcat QQ &amp; chatRecord">
       <option name="closed" value="true" />
@@ -694,7 +674,23 @@
       <option name="project" value="LOCAL" />
       <updated>1755746864281</updated>
     </task>
-    <option name="localTasksCounter" value="106" />
+    <task id="LOCAL-00106" summary="add RisingStones functions">
+      <option name="closed" value="true" />
+      <created>1755857314624</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1755857314624</updated>
+    </task>
+    <task id="LOCAL-00107" summary="add RisingStones functions">
+      <option name="closed" value="true" />
+      <created>1755857420778</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1755857420778</updated>
+    </task>
+    <option name="localTasksCounter" value="108" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -729,7 +725,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add sys struct pic" />
     <MESSAGE value="test ws" />
     <MESSAGE value="turn off keep-render-service-active" />
     <MESSAGE value="switch supabase to Phantoms_DB_Reboot" />
@@ -754,7 +749,8 @@
     <MESSAGE value="rollback proxyImage API" />
     <MESSAGE value="update comments" />
     <MESSAGE value="update NapCatQQTest.java" />
-    <option name="LAST_COMMIT_MESSAGE" value="update NapCatQQTest.java" />
+    <MESSAGE value="add RisingStones functions" />
+    <option name="LAST_COMMIT_MESSAGE" value="add RisingStones functions" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -781,6 +777,51 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java</url>
           <line>61</line>
           <option name="timeStamp" value="73" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java</url>
+          <line>33</line>
+          <option name="timeStamp" value="78" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="81" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java</url>
+          <line>56</line>
+          <option name="timeStamp" value="83" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java</url>
+          <line>57</line>
+          <option name="timeStamp" value="84" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java</url>
+          <line>62</line>
+          <option name="timeStamp" value="86" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java</url>
+          <line>37</line>
+          <option name="timeStamp" value="87" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="88" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="89" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java</url>
+          <line>50</line>
+          <option name="timeStamp" value="91" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

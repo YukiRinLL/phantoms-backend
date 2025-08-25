@@ -25,8 +25,8 @@ public class RisingStonesLoginTool {
             .readTimeout(30, TimeUnit.SECONDS)
             .build();
 
-    // 定义一个成员变量来存储 device_id
     private static String device_id;
+    private static String device_manuid;
 
     public static String[] getDaoYuTokenAndCookie() {
         try {
@@ -89,9 +89,8 @@ public class RisingStonesLoginTool {
     }
 
     private static String initializeLoginFlow(String cookies) throws IOException {
-        // 生成 device_id 并存储到成员变量中
         device_id = UUID.randomUUID().toString().toUpperCase().replace("-", "");
-        String device_manuid = generateRandomString(6);
+        device_manuid = generateRandomString(6);
 
         HttpUrl url = HttpUrl.parse(DAO_URL + "initialize").newBuilder()
                 .addQueryParameter("src_code", "4")
@@ -134,8 +133,6 @@ public class RisingStonesLoginTool {
     }
 
     private static String queryAccountList(String flowId, String cookies) throws IOException {
-        // 使用成员变量 device_id
-        String device_manuid = generateRandomString(6);
 
         HttpUrl url = HttpUrl.parse(DAO_URL + "queryAccountList").newBuilder()
                 .addQueryParameter("src_code", "4")
@@ -180,8 +177,6 @@ public class RisingStonesLoginTool {
     }
 
     private static boolean makeConfirm(String flowId, String accountId, String cookies) throws IOException {
-        // 使用成员变量 device_id
-        String device_manuid = generateRandomString(6);
 
         HttpUrl url = HttpUrl.parse(DAO_URL + "chooseAccount").newBuilder()
                 .addQueryParameter("src_code", "4")
@@ -226,8 +221,6 @@ public class RisingStonesLoginTool {
     }
 
     private static String getSubAccountKey(String flowId, String cookies) throws IOException {
-        // 使用成员变量 device_id
-        String device_manuid = generateRandomString(6);
 
         HttpUrl url = HttpUrl.parse(DAO_URL + "confirm").newBuilder()
                 .addQueryParameter("src_code", "4")
