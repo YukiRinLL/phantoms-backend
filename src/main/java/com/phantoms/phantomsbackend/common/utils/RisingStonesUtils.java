@@ -24,7 +24,7 @@ public class RisingStonesUtils {
                 .url(url)
                 .header("User-Agent", "Mozilla/5.0 (Linux; Android 12; V2218A Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36 DaoYu/9.4.14")
                 .header("authorization", daoyuToken)
-                .header("accept", "application/json, text/plain, */*")
+                .header("accept", "application/json, text/plain, /")
                 .header("accept-encoding", "gzip, deflate")
                 .header("Cookie", cookie)
                 .build();

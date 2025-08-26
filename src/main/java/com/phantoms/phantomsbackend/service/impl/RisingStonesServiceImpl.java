@@ -19,12 +19,12 @@ public class RisingStonesServiceImpl implements RisingStonesService {
 
     private synchronized void ensureTokenAndCookie() throws IOException {
         long currentTime = System.currentTimeMillis();
-//        if (daoyuToken == null || cookie == null || currentTime - tokenObtainTime > TimeUnit.MINUTES.toMillis(5)) {
+        if (daoyuToken == null || cookie == null || currentTime - tokenObtainTime > TimeUnit.MINUTES.toMillis(5)) {
             String[] tokenAndCookie = RisingStonesLoginTool.getDaoYuTokenAndCookie();
             daoyuToken = tokenAndCookie[0];
             cookie = tokenAndCookie[1];
             tokenObtainTime = currentTime;
-//        }
+        }
     }
 
     @Override

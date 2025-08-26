@@ -77,6 +77,9 @@ public class RisingStonesLoginTool {
     private static Map<String, String> getTempCookies() throws IOException {
         Request request = new Request.Builder()
                 .url(BASE_URL + "GHome/isLogin")
+                .header("User-Agent", "Mozilla/5.0 (Linux; Android 12; V2218A Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36 DaoYu/9.4.14")
+                .header("accept", "application/json, text/plain, */*")
+//                .header("accept-encoding", "gzip, deflate")
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -113,6 +116,8 @@ public class RisingStonesLoginTool {
 
         Request request = new Request.Builder()
                 .url(url)
+                .header("User-Agent", "okhttp/2.5.0")
+//                .header("accept-encoding", "gzip")
                 .header("Cookie", formatCookies(cookies))
                 .build();
 
@@ -151,6 +156,8 @@ public class RisingStonesLoginTool {
 
         Request request = new Request.Builder()
                 .url(url)
+                .header("User-Agent", "okhttp/2.5.0")
+//                .header("accept-encoding", "gzip")
                 .header("Cookie", formatCookies(cookies))
                 .build();
 
@@ -190,6 +197,8 @@ public class RisingStonesLoginTool {
                 .build();
         Request request = new Request.Builder()
                 .url(url)
+                .header("User-Agent", "okhttp/2.5.0")
+//                .header("accept-encoding", "gzip")
                 .header("Cookie", formatCookies(cookies))
                 .build();
 
@@ -228,6 +237,8 @@ public class RisingStonesLoginTool {
 
         Request request = new Request.Builder()
                 .url(url)
+                .header("User-Agent", "okhttp/2.5.0")
+//                .header("accept-encoding", "gzip")
                 .header("Cookie", formatCookies(cookies))
                 .build();
 
@@ -250,6 +261,9 @@ public class RisingStonesLoginTool {
 
         Request request = new Request.Builder()
                 .url(url)
+                .header("User-Agent", "Mozilla/5.0 (Linux; Android 12; V2218A Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36 DaoYu/9.4.14")
+                .header("accept", "application/json, text/plain, */*")
+//                .header("accept-encoding", "gzip, deflate")
                 .header("Cookie", formatCookies(cookies))
                 .build();
 
@@ -273,7 +287,10 @@ public class RisingStonesLoginTool {
 
         Request request = new Request.Builder()
                 .url(url)
+                .header("User-Agent", "Mozilla/5.0 (Linux; Android 12; V2218A Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36 DaoYu/9.4.14")
                 .header("authorization", daoyuToken)
+                .header("accept", "application/json, text/plain, */*")
+//                .header("accept-encoding", "gzip, deflate")
                 .header("Cookie", formatCookies(cookies))
                 .build();
 
