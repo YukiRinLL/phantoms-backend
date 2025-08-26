@@ -23,8 +23,8 @@ public class GuildMemberReminderScheduler {
     @Autowired
     private OneBotService oneBotService;
 
-//    @Scheduled(cron = "0 0 0 * * ?") // 每天凌晨0点执行
-    @Scheduled(fixedRate = 60000) // 每分钟执行一次
+    @Scheduled(cron = "0 0 0 * * ?") // 每天凌晨0点执行
+//    @Scheduled(fixedRate = 60000) // 每分钟执行一次
     public void remindInactiveMembers() {
         try {
             // 获取公会成员信息
@@ -51,7 +51,7 @@ public class GuildMemberReminderScheduler {
                                         Integer houseInfoPublish = userInfo.getInteger("house_info_publish");
                                         String houseInfo = characterDetail.getString("house_info");
 
-                                        // 判断是否超过25天未登录
+                                        // 判断是否超过30天未登录
                                         if (lastLoginTimeStr != null
                                                 && houseInfoPublish != null
                                                 && houseInfoPublish == 1
@@ -61,14 +61,16 @@ public class GuildMemberReminderScheduler {
                                             LocalDate now = LocalDate.now();
                                             long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(lastLoginTime, now);
 
-                                            if (daysBetween >= 25) {
-                                                // 构造提醒信息
-                                                String message = String.format("[系统提示]%s 已经超过25天未登录，房屋信息：%s", member.getString("character_name"), houseInfo);
-                                                // 发送提醒信息到群聊
-                                                try {
-                                                    oneBotService.sendGroupMessageWithDefaultGroup(message,"787909466");
-                                                } catch (Exception e) {
-                                                    throw new RuntimeException(e);
+                                            if (daysBetween >= 30) {
+                                                if (daysBetween <= 45) {
+                                                    // 构造提醒信息
+                                                    String message = String.format("[系统提示]%s 已经%d天未登录，房屋信息：%s", member.getString("character_name"), daysBetween, houseInfo);
+                                                    // 发送提醒信息到群聊
+                                                    try {
+                                                        oneBotService.sendGroupMessageWithDefaultGroup(message, "787909466");
+                                                    } catch (Exception e) {
+                                                        throw new RuntimeException(e);
+                                                    }
                                                 }
                                                 return member.getString("character_name");
                                             }
@@ -82,7 +84,12 @@ public class GuildMemberReminderScheduler {
                         .collect(Collectors.toList());
 
                 // 打印未活跃成员名单（可选）
-                System.out.println("未活跃成员名单：" + inactiveMembers);
+                // System.out.println("未活跃成员名单：" + inactiveMembers);
+                try {
+                    oneBotService.sendGroupMessageWithDefaultGroup("未活跃成员名单：" + inactiveMembers, null);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

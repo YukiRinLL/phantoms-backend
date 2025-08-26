@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${subject}">邮件标题</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .content h2 {
+            color: #333333;
+            margin-bottom: 10px;
+        }
+        .content p {
+            color: #666666;
+            line-height: 1.5;
+        }
+        .footer {
+            background-color: #f5f5f5;
+            color: #999999;
+            padding: 10px;
+            text-align: center;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        @media only screen and (max-width: 600px) {
+            .container {
+                width: 100%;
+                padding: 0;
+            }
+            .header, .content, .footer {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1 th:text="${subject}">邮件标题</h1>
+    </div>
+    <div class="content">
+        <h2 th:text="${recipientName}">尊敬的用户：</h2>
+        <p th:text="${messageBody}">这是一封测试邮件，用于展示 HTML 邮件模板的效果。你可以根据需要修改内容和样式。</p>
+        <p th:text="${footerText}">感谢你的支持！</p>
+        <a th:href="${buttonLink}" class="button" th:text="${buttonText}">点击这里</a>
+    </div>
+    <div class="footer">
+        <p th:text="${footerCopyright}">版权所有 © 2025</p>
+    </div>
+</div>
+</body>
+</html>
