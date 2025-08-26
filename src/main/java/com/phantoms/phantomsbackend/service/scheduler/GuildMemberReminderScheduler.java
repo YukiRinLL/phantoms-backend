@@ -1,7 +1,6 @@
 package com.phantoms.phantomsbackend.service.scheduler;
 
 import com.alibaba.fastjson.JSONObject;
-import com.phantoms.phantomsbackend.common.utils.DateUtils;
 import com.phantoms.phantomsbackend.service.OneBotService;
 import com.phantoms.phantomsbackend.service.RisingStonesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -44,26 +44,34 @@ public class GuildMemberReminderScheduler {
                                 }
                                 if (userInfoResponse != null && userInfoResponse.getInteger("code") == 10000) {
                                     JSONObject userInfo = userInfoResponse.getJSONObject("data");
-                                    String lastLoginTimeStr = userInfo.getString("last_login_time");
-                                    Integer houseInfoPublish = userInfo.getInteger("house_info_publish");
-                                    String houseInfo = userInfo.getString("house_info");
+                                    List<JSONObject> characterDetails = userInfo.getJSONArray("characterDetail").toJavaList(JSONObject.class);
+                                    if (!characterDetails.isEmpty()) {
+                                        JSONObject characterDetail = characterDetails.get(0);
+                                        String lastLoginTimeStr = characterDetail.getString("last_login_time");
+                                        Integer houseInfoPublish = userInfo.getInteger("house_info_publish");
+                                        String houseInfo = characterDetail.getString("house_info");
 
-                                    // 判断是否超过25天未登录
-                                    if (lastLoginTimeStr != null && houseInfoPublish != null && houseInfoPublish == 1) {
-                                        LocalDateTime lastLoginTime = LocalDateTime.parse(lastLoginTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                                        LocalDateTime now = LocalDateTime.now();
-                                        long daysBetween = DateUtils.daysBetween(lastLoginTime, now);
+                                        // 判断是否超过25天未登录
+                                        if (lastLoginTimeStr != null
+                                                && houseInfoPublish != null
+                                                && houseInfoPublish == 1
+                                                && houseInfo != null
+                                        ) {
+                                            LocalDate lastLoginTime = LocalDate.parse(lastLoginTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            LocalDate now = LocalDate.now();
+                                            long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(lastLoginTime, now);
 
-                                        if (daysBetween >= 25) {
-                                            // 构造提醒信息
-                                            String message = String.format("提醒：%s已经25天未登录，其房屋信息为：%s", member.getString("character_name"), houseInfo);
-                                            // 发送提醒信息到群聊
-                                            try {
-                                                oneBotService.sendGroupMessageWithDefaultGroup(message,null);
-                                            } catch (Exception e) {
-                                                throw new RuntimeException(e);
+                                            if (daysBetween >= 25) {
+                                                // 构造提醒信息
+                                                String message = String.format("[系统提示]%s 已经超过25天未登录，房屋信息：%s", member.getString("character_name"), houseInfo);
+                                                // 发送提醒信息到群聊
+                                                try {
+                                                    oneBotService.sendGroupMessageWithDefaultGroup(message,"787909466");
+                                                } catch (Exception e) {
+                                                    throw new RuntimeException(e);
+                                                }
+                                                return member.getString("character_name");
                                             }
-                                            return member.getString("character_name");
                                         }
                                     }
                                 }

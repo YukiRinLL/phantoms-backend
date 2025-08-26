@@ -4,10 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update DaoyuToken time limit">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/DateUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/GuildMemberReminderScheduler.java" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add GuildMemberReminderScheduler">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/GuildMemberReminderScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/GuildMemberReminderScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/log4j2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/email/defaultEmailTemplate.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/email/welcomeEmailTemplate.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-08-26T10-59-49_084.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-08-26T11-00-12_111.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/application.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -298,14 +312,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00064" summary="switch supabase to Phantoms_DB_Reboot">
-      <option name="closed" value="true" />
-      <created>1753931948272</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1753931948272</updated>
     </task>
     <task id="LOCAL-00065" summary="switch supabase to Phantoms_DB_Reboot">
       <option name="closed" value="true" />
@@ -691,7 +697,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756177233254</updated>
     </task>
-    <option name="localTasksCounter" value="113" />
+    <task id="LOCAL-00113" summary="add GuildMemberReminderScheduler">
+      <option name="closed" value="true" />
+      <created>1756192505887</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1756192505888</updated>
+    </task>
+    <option name="localTasksCounter" value="114" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -726,7 +740,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="turn off keep-render-service-active" />
     <MESSAGE value="switch supabase to Phantoms_DB_Reboot" />
     <MESSAGE value="added mysql with mybatis plus" />
     <MESSAGE value="fix secondary datasource" />
@@ -751,7 +764,8 @@
     <MESSAGE value="update NapCatQQTest.java" />
     <MESSAGE value="add RisingStones functions" />
     <MESSAGE value="update DaoyuToken time limit" />
-    <option name="LAST_COMMIT_MESSAGE" value="update DaoyuToken time limit" />
+    <MESSAGE value="add GuildMemberReminderScheduler" />
+    <option name="LAST_COMMIT_MESSAGE" value="add GuildMemberReminderScheduler" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -766,8 +780,18 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/GuildMemberReminderScheduler.java</url>
-          <line>51</line>
-          <option name="timeStamp" value="111" />
+          <line>68</line>
+          <option name="timeStamp" value="116" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/GuildMemberReminderScheduler.java</url>
+          <line>72</line>
+          <option name="timeStamp" value="122" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/GuildMemberReminderScheduler.java</url>
+          <line>84</line>
+          <option name="timeStamp" value="123" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
