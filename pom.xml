@@ -91,10 +91,17 @@
             <version>8.0.1.Final</version>
         </dependency>
 
+        <!-- Jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>2.15.2</version>
+        </dependency>
+        <!-- HttpClient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
         </dependency>
 
         <dependency>

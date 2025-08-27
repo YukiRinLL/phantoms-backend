@@ -4,8 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="remindInactiveMembers">
-      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update todo list">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/RecruitmentResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/primary/Recruitment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/RecruitmentRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-08-26T16-10-28_483.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-08-26T16-10-52_081.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/application.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,11 +158,11 @@
       <recent name="com.phantoms.phantomsbackend" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.phantoms.phantomsbackend.common.utils" />
+      <recent name="com.phantoms.phantomsbackend.repository.primary" />
       <recent name="com.phantoms.phantomsbackend.service.scheduler" />
-      <recent name="com.phantoms.phantomsbackend.controller" />
-      <recent name="com.phantoms.phantomsbackend.service.impl" />
-      <recent name="com.phantoms.phantomsbackend.service" />
+      <recent name="com.phantoms.phantomsbackend.pojo.entity.primary" />
+      <recent name="com.phantoms.phantomsbackend.common.utils" />
+      <recent name="com.phantoms.phantomsbackend.pojo.entity" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -296,14 +313,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00067" summary="added mysql with mybatis plus">
-      <option name="closed" value="true" />
-      <created>1753950304638</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1753950304638</updated>
     </task>
     <task id="LOCAL-00068" summary="added mysql with mybatis plus">
       <option name="closed" value="true" />
@@ -689,7 +698,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756195870940</updated>
     </task>
-    <option name="localTasksCounter" value="116" />
+    <task id="LOCAL-00116" summary="update todo list">
+      <option name="closed" value="true" />
+      <created>1756262179205</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1756262179206</updated>
+    </task>
+    <option name="localTasksCounter" value="117" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -724,7 +741,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added mysql with mybatis plus" />
     <MESSAGE value="fix secondary datasource" />
     <MESSAGE value="add legacy user info sync" />
     <MESSAGE value="update HealthCheckScheduler" />
@@ -749,7 +765,8 @@
     <MESSAGE value="update DaoyuToken time limit" />
     <MESSAGE value="add GuildMemberReminderScheduler" />
     <MESSAGE value="remindInactiveMembers" />
-    <option name="LAST_COMMIT_MESSAGE" value="remindInactiveMembers" />
+    <MESSAGE value="update todo list" />
+    <option name="LAST_COMMIT_MESSAGE" value="update todo list" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -763,9 +780,9 @@
           <option name="timeStamp" value="28" />
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/GuildMemberReminderScheduler.java</url>
-          <line>86</line>
-          <option name="timeStamp" value="123" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java</url>
+          <line>29</line>
+          <option name="timeStamp" value="132" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
