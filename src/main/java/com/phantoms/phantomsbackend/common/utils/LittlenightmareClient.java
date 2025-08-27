@@ -11,16 +11,35 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LittlenightmareClient {
 
     private static final String BASE_URL = "https://xivpf.littlenightmare.top/api/listings";
 
-    public static RecruitmentResponse fetchRecruitmentListings(String datacenter, String category, List<Integer> jobs, List<Integer> duties) throws IOException {
+    public static RecruitmentResponse fetchRecruitmentListings(
+            Integer page,
+            Integer perPage,
+            String category,
+            String world,
+            String search,
+            String datacenter,
+            List<Integer> jobs,
+            List<Integer> duties
+    ) throws IOException {
         StringBuilder urlBuilder = new StringBuilder(BASE_URL);
 
-        if (datacenter != null && !datacenter.isEmpty()) {
-            urlBuilder.append("?datacenter=").append(datacenter);
+        if (page != null) {
+            urlBuilder.append("?page=").append(page);
+        }
+
+        if (perPage != null) {
+            if (urlBuilder.toString().contains("?")) {
+                urlBuilder.append("&");
+            } else {
+                urlBuilder.append("?");
+            }
+            urlBuilder.append("per_page=").append(perPage);
         }
 
         if (category != null && !category.isEmpty()) {
@@ -32,6 +51,33 @@ public class LittlenightmareClient {
             urlBuilder.append("category=").append(category);
         }
 
+        if (world != null && !world.isEmpty()) {
+            if (urlBuilder.toString().contains("?")) {
+                urlBuilder.append("&");
+            } else {
+                urlBuilder.append("?");
+            }
+            urlBuilder.append("world=").append(world);
+        }
+
+        if (search != null && !search.isEmpty()) {
+            if (urlBuilder.toString().contains("?")) {
+                urlBuilder.append("&");
+            } else {
+                urlBuilder.append("?");
+            }
+            urlBuilder.append("search=").append(search);
+        }
+
+        if (datacenter != null && !datacenter.isEmpty()) {
+            if (urlBuilder.toString().contains("?")) {
+                urlBuilder.append("&");
+            } else {
+                urlBuilder.append("?");
+            }
+            urlBuilder.append("datacenter=").append(datacenter);
+        }
+
         if (jobs != null && !jobs.isEmpty()) {
             for (Integer job : jobs) {
                 if (urlBuilder.toString().contains("?")) {
@@ -39,7 +85,7 @@ public class LittlenightmareClient {
                 } else {
                     urlBuilder.append("?");
                 }
-                urlBuilder.append("jobs[]={job}");
+                urlBuilder.append("jobs[]=").append(job);
             }
         }
 
@@ -50,11 +96,25 @@ public class LittlenightmareClient {
                 } else {
                     urlBuilder.append("?");
                 }
-                urlBuilder.append("duty[]={duty}");
+                urlBuilder.append("duty[]=").append(duty);
             }
         }
 
         String url = urlBuilder.toString();
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            HttpGet request = new HttpGet(url);
+            try (CloseableHttpResponse response = httpClient.execute(request)) {
+                String jsonResponse = EntityUtils.toString(response.getEntity());
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.registerModule(new JavaTimeModule());
+                return objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
+            }
+        }
+    }
+
+    public static RecruitmentResponse fetchRecruitmentDetails(int id) throws IOException {
+        String url = BASE_URL + "/" + id;
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpGet request = new HttpGet(url);
