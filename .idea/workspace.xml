@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add LittlenightmareClient">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/Pagination.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/RecruitmentResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/RecruitmentResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java" afterDir="false" />
-    </list>
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add RecruitmentScheduler" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -300,22 +294,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00070" summary="added mysql with mybatis plus">
-      <option name="closed" value="true" />
-      <created>1754031139024</created>
-      <option name="number" value="00070" />
-      <option name="presentableId" value="LOCAL-00070" />
-      <option name="project" value="LOCAL" />
-      <updated>1754031139024</updated>
-    </task>
-    <task id="LOCAL-00071" summary="added mysql with mybatis plus">
-      <option name="closed" value="true" />
-      <created>1754031278597</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1754031278597</updated>
     </task>
     <task id="LOCAL-00072" summary="added mysql with mybatis plus">
       <option name="closed" value="true" />
@@ -693,7 +671,23 @@
       <option name="project" value="LOCAL" />
       <updated>1756279151330</updated>
     </task>
-    <option name="localTasksCounter" value="119" />
+    <task id="LOCAL-00119" summary="add RecruitmentScheduler">
+      <option name="closed" value="true" />
+      <created>1756279755796</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1756279755798</updated>
+    </task>
+    <task id="LOCAL-00120" summary="add RecruitmentScheduler">
+      <option name="closed" value="true" />
+      <created>1756279924003</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1756279924003</updated>
+    </task>
+    <option name="localTasksCounter" value="121" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -728,7 +722,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add legacy user info sync" />
     <MESSAGE value="update HealthCheckScheduler" />
     <MESSAGE value="fix OneBotController ResponseEntity as Json format" />
     <MESSAGE value="add chat records api" />
@@ -753,7 +746,8 @@
     <MESSAGE value="remindInactiveMembers" />
     <MESSAGE value="update todo list" />
     <MESSAGE value="add LittlenightmareClient" />
-    <option name="LAST_COMMIT_MESSAGE" value="add LittlenightmareClient" />
+    <MESSAGE value="add RecruitmentScheduler" />
+    <option name="LAST_COMMIT_MESSAGE" value="add RecruitmentScheduler" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -768,7 +762,7 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java</url>
-          <line>42</line>
+          <line>35</line>
           <option name="timeStamp" value="133" />
         </line-breakpoint>
       </breakpoints>
