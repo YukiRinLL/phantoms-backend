@@ -1,7 +1,17 @@
-LOGGER的写法好像有的是调用的SIS，需要全部检查重写
+LOGGER的写法好像有的是调用的SIS，需要全部检查重写（已完成）
 
 写一个可以实时返回聊天记录的接口搭配页面（已完成）
-通过页面参与QQ聊天（这个需要做调用napcat的方法）
+通过页面参与QQ聊天（这个需要做调用napcat的方法）（已完成）
 
 增强WS接口相关的功能
 napcat的报错修一下
+
+
+石之家登录流程:
+Get Temp Cookies → 获取临时Cookie
+Initialize Login Flow → 初始化登录流程，获取flowId
+Query Account List → 查询账号列表
+Make Confirm → 选择账号并进行服务器鉴权
+Get Sub Account Key → 获取子账号的daoyu_ticket
+Dao Login → 使用daoyu_ticket登录石之家
+Do Login → 验证登录状态，获取最终的登录Cookie
