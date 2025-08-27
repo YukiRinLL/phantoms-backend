@@ -29,7 +29,7 @@ public class RecruitmentScheduler {
                     null, // category
                     null, // world
                     null, // search
-                    "莫古力", // datacenter
+                    null, // datacenter
                     null, // jobs
                     null  // duties
             );
