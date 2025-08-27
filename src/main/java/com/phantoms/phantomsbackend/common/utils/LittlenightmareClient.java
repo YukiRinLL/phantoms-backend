@@ -10,8 +10,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class LittlenightmareClient {
 
@@ -113,17 +113,38 @@ public class LittlenightmareClient {
         }
     }
 
-    public static RecruitmentResponse fetchRecruitmentDetails(int id) throws IOException {
-        String url = BASE_URL + "/" + id;
+    public static List<RecruitmentResponse> fetchAllRecruitmentListings(
+            Integer perPage,
+            String category,
+            String world,
+            String search,
+            String datacenter,
+            List<Integer> jobs,
+            List<Integer> duties
+    ) throws IOException {
+        List<RecruitmentResponse> allResponses = new ArrayList<>();
+        int page = 1;
+        boolean hasMorePages = true;
 
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            HttpGet request = new HttpGet(url);
-            try (CloseableHttpResponse response = httpClient.execute(request)) {
-                String jsonResponse = EntityUtils.toString(response.getEntity());
-                ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.registerModule(new JavaTimeModule());
-                return objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
-            }
+        while (hasMorePages) {
+            RecruitmentResponse response = fetchRecruitmentListings(
+                    page,
+                    perPage,
+                    category,
+                    world,
+                    search,
+                    datacenter,
+                    jobs,
+                    duties
+            );
+
+            allResponses.add(response);
+
+            // Check if there are more pages
+            hasMorePages = response.getPagination().getPage() < response.getPagination().getTotalPages();
+            page++;
         }
+
+        return allResponses;
     }
 }
