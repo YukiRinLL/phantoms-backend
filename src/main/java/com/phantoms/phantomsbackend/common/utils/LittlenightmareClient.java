@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.phantoms.phantomsbackend.common.serializer.CustomOffsetDateTimeDeserializer;
 import com.phantoms.phantomsbackend.pojo.entity.RecruitmentResponse;
+import org.apache.http.HttpHost;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -107,7 +108,8 @@ public class LittlenightmareClient {
 
         String url = urlBuilder.toString();
 
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+        HttpHost proxy = ProxyUtil.getRandomProxy();
+        try (CloseableHttpClient httpClient = HttpClients.custom().setProxy(proxy).build()) {
             HttpGet request = new HttpGet(url);
             request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
             request.setHeader("Accept", "application/json");
