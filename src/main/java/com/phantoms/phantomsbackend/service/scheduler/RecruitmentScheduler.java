@@ -5,6 +5,8 @@ import com.phantoms.phantomsbackend.pojo.entity.RecruitmentResponse;
 import com.phantoms.phantomsbackend.pojo.entity.primary.Recruitment;
 import com.phantoms.phantomsbackend.repository.primary.RecruitmentRepository;
 import com.phantoms.phantomsbackend.service.OneBotService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class RecruitmentScheduler {
+
+    private static final Logger logger = LoggerFactory.getLogger(RecruitmentScheduler.class);
 
     @Autowired
     private OneBotService oneBotService;
@@ -41,6 +45,8 @@ public class RecruitmentScheduler {
 
             // 保存所有获取到的招募信息到数据库
             recruitmentRepository.saveAll(allRecruitments);
+
+            logger.info("Successfully fetched and saved {} recruitments", allRecruitments.size());
 
 //            // 筛选符合条件的招募信息
 //            List<Recruitment> filteredRecruitments = allRecruitments.stream()
@@ -73,7 +79,7 @@ public class RecruitmentScheduler {
 //                System.out.println("未找到符合条件的招募信息");
 //            }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Failed to fetch and filter recruitments", e);
         }
     }
 }

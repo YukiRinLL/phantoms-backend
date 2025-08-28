@@ -2,12 +2,16 @@ package com.phantoms.phantomsbackend.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.phantoms.phantomsbackend.pojo.entity.RecruitmentResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +19,7 @@ import java.util.List;
 
 public class LittlenightmareClient {
 
+    private static final Logger logger = LoggerFactory.getLogger(LittlenightmareClient.class);
     private static final String BASE_URL = "https://xivpf.littlenightmare.top/api/listings";
 
     public static RecruitmentResponse fetchRecruitmentListings(
@@ -106,8 +111,19 @@ public class LittlenightmareClient {
             HttpGet request = new HttpGet(url);
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 String jsonResponse = EntityUtils.toString(response.getEntity());
+
+                // 检查返回内容是否为 HTML 页面
+                if (jsonResponse != null && jsonResponse.trim().startsWith("<")) {
+                    logger.error("Invalid response received: {}", jsonResponse);
+                    throw new IOException("Invalid response received: " + jsonResponse);
+                }
+
+                // 配置 ObjectMapper 以解析 ISO 8601 格式的日期时间
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.registerModule(new JavaTimeModule());
+                objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+
                 return objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
             }
         }
