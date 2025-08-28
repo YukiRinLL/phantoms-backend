@@ -76,6 +76,7 @@ com\phantoms\phantomsbackend\pojo\entity\primary\onebot\UserMessage.class
 com\phantoms\phantomsbackend\service\impl\D1ServiceImpl.class
 com\phantoms\phantomsbackend\common\exception\ServiceException.class
 com\phantoms\phantomsbackend\pojo\entity\secondary\User.class
+com\phantoms\phantomsbackend\common\serializer\CustomOffsetDateTimeDeserializer.class
 com\phantoms\phantomsbackend\repository\primary\PrimaryAuthUserRepository.class
 com\phantoms\phantomsbackend\pojo\entity\primary\AuthUser.class
 com\phantoms\phantomsbackend\service\D1Service.class
@@ -88,6 +89,7 @@ com\phantoms\phantomsbackend\pojo\entity\secondary\onebot\ChatRecord.class
 com\phantoms\phantomsbackend\service\impl\AuthUserServiceImpl.class
 com\phantoms\phantomsbackend\repository\primary\PrimaryMessageRepository.class
 com\phantoms\phantomsbackend\controller\PingController.class
+com\phantoms\phantomsbackend\common\serializer\CustomOffsetDateTimeDeserializer$1.class
 com\phantoms\phantomsbackend\repository\primary\RecruitmentRepository.class
 com\phantoms\phantomsbackend\service\impl\EmailServiceImpl.class
 com\phantoms\phantomsbackend\pojo\entity\secondary\Password.class

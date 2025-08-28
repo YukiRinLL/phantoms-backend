@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class LittlenightmareClient {
 
@@ -108,6 +109,9 @@ public class LittlenightmareClient {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpGet request = new HttpGet(url);
+            request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
+            request.setHeader("Accept", "application/json");
+
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 String jsonResponse = EntityUtils.toString(response.getEntity());
 
@@ -157,6 +161,13 @@ public class LittlenightmareClient {
             // Check if there are more pages
             hasMorePages = response.getPagination().getPage() < response.getPagination().getTotalPages();
             page++;
+
+            // 添加延迟以避免频率过高
+            try {
+                TimeUnit.SECONDS.sleep(1); // 每次请求之间延迟 1 秒
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
 
         return allResponses;

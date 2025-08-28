@@ -57,6 +57,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\secon
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\jasper\ReportDto.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\impl\UserServiceImpl.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\primary\RecruitmentRepository.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\serializer\CustomOffsetDateTimeDeserializer.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\jasper\JasperModel.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\UserController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\Pagination.java
