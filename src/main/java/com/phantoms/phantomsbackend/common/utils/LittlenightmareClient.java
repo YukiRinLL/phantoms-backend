@@ -2,8 +2,7 @@ package com.phantoms.phantomsbackend.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.phantoms.phantomsbackend.common.serializer.CustomOffsetDateTimeDeserializer;
 import com.phantoms.phantomsbackend.pojo.entity.RecruitmentResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -121,8 +120,7 @@ public class LittlenightmareClient {
                 // 配置 ObjectMapper 以解析 ISO 8601 格式的日期时间
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.registerModule(new JavaTimeModule());
-                objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+                objectMapper.registerModule(CustomOffsetDateTimeDeserializer.createModule());
 
                 return objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
             }
