@@ -55,6 +55,12 @@ public class OneBotServiceImpl implements OneBotService {
                 chatRecord.setUpdatedAt(LocalDateTime.now());
                 chatRecordRepository.save(chatRecord);
                 chatRecords.add(chatRecord);
+
+                handleMessage(userId, groupId, (String) messageObj);
+                // 检查是否为图片消息
+                if (isImageMessage(messageElement)) {
+                    handleImageMessage(userId, groupId, messageElement.toString());
+                }
             }
         } else if (messageObj instanceof String) {
             // 如果是String，直接保存为一条ChatRecord
@@ -68,6 +74,12 @@ public class OneBotServiceImpl implements OneBotService {
             chatRecord.setUpdatedAt(LocalDateTime.now());
             chatRecordRepository.save(chatRecord);
             chatRecords.add(chatRecord);
+
+            handleMessage(userId, groupId, (String) messageObj);
+            // 检查图片消息
+            if (isImageMessage(messageObj)) {
+                handleImageMessage(userId, groupId, (String) messageObj);
+            }
         } else {
             throw new IllegalArgumentException("message must be a string or a list");
         }
@@ -75,9 +87,73 @@ public class OneBotServiceImpl implements OneBotService {
         return chatRecords;
     }
 
+    private boolean isImageMessage(Object message) {
+        if (message instanceof Map) {
+            Map<?, ?> messageMap = (Map<?, ?>) message;
+            return "image".equals(messageMap.get("type"));
+        } else if (message instanceof String) {
+            return ((String) message).contains("[CQ:image");
+        }
+        return false;
+    }
+
+    private void handleMessage(Long userId, Long groupId, String imageUrl) throws Exception {
+        // 检查group内是否连续发送了三个相同内容的消息
+        if (checkConsecutive(groupId)) {
+            napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 5 * 60);
+        }
+    }
+
+    private void handleImageMessage(Long userId, Long groupId, String imageUrl) throws Exception {
+        // 检查发送者一天内发送了多少图片
+        if (checkDailyImageCount(userId, groupId)) {
+            napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 5 * 60);
+        }
+
+        // 检查用户最近10个消息是否都是图片
+        if (checkRecentMessagesAreAllImages(userId, groupId, 7)) {
+            napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 60 * 60);
+        }
+        // 检查用户最近9个消息是否都是图片
+        else if (checkRecentMessagesAreAllImages(userId, groupId, 7)) {
+            napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 30 * 60);
+        }
+        // 检查用户最近8个消息是否都是图片
+        else if (checkRecentMessagesAreAllImages(userId, groupId, 7)) {
+            napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 20 * 60);
+        }
+        // 检查用户最近7个消息是否都是图片
+        else if (checkRecentMessagesAreAllImages(userId, groupId, 7)) {
+            napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 10 * 60);
+        }
+    }
+
+    private boolean checkConsecutive(Long groupId) {
+        List<ChatRecord> recentRecords = chatRecordRepository.findTop3ByGroupIdOrderByCreatedAtDesc(groupId);
+        if (recentRecords.size() < 3) {
+            return false;
+        }
+        String lastMessage = recentRecords.get(0).getMessage();
+        return recentRecords.stream().allMatch(record -> record.getMessage().equals(lastMessage));
+    }
+
+    private boolean checkDailyImageCount(Long userId, Long groupId) {
+        LocalDateTime oneDayAgo = LocalDateTime.now().minusDays(1);
+        long imageCount = chatRecordRepository.countByUserIdAndGroupIdAndMessageTypeAndTimestampAfter(userId, groupId, oneDayAgo);
+        long totalMessageCount = chatRecordRepository.countByUserIdAndGroupIdAndTimestampAfter(userId, groupId, oneDayAgo);
+        return totalMessageCount > 20 && imageCount * 2 >= totalMessageCount;
+    }
+
+    private boolean checkRecentMessagesAreAllImages(Long userId, Long groupId, int messageCount) {
+        List<ChatRecord> recentRecords = chatRecordRepository.findTopByUserIdAndGroupIdOrderByCreatedAtDesc(userId, groupId, messageCount);
+        if (recentRecords.size() < messageCount) {
+            return false;
+        }
+        return recentRecords.stream().allMatch(record -> record.getMessage().contains("type=image"));
+    }
+
     @Override
     public List<ChatRecord> getLatestMessages(int limit) {
-        // 查询最新的几条消息，只返回 type=text 的消息
         return chatRecordRepository.findTopByOrderByCreatedAtDesc(limit);
     }
 
