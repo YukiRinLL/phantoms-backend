@@ -7,6 +7,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,13 +18,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ProxyUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(ProxyUtil.class);
-    private static final String PROXY_API_URL = "http://api.89ip.cn/tqdl.html?api=1&num=60&port=&address=&isp=";
+    private static final String PROXY_API_URL = "http://www.ip3366.net/free/";
     private static List<HttpHost> proxies = new ArrayList<>();
 
     public static synchronized HttpHost getRandomProxy() {
@@ -55,17 +57,17 @@ public class ProxyUtil {
                         return;
                     }
 
-                    // 使用正则表达式匹配代理 IP 地址
-                    String ipPattern = "\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}:\\d+\\b";
-                    Pattern pattern = Pattern.compile(ipPattern);
-                    Matcher matcher = pattern.matcher(responseText);
+                    // 使用Jsoup解析HTML
+                    Document doc = Jsoup.parse(responseText);
+                    Elements rows = doc.select("table tbody tr");
 
-                    while (matcher.find()) {
-                        String ipPort = matcher.group();
-                        String[] parts = ipPort.split(":");
-                        String host = parts[0];
-                        int port = Integer.parseInt(parts[1]);
-                        proxies.add(new HttpHost(host, port, "http"));
+                    for (Element row : rows) {
+                        Elements columns = row.select("td");
+                        if (columns.size() >= 2) {
+                            String ip = columns.get(0).text();
+                            String port = columns.get(1).text();
+                            proxies.add(new HttpHost(ip, Integer.parseInt(port), "http"));
+                        }
                     }
                 } else {
                     logger.warn("Response entity is null");

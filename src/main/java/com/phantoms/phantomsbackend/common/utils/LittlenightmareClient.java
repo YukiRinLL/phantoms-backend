@@ -23,6 +23,7 @@ public class LittlenightmareClient {
 
     private static final Logger logger = LoggerFactory.getLogger(LittlenightmareClient.class);
     private static final String BASE_URL = "https://xivpf.littlenightmare.top/api/listings";
+    private static final String SCRAPESTACK_API_URL = "http://api.scrapestack.com/scrape?access_key=ebdc1b9aa7e4f9f1c776d9ad2c90628e&url=";
     private static final int CONNECT_TIMEOUT = 10000; // 10 seconds
     private static final int SOCKET_TIMEOUT = 10000; // 10 seconds
 
@@ -109,13 +110,15 @@ public class LittlenightmareClient {
             }
         }
 
-        String url = urlBuilder.toString();
+        String targetUrl = urlBuilder.toString();
+        String scrapeStackUrl = SCRAPESTACK_API_URL + java.net.URLEncoder.encode(targetUrl, "UTF-8");
 
         RecruitmentResponse response = null;
         boolean success = false;
-        int attempt = 0;
-        while (!success && attempt < 3) { // 尝试最多 3 次
-            HttpHost proxy = ProxyUtil.getRandomProxy();
+
+        // 尝试使用 getRandomProxy 获取的代理地址
+        HttpHost proxy = ProxyUtil.getRandomProxy();
+        if (proxy != null) {
             try (CloseableHttpClient httpClient = HttpClients.custom()
                     .setProxy(proxy)
                     .setDefaultRequestConfig(RequestConfig.custom()
@@ -123,7 +126,7 @@ public class LittlenightmareClient {
                             .setSocketTimeout(SOCKET_TIMEOUT)
                             .build())
                     .build()) {
-                HttpGet request = new HttpGet(url);
+                HttpGet request = new HttpGet(targetUrl);
                 request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
                 request.setHeader("Accept", "application/json");
 
@@ -146,7 +149,69 @@ public class LittlenightmareClient {
                 }
             } catch (IOException e) {
                 logger.error("Failed to fetch recruitment listings using proxy {}: {}", proxy, e.getMessage());
-                attempt++;
+            }
+        }
+
+        // 如果代理尝试失败，尝试使用 ScrapeStack
+        if (!success) {
+            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                HttpGet request = new HttpGet(scrapeStackUrl);
+                request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
+                request.setHeader("Accept", "application/json");
+
+                try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
+                    String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+
+                    // 检查返回内容是否为 HTML 页面
+                    if (jsonResponse != null && jsonResponse.trim().startsWith("<")) {
+                        logger.error("Invalid response received: {}", jsonResponse);
+                        throw new IOException("Invalid response received: " + jsonResponse);
+                    }
+
+                    // 配置 ObjectMapper 以解析 ISO 8601 格式的日期时间
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    objectMapper.registerModule(new JavaTimeModule());
+                    objectMapper.registerModule(CustomOffsetDateTimeDeserializer.createModule());
+
+                    response = objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
+                    success = true;
+                }
+            } catch (IOException e) {
+                logger.error("Failed to fetch recruitment listings using ScrapeStack: {}", e.getMessage());
+            }
+        }
+
+        // 如果 ScrapeStack 尝试失败，尝试裸连
+        if (!success) {
+            try (CloseableHttpClient httpClient = HttpClients.custom()
+                    .setDefaultRequestConfig(RequestConfig.custom()
+                            .setConnectTimeout(CONNECT_TIMEOUT)
+                            .setSocketTimeout(SOCKET_TIMEOUT)
+                            .build())
+                    .build()) {
+                HttpGet request = new HttpGet(targetUrl);
+                request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
+                request.setHeader("Accept", "application/json");
+
+                try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
+                    String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+
+                    // 检查返回内容是否为 HTML 页面
+                    if (jsonResponse != null && jsonResponse.trim().startsWith("<")) {
+                        logger.error("Invalid response received: {}", jsonResponse);
+                        throw new IOException("Invalid response received: " + jsonResponse);
+                    }
+
+                    // 配置 ObjectMapper 以解析 ISO 8601 格式的日期时间
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    objectMapper.registerModule(new JavaTimeModule());
+                    objectMapper.registerModule(CustomOffsetDateTimeDeserializer.createModule());
+
+                    response = objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
+                    success = true;
+                }
+            } catch (IOException e) {
+                logger.error("Failed to fetch recruitment listings without proxy: {}", e.getMessage());
             }
         }
 

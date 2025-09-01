@@ -7,12 +7,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add ProxyUtil &amp; turn off RecruitmentScheduler">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/ProxyUtilArchive.java" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix ProxyUtil api.89ip.cn">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/ProxyUtilArchive2.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/ProxyUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/ProxyUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -304,14 +303,6 @@
       <workItem from="1746581782118" duration="426000" />
       <workItem from="1746584502357" duration="187000" />
       <workItem from="1746584705195" duration="547000" />
-    </task>
-    <task id="LOCAL-00079" summary="update HealthCheckScheduler">
-      <option name="closed" value="true" />
-      <created>1755072831309</created>
-      <option name="number" value="00079" />
-      <option name="presentableId" value="LOCAL-00079" />
-      <option name="project" value="LOCAL" />
-      <updated>1755072831309</updated>
     </task>
     <task id="LOCAL-00080" summary="update HealthCheckScheduler">
       <option name="closed" value="true" />
@@ -697,7 +688,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756372597107</updated>
     </task>
-    <option name="localTasksCounter" value="128" />
+    <task id="LOCAL-00128" summary="fix ProxyUtil api.89ip.cn">
+      <option name="closed" value="true" />
+      <created>1756694805383</created>
+      <option name="number" value="00128" />
+      <option name="presentableId" value="LOCAL-00128" />
+      <option name="project" value="LOCAL" />
+      <updated>1756694805383</updated>
+    </task>
+    <option name="localTasksCounter" value="129" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -732,7 +731,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix OneBotController json format" />
     <MESSAGE value="add NapCatQQUtil" />
     <MESSAGE value="add send group message API" />
     <MESSAGE value="add UserMessage record" />
@@ -757,7 +755,8 @@
     <MESSAGE value="add CustomOffsetDateTimeDeserializer" />
     <MESSAGE value="fix LittlenightmareClient" />
     <MESSAGE value="add ProxyUtil &amp; turn off RecruitmentScheduler" />
-    <option name="LAST_COMMIT_MESSAGE" value="add ProxyUtil &amp; turn off RecruitmentScheduler" />
+    <MESSAGE value="fix ProxyUtil api.89ip.cn" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix ProxyUtil api.89ip.cn" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -772,28 +771,23 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/ProxyUtil.java</url>
-          <line>51</line>
-          <option name="timeStamp" value="77" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/ProxyUtil.java</url>
-          <line>60</line>
-          <option name="timeStamp" value="83" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/ProxyUtil.java</url>
-          <line>33</line>
+          <line>57</line>
           <option name="timeStamp" value="88" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java</url>
-          <line>118</line>
+          <line>121</line>
           <option name="timeStamp" value="89" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/ProxyUtil.java</url>
-          <line>29</line>
+          <line>31</line>
           <option name="timeStamp" value="91" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/ProxyUtil.java</url>
+          <line>71</line>
+          <option name="timeStamp" value="96" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
