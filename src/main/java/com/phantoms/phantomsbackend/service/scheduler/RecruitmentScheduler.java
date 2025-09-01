@@ -25,7 +25,7 @@ public class RecruitmentScheduler {
     @Autowired
     private RecruitmentRepository recruitmentRepository;
 
-//    @Scheduled(fixedRate = 300000) // 每300秒执行一次
+    @Scheduled(fixedRate = 300000) // 每300秒执行一次
     /* TODO: Cloudflare 返回了一个 HTML 页面，提示用户“Just a moment...”，这表明 Cloudflare 正在对请求进行安全检查。
         这种页面通常包含 JavaScript 代码，用于验证请求是否来自真实的浏览器。
         部署在Render上的实例没法通过验证（本地运行没有问题），先暂时关闭

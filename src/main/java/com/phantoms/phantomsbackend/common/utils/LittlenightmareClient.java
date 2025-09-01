@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.phantoms.phantomsbackend.common.serializer.CustomOffsetDateTimeDeserializer;
 import com.phantoms.phantomsbackend.pojo.entity.RecruitmentResponse;
 import org.apache.http.HttpHost;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -22,6 +23,8 @@ public class LittlenightmareClient {
 
     private static final Logger logger = LoggerFactory.getLogger(LittlenightmareClient.class);
     private static final String BASE_URL = "https://xivpf.littlenightmare.top/api/listings";
+    private static final int CONNECT_TIMEOUT = 10000; // 10 seconds
+    private static final int SOCKET_TIMEOUT = 10000; // 10 seconds
 
     public static RecruitmentResponse fetchRecruitmentListings(
             Integer page,
@@ -108,29 +111,50 @@ public class LittlenightmareClient {
 
         String url = urlBuilder.toString();
 
-        HttpHost proxy = ProxyUtil.getRandomProxy();
-        try (CloseableHttpClient httpClient = HttpClients.custom().setProxy(proxy).build()) {
-            HttpGet request = new HttpGet(url);
-            request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
-            request.setHeader("Accept", "application/json");
+        RecruitmentResponse response = null;
+        boolean success = false;
+        int attempt = 0;
+        while (!success && attempt < 3) { // 尝试最多 3 次
+            HttpHost proxy = ProxyUtil.getRandomProxy();
+            try (CloseableHttpClient httpClient = HttpClients.custom()
+                    .setProxy(proxy)
+                    .setDefaultRequestConfig(RequestConfig.custom()
+                            .setConnectTimeout(CONNECT_TIMEOUT)
+                            .setSocketTimeout(SOCKET_TIMEOUT)
+                            .build())
+                    .build()) {
+                HttpGet request = new HttpGet(url);
+                request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
+                request.setHeader("Accept", "application/json");
 
-            try (CloseableHttpResponse response = httpClient.execute(request)) {
-                String jsonResponse = EntityUtils.toString(response.getEntity());
+                try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
+                    String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
 
-                // 检查返回内容是否为 HTML 页面
-                if (jsonResponse != null && jsonResponse.trim().startsWith("<")) {
-                    logger.error("Invalid response received: {}", jsonResponse);
-                    throw new IOException("Invalid response received: " + jsonResponse);
+                    // 检查返回内容是否为 HTML 页面
+                    if (jsonResponse != null && jsonResponse.trim().startsWith("<")) {
+                        logger.error("Invalid response received: {}", jsonResponse);
+                        throw new IOException("Invalid response received: " + jsonResponse);
+                    }
+
+                    // 配置 ObjectMapper 以解析 ISO 8601 格式的日期时间
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    objectMapper.registerModule(new JavaTimeModule());
+                    objectMapper.registerModule(CustomOffsetDateTimeDeserializer.createModule());
+
+                    response = objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
+                    success = true;
                 }
-
-                // 配置 ObjectMapper 以解析 ISO 8601 格式的日期时间
-                ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.registerModule(new JavaTimeModule());
-                objectMapper.registerModule(CustomOffsetDateTimeDeserializer.createModule());
-
-                return objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
+            } catch (IOException e) {
+                logger.error("Failed to fetch recruitment listings using proxy {}: {}", proxy, e.getMessage());
+                attempt++;
             }
         }
+
+        if (!success) {
+            throw new IOException("Failed to fetch recruitment listings after multiple attempts");
+        }
+
+        return response;
     }
 
     public static List<RecruitmentResponse> fetchAllRecruitmentListings(
