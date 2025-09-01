@@ -56,11 +56,11 @@ public class OneBotServiceImpl implements OneBotService {
                 chatRecordRepository.save(chatRecord);
                 chatRecords.add(chatRecord);
 
-                handleMessage(userId, groupId, (String) messageObj);
-                // 检查是否为图片消息
-                if (isImageMessage(messageElement)) {
-                    handleImageMessage(userId, groupId, messageElement.toString());
-                }
+//                handleMessage(userId, groupId, (String) messageObj);
+//                // 检查图片消息
+//                if (isImageMessage(messageElement)) {
+//                    handleImageMessage(userId, groupId, messageElement.toString());
+//                }
             }
         } else if (messageObj instanceof String) {
             // 如果是String，直接保存为一条ChatRecord
@@ -75,11 +75,11 @@ public class OneBotServiceImpl implements OneBotService {
             chatRecordRepository.save(chatRecord);
             chatRecords.add(chatRecord);
 
-            handleMessage(userId, groupId, (String) messageObj);
-            // 检查图片消息
-            if (isImageMessage(messageObj)) {
-                handleImageMessage(userId, groupId, (String) messageObj);
-            }
+//            handleMessage(userId, groupId, (String) messageObj);
+//            // 检查图片消息
+//            if (isImageMessage(messageObj)) {
+//                handleImageMessage(userId, groupId, (String) messageObj);
+//            }
         } else {
             throw new IllegalArgumentException("message must be a string or a list");
         }
@@ -110,19 +110,7 @@ public class OneBotServiceImpl implements OneBotService {
             napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 5 * 60);
         }
 
-        // 检查用户最近10个消息是否都是图片
-        if (checkRecentMessagesAreAllImages(userId, groupId, 7)) {
-            napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 60 * 60);
-        }
-        // 检查用户最近9个消息是否都是图片
-        else if (checkRecentMessagesAreAllImages(userId, groupId, 7)) {
-            napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 30 * 60);
-        }
-        // 检查用户最近8个消息是否都是图片
-        else if (checkRecentMessagesAreAllImages(userId, groupId, 7)) {
-            napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 20 * 60);
-        }
-        // 检查用户最近7个消息是否都是图片
+        // 检查用户连续发送图片的数量
         else if (checkRecentMessagesAreAllImages(userId, groupId, 7)) {
             napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 10 * 60);
         }
