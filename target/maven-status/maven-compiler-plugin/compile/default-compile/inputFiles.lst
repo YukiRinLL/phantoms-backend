@@ -81,8 +81,10 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\UserServi
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\RisingStonesUtils.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\ImageProxyController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\LeanCloudUtils.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\ProxyUtilArchive2.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\impl\AuthUserServiceImpl.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\dto\UserWithAvatarDTO.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\ProxyUtilArchive.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\impl\XIVAPIServiceImpl.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\XIVAPIConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\dto\MessageDTO.java
