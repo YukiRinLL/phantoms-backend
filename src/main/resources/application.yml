@@ -165,3 +165,6 @@ d1:
   database-id: 0ad9906c-ec63-4111-b741-647627eee096
   api-token: XfJvEzGOKAMIn18NRE5MvkqU4C64s_ic3iNXRk1y
   log-level: WARNING
+
+scrapestack:
+  access-key: ebdc1b9aa7e4f9f1c776d9ad2c90628e
