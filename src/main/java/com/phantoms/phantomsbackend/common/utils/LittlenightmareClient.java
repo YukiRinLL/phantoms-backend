@@ -11,6 +11,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +28,7 @@ public class LittlenightmareClient {
 
     private static final Logger logger = LoggerFactory.getLogger(LittlenightmareClient.class);
     private static final String BASE_URL = "https://xivpf.littlenightmare.top/api/listings";
+    private static final String SCRAPESTACK_API_URL = "http://api.scrapestack.com/scrape";
     private static final int CONNECT_TIMEOUT = 10000; // 10 seconds
     private static final int SOCKET_TIMEOUT = 10000; // 10 seconds
 
@@ -116,7 +119,7 @@ public class LittlenightmareClient {
         }
 
         String targetUrl = urlBuilder.toString();
-        String scrapeStackUrl = "http://api.scrapestack.com/scrape?access_key=" + scrapestackAccessKey + "&url=" + java.net.URLEncoder.encode(targetUrl, "UTF-8");
+        String scrapeStackUrl = SCRAPESTACK_API_URL + "?access_key=" + scrapestackAccessKey + "&url=" + java.net.URLEncoder.encode(targetUrl, "UTF-8");
 
         RecruitmentResponse response = null;
         boolean success = false;
@@ -153,7 +156,7 @@ public class LittlenightmareClient {
             logger.error("Failed to fetch recruitment listings without proxy: {}", e.getMessage());
         }
 
-        // 如果直连失败，尝试使用 getRandomProxy 获取的代理地址
+        // 如果直连失败，尝试使用代理
         if (!success) {
             for (int attempt = 0; attempt < 3; attempt++) {
                 HttpHost proxy = ProxyUtil.getRandomProxy();
@@ -205,6 +208,7 @@ public class LittlenightmareClient {
 
                 try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
                     String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+                    logger.info("ScrapeStack response: {}", jsonResponse);
 
                     // 检查返回内容是否为 HTML 页面
                     if (jsonResponse != null && jsonResponse.trim().startsWith("<")) {
