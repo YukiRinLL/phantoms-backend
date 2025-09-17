@@ -100,19 +100,19 @@ public class OneBotServiceImpl implements OneBotService {
     private void handleMessage(Long userId, Long groupId, String imageUrl) throws Exception {
         // 检查group内是否连续发送了三个相同内容的消息
         if (checkConsecutive(groupId)) {
-            napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 5 * 60);
+            napCatQQUtil.setGroupBan(groupId.toString(), userId.toString(), 5 * 60);
         }
     }
 
     private void handleImageMessage(Long userId, Long groupId, String imageUrl) throws Exception {
         // 检查发送者一天内发送了多少图片
         if (checkDailyImageCount(userId, groupId)) {
-            napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 5 * 60);
+            napCatQQUtil.setGroupBan(groupId.toString(), userId.toString(), 5 * 60);
         }
 
         // 检查用户连续发送图片的数量
         else if (checkRecentMessagesAreAllImages(userId, groupId, 7)) {
-            napCatQQUtil.muteGroupMember(groupId.toString(), userId.toString(), 10 * 60);
+            napCatQQUtil.setGroupBan(groupId.toString(), userId.toString(), 10 * 60);
         }
     }
 
