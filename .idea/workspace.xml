@@ -7,7 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update NapCatQQUtil" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update NapCatQQUtil">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Phantoms.drawio" beforeDir="false" afterPath="$PROJECT_DIR$/data/Phantoms.drawio" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -296,15 +299,7 @@
       <workItem from="1746584705195" duration="547000" />
       <workItem from="1757740166773" duration="652000" />
       <workItem from="1758076615188" duration="2590000" />
-      <workItem from="1758096698328" duration="327000" />
-    </task>
-    <task id="LOCAL-00092" summary="OneBotService add getDoubleValue function">
-      <option name="closed" value="true" />
-      <created>1755575839468</created>
-      <option name="number" value="00092" />
-      <option name="presentableId" value="LOCAL-00092" />
-      <option name="project" value="LOCAL" />
-      <updated>1755575839468</updated>
+      <workItem from="1758096698328" duration="2679000" />
     </task>
     <task id="LOCAL-00093" summary="OneBotService add getDoubleValue function">
       <option name="closed" value="true" />
@@ -690,7 +685,15 @@
       <option name="project" value="LOCAL" />
       <updated>1758096831481</updated>
     </task>
-    <option name="localTasksCounter" value="141" />
+    <task id="LOCAL-00141" summary="update NapCatQQUtil">
+      <option name="closed" value="true" />
+      <created>1758097138832</created>
+      <option name="number" value="00141" />
+      <option name="presentableId" value="LOCAL-00141" />
+      <option name="project" value="LOCAL" />
+      <updated>1758097138832</updated>
+    </task>
+    <option name="localTasksCounter" value="142" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
