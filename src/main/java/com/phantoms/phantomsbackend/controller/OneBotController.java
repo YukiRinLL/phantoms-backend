@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -105,7 +106,7 @@ public class OneBotController {
     @PostMapping("/onebot/send-to-group")
     public ResponseEntity<String> sendToGroup(@RequestBody Map<String, Object> requestBody, @RequestParam(required = false) String groupId) {
         try {
-            if(StringUtils.isEmpty(groupId)){
+            if (StringUtils.isEmpty(groupId)) {
                 groupId = defaultGroupId;
             }
 
@@ -115,6 +116,15 @@ public class OneBotController {
 
             // Log system information for investigation purposes
             System.out.println("System Information: " + systemInfo);
+
+            // Ensure systemInfo is not null
+            if (systemInfo == null) {
+                systemInfo = new HashMap<>();
+            }
+
+            // Ensure network and connection are not null
+            Map<String, Object> network = (Map<String, Object>) systemInfo.getOrDefault("network", new HashMap<>());
+            Map<String, Object> connection = (Map<String, Object>) network.getOrDefault("connection", new HashMap<>());
 
             // Save the message and system information to the database
             oneBotService.saveUserMessage(message, Long.valueOf(groupId.toString()), systemInfo);

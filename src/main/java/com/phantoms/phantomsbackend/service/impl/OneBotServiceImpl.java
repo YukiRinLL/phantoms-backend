@@ -222,6 +222,11 @@ public class OneBotServiceImpl implements OneBotService {
         userMessage.setMessage(message);
         userMessage.setGroupId(groupId);
 
+        // Ensure systemInfo is not null
+        if (systemInfo == null) {
+            systemInfo = new HashMap<>();
+        }
+
         // Extract nested browser information
         Map<String, Object> browser = (Map<String, Object>) systemInfo.getOrDefault("browser", new HashMap<>());
         userMessage.setUserAgent((String) browser.getOrDefault("userAgent", ""));
