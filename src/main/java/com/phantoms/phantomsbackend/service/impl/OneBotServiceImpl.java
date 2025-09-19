@@ -1,6 +1,9 @@
 package com.phantoms.phantomsbackend.service.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
+import com.phantoms.phantomsbackend.pojo.dto.ChatRecordDTO;
 import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.ChatRecord;
 import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.UserMessage;
 import com.phantoms.phantomsbackend.repository.primary.onebot.PrimaryChatRecordRepository;
@@ -10,11 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class OneBotServiceImpl implements OneBotService {
@@ -141,8 +148,60 @@ public class OneBotServiceImpl implements OneBotService {
     }
 
     @Override
-    public List<ChatRecord> getLatestMessages(int limit) {
-        return chatRecordRepository.findTopByOrderByCreatedAtDesc(limit);
+    public List<ChatRecordDTO> getLatestMessages(int limit) throws IOException {
+        List<ChatRecord> chatRecords = chatRecordRepository.findTopByOrderByCreatedAtDesc(limit);
+        List<ChatRecordDTO> chatRecordDTOs = new ArrayList<>();
+
+        // 统计所有需要查询的群组ID
+        Set<Long> groupIds = chatRecords.stream()
+            .map(ChatRecord::getGroupId)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
+
+        // 缓存每个群组的成员列表
+        Map<Long, Map<Long, String>> groupNicknameMap = new HashMap<>();
+
+        for (Long groupId : groupIds) {
+            String groupMemberListJson = napCatQQUtil.getGroupMemberList(groupId.toString());
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode groupMemberListNode;
+            try {
+                groupMemberListNode = objectMapper.readTree(groupMemberListJson);
+            } catch (Exception e) {
+                System.err.println("Error parsing group member list JSON for group " + groupId + ": " + e.getMessage());
+                continue; // 跳过当前群组
+            }
+
+            Map<Long, String> nicknameMap = new HashMap<>();
+            JsonNode dataNode = groupMemberListNode.path("data");
+            for (JsonNode memberNode : dataNode) {
+                Long userId = memberNode.path("user_id").asLong();
+                String nickname = memberNode.path("nickname").asText();
+                nicknameMap.put(userId, nickname);
+            }
+
+            groupNicknameMap.put(groupId, nicknameMap);
+        }
+
+        for (ChatRecord chatRecord : chatRecords) {
+            ChatRecordDTO chatRecordDTO = new ChatRecordDTO();
+            chatRecordDTO.setId(chatRecord.getId());
+            chatRecordDTO.setMessageType(chatRecord.getMessageType());
+            chatRecordDTO.setUserId(chatRecord.getUserId());
+            chatRecordDTO.setGroupId(chatRecord.getGroupId());
+            chatRecordDTO.setMessage(chatRecord.getMessage());
+            chatRecordDTO.setTimestamp(chatRecord.getTimestamp());
+            chatRecordDTO.setCreatedAt(chatRecord.getCreatedAt());
+            chatRecordDTO.setUpdatedAt(chatRecord.getUpdatedAt());
+
+            // 设置昵称
+            Map<Long, String> nicknameMap = groupNicknameMap.getOrDefault(chatRecord.getGroupId(), new HashMap<>());
+            chatRecordDTO.setNickname(nicknameMap.getOrDefault(chatRecord.getUserId(), "Unknown"));
+
+            chatRecordDTOs.add(chatRecordDTO);
+        }
+
+        return chatRecordDTOs;
     }
 
     @Override

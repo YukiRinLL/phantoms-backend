@@ -61,6 +61,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\primar
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\serializer\CustomOffsetDateTimeDeserializer.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\jasper\JasperModel.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\UserController.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\dto\ChatRecordDTO.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\Pagination.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\primary\Recruitment.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\secondary\onebot\ChatRecord.java

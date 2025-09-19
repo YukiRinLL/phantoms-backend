@@ -40,6 +40,7 @@ com\phantoms\phantomsbackend\pojo\entity\primary\Password.class
 com\phantoms\phantomsbackend\pojo\entity\secondary\AuthUser.class
 com\phantoms\phantomsbackend\controller\EmailController$EmailContent.class
 com\phantoms\phantomsbackend\controller\UserController.class
+com\phantoms\phantomsbackend\pojo\dto\ChatRecordDTO.class
 com\phantoms\phantomsbackend\common\utils\RedisUtil.class
 com\phantoms\phantomsbackend\common\config\SecondaryDataSourceConfig.class
 com\phantoms\phantomsbackend\service\EmailService.class

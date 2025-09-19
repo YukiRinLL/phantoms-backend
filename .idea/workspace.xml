@@ -7,9 +7,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update NapCatQQUtil">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update Phantoms.drawio">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/dto/ChatRecordDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/Phantoms.drawio" beforeDir="false" afterPath="$PROJECT_DIR$/data/Phantoms.drawio" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/git.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-09-12T14-32-29_923.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-09-17T16-16-23_143.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-09-17T16-16-40_175.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-09-17T16-18-23_681.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-09-17T16-18-43_508.dumpstream" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +71,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.NapCatQQTest.executor": "Debug",
     "Application.PhantomsBackendApplication.executor": "Debug",
     "Application.XIVAPIExample.executor": "Debug",
     "Docker.Dockerfile.executor": "Run",
@@ -137,11 +151,11 @@
       <recent name="com.phantoms.phantomsbackend" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.phantoms.phantomsbackend.pojo.dto" />
       <recent name="com.phantoms.phantomsbackend.common.utils" />
       <recent name="com.phantoms.phantomsbackend.common.serializer" />
       <recent name="com.phantoms.phantomsbackend.pojo.entity" />
       <recent name="com.phantoms.phantomsbackend.repository.primary" />
-      <recent name="com.phantoms.phantomsbackend.service.scheduler" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -153,7 +167,7 @@
       <command value="mvn clean package" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.NapCatQQTest">
+  <component name="RunManager" selected="Application.PhantomsBackendApplication">
     <configuration name="NapCatQQTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.NapCatQQTest" />
       <module name="phantoms-backend" />
@@ -241,6 +255,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.PhantomsBackendApplication" />
+        <item itemvalue="Application.NapCatQQTest" />
         <item itemvalue="TestNG.NapCatQQTest" />
         <item itemvalue="JUnit.NapCatQQTest" />
       </list>
@@ -299,15 +315,9 @@
       <workItem from="1746584705195" duration="547000" />
       <workItem from="1757740166773" duration="652000" />
       <workItem from="1758076615188" duration="2590000" />
-      <workItem from="1758096698328" duration="2679000" />
-    </task>
-    <task id="LOCAL-00093" summary="OneBotService add getDoubleValue function">
-      <option name="closed" value="true" />
-      <created>1755575916742</created>
-      <option name="number" value="00093" />
-      <option name="presentableId" value="LOCAL-00093" />
-      <option name="project" value="LOCAL" />
-      <updated>1755575916742</updated>
+      <workItem from="1758096698328" duration="2708000" />
+      <workItem from="1758260967487" duration="863000" />
+      <workItem from="1758264630979" duration="3518000" />
     </task>
     <task id="LOCAL-00094" summary="OneBotServiceImpl fix bug">
       <option name="closed" value="true" />
@@ -693,7 +703,15 @@
       <option name="project" value="LOCAL" />
       <updated>1758097138832</updated>
     </task>
-    <option name="localTasksCounter" value="142" />
+    <task id="LOCAL-00142" summary="update Phantoms.drawio">
+      <option name="closed" value="true" />
+      <created>1758099679135</created>
+      <option name="number" value="00142" />
+      <option name="presentableId" value="LOCAL-00142" />
+      <option name="project" value="LOCAL" />
+      <updated>1758099679136</updated>
+    </task>
+    <option name="localTasksCounter" value="143" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -728,7 +746,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="OneBotServiceImpl fix bug" />
     <MESSAGE value="OneBot chatRecord API fix type=reply case" />
     <MESSAGE value="remove tools" />
     <MESSAGE value="remove tools" />
@@ -753,7 +770,8 @@
     <MESSAGE value="add handleMessage rules" />
     <MESSAGE value="update http-server-url" />
     <MESSAGE value="update NapCatQQUtil" />
-    <option name="LAST_COMMIT_MESSAGE" value="update NapCatQQUtil" />
+    <MESSAGE value="update Phantoms.drawio" />
+    <option name="LAST_COMMIT_MESSAGE" value="update Phantoms.drawio" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

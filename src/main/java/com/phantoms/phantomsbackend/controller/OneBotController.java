@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.phantoms.phantomsbackend.pojo.dto.ChatRecordDTO;
 import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.ChatRecord;
 import com.phantoms.phantomsbackend.service.OneBotService;
 
@@ -70,10 +71,10 @@ public class OneBotController {
     }
 
     @GetMapping("/onebot/latest")
-    public ResponseEntity<List<ChatRecord>> getLatestMessages(@RequestParam(defaultValue = "30") int limit) {
+    public ResponseEntity<List<ChatRecordDTO>> getLatestMessages(@RequestParam(defaultValue = "30") int limit) {
         try {
             // 调用服务层获取最新的几条消息
-            List<ChatRecord> latestMessages = oneBotService.getLatestMessages(limit);
+            List<ChatRecordDTO> latestMessages = oneBotService.getLatestMessages(limit);
 
             // 返回 JSON 格式的响应
             return ResponseEntity.ok(latestMessages);
