@@ -36,3 +36,6 @@ https://railway.com/project/500f4c23-17d9-4f1f-91d1-afbdd564de98?environmentId=4
 
 https://ide.goorm.io/my/dashboard#/containers
 可以部署环境但是收代币有点多
+
+
+获取QQ消息/头像/昵称的时候写缓存，避免反复请求napcat

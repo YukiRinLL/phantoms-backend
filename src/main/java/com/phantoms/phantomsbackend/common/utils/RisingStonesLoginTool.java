@@ -1,8 +1,13 @@
 package com.phantoms.phantomsbackend.common.utils;
 
 import com.alibaba.fastjson.JSONArray;
+import com.phantoms.phantomsbackend.service.SystemConfigService;
+import jakarta.annotation.PostConstruct;
 import okhttp3.*;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
@@ -12,21 +17,31 @@ import java.util.UUID;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+@Component
 public class RisingStonesLoginTool {
+
+    @Autowired
+    private SystemConfigService systemConfigService; // 改为非静态
 
     private static final Logger logger = Logger.getLogger(RisingStonesLoginTool.class.getName());
     private static final String BASE_URL = "https://apiff14risingstones.web.sdo.com/api/home/";
     private static final String DAO_URL = "https://daoyu.sdo.com/api/thirdPartyAuth/";
-    private static final String DAOGU_KEY = "DY_1FCEB820ADBB414F9298EB4C91B9B12A";
-    /* todo 这个值会定期过期，需要改写成可以通过接口更改，写入DB配置表
-        定期从DB获取值
-     */
+    private static String DAOYU_KEY;
 
-    private static final OkHttpClient client = new OkHttpClient.Builder()
+    private static OkHttpClient client;
+
+    @PostConstruct
+    public void init() {
+        // 在Spring完成注入后初始化静态字段
+        DAOYU_KEY = systemConfigService.getDaoYuKey();
+        //每次从DB获取daoyu_key
+
+        client = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .build();
+    }
 
     public static String[] getDaoYuTokenAndCookie() {
         try {
@@ -114,7 +129,7 @@ public class RisingStonesLoginTool {
                 .addQueryParameter("scene", "")
                 .addQueryParameter("device_id", device_id)
                 .addQueryParameter("device_manuid", device_manuid)
-                .addQueryParameter("USERSESSID", DAOGU_KEY)
+                .addQueryParameter("USERSESSID", DAOYU_KEY)
                 .build();
 
         Request request = new Request.Builder()
@@ -153,7 +168,7 @@ public class RisingStonesLoginTool {
                 .addQueryParameter("scene", "")
                 .addQueryParameter("device_id", UUID.randomUUID().toString().toUpperCase().replace("-", ""))
                 .addQueryParameter("device_manuid", generateRandomString(6))
-                .addQueryParameter("USERSESSID", DAOGU_KEY)
+                .addQueryParameter("USERSESSID", DAOYU_KEY)
                 .addQueryParameter("flowId", flowId)
                 .build();
 
@@ -206,7 +221,7 @@ public class RisingStonesLoginTool {
                 .addQueryParameter("scene", "")
                 .addQueryParameter("device_id", UUID.randomUUID().toString().toUpperCase().replace("-", ""))
                 .addQueryParameter("device_manuid", generateRandomString(6))
-                .addQueryParameter("USERSESSID", DAOGU_KEY)
+                .addQueryParameter("USERSESSID", DAOYU_KEY)
                 .addQueryParameter("flowId", flowId)
                 .addQueryParameter("accountId", accountId)
                 .build();
@@ -246,7 +261,7 @@ public class RisingStonesLoginTool {
                 .addQueryParameter("scene", "")
                 .addQueryParameter("device_id", UUID.randomUUID().toString().toUpperCase().replace("-", ""))
                 .addQueryParameter("device_manuid", generateRandomString(6))
-                .addQueryParameter("USERSESSID", DAOGU_KEY)
+                .addQueryParameter("USERSESSID", DAOYU_KEY)
                 .addQueryParameter("flowId", flowId)
                 .build();
 
