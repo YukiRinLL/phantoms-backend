@@ -3,6 +3,7 @@ package com.phantoms.phantomsbackend.service.impl;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
+import com.phantoms.phantomsbackend.common.utils.RedisUtil;
 import com.phantoms.phantomsbackend.pojo.dto.ChatRecordDTO;
 import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.ChatRecord;
 import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.UserMessage;
@@ -22,6 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class OneBotServiceImpl implements OneBotService {
@@ -35,8 +37,15 @@ public class OneBotServiceImpl implements OneBotService {
     @Autowired
     private NapCatQQUtil napCatQQUtil;
 
+    @Autowired
+    private RedisUtil redisUtil;
+
     @Value("${napcat.default-group-id}")
     private String defaultGroupId;
+
+    // Redis缓存相关配置
+    private static final String NICKNAME_CACHE_PREFIX = "nickname:group:";
+    private static final long NICKNAME_CACHE_EXPIRE_HOURS = 24; // 缓存24小时
 
     @Override
     public List<ChatRecord> processOneBotRequest(Map<String, Object> requestBody) throws Exception {
@@ -62,12 +71,6 @@ public class OneBotServiceImpl implements OneBotService {
                 chatRecord.setUpdatedAt(LocalDateTime.now());
                 chatRecordRepository.save(chatRecord);
                 chatRecords.add(chatRecord);
-
-//                handleMessage(userId, groupId, (String) messageObj);
-//                // 检查图片消息
-//                if (isImageMessage(messageElement)) {
-//                    handleImageMessage(userId, groupId, messageElement.toString());
-//                }
             }
         } else if (messageObj instanceof String) {
             // 如果是String，直接保存为一条ChatRecord
@@ -81,12 +84,6 @@ public class OneBotServiceImpl implements OneBotService {
             chatRecord.setUpdatedAt(LocalDateTime.now());
             chatRecordRepository.save(chatRecord);
             chatRecords.add(chatRecord);
-
-//            handleMessage(userId, groupId, (String) messageObj);
-//            // 检查图片消息
-//            if (isImageMessage(messageObj)) {
-//                handleImageMessage(userId, groupId, (String) messageObj);
-//            }
         } else {
             throw new IllegalArgumentException("message must be a string or a list");
         }
@@ -162,22 +159,19 @@ public class OneBotServiceImpl implements OneBotService {
         Map<Long, Map<Long, String>> groupNicknameMap = new HashMap<>();
 
         for (Long groupId : groupIds) {
-            String groupMemberListJson = napCatQQUtil.getGroupMemberList(groupId.toString());
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode groupMemberListNode;
-            try {
-                groupMemberListNode = objectMapper.readTree(groupMemberListJson);
-            } catch (Exception e) {
-                System.err.println("Error parsing group member list JSON for group " + groupId + ": " + e.getMessage());
-                continue; // 跳过当前群组
-            }
+            // 先从Redis缓存中尝试获取群组成员信息
+            String cacheKey = NICKNAME_CACHE_PREFIX + groupId;
+            Map<Long, String> nicknameMap = getNicknameMapFromCache(cacheKey);
 
-            Map<Long, String> nicknameMap = new HashMap<>();
-            JsonNode dataNode = groupMemberListNode.path("data");
-            for (JsonNode memberNode : dataNode) {
-                Long userId = memberNode.path("user_id").asLong();
-                String nickname = memberNode.path("nickname").asText();
-                nicknameMap.put(userId, nickname);
+            if (nicknameMap == null) {
+                // 缓存中没有，从NapCat服务器查询
+                nicknameMap = fetchNicknameMapFromNapCat(groupId);
+                // 将查询结果存入缓存
+                if (nicknameMap != null && !nicknameMap.isEmpty()) {
+                    saveNicknameMapToCache(cacheKey, nicknameMap);
+                } else {
+                    nicknameMap = new HashMap<>(); // 避免空指针
+                }
             }
 
             groupNicknameMap.put(groupId, nicknameMap);
@@ -202,6 +196,63 @@ public class OneBotServiceImpl implements OneBotService {
         }
 
         return chatRecordDTOs;
+    }
+
+    /**
+     * 从Redis缓存中获取昵称映射
+     */
+    @SuppressWarnings("unchecked")
+    private Map<Long, String> getNicknameMapFromCache(String cacheKey) {
+        try {
+            Object cachedData = redisUtil.get(cacheKey);
+            if (cachedData instanceof Map) {
+                return (Map<Long, String>) cachedData;
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting nickname map from cache for key " + cacheKey + ": " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * 将昵称映射保存到Redis缓存
+     */
+    private void saveNicknameMapToCache(String cacheKey, Map<Long, String> nicknameMap) {
+        try {
+            redisUtil.setWithExpire(cacheKey, nicknameMap, NICKNAME_CACHE_EXPIRE_HOURS, TimeUnit.HOURS);
+        } catch (Exception e) {
+            System.err.println("Error saving nickname map to cache for key " + cacheKey + ": " + e.getMessage());
+        }
+    }
+
+    /**
+     * 从NapCat服务器获取群组成员昵称映射
+     */
+    private Map<Long, String> fetchNicknameMapFromNapCat(Long groupId) {
+        try {
+            String groupMemberListJson = napCatQQUtil.getGroupMemberList(groupId.toString());
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode groupMemberListNode;
+            try {
+                groupMemberListNode = objectMapper.readTree(groupMemberListJson);
+            } catch (Exception e) {
+                System.err.println("Error parsing group member list JSON for group " + groupId + ": " + e.getMessage());
+                return new HashMap<>();
+            }
+
+            Map<Long, String> nicknameMap = new HashMap<>();
+            JsonNode dataNode = groupMemberListNode.path("data");
+            for (JsonNode memberNode : dataNode) {
+                Long userId = memberNode.path("user_id").asLong();
+                String nickname = memberNode.path("nickname").asText();
+                nicknameMap.put(userId, nickname);
+            }
+
+            return nicknameMap;
+        } catch (Exception e) {
+            System.err.println("Error fetching nickname map from NapCat for group " + groupId + ": " + e.getMessage());
+            return new HashMap<>();
+        }
     }
 
     @Override

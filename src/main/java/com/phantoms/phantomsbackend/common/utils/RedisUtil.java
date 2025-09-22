@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -45,5 +46,53 @@ public class RedisUtil {
     // Get the remaining expiration time for a key
     public Long getExpire(String key) {
         return redisTemplate.getExpire(key);
+    }
+
+    // Batch set key-value pairs
+    public void setAll(Map<String, Object> keyValues) {
+        redisTemplate.opsForValue().multiSet(keyValues);
+    }
+
+    // Batch set key-value pairs with an expiration time
+    public void setAllWithExpire(Map<String, Object> keyValues, long timeout, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().multiSet(keyValues);
+        for (String key : keyValues.keySet()) {
+            redisTemplate.expire(key, timeout, timeUnit);
+        }
+    }
+
+    // Batch get values for multiple keys
+    public List<Object> getAll(List<String> keys) {
+        return redisTemplate.opsForValue().multiGet(keys);
+    }
+
+    // Batch delete multiple keys
+    public void deleteAll(Collection<String> keys) {
+        redisTemplate.delete(keys);
+    }
+
+    // Batch check if keys exist
+    public Map<String, Boolean> hasKeys(Collection<String> keys) {
+        Map<String, Boolean> result = new HashMap<>();
+        for (String key : keys) {
+            result.put(key, redisTemplate.hasKey(key));
+        }
+        return result;
+    }
+
+    // Batch set expiration time for multiple keys
+    public void expireAll(Collection<String> keys, long timeout, TimeUnit timeUnit) {
+        for (String key : keys) {
+            redisTemplate.expire(key, timeout, timeUnit);
+        }
+    }
+
+    // Batch get remaining expiration time for multiple keys
+    public Map<String, Long> getAllExpire(Collection<String> keys) {
+        Map<String, Long> result = new HashMap<>();
+        for (String key : keys) {
+            result.put(key, redisTemplate.getExpire(key));
+        }
+        return result;
     }
 }
