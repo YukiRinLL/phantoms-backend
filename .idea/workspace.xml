@@ -7,10 +7,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update getLatestMessages API adding nickname">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="try iPhone send message error fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -306,15 +307,8 @@
       <workItem from="1758096698328" duration="2708000" />
       <workItem from="1758260967487" duration="863000" />
       <workItem from="1758264630979" duration="3868000" />
-      <workItem from="1758285076549" duration="395000" />
-    </task>
-    <task id="LOCAL-00097" summary="OneBot chatRecord API fix type=reply case">
-      <option name="closed" value="true" />
-      <created>1755595368923</created>
-      <option name="number" value="00097" />
-      <option name="presentableId" value="LOCAL-00097" />
-      <option name="project" value="LOCAL" />
-      <updated>1755595368923</updated>
+      <workItem from="1758285076549" duration="2245000" />
+      <workItem from="1758512748651" duration="833000" />
     </task>
     <task id="LOCAL-00098" summary="add ImageProxy">
       <option name="closed" value="true" />
@@ -700,7 +694,15 @@
       <option name="project" value="LOCAL" />
       <updated>1758279102469</updated>
     </task>
-    <option name="localTasksCounter" value="146" />
+    <task id="LOCAL-00146" summary="try iPhone send message error fix">
+      <option name="closed" value="true" />
+      <created>1758285792427</created>
+      <option name="number" value="00146" />
+      <option name="presentableId" value="LOCAL-00146" />
+      <option name="project" value="LOCAL" />
+      <updated>1758285792427</updated>
+    </task>
+    <option name="localTasksCounter" value="147" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -736,7 +738,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="remove tools" />
-    <MESSAGE value="remove tools" />
     <MESSAGE value="imageProxy with Pool,Streaming,size limit" />
     <MESSAGE value="rollback proxyImage API" />
     <MESSAGE value="update comments" />
@@ -760,7 +761,8 @@
     <MESSAGE value="update NapCatQQUtil" />
     <MESSAGE value="update Phantoms.drawio" />
     <MESSAGE value="update getLatestMessages API adding nickname" />
-    <option name="LAST_COMMIT_MESSAGE" value="update getLatestMessages API adding nickname" />
+    <MESSAGE value="try iPhone send message error fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="try iPhone send message error fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

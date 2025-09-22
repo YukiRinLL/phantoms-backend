@@ -41,6 +41,15 @@ public class RisingStonesUtils {
     }
 
     public static JSONObject getGuildInfo(String guildId, String daoyuToken, String cookie) throws IOException {
+        if (daoyuToken == null || daoyuToken.isEmpty()) {
+            logger.log(Level.SEVERE, "DaoyuToken is null or empty");
+            throw new IllegalArgumentException("DaoyuToken is null or empty");
+        }
+        if (cookie == null || cookie.isEmpty()) {
+            logger.log(Level.SEVERE, "Cookie is null or empty");
+            throw new IllegalArgumentException("Cookie is null or empty");
+        }
+
         HttpUrl url = HttpUrl.parse(BASE_URL + "guild/getGuildInfo").newBuilder()
                 .addQueryParameter("guild_id", guildId)
                 .build();

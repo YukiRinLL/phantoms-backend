@@ -6,6 +6,11 @@ LOGGER的写法好像有的是调用的SIS，需要全部检查重写（已完�
 增强WS接口相关的功能
 napcat的报错修一下
 
+获取userID
+https://www.daoyu8.com/#/
+扫码登录后检查
+getInfo
+cookie:USERSESSID=DY_1FCEB820ADBB414F9298EB4C91B9B12A
 
 石之家登录流程:
 Get Temp Cookies → 获取临时Cookie

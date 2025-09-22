@@ -17,7 +17,10 @@ public class RisingStonesLoginTool {
     private static final Logger logger = Logger.getLogger(RisingStonesLoginTool.class.getName());
     private static final String BASE_URL = "https://apiff14risingstones.web.sdo.com/api/home/";
     private static final String DAO_URL = "https://daoyu.sdo.com/api/thirdPartyAuth/";
-    private static final String DAOGU_KEY = "DY_6FE0F3F7C9CA488F86E2BE9BD907C657";
+    private static final String DAOGU_KEY = "DY_1FCEB820ADBB414F9298EB4C91B9B12A";
+    /* todo 这个值会定期过期，需要改写成可以通过接口更改，写入DB配置表
+        定期从DB获取值
+     */
 
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
@@ -169,7 +172,19 @@ public class RisingStonesLoginTool {
             cookies.putAll(parseCookies(response.headers("Set-Cookie")));
             JSONObject jsonResponse = JSONObject.parseObject(response.body().string());
             logger.log(Level.FINE, "Query account list response: {0}", jsonResponse.toJSONString());
+
+            // 检查 accountList 是否存在
+            if (!jsonResponse.getJSONObject("data").containsKey("accountList")) {
+                logger.log(Level.SEVERE, "Account list not found in response data");
+                throw new IOException("Account list not found in response data");
+            }
+
             JSONArray accountList = jsonResponse.getJSONObject("data").getJSONArray("accountList");
+            if (accountList == null || accountList.size() == 0) {
+                logger.log(Level.SEVERE, "Account list is empty");
+                throw new IOException("Account list is empty");
+            }
+
             return accountList.getJSONObject(0).getString("accountId");
         }
     }
