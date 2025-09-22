@@ -24,6 +24,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\Nat
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\dto\UserDTO.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\secondary\Message.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\XIVAPIClient.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\primary\SystemConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\secondary\AuthUser.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\exception\ServiceException.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\WebSocketConfig.java
@@ -40,6 +41,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\dto\MessageW
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\bean\SearchResult.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\primary\onebot\PrimaryChatRecordRepository.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\bean\ResultInfo.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\SystemConfigService.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\SchedulingConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\WebConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\D1Controller.java
@@ -92,6 +94,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\dto\MessageD
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\secondary\SecondaryMessageRepository.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\AuthUserController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\exception\GlobalExceptionHandler.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\primary\SystemConfigRepository.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\RecruitmentResponse.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\impl\LeanCloudServiceImpl.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\primary\PrimaryMessageRepository.java
