@@ -26,3 +26,13 @@ Do Login → 验证登录状态，获取最终的登录Cookie
 
 不活跃玩家列表私信自己
 招募加入redis控制不要短时间重复发很多
+
+
+七牛云可以部署Docker但是要自己推送镜像
+https://portal.qiniu.com/dora/qapp/application/
+
+railway免费过期只能部署DB了
+https://railway.com/project/500f4c23-17d9-4f1f-91d1-afbdd564de98?environmentId=4ad7075c-6038-4074-9634-d04a9e9f06ad
+
+https://ide.goorm.io/my/dashboard#/containers
+可以部署环境但是收代币有点多
