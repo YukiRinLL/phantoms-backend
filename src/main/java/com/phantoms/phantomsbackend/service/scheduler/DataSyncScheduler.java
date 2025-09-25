@@ -75,6 +75,15 @@ public class DataSyncScheduler {
     @Qualifier("secondaryPasswordRepository")
     private com.phantoms.phantomsbackend.repository.secondary.SecondaryPasswordRepository secondaryPasswordRepository;
 
+    @Autowired
+    @Qualifier("primaryExpeditionaryTeamRepository")
+    private com.phantoms.phantomsbackend.repository.primary.PrimaryExpeditionaryTeamRepository primaryExpeditionaryTeamRepository;
+
+    @Autowired
+    @Qualifier("secondaryExpeditionaryTeamRepository")
+    private com.phantoms.phantomsbackend.repository.secondary.SecondaryExpeditionaryTeamRepository secondaryExpeditionaryTeamRepository;
+
+
     @Scheduled(fixedRate = 600000) // 每10分钟执行一次
 //    @Scheduled(cron = "0 0 */2 * * ?") // 每两小时执行一次，整点执行
     public void syncData() {
@@ -84,6 +93,7 @@ public class DataSyncScheduler {
         syncUserProfiles();
         syncMessages();
         syncChatRecords();
+        syncExpeditionaryTeams();
         logger.info("All sync jobs completed successfully.");
     }
 
@@ -125,6 +135,40 @@ public class DataSyncScheduler {
                 .map(this::convertToSecondaryUserProfile)
                 .collect(Collectors.toList());
         secondaryUserProfileRepository.saveAll(secondaryUserProfiles);
+    }
+
+    private void syncExpeditionaryTeams() {
+        try {
+            List<com.phantoms.phantomsbackend.pojo.entity.primary.ExpeditionaryTeam> primaryTeams = primaryExpeditionaryTeamRepository.findAll();
+            List<com.phantoms.phantomsbackend.pojo.entity.secondary.ExpeditionaryTeam> secondaryTeams = primaryTeams.stream()
+                .map(this::convertToSecondaryExpeditionaryTeam)
+                .collect(Collectors.toList());
+
+            secondaryExpeditionaryTeamRepository.saveAll(secondaryTeams);
+            logger.info("ExpeditionaryTeams synced successfully. Count: {}", secondaryTeams.size());
+        } catch (Exception e) {
+            logger.error("Failed to sync ExpeditionaryTeams", e);
+        }
+    }
+    private com.phantoms.phantomsbackend.pojo.entity.secondary.ExpeditionaryTeam convertToSecondaryExpeditionaryTeam(
+        com.phantoms.phantomsbackend.pojo.entity.primary.ExpeditionaryTeam primaryTeam) {
+
+        com.phantoms.phantomsbackend.pojo.entity.secondary.ExpeditionaryTeam secondaryTeam = new com.phantoms.phantomsbackend.pojo.entity.secondary.ExpeditionaryTeam();
+
+        secondaryTeam.setUuid(primaryTeam.getUuid().toString());
+        secondaryTeam.setName(primaryTeam.getName());
+        secondaryTeam.setFreeStartTime(primaryTeam.getFreeStartTime());
+        secondaryTeam.setFreeEndTime(primaryTeam.getFreeEndTime());
+        secondaryTeam.setOccupation(primaryTeam.getOccupation());
+        secondaryTeam.setNotes(primaryTeam.getNotes());
+        secondaryTeam.setVolunteerDungeon(primaryTeam.getVolunteerDungeon());
+        secondaryTeam.setLevel(primaryTeam.getLevel());
+        secondaryTeam.setGuildName(primaryTeam.getGuildName());
+        secondaryTeam.setOnlineStatus(primaryTeam.getOnlineStatus());
+        secondaryTeam.setCreatedAt(primaryTeam.getCreatedAt());
+        secondaryTeam.setUpdatedAt(primaryTeam.getUpdatedAt());
+
+        return secondaryTeam;
     }
 
     private void syncChatRecords() {
