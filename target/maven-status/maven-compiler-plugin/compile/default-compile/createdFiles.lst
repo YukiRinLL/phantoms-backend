@@ -32,6 +32,7 @@ com\phantoms\phantomsbackend\service\scheduler\GuildMemberReminderScheduler.clas
 com\phantoms\phantomsbackend\common\bean\SearchResponse.class
 com\phantoms\phantomsbackend\controller\AuthUserController.class
 com\phantoms\phantomsbackend\pojo\dto\UserWithAvatarDTO.class
+com\phantoms\phantomsbackend\pojo\entity\primary\ExpeditionaryTeam.class
 com\phantoms\phantomsbackend\pojo\dto\UserDTO.class
 com\phantoms\phantomsbackend\pojo\dto\MessageDTO.class
 com\phantoms\phantomsbackend\common\utils\DateUtils.class
@@ -66,9 +67,11 @@ com\phantoms\phantomsbackend\controller\WebSocketController$HelloMessage.class
 com\phantoms\phantomsbackend\pojo\dto\MessageWithUserDTO.class
 com\phantoms\phantomsbackend\service\scheduler\DataSyncScheduler.class
 com\phantoms\phantomsbackend\repository\secondary\SecondaryMessageRepository.class
+com\phantoms\phantomsbackend\common\config\CacheConfig.class
 com\phantoms\phantomsbackend\common\bean\ResultInfo.class
 com\phantoms\phantomsbackend\pojo\entity\primary\UserProfile.class
 com\phantoms\phantomsbackend\repository\primary\onebot\UserMessageRepository.class
+com\phantoms\phantomsbackend\pojo\entity\secondary\ExpeditionaryTeam.class
 com\phantoms\phantomsbackend\pojo\entity\secondary\UserProfile.class
 com\phantoms\phantomsbackend\common\jasper\AbstractReport.class
 com\phantoms\phantomsbackend\repository\primary\onebot\PrimaryChatRecordRepository.class
@@ -78,14 +81,17 @@ com\phantoms\phantomsbackend\pojo\entity\primary\onebot\UserMessage.class
 com\phantoms\phantomsbackend\service\impl\D1ServiceImpl.class
 com\phantoms\phantomsbackend\common\exception\ServiceException.class
 com\phantoms\phantomsbackend\pojo\entity\secondary\User.class
+com\phantoms\phantomsbackend\service\DaoYuKeyCacheService.class
 com\phantoms\phantomsbackend\common\serializer\CustomOffsetDateTimeDeserializer.class
 com\phantoms\phantomsbackend\repository\primary\PrimaryAuthUserRepository.class
+com\phantoms\phantomsbackend\repository\primary\PrimaryExpeditionaryTeamRepository.class
 com\phantoms\phantomsbackend\pojo\entity\primary\AuthUser.class
 com\phantoms\phantomsbackend\service\D1Service.class
 com\phantoms\phantomsbackend\controller\LeanCloudController.class
 com\phantoms\phantomsbackend\service\LeanCloudService.class
 com\phantoms\phantomsbackend\pojo\entity\secondary\Image.class
 com\phantoms\phantomsbackend\repository\secondary\SecondaryUserProfileRepository.class
+com\phantoms\phantomsbackend\controller\CacheController.class
 com\phantoms\phantomsbackend\common\utils\XIVAPIClient$3.class
 com\phantoms\phantomsbackend\service\SystemConfigService.class
 com\phantoms\phantomsbackend\repository\primary\SystemConfigRepository.class
@@ -107,6 +113,7 @@ com\phantoms\phantomsbackend\common\jasper\AbstractReport$1.class
 com\phantoms\phantomsbackend\PhantomsBackendApplication.class
 com\phantoms\phantomsbackend\service\AuthUserService.class
 com\phantoms\phantomsbackend\controller\WebSocketController.class
+com\phantoms\phantomsbackend\repository\secondary\SecondaryExpeditionaryTeamRepository.class
 com\phantoms\phantomsbackend\controller\UserController$IdRequest.class
 com\phantoms\phantomsbackend\repository\secondary\SecondaryUserRepository.class
 com\phantoms\phantomsbackend\service\RisingStonesService.class

@@ -7,9 +7,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="cache QQ nicknames to redis">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add syncExpeditionaryTeams in job">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RisingStonesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RisingStonesController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/git.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-09-22T19-05-29_120.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-09-22T19-06-08_333.dumpstream" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,11 +144,11 @@
       <recent name="com.phantoms.phantomsbackend" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.phantoms.phantomsbackend.service" />
+      <recent name="com.phantoms.phantomsbackend.repository.secondary" />
       <recent name="com.phantoms.phantomsbackend.repository.primary" />
+      <recent name="com.phantoms.phantomsbackend.pojo.entity.secondary" />
       <recent name="com.phantoms.phantomsbackend.pojo.entity.primary" />
-      <recent name="com.phantoms.phantomsbackend.pojo.dto" />
-      <recent name="com.phantoms.phantomsbackend.common.utils" />
+      <recent name="com.phantoms.phantomsbackend.controller" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -308,39 +314,7 @@
       <workItem from="1758285076549" duration="2245000" />
       <workItem from="1758512748651" duration="22539000" />
       <workItem from="1758678225062" duration="21000" />
-      <workItem from="1758765975747" duration="1246000" />
-    </task>
-    <task id="LOCAL-00104" summary="update comments">
-      <option name="closed" value="true" />
-      <created>1755742640152</created>
-      <option name="number" value="00104" />
-      <option name="presentableId" value="LOCAL-00104" />
-      <option name="project" value="LOCAL" />
-      <updated>1755742640152</updated>
-    </task>
-    <task id="LOCAL-00105" summary="update NapCatQQTest.java">
-      <option name="closed" value="true" />
-      <created>1755746864281</created>
-      <option name="number" value="00105" />
-      <option name="presentableId" value="LOCAL-00105" />
-      <option name="project" value="LOCAL" />
-      <updated>1755746864281</updated>
-    </task>
-    <task id="LOCAL-00106" summary="add RisingStones functions">
-      <option name="closed" value="true" />
-      <created>1755857314624</created>
-      <option name="number" value="00106" />
-      <option name="presentableId" value="LOCAL-00106" />
-      <option name="project" value="LOCAL" />
-      <updated>1755857314624</updated>
-    </task>
-    <task id="LOCAL-00107" summary="add RisingStones functions">
-      <option name="closed" value="true" />
-      <created>1755857420778</created>
-      <option name="number" value="00107" />
-      <option name="presentableId" value="LOCAL-00107" />
-      <option name="project" value="LOCAL" />
-      <updated>1755857420778</updated>
+      <workItem from="1758765975747" duration="6946000" />
     </task>
     <task id="LOCAL-00108" summary="add RisingStones functions">
       <option name="closed" value="true" />
@@ -702,7 +676,39 @@
       <option name="project" value="LOCAL" />
       <updated>1758539190409</updated>
     </task>
-    <option name="localTasksCounter" value="153" />
+    <task id="LOCAL-00153" summary="add updateDaoYuKey API">
+      <option name="closed" value="true" />
+      <created>1758770786324</created>
+      <option name="number" value="00153" />
+      <option name="presentableId" value="LOCAL-00153" />
+      <option name="project" value="LOCAL" />
+      <updated>1758770786325</updated>
+    </task>
+    <task id="LOCAL-00154" summary="set daoyuKey in cache">
+      <option name="closed" value="true" />
+      <created>1758779701817</created>
+      <option name="number" value="00154" />
+      <option name="presentableId" value="LOCAL-00154" />
+      <option name="project" value="LOCAL" />
+      <updated>1758779701817</updated>
+    </task>
+    <task id="LOCAL-00155" summary="set daoyuKey in cache">
+      <option name="closed" value="true" />
+      <created>1758780382606</created>
+      <option name="number" value="00155" />
+      <option name="presentableId" value="LOCAL-00155" />
+      <option name="project" value="LOCAL" />
+      <updated>1758780382606</updated>
+    </task>
+    <task id="LOCAL-00156" summary="add syncExpeditionaryTeams in job">
+      <option name="closed" value="true" />
+      <created>1758783239888</created>
+      <option name="number" value="00156" />
+      <option name="presentableId" value="LOCAL-00156" />
+      <option name="project" value="LOCAL" />
+      <updated>1758783239888</updated>
+    </task>
+    <option name="localTasksCounter" value="157" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -737,9 +743,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update comments" />
-    <MESSAGE value="update NapCatQQTest.java" />
-    <MESSAGE value="add RisingStones functions" />
     <MESSAGE value="update DaoyuToken time limit" />
     <MESSAGE value="add GuildMemberReminderScheduler" />
     <MESSAGE value="remindInactiveMembers" />
@@ -762,7 +765,10 @@
     <MESSAGE value="update todo list" />
     <MESSAGE value="get DAOYU_KEY from DB" />
     <MESSAGE value="cache QQ nicknames to redis" />
-    <option name="LAST_COMMIT_MESSAGE" value="cache QQ nicknames to redis" />
+    <MESSAGE value="add updateDaoYuKey API" />
+    <MESSAGE value="set daoyuKey in cache" />
+    <MESSAGE value="add syncExpeditionaryTeams in job" />
+    <option name="LAST_COMMIT_MESSAGE" value="add syncExpeditionaryTeams in job" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -794,11 +800,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/ProxyUtil.java</url>
           <line>71</line>
           <option name="timeStamp" value="96" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java</url>
-          <line>141</line>
-          <option name="timeStamp" value="106" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
