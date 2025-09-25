@@ -1,69 +1,68 @@
 package com.phantoms.phantomsbackend.common.utils;
 
 import com.alibaba.fastjson.JSONArray;
-import com.phantoms.phantomsbackend.service.SystemConfigService;
+import com.alibaba.fastjson.JSONObject;
+import com.phantoms.phantomsbackend.service.DaoYuKeyCacheService;
 import jakarta.annotation.PostConstruct;
 import okhttp3.*;
-import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.UUID;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class RisingStonesLoginTool {
 
-    @Autowired
-    private SystemConfigService systemConfigService; // 改为非静态
-
     private static final Logger logger = Logger.getLogger(RisingStonesLoginTool.class.getName());
     private static final String BASE_URL = "https://apiff14risingstones.web.sdo.com/api/home/";
     private static final String DAO_URL = "https://daoyu.sdo.com/api/thirdPartyAuth/";
-    private static String DAOYU_KEY;
 
-    private static OkHttpClient client;
+    @Autowired
+    private DaoYuKeyCacheService daoYuKeyCacheService;
+
+    private OkHttpClient client;
 
     @PostConstruct
     public void init() {
-        // 在Spring完成注入后初始化静态字段
-        DAOYU_KEY = systemConfigService.getDaoYuKey();
-        //每次从DB获取daoyu_key
-
         client = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .build();
+
+        // 预加载缓存
+        daoYuKeyCacheService.getDaoYuKey();
     }
 
-    public static String[] getDaoYuTokenAndCookie() {
+    public String[] getDaoYuTokenAndCookie() {
         try {
+            // 从缓存服务获取DaoYu Key（自动缓存）
+            String currentDaoYuKey = daoYuKeyCacheService.getDaoYuKey();
+            logger.log(Level.INFO, "使用DaoYu Key: {0}", currentDaoYuKey);
+
             // Step 1: Get Temp Cookies
             Map<String, String> cookies = getTempCookies();
             logger.log(Level.INFO, "Temp Cookies: {0}", cookies);
 
             // Step 2: Initialize Login Flow and get flowId
-            String flowId = initializeLoginFlow(cookies);
+            String flowId = initializeLoginFlow(cookies, currentDaoYuKey);
             logger.log(Level.INFO, "Flow ID: {0}", flowId);
 
             // Step 3: Query Account List
-            String accountId = queryAccountList(flowId, cookies);
+            String accountId = queryAccountList(flowId, cookies, currentDaoYuKey);
             logger.log(Level.INFO, "Account ID: {0}", accountId);
 
             // Step 4: Make Confirm
-            boolean confirmResult = makeConfirm(flowId, accountId, cookies);
+            boolean confirmResult = makeConfirm(flowId, accountId, cookies, currentDaoYuKey);
             logger.log(Level.INFO, "Confirm Result: {0}", confirmResult);
 
             if (confirmResult) {
                 // Step 5: Get Sub Account Key
-                String subAccountKey = getSubAccountKey(flowId, cookies);
+                String subAccountKey = getSubAccountKey(flowId, cookies, currentDaoYuKey);
                 logger.log(Level.INFO, "Sub Account Key: {0}", subAccountKey);
 
                 // Step 6: Dao Login
@@ -92,13 +91,12 @@ public class RisingStonesLoginTool {
         return new String[]{null, null};
     }
 
-    private static Map<String, String> getTempCookies() throws IOException {
+    private Map<String, String> getTempCookies() throws IOException {
         Request request = new Request.Builder()
-                .url(BASE_URL + "GHome/isLogin")
-                .header("User-Agent", "Mozilla/5.0 (Linux; Android 12; V2218A Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36 DaoYu/9.4.14")
-                .header("accept", "application/json, text/plain, */*")
-//                .header("accept-encoding", "gzip, deflate")
-                .build();
+            .url(BASE_URL + "GHome/isLogin")
+            .header("User-Agent", "Mozilla/5.0 (Linux; Android 12; V2218A Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36 DaoYu/9.4.14")
+            .header("accept", "application/json, text/plain, */*")
+            .build();
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
@@ -109,35 +107,34 @@ public class RisingStonesLoginTool {
         }
     }
 
-    private static String initializeLoginFlow(Map<String, String> cookies) throws IOException {
+    private String initializeLoginFlow(Map<String, String> cookies, String daoyuKey) throws IOException {
         String device_id = UUID.randomUUID().toString().toUpperCase().replace("-", "");
         String device_manuid = generateRandomString(6);
 
         HttpUrl url = HttpUrl.parse(DAO_URL + "initialize").newBuilder()
-                .addQueryParameter("src_code", "4")
-                .addQueryParameter("app_version", "9.4.14")
-                .addQueryParameter("app_version_code", "688")
-                .addQueryParameter("device_gid", "_08:ff:3d:32:60:00")
-                .addQueryParameter("device_os", "12")
-                .addQueryParameter("device_manufacturer", "vivo")
-                .addQueryParameter("device_txzDeviceId", "")
-                .addQueryParameter("_dispath", "0")
-                .addQueryParameter("clientId", "ff14risingstones")
-                .addQueryParameter("appId", "6788")
-                .addQueryParameter("scope", "get_account_profile")
-                .addQueryParameter("extend", "")
-                .addQueryParameter("scene", "")
-                .addQueryParameter("device_id", device_id)
-                .addQueryParameter("device_manuid", device_manuid)
-                .addQueryParameter("USERSESSID", DAOYU_KEY)
-                .build();
+            .addQueryParameter("src_code", "4")
+            .addQueryParameter("app_version", "9.4.14")
+            .addQueryParameter("app_version_code", "688")
+            .addQueryParameter("device_gid", "_08:ff:3d:32:60:00")
+            .addQueryParameter("device_os", "12")
+            .addQueryParameter("device_manufacturer", "vivo")
+            .addQueryParameter("device_txzDeviceId", "")
+            .addQueryParameter("_dispath", "0")
+            .addQueryParameter("clientId", "ff14risingstones")
+            .addQueryParameter("appId", "6788")
+            .addQueryParameter("scope", "get_account_profile")
+            .addQueryParameter("extend", "")
+            .addQueryParameter("scene", "")
+            .addQueryParameter("device_id", device_id)
+            .addQueryParameter("device_manuid", device_manuid)
+            .addQueryParameter("USERSESSID", daoyuKey)
+            .build();
 
         Request request = new Request.Builder()
-                .url(url)
-                .header("User-Agent", "okhttp/2.5.0")
-//                .header("accept-encoding", "gzip")
-                .header("Cookie", formatCookies(cookies))
-                .build();
+            .url(url)
+            .header("User-Agent", "okhttp/2.5.0")
+            .header("Cookie", formatCookies(cookies))
+            .build();
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
@@ -151,33 +148,32 @@ public class RisingStonesLoginTool {
         }
     }
 
-    private static String queryAccountList(String flowId, Map<String, String> cookies) throws IOException {
+    private String queryAccountList(String flowId, Map<String, String> cookies, String daoyuKey) throws IOException {
         HttpUrl url = HttpUrl.parse(DAO_URL + "queryAccountList").newBuilder()
-                .addQueryParameter("src_code", "4")
-                .addQueryParameter("app_version", "9.4.14")
-                .addQueryParameter("app_version_code", "688")
-                .addQueryParameter("device_gid", "_08:ff:3d:32:60:00")
-                .addQueryParameter("device_os", "12")
-                .addQueryParameter("device_manufacturer", "vivo")
-                .addQueryParameter("device_txzDeviceId", "")
-                .addQueryParameter("_dispath", "0")
-                .addQueryParameter("clientId", "ff14risingstones")
-                .addQueryParameter("appId", "6788")
-                .addQueryParameter("scope", "get_account_profile")
-                .addQueryParameter("extend", "")
-                .addQueryParameter("scene", "")
-                .addQueryParameter("device_id", UUID.randomUUID().toString().toUpperCase().replace("-", ""))
-                .addQueryParameter("device_manuid", generateRandomString(6))
-                .addQueryParameter("USERSESSID", DAOYU_KEY)
-                .addQueryParameter("flowId", flowId)
-                .build();
+            .addQueryParameter("src_code", "4")
+            .addQueryParameter("app_version", "9.4.14")
+            .addQueryParameter("app_version_code", "688")
+            .addQueryParameter("device_gid", "_08:ff:3d:32:60:00")
+            .addQueryParameter("device_os", "12")
+            .addQueryParameter("device_manufacturer", "vivo")
+            .addQueryParameter("device_txzDeviceId", "")
+            .addQueryParameter("_dispath", "0")
+            .addQueryParameter("clientId", "ff14risingstones")
+            .addQueryParameter("appId", "6788")
+            .addQueryParameter("scope", "get_account_profile")
+            .addQueryParameter("extend", "")
+            .addQueryParameter("scene", "")
+            .addQueryParameter("device_id", UUID.randomUUID().toString().toUpperCase().replace("-", ""))
+            .addQueryParameter("device_manuid", generateRandomString(6))
+            .addQueryParameter("USERSESSID", daoyuKey)
+            .addQueryParameter("flowId", flowId)
+            .build();
 
         Request request = new Request.Builder()
-                .url(url)
-                .header("User-Agent", "okhttp/2.5.0")
-//                .header("accept-encoding", "gzip")
-                .header("Cookie", formatCookies(cookies))
-                .build();
+            .url(url)
+            .header("User-Agent", "okhttp/2.5.0")
+            .header("Cookie", formatCookies(cookies))
+            .build();
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
@@ -204,33 +200,32 @@ public class RisingStonesLoginTool {
         }
     }
 
-    private static boolean makeConfirm(String flowId, String accountId, Map<String, String> cookies) throws IOException {
+    private boolean makeConfirm(String flowId, String accountId, Map<String, String> cookies, String daoyuKey) throws IOException {
         HttpUrl url = HttpUrl.parse(DAO_URL + "chooseAccount").newBuilder()
-                .addQueryParameter("src_code", "4")
-                .addQueryParameter("app_version", "9.4.14")
-                .addQueryParameter("app_version_code", "688")
-                .addQueryParameter("device_gid", "_08:ff:3d:32:60:00")
-                .addQueryParameter("device_os", "12")
-                .addQueryParameter("device_manufacturer", "vivo")
-                .addQueryParameter("device_txzDeviceId", "")
-                .addQueryParameter("_dispath", "0")
-                .addQueryParameter("clientId", "ff14risingstones")
-                .addQueryParameter("appId", "6788")
-                .addQueryParameter("scope", "get_account_profile")
-                .addQueryParameter("extend", "")
-                .addQueryParameter("scene", "")
-                .addQueryParameter("device_id", UUID.randomUUID().toString().toUpperCase().replace("-", ""))
-                .addQueryParameter("device_manuid", generateRandomString(6))
-                .addQueryParameter("USERSESSID", DAOYU_KEY)
-                .addQueryParameter("flowId", flowId)
-                .addQueryParameter("accountId", accountId)
-                .build();
+            .addQueryParameter("src_code", "4")
+            .addQueryParameter("app_version", "9.4.14")
+            .addQueryParameter("app_version_code", "688")
+            .addQueryParameter("device_gid", "_08:ff:3d:32:60:00")
+            .addQueryParameter("device_os", "12")
+            .addQueryParameter("device_manufacturer", "vivo")
+            .addQueryParameter("device_txzDeviceId", "")
+            .addQueryParameter("_dispath", "0")
+            .addQueryParameter("clientId", "ff14risingstones")
+            .addQueryParameter("appId", "6788")
+            .addQueryParameter("scope", "get_account_profile")
+            .addQueryParameter("extend", "")
+            .addQueryParameter("scene", "")
+            .addQueryParameter("device_id", UUID.randomUUID().toString().toUpperCase().replace("-", ""))
+            .addQueryParameter("device_manuid", generateRandomString(6))
+            .addQueryParameter("USERSESSID", daoyuKey)
+            .addQueryParameter("flowId", flowId)
+            .addQueryParameter("accountId", accountId)
+            .build();
         Request request = new Request.Builder()
-                .url(url)
-                .header("User-Agent", "okhttp/2.5.0")
-//                .header("accept-encoding", "gzip")
-                .header("Cookie", formatCookies(cookies))
-                .build();
+            .url(url)
+            .header("User-Agent", "okhttp/2.5.0")
+            .header("Cookie", formatCookies(cookies))
+            .build();
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
@@ -244,33 +239,32 @@ public class RisingStonesLoginTool {
         }
     }
 
-    private static String getSubAccountKey(String flowId, Map<String, String> cookies) throws IOException {
+    private String getSubAccountKey(String flowId, Map<String, String> cookies, String daoyuKey) throws IOException {
         HttpUrl url = HttpUrl.parse(DAO_URL + "confirm").newBuilder()
-                .addQueryParameter("src_code", "4")
-                .addQueryParameter("app_version", "9.4.14")
-                .addQueryParameter("app_version_code", "688")
-                .addQueryParameter("device_gid", "_08:ff:3d:32:60:00")
-                .addQueryParameter("device_os", "12")
-                .addQueryParameter("device_manufacturer", "vivo")
-                .addQueryParameter("device_txzDeviceId", "")
-                .addQueryParameter("_dispath", "0")
-                .addQueryParameter("clientId", "ff14risingstones")
-                .addQueryParameter("appId", "6788")
-                .addQueryParameter("scope", "get_account_profile")
-                .addQueryParameter("extend", "")
-                .addQueryParameter("scene", "")
-                .addQueryParameter("device_id", UUID.randomUUID().toString().toUpperCase().replace("-", ""))
-                .addQueryParameter("device_manuid", generateRandomString(6))
-                .addQueryParameter("USERSESSID", DAOYU_KEY)
-                .addQueryParameter("flowId", flowId)
-                .build();
+            .addQueryParameter("src_code", "4")
+            .addQueryParameter("app_version", "9.4.14")
+            .addQueryParameter("app_version_code", "688")
+            .addQueryParameter("device_gid", "_08:ff:3d:32:60:00")
+            .addQueryParameter("device_os", "12")
+            .addQueryParameter("device_manufacturer", "vivo")
+            .addQueryParameter("device_txzDeviceId", "")
+            .addQueryParameter("_dispath", "0")
+            .addQueryParameter("clientId", "ff14risingstones")
+            .addQueryParameter("appId", "6788")
+            .addQueryParameter("scope", "get_account_profile")
+            .addQueryParameter("extend", "")
+            .addQueryParameter("scene", "")
+            .addQueryParameter("device_id", UUID.randomUUID().toString().toUpperCase().replace("-", ""))
+            .addQueryParameter("device_manuid", generateRandomString(6))
+            .addQueryParameter("USERSESSID", daoyuKey)
+            .addQueryParameter("flowId", flowId)
+            .build();
 
         Request request = new Request.Builder()
-                .url(url)
-                .header("User-Agent", "okhttp/2.5.0")
-//                .header("accept-encoding", "gzip")
-                .header("Cookie", formatCookies(cookies))
-                .build();
+            .url(url)
+            .header("User-Agent", "okhttp/2.5.0")
+            .header("Cookie", formatCookies(cookies))
+            .build();
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
@@ -284,18 +278,17 @@ public class RisingStonesLoginTool {
         }
     }
 
-    private static String[] daoLogin(String subAccountKey, Map<String, String> cookies) throws IOException {
+    private String[] daoLogin(String subAccountKey, Map<String, String> cookies) throws IOException {
         HttpUrl url = HttpUrl.parse(BASE_URL + "GHome/daoLogin").newBuilder()
-                .addQueryParameter("authorization", subAccountKey)
-                .build();
+            .addQueryParameter("authorization", subAccountKey)
+            .build();
 
         Request request = new Request.Builder()
-                .url(url)
-                .header("User-Agent", "Mozilla/5.0 (Linux; Android 12; V2218A Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36 DaoYu/9.4.14")
-                .header("accept", "application/json, text/plain, */*")
-//                .header("accept-encoding", "gzip, deflate")
-                .header("Cookie", formatCookies(cookies))
-                .build();
+            .url(url)
+            .header("User-Agent", "Mozilla/5.0 (Linux; Android 12; V2218A Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36 DaoYu/9.4.14")
+            .header("accept", "application/json, text/plain, */*")
+            .header("Cookie", formatCookies(cookies))
+            .build();
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
@@ -310,19 +303,18 @@ public class RisingStonesLoginTool {
         }
     }
 
-    private static boolean getCharacterBindInfo(String daoyuToken, Map<String, String> cookies) throws IOException {
+    private boolean getCharacterBindInfo(String daoyuToken, Map<String, String> cookies) throws IOException {
         HttpUrl url = HttpUrl.parse(BASE_URL + "groupAndRole/getCharacterBindInfo").newBuilder()
-                .addQueryParameter("platform", "1")
-                .build();
+            .addQueryParameter("platform", "1")
+            .build();
 
         Request request = new Request.Builder()
-                .url(url)
-                .header("User-Agent", "Mozilla/5.0 (Linux; Android 12; V2218A Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36 DaoYu/9.4.14")
-                .header("authorization", daoyuToken)
-                .header("accept", "application/json, text/plain, */*")
-//                .header("accept-encoding", "gzip, deflate")
-                .header("Cookie", formatCookies(cookies))
-                .build();
+            .url(url)
+            .header("User-Agent", "Mozilla/5.0 (Linux; Android 12; V2218A Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36 DaoYu/9.4.14")
+            .header("authorization", daoyuToken)
+            .header("accept", "application/json, text/plain, */*")
+            .header("Cookie", formatCookies(cookies))
+            .build();
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
@@ -336,7 +328,7 @@ public class RisingStonesLoginTool {
         }
     }
 
-    private static Map<String, String> parseCookies(List<String> cookieHeaders) {
+    private Map<String, String> parseCookies(List<String> cookieHeaders) {
         Map<String, String> cookies = new HashMap<>();
         for (String header : cookieHeaders) {
             String[] parts = header.split(";")[0].split("=");
@@ -347,7 +339,7 @@ public class RisingStonesLoginTool {
         return cookies;
     }
 
-    private static String formatCookies(Map<String, String> cookies) {
+    private String formatCookies(Map<String, String> cookies) {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String> entry : cookies.entrySet()) {
             if (sb.length() > 0) {
@@ -358,7 +350,7 @@ public class RisingStonesLoginTool {
         return sb.toString();
     }
 
-    private static String generateRandomString(int length) {
+    private String generateRandomString(int length) {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder result = new StringBuilder(length);
         Random random = new Random();
@@ -366,5 +358,15 @@ public class RisingStonesLoginTool {
             result.append(characters.charAt(random.nextInt(characters.length())));
         }
         return result.toString();
+    }
+
+    /**
+     * 手动刷新缓存的方法（可选）
+     */
+    public void refreshDaoYuKeyCache() {
+        daoYuKeyCacheService.evictDaoYuKeyCache();
+        // 触发重新加载
+        daoYuKeyCacheService.getDaoYuKey();
+        logger.log(Level.INFO, "DaoYu Key缓存已手动刷新");
     }
 }
