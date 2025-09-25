@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -44,8 +46,8 @@ public class OneBotServiceImpl implements OneBotService {
     private String defaultGroupId;
 
     // Redis缓存相关配置
-    private static final String NICKNAME_CACHE_PREFIX = "nickname:group:";
-    private static final long NICKNAME_CACHE_EXPIRE_HOURS = 24; // 缓存24小时
+    private static final String GROUP_MEMBER_CACHE_PREFIX = "group:members:";
+    private static final long GROUP_MEMBER_CACHE_EXPIRE_HOURS = 24; // 缓存24小时
 
     @Override
     public List<ChatRecord> processOneBotRequest(Map<String, Object> requestBody) throws Exception {
@@ -156,25 +158,11 @@ public class OneBotServiceImpl implements OneBotService {
             .collect(Collectors.toSet());
 
         // 缓存每个群组的成员列表
-        Map<Long, Map<Long, String>> groupNicknameMap = new HashMap<>();
+        Map<Long, Map<Long, String>> groupMemberMap = new HashMap<>();
 
         for (Long groupId : groupIds) {
-            // 先从Redis缓存中尝试获取群组成员信息
-            String cacheKey = NICKNAME_CACHE_PREFIX + groupId;
-            Map<Long, String> nicknameMap = getNicknameMapFromCache(cacheKey);
-
-            if (nicknameMap == null) {
-                // 缓存中没有，从NapCat服务器查询
-                nicknameMap = fetchNicknameMapFromNapCat(groupId);
-                // 将查询结果存入缓存
-                if (nicknameMap != null && !nicknameMap.isEmpty()) {
-                    saveNicknameMapToCache(cacheKey, nicknameMap);
-                } else {
-                    nicknameMap = new HashMap<>(); // 避免空指针
-                }
-            }
-
-            groupNicknameMap.put(groupId, nicknameMap);
+            Map<Long, String> memberMap = getGroupMemberMap(groupId);
+            groupMemberMap.put(groupId, memberMap);
         }
 
         for (ChatRecord chatRecord : chatRecords) {
@@ -189,70 +177,17 @@ public class OneBotServiceImpl implements OneBotService {
             chatRecordDTO.setUpdatedAt(chatRecord.getUpdatedAt());
 
             // 设置昵称
-            Map<Long, String> nicknameMap = groupNicknameMap.getOrDefault(chatRecord.getGroupId(), new HashMap<>());
-            chatRecordDTO.setNickname(nicknameMap.getOrDefault(chatRecord.getUserId(), "Unknown"));
+            Map<Long, String> memberMap = groupMemberMap.get(chatRecord.getGroupId());
+            if (memberMap != null) {
+                chatRecordDTO.setNickname(memberMap.getOrDefault(chatRecord.getUserId(), "Unknown" + chatRecord.getUserId()));
+            } else {
+                chatRecordDTO.setNickname("Unknown" + chatRecord.getUserId());
+            }
 
             chatRecordDTOs.add(chatRecordDTO);
         }
 
         return chatRecordDTOs;
-    }
-
-    /**
-     * 从Redis缓存中获取昵称映射
-     */
-    @SuppressWarnings("unchecked")
-    private Map<Long, String> getNicknameMapFromCache(String cacheKey) {
-        try {
-            Object cachedData = redisUtil.get(cacheKey);
-            if (cachedData instanceof Map) {
-                return (Map<Long, String>) cachedData;
-            }
-        } catch (Exception e) {
-            System.err.println("Error getting nickname map from cache for key " + cacheKey + ": " + e.getMessage());
-        }
-        return null;
-    }
-
-    /**
-     * 将昵称映射保存到Redis缓存
-     */
-    private void saveNicknameMapToCache(String cacheKey, Map<Long, String> nicknameMap) {
-        try {
-            redisUtil.setWithExpire(cacheKey, nicknameMap, NICKNAME_CACHE_EXPIRE_HOURS, TimeUnit.HOURS);
-        } catch (Exception e) {
-            System.err.println("Error saving nickname map to cache for key " + cacheKey + ": " + e.getMessage());
-        }
-    }
-
-    /**
-     * 从NapCat服务器获取群组成员昵称映射
-     */
-    private Map<Long, String> fetchNicknameMapFromNapCat(Long groupId) {
-        try {
-            String groupMemberListJson = napCatQQUtil.getGroupMemberList(groupId.toString());
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode groupMemberListNode;
-            try {
-                groupMemberListNode = objectMapper.readTree(groupMemberListJson);
-            } catch (Exception e) {
-                System.err.println("Error parsing group member list JSON for group " + groupId + ": " + e.getMessage());
-                return new HashMap<>();
-            }
-
-            Map<Long, String> nicknameMap = new HashMap<>();
-            JsonNode dataNode = groupMemberListNode.path("data");
-            for (JsonNode memberNode : dataNode) {
-                Long userId = memberNode.path("user_id").asLong();
-                String nickname = memberNode.path("nickname").asText();
-                nicknameMap.put(userId, nickname);
-            }
-
-            return nicknameMap;
-        } catch (Exception e) {
-            System.err.println("Error fetching nickname map from NapCat for group " + groupId + ": " + e.getMessage());
-            return new HashMap<>();
-        }
     }
 
     @Override
@@ -336,6 +271,212 @@ public class OneBotServiceImpl implements OneBotService {
         userMessage.setTimestamp(LocalDateTime.now());
 
         userMessageRepository.save(userMessage);
+    }
+
+    @Override
+    public Map<String, Object> getMonthlyStats() {
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            // 1. 发送消息数量排名
+            List<Object[]> messageRanking = chatRecordRepository.findMonthlyMessageRanking();
+            List<Map<String, Object>> messageRankingList = new ArrayList<>();
+
+            // 2. 发送图片数量排名
+            List<Object[]> imageRanking = chatRecordRepository.findMonthlyImageRanking();
+            List<Map<String, Object>> imageRankingList = new ArrayList<>();
+
+            // 3. 图片比例排名
+            List<Object[]> ratioRanking = chatRecordRepository.findMonthlyImageRatioRanking();
+            List<Map<String, Object>> ratioRankingList = new ArrayList<>();
+
+            // 收集所有需要查询的群组ID（假设统计的是默认群组的数据）
+            Set<Long> groupIds = new HashSet<>();
+            groupIds.add(Long.parseLong("787909466"));//todo 这里改为配置
+
+            // 缓存每个群组的成员列表
+            Map<Long, Map<Long, String>> groupMemberMap = new HashMap<>();
+
+            for (Long groupId : groupIds) {
+                Map<Long, String> memberMap = getGroupMemberMap(groupId);
+                groupMemberMap.put(groupId, memberMap);
+            }
+
+            // 获取默认群组的成员映射
+            Map<Long, String> defaultGroupMemberMap = groupMemberMap.get(Long.parseLong("787909466"));//todo 这里改为配置
+            if (defaultGroupMemberMap == null) {
+                defaultGroupMemberMap = new HashMap<>();
+            }
+
+            // 处理消息排名
+            for (Object[] row : messageRanking) {
+                Long userId = (Long) row[0];
+                Long messageCount = (Long) row[1];
+
+                Map<String, Object> userStat = new HashMap<>();
+                userStat.put("userId", userId);
+                userStat.put("messageCount", messageCount);
+                userStat.put("nickname", defaultGroupMemberMap.getOrDefault(userId, "Unknown" + userId));
+                messageRankingList.add(userStat);
+            }
+            result.put("messageRanking", messageRankingList);
+
+            // 处理图片排名
+            for (Object[] row : imageRanking) {
+                Long userId = (Long) row[0];
+                Long imageCount = (Long) row[1];
+
+                Map<String, Object> userStat = new HashMap<>();
+                userStat.put("userId", userId);
+                userStat.put("imageCount", imageCount);
+                userStat.put("nickname", defaultGroupMemberMap.getOrDefault(userId, "Unknown" + userId));
+                imageRankingList.add(userStat);
+            }
+            result.put("imageRanking", imageRankingList);
+
+            // 处理图片比例排名
+            for (Object[] row : ratioRanking) {
+                Long userId = (Long) row[0];
+                Long totalMessages = (Long) row[1];
+                Long totalImages = ((Number) row[2]).longValue();
+
+                Double imageRatio;
+                if (row[3] instanceof BigDecimal) {
+                    imageRatio = ((BigDecimal) row[3]).doubleValue();
+                } else if (row[3] instanceof Double) {
+                    imageRatio = (Double) row[3];
+                } else if (row[3] instanceof Number) {
+                    imageRatio = ((Number) row[3]).doubleValue();
+                } else {
+                    imageRatio = 0.0; // 默认值
+                }
+
+                Map<String, Object> userStat = new HashMap<>();
+                userStat.put("userId", userId);
+                userStat.put("totalMessages", totalMessages);
+                userStat.put("totalImages", totalImages);
+                userStat.put("imageRatio", String.format("%.2f%%", imageRatio * 100));
+                userStat.put("nickname", defaultGroupMemberMap.getOrDefault(userId, "Unknown" + userId));
+                ratioRankingList.add(userStat);
+            }
+            result.put("ratioRanking", ratioRankingList);
+
+        } catch (Exception e) {
+            System.err.println("Error generating monthly stats: " + e.getMessage());
+            throw new RuntimeException("生成月度统计失败", e);
+        }
+
+        return result;
+    }
+
+    // ========== 公共缓存方法 ==========
+
+    /**
+     * 获取群组成员映射（优先从缓存获取）
+     */
+    private Map<Long, String> getGroupMemberMap(Long groupId) {
+        if (groupId == null) {
+            return new HashMap<>();
+        }
+
+        try {
+            String cacheKey = GROUP_MEMBER_CACHE_PREFIX + groupId;
+
+            // 先从Redis缓存中尝试获取群组成员信息
+            Map<Long, String> memberMap = getGroupMemberMapFromCache(cacheKey);
+
+            if (memberMap != null && !memberMap.isEmpty()) {
+                return memberMap;
+            }
+
+            // 缓存中没有，从NapCat服务器查询群组成员
+            memberMap = fetchGroupMemberMapFromNapCat(groupId);
+
+            if (memberMap != null && !memberMap.isEmpty()) {
+                // 将查询结果存入缓存
+                saveGroupMemberMapToCache(cacheKey, memberMap);
+                return memberMap;
+            }
+
+            // 如果查询失败，返回空映射
+            return new HashMap<>();
+
+        } catch (Exception e) {
+            System.err.println("Error getting group member map for group " + groupId + ": " + e.getMessage());
+            return new HashMap<>();
+        }
+    }
+
+    /**
+     * 从Redis缓存中获取群组成员映射
+     */
+    @SuppressWarnings("unchecked")
+    private Map<Long, String> getGroupMemberMapFromCache(String cacheKey) {
+        try {
+            Object cachedData = redisUtil.get(cacheKey);
+            if (cachedData instanceof Map) {
+                return (Map<Long, String>) cachedData;
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting group member map from cache for key " + cacheKey + ": " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * 将数据保存到Redis缓存
+     */
+    private void saveToCache(String cacheKey, Object data, long expireTime, TimeUnit timeUnit) {
+        try {
+            redisUtil.setWithExpire(cacheKey, data, expireTime, timeUnit);
+        } catch (Exception e) {
+            System.err.println("Error saving data to cache for key " + cacheKey + ": " + e.getMessage());
+        }
+    }
+
+    /**
+     * 将群组成员映射保存到Redis缓存
+     */
+    private void saveGroupMemberMapToCache(String cacheKey, Map<Long, String> memberMap) {
+        saveToCache(cacheKey, memberMap, GROUP_MEMBER_CACHE_EXPIRE_HOURS, TimeUnit.HOURS);
+    }
+
+    /**
+     * 从NapCat服务器获取群组成员映射
+     */
+    private Map<Long, String> fetchGroupMemberMapFromNapCat(Long groupId) {
+        try {
+            String groupMemberListJson = napCatQQUtil.getGroupMemberList(groupId.toString());
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode groupMemberListNode;
+
+            try {
+                groupMemberListNode = objectMapper.readTree(groupMemberListJson);
+            } catch (Exception e) {
+                System.err.println("Error parsing group member list JSON for group " + groupId + ": " + e.getMessage());
+                return new HashMap<>();
+            }
+
+            Map<Long, String> memberMap = new HashMap<>();
+            JsonNode dataNode = groupMemberListNode.path("data");
+
+            for (JsonNode memberNode : dataNode) {
+                Long userId = memberNode.path("user_id").asLong();
+                // 优先使用群名片，如果没有则使用昵称
+                String card = memberNode.path("card").asText();
+                String nickname = memberNode.path("nickname").asText();
+                String displayName = card.isEmpty() ? nickname : card;
+
+                if (!displayName.isEmpty()) {
+                    memberMap.put(userId, displayName);
+                }
+            }
+
+            return memberMap;
+        } catch (Exception e) {
+            System.err.println("Error fetching group member map from NapCat for group " + groupId + ": " + e.getMessage());
+            return new HashMap<>();
+        }
     }
 
     // 通用方法：从Map中获取并转换为double

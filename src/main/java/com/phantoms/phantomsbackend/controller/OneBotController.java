@@ -142,4 +142,24 @@ public class OneBotController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"status\":\"failed\",\"error\":\"" + e.getMessage() + "\"}");
         }
     }
+
+    @GetMapping("/onebot/monthly-stats")
+    public ResponseEntity<Map<String, Object>> getMonthlyStats() {
+        try {
+            // 调用服务层获取月度统计
+            Map<String, Object> monthlyStats = oneBotService.getMonthlyStats();
+
+            // 返回 JSON 格式的响应
+            return ResponseEntity.ok(monthlyStats);
+        } catch (Exception e) {
+            // 记录错误日志
+            System.err.println("Error fetching monthly stats: " + e.getMessage());
+
+            // 返回错误响应
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", "failed");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
 }

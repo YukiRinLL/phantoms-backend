@@ -37,4 +37,41 @@ public interface PrimaryChatRecordRepository extends JpaRepository<ChatRecord, L
     // 查询用户在指定群组中发送的所有消息数量（过去24小时内）
     @Query(value = "SELECT COUNT(*) FROM onebot.chat_records cr WHERE cr.qq_user_id = ?1 AND cr.qq_group_id = ?2 AND cr.created_at > ?3", nativeQuery = true)
     long countByUserIdAndGroupIdAndTimestampAfter(Long userId, Long groupId, LocalDateTime timestamp);
+
+    // 本月度消息数量排名 - 修改为 PostgreSQL 语法
+    @Query(value = "SELECT " +
+        "cr.qq_user_id, " +
+        "COUNT(*) AS total " +
+        "FROM onebot.chat_records cr " +
+        "WHERE cr.created_at >= DATE_TRUNC('month', CURRENT_DATE) " +
+        "GROUP BY cr.qq_user_id " +
+        "ORDER BY total DESC",
+        nativeQuery = true)
+    List<Object[]> findMonthlyMessageRanking();
+
+    // 本月度图片数量排名 - 修改为 PostgreSQL 语法
+    @Query(value = "SELECT " +
+        "cr.qq_user_id, " +
+        "COUNT(*) AS total_images " +
+        "FROM onebot.chat_records cr " +
+        "WHERE cr.message LIKE '%type=image%' " +
+        "AND cr.created_at >= DATE_TRUNC('month', CURRENT_DATE) " +
+        "GROUP BY cr.qq_user_id " +
+        "ORDER BY total_images DESC",
+        nativeQuery = true)
+    List<Object[]> findMonthlyImageRanking();
+
+    // 本月度图片比例排名（消息总数大于50的用户）- 修改为 PostgreSQL 语法
+    @Query(value = "SELECT " +
+        "cr.qq_user_id, " +
+        "COUNT(*) AS total_messages, " +
+        "SUM(CASE WHEN cr.message LIKE '%type=image%' THEN 1 ELSE 0 END) AS total_images, " +
+        "(SUM(CASE WHEN cr.message LIKE '%type=image%' THEN 1 ELSE 0 END) * 1.0 / COUNT(*)) AS image_ratio " +
+        "FROM onebot.chat_records cr " +
+        "WHERE cr.created_at >= DATE_TRUNC('month', CURRENT_DATE) " +
+        "GROUP BY cr.qq_user_id " +
+        "HAVING COUNT(*) > 50 " +
+        "ORDER BY image_ratio DESC",
+        nativeQuery = true)
+    List<Object[]> findMonthlyImageRatioRanking();
 }

@@ -19,4 +19,10 @@ public interface OneBotService {
     void sendGroupMessageWithDefaultGroup(String message, String groupId) throws Exception;
 
     void saveUserMessage(String message, Long groupId, Map<String, Object> systemInfo);
+
+    /**
+     * 获取本月度消息统计
+     * @return 包含三个统计结果的Map
+     */
+    Map<String, Object> getMonthlyStats();
 }
