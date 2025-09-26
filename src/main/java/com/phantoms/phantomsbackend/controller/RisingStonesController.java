@@ -33,6 +33,15 @@ public class RisingStonesController {
         return risingStonesService.getGuildMember(guildId);
     }
 
+    // 获取部队成员动态
+    @GetMapping("/guild-member-dynamic")
+    public JSONObject guildMemberDynamic(
+        @RequestParam(value = "guildId", defaultValue = "9381138761301105564") String guildId,
+        @RequestParam(value = "page", defaultValue = "1") int page,
+        @RequestParam(value = "limit", defaultValue = "10") int limit) throws IOException {
+        return risingStonesService.getGuildMemberDynamic(guildId, page, limit);
+    }
+
     // 更新daoyu_key密钥
     @PostMapping("/update-daoyu-key")
     public JSONObject updateDaoYuKey(@RequestParam String newKey) {

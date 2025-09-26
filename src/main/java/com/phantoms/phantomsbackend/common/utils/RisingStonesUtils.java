@@ -109,4 +109,40 @@ public class RisingStonesUtils {
         }
         return cookies.toString();
     }
+
+    public static JSONObject getGuildMemberDynamic(String guildId, int page, int limit, String daoyuToken, String cookie) throws IOException {
+        if (daoyuToken == null || daoyuToken.isEmpty()) {
+            logger.log(Level.SEVERE, "DaoyuToken is null or empty");
+            throw new IllegalArgumentException("DaoyuToken is null or empty");
+        }
+        if (cookie == null || cookie.isEmpty()) {
+            logger.log(Level.SEVERE, "Cookie is null or empty");
+            throw new IllegalArgumentException("Cookie is null or empty");
+        }
+
+        HttpUrl url = HttpUrl.parse(BASE_URL + "guild/guildMemberDynamic").newBuilder()
+            .addQueryParameter("guild_id", guildId)
+            .addQueryParameter("page", String.valueOf(page))
+            .addQueryParameter("limit", String.valueOf(limit))
+            .build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .header("User-Agent", "Mozilla/5.0 (Linux; Android 12; V2218A Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.114 Mobile Safari/537.36 DaoYu/9.4.14")
+            .header("authorization", daoyuToken)
+            .header("accept", "application/json, text/plain, */*")
+            .header("accept-encoding", "gzip, deflate")
+            .header("Cookie", cookie)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                logger.log(Level.SEVERE, "Unexpected code {0} for getting guild member dynamic", response.code());
+                throw new IOException("Unexpected code " + response.code());
+            }
+            String responseBody = response.body().string();
+            logger.log(Level.FINE, "Guild member dynamic response: {0}", responseBody);
+            return JSONObject.parseObject(responseBody);
+        }
+    }
 }

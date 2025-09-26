@@ -50,4 +50,10 @@ public class RisingStonesServiceImpl implements RisingStonesService {
         ensureTokenAndCookie();
         return RisingStonesUtils.getGuildMember(guildId, daoyuToken, cookie);
     }
+
+    @Override
+    public JSONObject getGuildMemberDynamic(String guildId, int page, int limit) throws IOException {
+        ensureTokenAndCookie();
+        return RisingStonesUtils.getGuildMemberDynamic(guildId, page, limit, daoyuToken, cookie);
+    }
 }

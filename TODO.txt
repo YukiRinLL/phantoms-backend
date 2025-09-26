@@ -21,6 +21,8 @@ Get Sub Account Key → 获取子账号的daoyu_ticket
 Dao Login → 使用daoyu_ticket登录石之家
 Do Login → 验证登录状态，获取最终的登录Cookie
 
+石之家数据更新时间:中午12点更新截止至前一天22:00的数据
+
 
 加一个手动触发重新登录接口
 
