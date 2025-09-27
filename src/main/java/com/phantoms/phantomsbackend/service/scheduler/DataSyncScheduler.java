@@ -119,7 +119,7 @@ public class DataSyncScheduler {
     }
 
     /**
-     * 优化后的聊天记录同步方法 - 支持几十万条数据的高性能同步
+     * 聊天记录同步方法
      */
     private void syncChatRecordsOptimized() {
         StopWatch stopWatch = new StopWatch("ChatRecordsSync");
