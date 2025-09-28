@@ -28,6 +28,9 @@ public class LittlenightmareClient {
 
     private static final Logger logger = LoggerFactory.getLogger(LittlenightmareClient.class);
     private static final String BASE_URL = "https://xivpf.littlenightmare.top/api/listings";
+    private static final String ALLORIGINS_RAW_URL = "https://api.allorigins.win/raw?url=";
+    private static final String ALLORIGINS_GET_URL = "https://api.allorigins.win/get?url=";
+    private static final String CORS_ANYWHERE_URL = "https://cors-anywhere.herokuapp.com/";
     private static final String SCRAPESTACK_API_URL = "http://api.scrapestack.com/scrape";
     private static final int CONNECT_TIMEOUT = 10000; // 10 seconds
     private static final int SOCKET_TIMEOUT = 10000; // 10 seconds
@@ -36,14 +39,14 @@ public class LittlenightmareClient {
     private static String scrapestackAccessKey;
 
     public static RecruitmentResponse fetchRecruitmentListings(
-            Integer page,
-            Integer perPage,
-            String category,
-            String world,
-            String search,
-            String datacenter,
-            List<Integer> jobs,
-            List<Integer> duties
+        Integer page,
+        Integer perPage,
+        String category,
+        String world,
+        String search,
+        String datacenter,
+        List<Integer> jobs,
+        List<Integer> duties
     ) throws IOException {
         StringBuilder urlBuilder = new StringBuilder(BASE_URL);
 
@@ -119,18 +122,24 @@ public class LittlenightmareClient {
         }
 
         String targetUrl = urlBuilder.toString();
-        String scrapeStackUrl = SCRAPESTACK_API_URL + "?access_key=" + scrapestackAccessKey + "&url=" + java.net.URLEncoder.encode(targetUrl, "UTF-8");
+        String encodedTargetUrl = java.net.URLEncoder.encode(targetUrl, "UTF-8");
+
+        // 构建代理URL
+        String allOriginsRawUrl = ALLORIGINS_RAW_URL + encodedTargetUrl;
+        String allOriginsGetUrl = ALLORIGINS_GET_URL + encodedTargetUrl;
+        String corsAnywhereUrl = CORS_ANYWHERE_URL + targetUrl;
+        String scrapeStackUrl = SCRAPESTACK_API_URL + "?access_key=" + scrapestackAccessKey + "&url=" + encodedTargetUrl;
 
         RecruitmentResponse response = null;
         boolean success = false;
 
         // 尝试直连
         try (CloseableHttpClient httpClient = HttpClients.custom()
-                .setDefaultRequestConfig(RequestConfig.custom()
-                        .setConnectTimeout(CONNECT_TIMEOUT)
-                        .setSocketTimeout(SOCKET_TIMEOUT)
-                        .build())
-                .build()) {
+            .setDefaultRequestConfig(RequestConfig.custom()
+                .setConnectTimeout(CONNECT_TIMEOUT)
+                .setSocketTimeout(SOCKET_TIMEOUT)
+                .build())
+            .build()) {
             HttpGet request = new HttpGet(targetUrl);
             request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
             request.setHeader("Accept", "application/json");
@@ -144,20 +153,92 @@ public class LittlenightmareClient {
                     throw new IOException("Invalid response received: " + jsonResponse);
                 }
 
-                // 配置 ObjectMapper 以解析 ISO 8601 格式的日期时间
-                ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.registerModule(new JavaTimeModule());
-                objectMapper.registerModule(CustomOffsetDateTimeDeserializer.createModule());
-
-                response = objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
+                response = parseJsonResponse(jsonResponse);
                 success = true;
+                logger.info("Successfully fetched data via direct connection");
             }
         } catch (IOException e) {
             logger.error("Failed to fetch recruitment listings without proxy: {}", e.getMessage());
         }
 
-        // 如果直连失败，尝试使用代理
+        // 如果直连失败，尝试使用 AllOrigins Raw
         if (!success) {
+            logger.info("Trying AllOrigins Raw...");
+            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                HttpGet request = new HttpGet(allOriginsRawUrl);
+                request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
+                request.setHeader("Accept", "application/json");
+
+                try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
+                    String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+                    logger.info("AllOrigins Raw response status: {}", httpResponse.getStatusLine().getStatusCode());
+
+                    if (jsonResponse != null && !jsonResponse.trim().startsWith("<")) {
+                        response = parseJsonResponse(jsonResponse);
+                        success = true;
+                        logger.info("Successfully fetched data via AllOrigins Raw");
+                    }
+                }
+            } catch (IOException e) {
+                logger.error("Failed to fetch via AllOrigins Raw: {}", e.getMessage());
+            }
+        }
+
+        // 如果 AllOrigins Raw 失败，尝试使用 AllOrigins Get
+        if (!success) {
+            logger.info("Trying AllOrigins Get...");
+            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                HttpGet request = new HttpGet(allOriginsGetUrl);
+                request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
+                request.setHeader("Accept", "application/json");
+
+                try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
+                    String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+                    logger.info("AllOrigins Get response status: {}", httpResponse.getStatusLine().getStatusCode());
+
+                    if (jsonResponse != null && !jsonResponse.trim().startsWith("<")) {
+                        // AllOrigins Get 返回包装的JSON，需要提取 contents 字段
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        var wrapper = objectMapper.readTree(jsonResponse);
+                        if (wrapper.has("contents")) {
+                            String contents = wrapper.get("contents").asText();
+                            response = parseJsonResponse(contents);
+                            success = true;
+                            logger.info("Successfully fetched data via AllOrigins Get");
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                logger.error("Failed to fetch via AllOrigins Get: {}", e.getMessage());
+            }
+        }
+
+        // 如果 AllOrigins 失败，尝试使用 CORS Anywhere
+        if (!success) {
+            logger.info("Trying CORS Anywhere...");
+            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                HttpGet request = new HttpGet(corsAnywhereUrl);
+                request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
+                request.setHeader("Accept", "application/json");
+
+                try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
+                    String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+                    logger.info("CORS Anywhere response status: {}", httpResponse.getStatusLine().getStatusCode());
+
+                    if (jsonResponse != null && !jsonResponse.trim().startsWith("<")) {
+                        response = parseJsonResponse(jsonResponse);
+                        success = true;
+                        logger.info("Successfully fetched data via CORS Anywhere");
+                    }
+                }
+            } catch (IOException e) {
+                logger.error("Failed to fetch via CORS Anywhere: {}", e.getMessage());
+            }
+        }
+
+        // 如果 CORS Anywhere 失败，尝试使用代理
+        if (!success) {
+            logger.info("Trying proxy servers...");
             for (int attempt = 0; attempt < 3; attempt++) {
                 HttpHost proxy = ProxyUtil.getRandomProxy();
                 if (proxy == null) {
@@ -165,12 +246,12 @@ public class LittlenightmareClient {
                     continue;
                 }
                 try (CloseableHttpClient httpClient = HttpClients.custom()
-                        .setProxy(proxy)
-                        .setDefaultRequestConfig(RequestConfig.custom()
-                                .setConnectTimeout(CONNECT_TIMEOUT)
-                                .setSocketTimeout(SOCKET_TIMEOUT)
-                                .build())
-                        .build()) {
+                    .setProxy(proxy)
+                    .setDefaultRequestConfig(RequestConfig.custom()
+                        .setConnectTimeout(CONNECT_TIMEOUT)
+                        .setSocketTimeout(SOCKET_TIMEOUT)
+                        .build())
+                    .build()) {
                     HttpGet request = new HttpGet(targetUrl);
                     request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
                     request.setHeader("Accept", "application/json");
@@ -178,20 +259,12 @@ public class LittlenightmareClient {
                     try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
                         String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
 
-                        // 检查返回内容是否为 HTML 页面
-                        if (jsonResponse != null && jsonResponse.trim().startsWith("<")) {
-                            logger.error("Invalid response received: {}", jsonResponse);
-                            throw new IOException("Invalid response received: " + jsonResponse);
+                        if (jsonResponse != null && !jsonResponse.trim().startsWith("<")) {
+                            response = parseJsonResponse(jsonResponse);
+                            success = true;
+                            logger.info("Successfully fetched data via proxy: {}", proxy);
+                            break;
                         }
-
-                        // 配置 ObjectMapper 以解析 ISO 8601 格式的日期时间
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        objectMapper.registerModule(new JavaTimeModule());
-                        objectMapper.registerModule(CustomOffsetDateTimeDeserializer.createModule());
-
-                        response = objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
-                        success = true;
-                        break;
                     }
                 } catch (IOException e) {
                     logger.error("Failed to fetch recruitment listings using proxy {}: {}", proxy, e.getMessage());
@@ -201,6 +274,7 @@ public class LittlenightmareClient {
 
         // 如果代理尝试失败，尝试使用 ScrapeStack
         if (!success) {
+            logger.info("Trying ScrapeStack...");
             try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
                 HttpGet request = new HttpGet(scrapeStackUrl);
                 request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
@@ -208,21 +282,13 @@ public class LittlenightmareClient {
 
                 try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
                     String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                    logger.info("ScrapeStack response: {}", jsonResponse);
+                    logger.info("ScrapeStack response status: {}", httpResponse.getStatusLine().getStatusCode());
 
-                    // 检查返回内容是否为 HTML 页面
-                    if (jsonResponse != null && jsonResponse.trim().startsWith("<")) {
-                        logger.error("Invalid response received: {}", jsonResponse);
-                        throw new IOException("Invalid response received: " + jsonResponse);
+                    if (jsonResponse != null && !jsonResponse.trim().startsWith("<")) {
+                        response = parseJsonResponse(jsonResponse);
+                        success = true;
+                        logger.info("Successfully fetched data via ScrapeStack");
                     }
-
-                    // 配置 ObjectMapper 以解析 ISO 8601 格式的日期时间
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    objectMapper.registerModule(new JavaTimeModule());
-                    objectMapper.registerModule(CustomOffsetDateTimeDeserializer.createModule());
-
-                    response = objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
-                    success = true;
                 }
             } catch (IOException e) {
                 logger.error("Failed to fetch recruitment listings using ScrapeStack: {}", e.getMessage());
@@ -236,14 +302,24 @@ public class LittlenightmareClient {
         return response;
     }
 
+    /**
+     * 解析JSON响应的辅助方法
+     */
+    private static RecruitmentResponse parseJsonResponse(String jsonResponse) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.registerModule(CustomOffsetDateTimeDeserializer.createModule());
+        return objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
+    }
+
     public static List<RecruitmentResponse> fetchAllRecruitmentListings(
-            Integer perPage,
-            String category,
-            String world,
-            String search,
-            String datacenter,
-            List<Integer> jobs,
-            List<Integer> duties
+        Integer perPage,
+        String category,
+        String world,
+        String search,
+        String datacenter,
+        List<Integer> jobs,
+        List<Integer> duties
     ) throws IOException {
         List<RecruitmentResponse> allResponses = new ArrayList<>();
         int page = 1;
@@ -251,14 +327,14 @@ public class LittlenightmareClient {
 
         while (hasMorePages) {
             RecruitmentResponse response = fetchRecruitmentListings(
-                    page,
-                    perPage,
-                    category,
-                    world,
-                    search,
-                    datacenter,
-                    jobs,
-                    duties
+                page,
+                perPage,
+                category,
+                world,
+                search,
+                datacenter,
+                jobs,
+                duties
             );
 
             allResponses.add(response);
