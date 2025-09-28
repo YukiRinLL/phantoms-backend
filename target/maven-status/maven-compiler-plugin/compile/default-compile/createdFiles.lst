@@ -79,6 +79,7 @@ com\phantoms\phantomsbackend\repository\primary\PrimaryUserRepository.class
 com\phantoms\phantomsbackend\service\MessageService.class
 com\phantoms\phantomsbackend\pojo\entity\primary\onebot\UserMessage.class
 com\phantoms\phantomsbackend\service\impl\D1ServiceImpl.class
+com\phantoms\phantomsbackend\service\scheduler\RecruitmentScheduler$1.class
 com\phantoms\phantomsbackend\common\exception\ServiceException.class
 com\phantoms\phantomsbackend\pojo\entity\secondary\User.class
 com\phantoms\phantomsbackend\service\DaoYuKeyCacheService.class
