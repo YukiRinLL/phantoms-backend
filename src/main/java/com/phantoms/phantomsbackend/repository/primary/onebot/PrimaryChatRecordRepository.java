@@ -74,4 +74,20 @@ public interface PrimaryChatRecordRepository extends JpaRepository<ChatRecord, L
         "ORDER BY image_ratio DESC",
         nativeQuery = true)
     List<Object[]> findMonthlyImageRatioRanking();
+
+    // 查询本月消息总数
+    @Query(value = "SELECT COUNT(*) FROM onebot.chat_records cr WHERE cr.created_at >= DATE_TRUNC('month', CURRENT_DATE)", nativeQuery = true)
+    long countMonthlyMessages();
+
+    // 查询本月图片总数
+    @Query(value = "SELECT COUNT(*) FROM onebot.chat_records cr WHERE cr.message LIKE '%type=image%' AND cr.created_at >= DATE_TRUNC('month', CURRENT_DATE)", nativeQuery = true)
+    long countMonthlyImages();
+
+    // 查询所有图片消息总数
+    @Query(value = "SELECT COUNT(*) FROM onebot.chat_records cr WHERE cr.message LIKE '%type=image%'", nativeQuery = true)
+    long countByMessageContaining(String pattern);
+
+    // 注意：countByMessageContaining 方法需要重载或者使用默认的JPA方法
+    // 或者可以直接使用以下方法：
+//    long countByMessageContaining(String pattern);
 }

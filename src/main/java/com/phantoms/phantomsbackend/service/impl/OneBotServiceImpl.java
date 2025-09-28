@@ -280,6 +280,12 @@ public class OneBotServiceImpl implements OneBotService {
         Map<String, Object> result = new HashMap<>();
 
         try {
+            // 添加总量统计数据
+            result.put("monthlyMessageCount", getMonthlyMessageCount());
+            result.put("monthlyImageCount", getMonthlyImageCount());
+            result.put("totalMessageCount", getTotalMessageCount());
+            result.put("totalImageCount", getTotalImageCount());
+
             // 1. 发送消息数量排名
             List<Object[]> messageRanking = chatRecordRepository.findMonthlyMessageRanking();
             List<Map<String, Object>> messageRankingList = new ArrayList<>();
@@ -494,5 +500,25 @@ public class OneBotServiceImpl implements OneBotService {
         } else {
             return defaultValue;
         }
+    }
+
+    @Override
+    public long getMonthlyMessageCount() {
+        return chatRecordRepository.countMonthlyMessages();
+    }
+
+    @Override
+    public long getMonthlyImageCount() {
+        return chatRecordRepository.countMonthlyImages();
+    }
+
+    @Override
+    public long getTotalMessageCount() {
+        return chatRecordRepository.count();
+    }
+
+    @Override
+    public long getTotalImageCount() {
+        return chatRecordRepository.countByMessageContaining("[CQ:image");
     }
 }
