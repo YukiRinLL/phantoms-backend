@@ -127,6 +127,7 @@ com\phantoms\phantomsbackend\repository\primary\PrimaryPasswordRepository.class
 com\phantoms\phantomsbackend\common\utils\LittlenightmareClient.class
 com\phantoms\phantomsbackend\common\serializer\JsonArraySerializer.class
 com\phantoms\phantomsbackend\service\impl\OneBotServiceImpl.class
+com\phantoms\phantomsbackend\common\config\AppConfig.class
 com\phantoms\phantomsbackend\pojo\entity\primary\User.class
 com\phantoms\phantomsbackend\common\jasper\JasperReport.class
 com\phantoms\phantomsbackend\common\utils\XIVAPIClient$4.class

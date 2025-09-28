@@ -99,6 +99,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\dto\MessageD
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\secondary\SecondaryMessageRepository.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\AuthUserController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\exception\GlobalExceptionHandler.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\AppConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\primary\SystemConfigRepository.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\RecruitmentResponse.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\secondary\SecondaryExpeditionaryTeamRepository.java
