@@ -45,6 +45,8 @@ public class OneBotServiceImpl implements OneBotService {
     @Value("${napcat.default-group-id}")
     private String defaultGroupId;
 
+    private String phantomGroupId = "787909466";
+
     // Redis缓存相关配置
     private static final String GROUP_MEMBER_CACHE_PREFIX = "group:members:";
     private static final long GROUP_MEMBER_CACHE_EXPIRE_HOURS = 24; // 缓存24小时
@@ -292,7 +294,7 @@ public class OneBotServiceImpl implements OneBotService {
 
             // 收集所有需要查询的群组ID（假设统计的是默认群组的数据）
             Set<Long> groupIds = new HashSet<>();
-            groupIds.add(Long.parseLong("787909466"));//todo 这里改为配置
+            groupIds.add(Long.parseLong(phantomGroupId));
 
             // 缓存每个群组的成员列表
             Map<Long, Map<Long, String>> groupMemberMap = new HashMap<>();
@@ -303,7 +305,7 @@ public class OneBotServiceImpl implements OneBotService {
             }
 
             // 获取默认群组的成员映射
-            Map<Long, String> defaultGroupMemberMap = groupMemberMap.get(Long.parseLong("787909466"));//todo 这里改为配置
+            Map<Long, String> defaultGroupMemberMap = groupMemberMap.get(Long.parseLong(phantomGroupId));
             if (defaultGroupMemberMap == null) {
                 defaultGroupMemberMap = new HashMap<>();
             }
