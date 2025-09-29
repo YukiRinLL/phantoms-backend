@@ -1,6 +1,7 @@
 package com.phantoms.phantomsbackend.service.scheduler;
 
 import com.phantoms.phantomsbackend.common.utils.LittlenightmareClient;
+import com.phantoms.phantomsbackend.common.utils.RedisUtil;
 import com.phantoms.phantomsbackend.pojo.entity.RecruitmentResponse;
 import com.phantoms.phantomsbackend.pojo.entity.primary.Recruitment;
 import com.phantoms.phantomsbackend.repository.primary.RecruitmentRepository;
@@ -19,12 +20,18 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
 public class RecruitmentScheduler {
 
     private static final Logger logger = LoggerFactory.getLogger(RecruitmentScheduler.class);
+
+    // Redis 缓存键前缀
+    private static final String RECRUITMENT_CACHE_PREFIX = "recruitment:";
+    // 缓存过期时间（24小时）
+    private static final long CACHE_EXPIRE_HOURS = 24;
 
     @Autowired
     private OneBotService oneBotService;
@@ -34,6 +41,9 @@ public class RecruitmentScheduler {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Scheduled(fixedRate = 300000) // 每300秒执行一次
     @Transactional
@@ -121,6 +131,90 @@ public class RecruitmentScheduler {
     }
 
     /**
+     * 筛选并通知，使用 Redis 缓存避免重复发送
+     */
+    private void filterAndNotify(List<Recruitment> allRecruitments) {
+        List<Recruitment> filteredRecruitments = allRecruitments.stream()
+            .filter(recruitment -> recruitment.getDescription() != null &&
+                recruitment.getDescription().contains("HQ"))
+            .collect(Collectors.toList());
+
+        if (!filteredRecruitments.isEmpty()) {
+            logger.info("Found {} filtered recruitments before cache check", filteredRecruitments.size());
+
+            // 过滤出未在缓存中的招募信息
+            List<Recruitment> newRecruitments = filteredRecruitments.stream()
+                .filter(recruitment -> !isRecruitmentInCache(recruitment.getId()))
+                .collect(Collectors.toList());
+
+            if (!newRecruitments.isEmpty()) {
+                logger.info("Sending notifications for {} new recruitments", newRecruitments.size());
+
+                newRecruitments.forEach(recruitment -> {
+                    try {
+                        // 发送消息
+                        oneBotService.sendGroupMessageWithDefaultGroup(
+                            "[招募信息] (" + recruitment.getName() + ")\n" +
+                                "Category: " + recruitment.getCategory() + "\n" +
+                                "Duty: " + recruitment.getDuty() + "\n" +
+                                recruitment.getDescription() + "\n" +
+                                "HomeWorld: " + recruitment.getHomeWorld() + "\n" +
+                                "Posted: " + recruitment.getDatacenter() + "-" + recruitment.getCreatedWorld() + "\n" +
+                                "UpdatedAt: " + recruitment.getUpdatedAt() + "\n" +
+                                "TimeLeft: " + recruitment.getTimeLeft() + "s\n",
+                            null
+                        );
+
+                        // 将已发送的招募信息加入缓存
+                        cacheRecruitment(recruitment.getId());
+
+                    } catch (Exception e) {
+                        logger.error("Failed to send notification for recruitment {}", recruitment.getId(), e);
+                    }
+                });
+            } else {
+                logger.info("No new recruitments found after cache check");
+            }
+        } else {
+            logger.info("No filtered recruitments found");
+        }
+    }
+
+    /**
+     * 检查招募信息是否在缓存中
+     */
+    private boolean isRecruitmentInCache(Integer recruitmentId) {
+        try {
+            String cacheKey = getCacheKey(recruitmentId);
+            return redisUtil.hasKey(cacheKey);
+        } catch (Exception e) {
+            logger.warn("Failed to check cache for recruitment {}, treating as not cached", recruitmentId, e);
+            return false; // 如果缓存检查失败，当作不在缓存中处理
+        }
+    }
+
+    /**
+     * 将招募信息加入缓存
+     */
+    private void cacheRecruitment(Integer recruitmentId) {
+        try {
+            String cacheKey = getCacheKey(recruitmentId);
+            // 使用 "1" 作为值，我们只关心键是否存在
+            redisUtil.setWithExpire(cacheKey, "1", CACHE_EXPIRE_HOURS, TimeUnit.HOURS);
+            logger.debug("Cached recruitment {} with key: {}", recruitmentId, cacheKey);
+        } catch (Exception e) {
+            logger.warn("Failed to cache recruitment {}", recruitmentId, e);
+        }
+    }
+
+    /**
+     * 生成缓存键
+     */
+    private String getCacheKey(Integer recruitmentId) {
+        return RECRUITMENT_CACHE_PREFIX + recruitmentId;
+    }
+
+    /**
      * 简化版批量保存 - 只使用最基本的功能（修正类型问题）
      */
     private int simpleBatchSave(List<Recruitment> recruitments) {
@@ -201,38 +295,4 @@ public class RecruitmentScheduler {
 
         return 0;
     }
-
-
-    // 原有的筛选逻辑（如果需要可以取消注释）
-    private void filterAndNotify(List<Recruitment> allRecruitments) {
-        List<Recruitment> filteredRecruitments = allRecruitments.stream()
-                .filter(recruitment -> recruitment.getDescription() != null &&
-                                      recruitment.getDescription().contains("HQ"))
-                .collect(Collectors.toList());
-
-        if (!filteredRecruitments.isEmpty()) {
-            logger.info("Found {} filtered recruitments", filteredRecruitments.size());
-
-            filteredRecruitments.forEach(recruitment -> {
-                try {
-                    oneBotService.sendGroupMessageWithDefaultGroup(
-                            "[招募信息] (" + recruitment.getName() + ")\n" +
-                                    "Category: " + recruitment.getCategory() + "\n" +
-                                    "Duty: " + recruitment.getDuty() + "\n" +
-                                    recruitment.getDescription() + "\n" +
-                                    "HomeWorld: " + recruitment.getHomeWorld() + "\n" +
-                                    "Posted: " + recruitment.getDatacenter() + "-" + recruitment.getCreatedWorld() + "\n" +
-                                    "UpdatedAt: " + recruitment.getUpdatedAt() + "\n" +
-                                    "TimeLeft: " + recruitment.getTimeLeft() + "s\n",
-                            null
-                    );
-                } catch (Exception e) {
-                    logger.error("Failed to send notification for recruitment {}", recruitment.getId(), e);
-                }
-            });
-        } else {
-            logger.info("No filtered recruitments found");
-        }
-    }
-
 }
