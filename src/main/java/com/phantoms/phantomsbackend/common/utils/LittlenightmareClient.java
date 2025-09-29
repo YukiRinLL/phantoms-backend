@@ -149,7 +149,8 @@ public class LittlenightmareClient {
 
                 // 检查返回内容是否为 HTML 页面
                 if (jsonResponse != null && jsonResponse.trim().startsWith("<")) {
-                    logger.error("Invalid response received: {}", jsonResponse);
+                    logger.info("Invalid response received when trying direct connect.");
+//                    logger.error("Invalid response received: {}", jsonResponse);
                     throw new IOException("Invalid response received: " + jsonResponse);
                 }
 
@@ -158,7 +159,8 @@ public class LittlenightmareClient {
                 logger.info("Successfully fetched data via direct connection");
             }
         } catch (IOException e) {
-            logger.error("Failed to fetch recruitment listings without proxy: {}", e.getMessage());
+            logger.info("Failed to fetch recruitment listings without proxy.");
+//            logger.error("Failed to fetch recruitment listings without proxy: {}", e.getMessage());
         }
 
         // 如果直连失败，尝试使用 AllOrigins Raw
@@ -236,64 +238,64 @@ public class LittlenightmareClient {
             }
         }
 
-        // 如果 CORS Anywhere 失败，尝试使用代理
-        if (!success) {
-            logger.info("Trying proxy servers...");
-            for (int attempt = 0; attempt < 3; attempt++) {
-                HttpHost proxy = ProxyUtil.getRandomProxy();
-                if (proxy == null) {
-                    logger.warn("No proxy available, skipping proxy attempt");
-                    continue;
-                }
-                try (CloseableHttpClient httpClient = HttpClients.custom()
-                    .setProxy(proxy)
-                    .setDefaultRequestConfig(RequestConfig.custom()
-                        .setConnectTimeout(CONNECT_TIMEOUT)
-                        .setSocketTimeout(SOCKET_TIMEOUT)
-                        .build())
-                    .build()) {
-                    HttpGet request = new HttpGet(targetUrl);
-                    request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
-                    request.setHeader("Accept", "application/json");
+//        // 如果 CORS Anywhere 失败，尝试使用代理
+//        if (!success) {
+//            logger.info("Trying proxy servers...");
+//            for (int attempt = 0; attempt < 3; attempt++) {
+//                HttpHost proxy = ProxyUtil.getRandomProxy();
+//                if (proxy == null) {
+//                    logger.warn("No proxy available, skipping proxy attempt");
+//                    continue;
+//                }
+//                try (CloseableHttpClient httpClient = HttpClients.custom()
+//                    .setProxy(proxy)
+//                    .setDefaultRequestConfig(RequestConfig.custom()
+//                        .setConnectTimeout(CONNECT_TIMEOUT)
+//                        .setSocketTimeout(SOCKET_TIMEOUT)
+//                        .build())
+//                    .build()) {
+//                    HttpGet request = new HttpGet(targetUrl);
+//                    request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
+//                    request.setHeader("Accept", "application/json");
+//
+//                    try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
+//                        String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+//
+//                        if (jsonResponse != null && !jsonResponse.trim().startsWith("<")) {
+//                            response = parseJsonResponse(jsonResponse);
+//                            success = true;
+//                            logger.info("Successfully fetched data via proxy: {}", proxy);
+//                            break;
+//                        }
+//                    }
+//                } catch (IOException e) {
+//                    logger.error("Failed to fetch recruitment listings using proxy {}: {}", proxy, e.getMessage());
+//                }
+//            }
+//        }
 
-                    try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
-                        String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-
-                        if (jsonResponse != null && !jsonResponse.trim().startsWith("<")) {
-                            response = parseJsonResponse(jsonResponse);
-                            success = true;
-                            logger.info("Successfully fetched data via proxy: {}", proxy);
-                            break;
-                        }
-                    }
-                } catch (IOException e) {
-                    logger.error("Failed to fetch recruitment listings using proxy {}: {}", proxy, e.getMessage());
-                }
-            }
-        }
-
-        // 如果代理尝试失败，尝试使用 ScrapeStack
-        if (!success) {
-            logger.info("Trying ScrapeStack...");
-            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-                HttpGet request = new HttpGet(scrapeStackUrl);
-                request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
-                request.setHeader("Accept", "application/json");
-
-                try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
-                    String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                    logger.info("ScrapeStack response status: {}", httpResponse.getStatusLine().getStatusCode());
-
-                    if (jsonResponse != null && !jsonResponse.trim().startsWith("<")) {
-                        response = parseJsonResponse(jsonResponse);
-                        success = true;
-                        logger.info("Successfully fetched data via ScrapeStack");
-                    }
-                }
-            } catch (IOException e) {
-                logger.error("Failed to fetch recruitment listings using ScrapeStack: {}", e.getMessage());
-            }
-        }
+//        // 如果代理尝试失败，尝试使用 ScrapeStack
+//        if (!success) {
+//            logger.info("Trying ScrapeStack...");
+//            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+//                HttpGet request = new HttpGet(scrapeStackUrl);
+//                request.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
+//                request.setHeader("Accept", "application/json");
+//
+//                try (CloseableHttpResponse httpResponse = httpClient.execute(request)) {
+//                    String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+//                    logger.info("ScrapeStack response status: {}", httpResponse.getStatusLine().getStatusCode());
+//
+//                    if (jsonResponse != null && !jsonResponse.trim().startsWith("<")) {
+//                        response = parseJsonResponse(jsonResponse);
+//                        success = true;
+//                        logger.info("Successfully fetched data via ScrapeStack");
+//                    }
+//                }
+//            } catch (IOException e) {
+//                logger.error("Failed to fetch recruitment listings using ScrapeStack: {}", e.getMessage());
+//            }
+//        }
 
         if (!success) {
             throw new IOException("Failed to fetch recruitment listings after multiple attempts");

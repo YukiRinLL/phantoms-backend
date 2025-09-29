@@ -7,12 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update data sync function">
-      <change beforePath="$PROJECT_DIR$/.idea/phantoms-backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/phantoms-backend.iml" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update RecruitmentScheduler">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/RecruitmentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/RecruitmentRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -312,23 +309,7 @@
       <workItem from="1758512748651" duration="22539000" />
       <workItem from="1758678225062" duration="21000" />
       <workItem from="1758765975747" duration="44910000" />
-      <workItem from="1759043180802" duration="13005000" />
-    </task>
-    <task id="LOCAL-00116" summary="update todo list">
-      <option name="closed" value="true" />
-      <created>1756262179205</created>
-      <option name="number" value="00116" />
-      <option name="presentableId" value="LOCAL-00116" />
-      <option name="project" value="LOCAL" />
-      <updated>1756262179206</updated>
-    </task>
-    <task id="LOCAL-00117" summary="add LittlenightmareClient">
-      <option name="closed" value="true" />
-      <created>1756278957878</created>
-      <option name="number" value="00117" />
-      <option name="presentableId" value="LOCAL-00117" />
-      <option name="project" value="LOCAL" />
-      <updated>1756278957884</updated>
+      <workItem from="1759043180802" duration="15327000" />
     </task>
     <task id="LOCAL-00118" summary="add LittlenightmareClient">
       <option name="closed" value="true" />
@@ -706,7 +687,23 @@
       <option name="project" value="LOCAL" />
       <updated>1759044481081</updated>
     </task>
-    <option name="localTasksCounter" value="165" />
+    <task id="LOCAL-00165" summary="update RecruitmentScheduler">
+      <option name="closed" value="true" />
+      <created>1759061991685</created>
+      <option name="number" value="00165" />
+      <option name="presentableId" value="LOCAL-00165" />
+      <option name="project" value="LOCAL" />
+      <updated>1759061991685</updated>
+    </task>
+    <task id="LOCAL-00166" summary="update RecruitmentScheduler">
+      <option name="closed" value="true" />
+      <created>1759062064349</created>
+      <option name="number" value="00166" />
+      <option name="presentableId" value="LOCAL-00166" />
+      <option name="project" value="LOCAL" />
+      <updated>1759062064349</updated>
+    </task>
+    <option name="localTasksCounter" value="167" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -741,7 +738,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add RecruitmentScheduler" />
     <MESSAGE value="add CustomOffsetDateTimeDeserializer" />
     <MESSAGE value="fix LittlenightmareClient" />
     <MESSAGE value="add ProxyUtil &amp; turn off RecruitmentScheduler" />
@@ -766,7 +762,8 @@
     <MESSAGE value="add QQ getMonthlyStats API" />
     <MESSAGE value="add guild-member-dynamic API" />
     <MESSAGE value="update data sync function" />
-    <option name="LAST_COMMIT_MESSAGE" value="update data sync function" />
+    <MESSAGE value="update RecruitmentScheduler" />
+    <option name="LAST_COMMIT_MESSAGE" value="update RecruitmentScheduler" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
