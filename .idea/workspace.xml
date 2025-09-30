@@ -7,9 +7,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix PokeReply bugs">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update PokeReply bugs">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/git.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-09-30T17-02-07_379.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-09-30T17-02-33_907.dumpstream" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -312,14 +316,6 @@
       <workItem from="1758765975747" duration="44910000" />
       <workItem from="1759043180802" duration="18989000" />
       <workItem from="1759126190584" duration="3831000" />
-    </task>
-    <task id="LOCAL-00124" summary="add CustomOffsetDateTimeDeserializer">
-      <option name="closed" value="true" />
-      <created>1756363854538</created>
-      <option name="number" value="00124" />
-      <option name="presentableId" value="LOCAL-00124" />
-      <option name="project" value="LOCAL" />
-      <updated>1756363854538</updated>
     </task>
     <task id="LOCAL-00125" summary="fix LittlenightmareClient">
       <option name="closed" value="true" />
@@ -705,7 +701,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759222999749</updated>
     </task>
-    <option name="localTasksCounter" value="173" />
+    <task id="LOCAL-00173" summary="update PokeReply bugs">
+      <option name="closed" value="true" />
+      <created>1759224230682</created>
+      <option name="number" value="00173" />
+      <option name="presentableId" value="LOCAL-00173" />
+      <option name="project" value="LOCAL" />
+      <updated>1759224230682</updated>
+    </task>
+    <option name="localTasksCounter" value="174" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -740,7 +744,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add ProxyUtil &amp; turn off RecruitmentScheduler" />
     <MESSAGE value="fix ProxyUtil api.89ip.cn" />
     <MESSAGE value="update ProxyUtil ip3366.net" />
     <MESSAGE value="update LittlenightmareClient with scrapestack" />
@@ -765,7 +768,8 @@
     <MESSAGE value="update RecruitmentScheduler" />
     <MESSAGE value="add spring-dotenv" />
     <MESSAGE value="fix PokeReply bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix PokeReply bugs" />
+    <MESSAGE value="update PokeReply bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="update PokeReply bugs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
