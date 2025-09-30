@@ -7,9 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add spring-dotenv">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix PokeReply bugs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -312,22 +312,6 @@
       <workItem from="1758765975747" duration="44910000" />
       <workItem from="1759043180802" duration="18989000" />
       <workItem from="1759126190584" duration="3831000" />
-    </task>
-    <task id="LOCAL-00122" summary="add RecruitmentScheduler">
-      <option name="closed" value="true" />
-      <created>1756362285389</created>
-      <option name="number" value="00122" />
-      <option name="presentableId" value="LOCAL-00122" />
-      <option name="project" value="LOCAL" />
-      <updated>1756362285390</updated>
-    </task>
-    <task id="LOCAL-00123" summary="add RecruitmentScheduler">
-      <option name="closed" value="true" />
-      <created>1756362381145</created>
-      <option name="number" value="00123" />
-      <option name="presentableId" value="LOCAL-00123" />
-      <option name="project" value="LOCAL" />
-      <updated>1756362381145</updated>
     </task>
     <task id="LOCAL-00124" summary="add CustomOffsetDateTimeDeserializer">
       <option name="closed" value="true" />
@@ -705,7 +689,23 @@
       <option name="project" value="LOCAL" />
       <updated>1759218607286</updated>
     </task>
-    <option name="localTasksCounter" value="171" />
+    <task id="LOCAL-00171" summary="fix PokeReply bugs">
+      <option name="closed" value="true" />
+      <created>1759222892161</created>
+      <option name="number" value="00171" />
+      <option name="presentableId" value="LOCAL-00171" />
+      <option name="project" value="LOCAL" />
+      <updated>1759222892161</updated>
+    </task>
+    <task id="LOCAL-00172" summary="fix PokeReply bugs">
+      <option name="closed" value="true" />
+      <created>1759222999749</created>
+      <option name="number" value="00172" />
+      <option name="presentableId" value="LOCAL-00172" />
+      <option name="project" value="LOCAL" />
+      <updated>1759222999749</updated>
+    </task>
+    <option name="localTasksCounter" value="173" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -740,7 +740,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix LittlenightmareClient" />
     <MESSAGE value="add ProxyUtil &amp; turn off RecruitmentScheduler" />
     <MESSAGE value="fix ProxyUtil api.89ip.cn" />
     <MESSAGE value="update ProxyUtil ip3366.net" />
@@ -765,7 +764,8 @@
     <MESSAGE value="update data sync function" />
     <MESSAGE value="update RecruitmentScheduler" />
     <MESSAGE value="add spring-dotenv" />
-    <option name="LAST_COMMIT_MESSAGE" value="add spring-dotenv" />
+    <MESSAGE value="fix PokeReply bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix PokeReply bugs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -179,10 +179,8 @@ public class OneBotServiceImpl implements OneBotService {
             // 如果被戳的是机器人自己
             if (targetId != null && isBotUserId(targetId)) {
                 String[] replies = {
-                    "别戳我嘛~",
-                    "戳我干嘛呀~",
-                    "再戳我要生气了！",
-                    "戳回去~"
+                    "> <",
+                    "袜"
                 };
                 String reply = replies[(int) (Math.random() * replies.length)];
 
