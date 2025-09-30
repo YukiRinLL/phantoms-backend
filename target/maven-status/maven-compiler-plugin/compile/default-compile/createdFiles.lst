@@ -72,6 +72,7 @@ com\phantoms\phantomsbackend\common\bean\ResultInfo.class
 com\phantoms\phantomsbackend\pojo\entity\primary\UserProfile.class
 com\phantoms\phantomsbackend\repository\primary\onebot\UserMessageRepository.class
 com\phantoms\phantomsbackend\pojo\entity\secondary\ExpeditionaryTeam.class
+com\phantoms\phantomsbackend\common\config\EnvConfig.class
 com\phantoms\phantomsbackend\pojo\entity\secondary\UserProfile.class
 com\phantoms\phantomsbackend\common\jasper\AbstractReport.class
 com\phantoms\phantomsbackend\repository\primary\onebot\PrimaryChatRecordRepository.class

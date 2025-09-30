@@ -86,6 +86,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\Emai
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\PingController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\primary\PrimaryAuthUserRepository.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\UserService.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\EnvConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\RisingStonesUtils.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\ImageProxyController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\LeanCloudUtils.java

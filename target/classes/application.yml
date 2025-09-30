@@ -23,35 +23,16 @@ spring:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   datasource:
     primary:
-      # Supabase Direct Connection mode
-      #    url: jdbc:postgresql://db.dshmbsawwrbuycnivcjs.supabase.co:5432/postgres
-      #    username: postgres
-      #    password: LUOCANYU
-
       # Supabase Transaction Pooler mode
-      url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
-      username: postgres.dshmbsawwrbuycnivcjs
-      password: LUOCANYU
+      url: ${SUPABASE_PRIMARY_URL:jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres}
+      username: ${SUPABASE_PRIMARY_USERNAME:postgres.dshmbsawwrbuycnivcjs}
+      password: ${SUPABASE_PRIMARY_PASSWORD}
       driver-class-name: org.postgresql.Driver
 
-      # Supabase Session pooler mode
-      #    url: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres?pgbouncer=true&connection_limit=1
-      #    username: postgres.dshmbsawwrbuycnivcjs
-      #    password: LUOCANYU
-      #    driver-class-name: org.postgresql.Driver
-
     secondary:
-#      url: jdbc:mysql://sql.wsfdb.cn:3306/YukiRinLLPhantomBackup?useSSL=false&serverTimezone=UTC
-#      username: YukiRinLLPhantomBackup
-#      password: LUOCANYU
-
-#      url: jdbc:mysql://db4free.net:3306/phantoms_db
-#      username: yukirinll
-#      password: LUOCANYU
-
-      url: jdbc:mysql://mysql2.sqlpub.com:3307/phantoms_db?allowPublicKeyRetrieval=true
-      username: yukirinll
-      password: ACy2qDomjU1zMxFB
+      url: ${MYSQL_SECONDARY_URL:jdbc:mysql://mysql2.sqlpub.com:3307/phantoms_db?allowPublicKeyRetrieval=true}
+      username: ${MYSQL_SECONDARY_USERNAME:yukirinll}
+      password: ${MYSQL_SECONDARY_PASSWORD}
       driver-class-name: com.mysql.cj.jdbc.Driver
 
     hikari:
@@ -59,14 +40,12 @@ spring:
       max-lifetime: 1800000
       connection-timeout: 30000
       pool-name: SupabasePool
-
       maximum-pool-size: 20
       minimum-idle: 10
       data-source-properties:
-        # 禁用 HikariCP 的预编译语句缓存
         preparedStatementCacheQueries: 0
         preparedStatementCacheSizeMiB: 0
-        prepareThreshold: 0  # Disable prepared statement caching
+        prepareThreshold: 0
 
   jpa:
     properties:
@@ -91,8 +70,8 @@ spring:
   mail:
     host: smtp.qq.com
     port: 465
-    username: 3146672611@qq.com
-    password: aecgjhbyertddcfe
+    username: ${EMAIL_USERNAME:3146672611@qq.com}
+    password: ${EMAIL_PASSWORD}
     from:
       name: Phantoms Official
     properties:
@@ -101,22 +80,19 @@ spring:
           ssl:
             enable: true
           auth: true
+
   data:
     # Redis
     redis:
-      # Redis
-      # Render Internal Redis URL
-#      url: redis://red-d03imhre5dus73ab817g:6379
-      # External Redis URL
-      url: rediss://red-d03imhre5dus73ab817g:OXtvQrLbJ1WXXdjXMEVknm1hPnW8XFAo@oregon-keyvalue.render.com:6379
+      url: ${REDIS_URL:rediss://red-d03imhre5dus73ab817g:OXtvQrLbJ1WXXdjXMEVknm1hPnW8XFAo@oregon-keyvalue.render.com:6379}
 
 mybatis-plus:
   global-config:
     db-config:
-      field-strategy: not_null # 只映射实体中有值的字段
-      id-type: assign_uuid # 使用 UUID 作为主键
+      field-strategy: not_null
+      id-type: assign_uuid
   configuration:
-    map-underscore-to-camel-case: true # 自动映射下划线到驼峰
+    map-underscore-to-camel-case: true
 
 # swagger
 springdoc:
@@ -142,29 +118,28 @@ shiro:
     server:
       enable: true
       url: "/shiro/ws"
+
 #NapCatQQUtil
 napcat:
-  http-server-url: https://jtjlspevnnrw.jp-members-1.clawcloudrun.com
-  access-token: 7saligia
-  default-group-id: 595883141
+  http-server-url: ${NAPCAT_HTTP_SERVER_URL:https://jtjlspevnnrw.jp-members-1.clawcloudrun.com}
+  access-token: ${NAPCAT_ACCESS_TOKEN:7saligia}
+  default-group-id: ${NAPCAT_DEFAULT_GROUP_ID:595883141}
 
 xivapi:
   base-url: "https://v2.xivapi.com/api"
 
-
 leancloud:
-  app-id: "4NeSS81j4KK0uyYULpfk52yh-gzGzoHsz"
-  app-key: "1xNZMz1XUVSLDTAv3XoVBgni"
-  server-url: "https://4ness81j.lc-cn-n1-shared.com"
-  # 开启 LeanCloud SDK 调试日志
+  app-id: ${LEANCLOUD_APP_ID:4NeSS81j4KK0uyYULpfk52yh-gzGzoHsz}
+  app-key: ${LEANCLOUD_APP_KEY}
+  server-url: ${LEANCLOUD_SERVER_URL:https://4ness81j.lc-cn-n1-shared.com}
   log-level: "DEBUG"
 
 d1:
   api-url: https://api.cloudflare.com
-  account-id: 0e7f3f296b75e9770c65d0d0fa73d7d7
-  database-id: 0ad9906c-ec63-4111-b741-647627eee096
-  api-token: XfJvEzGOKAMIn18NRE5MvkqU4C64s_ic3iNXRk1y
+  account-id: ${CLOUDFLARE_ACCOUNT_ID:0e7f3f296b75e9770c65d0d0fa73d7d7}
+  database-id: ${CLOUDFLARE_DATABASE_ID:0ad9906c-ec63-4111-b741-647627eee096}
+  api-token: ${CLOUDFLARE_API_TOKEN}
   log-level: WARNING
 
 scrapestack:
-  access-key: ebdc1b9aa7e4f9f1c776d9ad2c90628e
+  access-key: ${SCRAPESTACK_ACCESS_KEY}
