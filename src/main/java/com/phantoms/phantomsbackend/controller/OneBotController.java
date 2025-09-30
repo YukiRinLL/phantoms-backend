@@ -36,8 +36,15 @@ public class OneBotController {
 
     @PostMapping("/onebot")
     public ResponseEntity<String> handleOneBotRequest(@RequestBody Map<String, Object> requestBody) {
-        // 打印接收到的请求内容
-        System.out.println("Received request: " + requestBody);
+        // 打印接收到的请求内容和类型
+        String postType = (String) requestBody.get("post_type");
+        String noticeType = (String) requestBody.get("notice_type");
+        String subType = (String) requestBody.get("sub_type");
+
+        System.out.println("Received request - post_type: " + postType +
+            ", notice_type: " + noticeType +
+            ", sub_type: " + subType);
+        System.out.println("Full request: " + requestBody);
 
         try {
             // 调用服务层处理请求
@@ -51,6 +58,8 @@ public class OneBotController {
             for (ChatRecord chatRecord : chatRecords) {
                 ObjectNode recordJson = objectMapper.createObjectNode();
                 recordJson.put("id", chatRecord.getId().toString());
+                recordJson.put("message_type", chatRecord.getMessageType());
+                recordJson.put("message", chatRecord.getMessage());
                 data.add(recordJson);
             }
             jsonResponse.set("data", data);
@@ -60,6 +69,7 @@ public class OneBotController {
         } catch (Exception e) {
             // 记录错误日志
             System.err.println("Error processing request: " + e.getMessage());
+            e.printStackTrace();
 
             // 使用 Jackson 构建 JSON 错误响应
             ObjectNode jsonError = objectMapper.createObjectNode();

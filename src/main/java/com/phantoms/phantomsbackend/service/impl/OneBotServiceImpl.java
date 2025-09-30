@@ -53,7 +53,63 @@ public class OneBotServiceImpl implements OneBotService {
 
     @Override
     public List<ChatRecord> processOneBotRequest(Map<String, Object> requestBody) throws Exception {
-        // 获取消息类型和消息内容
+        String postType = (String) requestBody.get("post_type");
+
+        // 处理通知事件（如戳一戳）
+        if ("notice".equals(postType)) {
+            return handleNoticeEvent(requestBody);
+        }
+        // 处理消息事件
+        else if ("message".equals(postType)) {
+            return handleMessageEvent(requestBody);
+        }
+        // 其他类型的事件
+        else {
+            return handleOtherEvent(requestBody);
+        }
+    }
+
+    /**
+     * 处理通知事件（戳一戳等）
+     */
+    private List<ChatRecord> handleNoticeEvent(Map<String, Object> requestBody) {
+        String noticeType = (String) requestBody.get("notice_type");
+        List<ChatRecord> chatRecords = new ArrayList<>();
+
+        if ("notify".equals(noticeType)) {
+            String subType = (String) requestBody.get("sub_type");
+
+            // 处理戳一戳事件
+            if ("poke".equals(subType)) {
+                Long userId = requestBody.get("user_id") != null ? Long.valueOf(requestBody.get("user_id").toString()) : null;
+                Long targetId = requestBody.get("target_id") != null ? Long.valueOf(requestBody.get("target_id").toString()) : null;
+                Long groupId = requestBody.get("group_id") != null ? Long.valueOf(requestBody.get("group_id").toString()) : null;
+
+                // 创建戳一戳记录
+                ChatRecord chatRecord = new ChatRecord();
+                chatRecord.setMessageType("notice_poke");
+                chatRecord.setUserId(userId);
+                chatRecord.setGroupId(groupId);
+                chatRecord.setMessage(String.format("用户 %s 戳了戳 %s", userId, targetId));
+                chatRecord.setTimestamp(LocalDateTime.now());
+                chatRecord.setCreatedAt(LocalDateTime.now());
+                chatRecord.setUpdatedAt(LocalDateTime.now());
+
+                chatRecordRepository.save(chatRecord);
+                chatRecords.add(chatRecord);
+
+                // 可以在这里添加自动回复逻辑
+                handlePokeReply(userId, targetId, groupId);
+            }
+        }
+
+        return chatRecords;
+    }
+
+    /**
+     * 处理消息事件（原来的逻辑）
+     */
+    private List<ChatRecord> handleMessageEvent(Map<String, Object> requestBody) throws Exception {
         String messageType = (String) requestBody.get("message_type");
         Long userId = requestBody.get("user_id") != null ? Long.valueOf(requestBody.get("user_id").toString()) : null;
         Long groupId = requestBody.get("group_id") != null ? Long.valueOf(requestBody.get("group_id").toString()) : null;
@@ -61,31 +117,18 @@ public class OneBotServiceImpl implements OneBotService {
         // 检查message字段是否为List
         Object messageObj = requestBody.get("message");
         List<ChatRecord> chatRecords = new ArrayList<>();
+
         if (messageObj instanceof List) {
             // 如果是List，将List中的每个元素分别保存为一条ChatRecord
             List<?> messageList = (List<?>) messageObj;
             for (Object messageElement : messageList) {
-                ChatRecord chatRecord = new ChatRecord();
-                chatRecord.setMessageType(messageType);
-                chatRecord.setUserId(userId);
-                chatRecord.setGroupId(groupId);
-                chatRecord.setMessage(messageElement.toString());
-                chatRecord.setTimestamp(LocalDateTime.now());
-                chatRecord.setCreatedAt(LocalDateTime.now());
-                chatRecord.setUpdatedAt(LocalDateTime.now());
+                ChatRecord chatRecord = createChatRecord(messageType, userId, groupId, messageElement.toString());
                 chatRecordRepository.save(chatRecord);
                 chatRecords.add(chatRecord);
             }
         } else if (messageObj instanceof String) {
             // 如果是String，直接保存为一条ChatRecord
-            ChatRecord chatRecord = new ChatRecord();
-            chatRecord.setMessageType(messageType);
-            chatRecord.setUserId(userId);
-            chatRecord.setGroupId(groupId);
-            chatRecord.setMessage((String) messageObj);
-            chatRecord.setTimestamp(LocalDateTime.now());
-            chatRecord.setCreatedAt(LocalDateTime.now());
-            chatRecord.setUpdatedAt(LocalDateTime.now());
+            ChatRecord chatRecord = createChatRecord(messageType, userId, groupId, (String) messageObj);
             chatRecordRepository.save(chatRecord);
             chatRecords.add(chatRecord);
         } else {
@@ -93,6 +136,77 @@ public class OneBotServiceImpl implements OneBotService {
         }
 
         return chatRecords;
+    }
+
+    /**
+     * 处理其他类型事件
+     */
+    private List<ChatRecord> handleOtherEvent(Map<String, Object> requestBody) {
+        // 记录其他类型的事件，但不做特殊处理
+        ChatRecord chatRecord = new ChatRecord();
+        chatRecord.setMessageType("other");
+        chatRecord.setUserId(requestBody.get("user_id") != null ? Long.valueOf(requestBody.get("user_id").toString()) : null);
+        chatRecord.setGroupId(requestBody.get("group_id") != null ? Long.valueOf(requestBody.get("group_id").toString()) : null);
+        chatRecord.setMessage("其他事件: " + requestBody.get("post_type"));
+        chatRecord.setTimestamp(LocalDateTime.now());
+        chatRecord.setCreatedAt(LocalDateTime.now());
+        chatRecord.setUpdatedAt(LocalDateTime.now());
+
+        chatRecordRepository.save(chatRecord);
+        return List.of(chatRecord);
+    }
+
+    /**
+     * 创建聊天记录对象（辅助方法）
+     */
+    private ChatRecord createChatRecord(String messageType, Long userId, Long groupId, String message) {
+        ChatRecord chatRecord = new ChatRecord();
+        chatRecord.setMessageType(messageType);
+        chatRecord.setUserId(userId);
+        chatRecord.setGroupId(groupId);
+        chatRecord.setMessage(message);
+        chatRecord.setTimestamp(LocalDateTime.now());
+        chatRecord.setCreatedAt(LocalDateTime.now());
+        chatRecord.setUpdatedAt(LocalDateTime.now());
+        return chatRecord;
+    }
+
+    /**
+     * 处理戳一戳的自动回复
+     */
+    private void handlePokeReply(Long userId, Long targetId, Long groupId) {
+        try {
+            // 如果被戳的是机器人自己
+            if (targetId != null && isBotUserId(targetId)) {
+                String[] replies = {
+                    "别戳我嘛~",
+                    "戳我干嘛呀~",
+                    "再戳我要生气了！",
+                    "戳回去~"
+                };
+                String reply = replies[(int) (Math.random() * replies.length)];
+
+                if (groupId != null) {
+                    napCatQQUtil.sendGroupMessage(groupId.toString(), reply);
+                }
+            }
+            // 如果是机器人戳别人（理论上不会发生，但可以记录）
+            else if (userId != null && isBotUserId(userId)) {
+                // 机器人主动戳别人，记录日志
+                System.out.println("机器人戳了用户: " + targetId);
+            }
+        } catch (Exception e) {
+            System.err.println("处理戳一戳回复失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 判断是否是机器人自己的用户ID
+     */
+    private boolean isBotUserId(Long userId) {
+        // 这里需要根据你的机器人实际用户ID来判断
+        // 假设机器人的用户ID是 3146672611（从日志中看到的self_id）
+        return userId != null && userId == 3146672611L;
     }
 
     private boolean isImageMessage(Object message) {

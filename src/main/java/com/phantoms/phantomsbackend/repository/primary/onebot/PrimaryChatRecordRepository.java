@@ -87,7 +87,10 @@ public interface PrimaryChatRecordRepository extends JpaRepository<ChatRecord, L
     @Query(value = "SELECT COUNT(*) FROM onebot.chat_records cr WHERE cr.message LIKE '%type=image%'", nativeQuery = true)
     long countByMessageContaining(String pattern);
 
-    // 注意：countByMessageContaining 方法需要重载或者使用默认的JPA方法
-    // 或者可以直接使用以下方法：
-//    long countByMessageContaining(String pattern);
+    // 查询指定类型的通知事件
+    List<ChatRecord> findByMessageType(String messageType);
+
+    // 查询戳一戳事件
+    @Query(value = "SELECT * FROM onebot.chat_records cr WHERE cr.message_type = 'notice_poke' ORDER BY cr.created_at DESC LIMIT ?1", nativeQuery = true)
+    List<ChatRecord> findTopPokeEvents(int limit);
 }
