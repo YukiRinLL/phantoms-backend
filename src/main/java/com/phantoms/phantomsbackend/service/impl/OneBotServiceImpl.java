@@ -186,7 +186,8 @@ public class OneBotServiceImpl implements OneBotService {
                     "嗯？",
                     "哎呀，被发现了",
                     "我还以为没人理我呢",
-                    "痒痒的"
+                    "痒痒的",
+                    "www"
                 };
                 String reply = replies[(int) (Math.random() * replies.length)];
 
