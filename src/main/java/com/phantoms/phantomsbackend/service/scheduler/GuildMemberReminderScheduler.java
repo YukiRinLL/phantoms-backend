@@ -35,7 +35,8 @@ public class GuildMemberReminderScheduler {
     @Value("${napcat.default-group-id}")
     private String defaultGroupId;
 
-    private String phantomGroupId = "787909466";
+    @Value("${napcat.phantom-group-id}")
+    private String phantomGroupId;
 
     @Scheduled(cron = "0 0 0 * * ?") // 每天凌晨0点执行
 //    @Scheduled(fixedRate = 60000) // 每分钟执行一次

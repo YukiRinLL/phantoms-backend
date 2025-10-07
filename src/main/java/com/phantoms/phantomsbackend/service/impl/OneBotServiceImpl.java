@@ -45,7 +45,8 @@ public class OneBotServiceImpl implements OneBotService {
     @Value("${napcat.default-group-id}")
     private String defaultGroupId;
 
-    private String phantomGroupId = "787909466";
+    @Value("${napcat.phantom-group-id}")
+    private String phantomGroupId;
 
     // Redis缓存相关配置
     private static final String GROUP_MEMBER_CACHE_PREFIX = "group:members:";

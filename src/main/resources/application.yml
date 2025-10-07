@@ -124,6 +124,7 @@ napcat:
   http-server-url: ${NAPCAT_HTTP_SERVER_URL:https://jtjlspevnnrw.jp-members-1.clawcloudrun.com}
   access-token: ${NAPCAT_ACCESS_TOKEN:7saligia}
   default-group-id: ${NAPCAT_DEFAULT_GROUP_ID:595883141}
+  phantom-group-id: ${NAPCAT_PHANTOM_GROUP_ID:787909466}
 
 xivapi:
   base-url: "https://v2.xivapi.com/api"
