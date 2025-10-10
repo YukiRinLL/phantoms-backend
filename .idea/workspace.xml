@@ -7,7 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add phantom-group-id in config" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add phantom-group-id in config">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -92,7 +95,7 @@
     "TestNG.NapCatQQTest.executor": "Run",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/phantoms-backend",
+    "last_opened_file_path": "D:/phantoms-configuration",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -152,7 +155,7 @@
       <command value="mvn clean package" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.PhantomsBackendApplication">
+  <component name="RunManager" selected="JUnit.NapCatQQTest">
     <configuration name="NapCatQQTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.NapCatQQTest" />
       <module name="phantoms-backend" />
@@ -240,20 +243,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.PhantomsBackendApplication" />
-        <item itemvalue="Application.NapCatQQTest" />
         <item itemvalue="TestNG.NapCatQQTest" />
         <item itemvalue="JUnit.NapCatQQTest" />
       </list>
     </recent_temporary>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27" />
-      </set>
-    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -310,6 +303,7 @@
       <workItem from="1759043180802" duration="18989000" />
       <workItem from="1759126190584" duration="3831000" />
       <workItem from="1759832179521" duration="1699000" />
+      <workItem from="1759889178751" duration="576000" />
     </task>
     <task id="LOCAL-00128" summary="fix ProxyUtil api.89ip.cn">
       <option name="closed" value="true" />
@@ -770,22 +764,22 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java</url>
-          <line>189</line>
+          <line>204</line>
           <option name="timeStamp" value="99" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java</url>
-          <line>166</line>
+          <line>183</line>
           <option name="timeStamp" value="100" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java</url>
-          <line>177</line>
+          <line>188</line>
           <option name="timeStamp" value="102" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java</url>
-          <line>200</line>
+          <line>216</line>
           <option name="timeStamp" value="103" />
         </line-breakpoint>
       </breakpoints>
