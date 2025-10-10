@@ -7,7 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update NAPCAT_HTTP_SERVER_URL">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update LittlenightmareClient add RETRIES &amp; DELAY_MS">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java" afterDir="false" />
     </list>
@@ -305,22 +305,6 @@
       <workItem from="1759126190584" duration="3831000" />
       <workItem from="1759832179521" duration="1699000" />
       <workItem from="1759889178751" duration="576000" />
-    </task>
-    <task id="LOCAL-00131" summary="update LittlenightmareClient with scrapestack">
-      <option name="closed" value="true" />
-      <created>1756699435917</created>
-      <option name="number" value="00131" />
-      <option name="presentableId" value="LOCAL-00131" />
-      <option name="project" value="LOCAL" />
-      <updated>1756699435917</updated>
-    </task>
-    <task id="LOCAL-00132" summary="update LittlenightmareClient add log">
-      <option name="closed" value="true" />
-      <created>1756711126289</created>
-      <option name="number" value="00132" />
-      <option name="presentableId" value="LOCAL-00132" />
-      <option name="project" value="LOCAL" />
-      <updated>1756711126289</updated>
     </task>
     <task id="LOCAL-00133" summary="update LittlenightmareClient add log">
       <option name="closed" value="true" />
@@ -698,7 +682,23 @@
       <option name="project" value="LOCAL" />
       <updated>1760076832937</updated>
     </task>
-    <option name="localTasksCounter" value="180" />
+    <task id="LOCAL-00180" summary="update LittlenightmareClient add RETRIES &amp; DELAY_MS">
+      <option name="closed" value="true" />
+      <created>1760080783372</created>
+      <option name="number" value="00180" />
+      <option name="presentableId" value="LOCAL-00180" />
+      <option name="project" value="LOCAL" />
+      <updated>1760080783372</updated>
+    </task>
+    <task id="LOCAL-00181" summary="update LittlenightmareClient add RETRIES &amp; DELAY_MS">
+      <option name="closed" value="true" />
+      <created>1760080853965</created>
+      <option name="number" value="00181" />
+      <option name="presentableId" value="LOCAL-00181" />
+      <option name="project" value="LOCAL" />
+      <updated>1760080853965</updated>
+    </task>
+    <option name="localTasksCounter" value="182" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -733,7 +733,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update LittlenightmareClient with scrapestack" />
     <MESSAGE value="update LittlenightmareClient add log" />
     <MESSAGE value="add handleMessage rules" />
     <MESSAGE value="update http-server-url" />
@@ -758,7 +757,8 @@
     <MESSAGE value="update PokeReply bugs" />
     <MESSAGE value="add phantom-group-id in config" />
     <MESSAGE value="update NAPCAT_HTTP_SERVER_URL" />
-    <option name="LAST_COMMIT_MESSAGE" value="update NAPCAT_HTTP_SERVER_URL" />
+    <MESSAGE value="update LittlenightmareClient add RETRIES &amp; DELAY_MS" />
+    <option name="LAST_COMMIT_MESSAGE" value="update LittlenightmareClient add RETRIES &amp; DELAY_MS" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

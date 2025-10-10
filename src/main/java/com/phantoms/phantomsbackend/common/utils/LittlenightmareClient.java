@@ -138,40 +138,90 @@ public class LittlenightmareClient {
         RecruitmentResponse response = null;
         boolean success = false;
 
-        // 为每种方法添加重试机制
-        String[] methods = {"direct", "allorigins_raw", "allorigins_get", "cors_anywhere"};
+        // 尝试直连
+        try {
+            response = tryDirectConnection(targetUrl);
+            if (response != null) {
+                success = true;
+                logger.info("Successfully fetched data via direct connection");
+            }
+        } catch (IOException e) {
+            logger.info("Failed to fetch recruitment listings without proxy.");
+        }
 
-        for (String method : methods) {
-            if (success) break;
-
+        // 如果直连失败，尝试使用 AllOrigins Raw（带重试）
+        if (!success) {
+            logger.info("Trying AllOrigins Raw...");
             for (int retry = 0; retry < MAX_RETRIES; retry++) {
                 if (success) break;
 
                 try {
-                    switch (method) {
-                        case "direct":
-                            response = tryDirectConnection(targetUrl);
-                            break;
-                        case "allorigins_raw":
-                            response = tryAllOriginsRaw(allOriginsRawUrl);
-                            break;
-                        case "allorigins_get":
-                            response = tryAllOriginsGet(allOriginsGetUrl);
-                            break;
-                        case "cors_anywhere":
-                            response = tryCorsAnywhere(corsAnywhereUrl);
-                            break;
-                    }
-
+                    response = tryAllOriginsRaw(allOriginsRawUrl);
                     if (response != null) {
                         success = true;
-                        logger.info("Successfully fetched data via {} (attempt {})", method, retry + 1);
+                        logger.info("Successfully fetched data via AllOrigins Raw (attempt {})", retry + 1);
                         break;
                     }
                 } catch (IOException e) {
-                    logger.warn("Attempt {} failed with method {}: {}", retry + 1, method, e.getMessage());
+                    logger.warn("Attempt {} failed with AllOrigins Raw: {}", retry + 1, e.getMessage());
                     if (retry < MAX_RETRIES - 1) {
                         // 指数退避延迟
+                        long delay = Math.min(BASE_DELAY_MS * (long) Math.pow(2, retry), MAX_DELAY_MS);
+                        try {
+                            Thread.sleep(delay);
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                            throw new IOException("Request interrupted", ie);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 如果 AllOrigins Raw 失败，尝试使用 AllOrigins Get（带重试）
+        if (!success) {
+            logger.info("Trying AllOrigins Get...");
+            for (int retry = 0; retry < MAX_RETRIES; retry++) {
+                if (success) break;
+
+                try {
+                    response = tryAllOriginsGet(allOriginsGetUrl);
+                    if (response != null) {
+                        success = true;
+                        logger.info("Successfully fetched data via AllOrigins Get (attempt {})", retry + 1);
+                        break;
+                    }
+                } catch (IOException e) {
+                    logger.warn("Attempt {} failed with AllOrigins Get: {}", retry + 1, e.getMessage());
+                    if (retry < MAX_RETRIES - 1) {
+                        long delay = Math.min(BASE_DELAY_MS * (long) Math.pow(2, retry), MAX_DELAY_MS);
+                        try {
+                            Thread.sleep(delay);
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                            throw new IOException("Request interrupted", ie);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 如果 AllOrigins 失败，尝试使用 CORS Anywhere（带重试）
+        if (!success) {
+            logger.info("Trying CORS Anywhere...");
+            for (int retry = 0; retry < MAX_RETRIES; retry++) {
+                if (success) break;
+
+                try {
+                    response = tryCorsAnywhere(corsAnywhereUrl);
+                    if (response != null) {
+                        success = true;
+                        logger.info("Successfully fetched data via CORS Anywhere (attempt {})", retry + 1);
+                        break;
+                    }
+                } catch (IOException e) {
+                    logger.warn("Attempt {} failed with CORS Anywhere: {}", retry + 1, e.getMessage());
+                    if (retry < MAX_RETRIES - 1) {
                         long delay = Math.min(BASE_DELAY_MS * (long) Math.pow(2, retry), MAX_DELAY_MS);
                         try {
                             Thread.sleep(delay);
