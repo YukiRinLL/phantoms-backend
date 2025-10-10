@@ -7,9 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add phantom-group-id in config">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update NAPCAT_HTTP_SERVER_URL">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +64,7 @@
     "Docker.Dockerfile.executor": "Run",
     "JUnit.MySQLConnectionTest.executor": "Run",
     "JUnit.MySQLConnectionTest.testMySQLConnection.executor": "Run",
-    "JUnit.NapCatQQTest.executor": "Run",
+    "JUnit.NapCatQQTest.executor": "Debug",
     "JUnit.PhantomsBackendApplicationTests.testMapper.executor": "Run",
     "JUnit.XIVAPIExample.executor": "Coverage",
     "Maven.phantoms-backend [-X,clean,install].executor": "Run",
@@ -155,7 +155,7 @@
       <command value="mvn clean package" />
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.NapCatQQTest">
+  <component name="RunManager" selected="应用程序.PhantomsBackendApplication">
     <configuration name="NapCatQQTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.NapCatQQTest" />
       <module name="phantoms-backend" />
@@ -243,8 +243,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="TestNG.NapCatQQTest" />
+        <item itemvalue="应用程序.PhantomsBackendApplication" />
         <item itemvalue="JUnit.NapCatQQTest" />
+        <item itemvalue="TestNG.NapCatQQTest" />
       </list>
     </recent_temporary>
   </component>
@@ -304,30 +305,6 @@
       <workItem from="1759126190584" duration="3831000" />
       <workItem from="1759832179521" duration="1699000" />
       <workItem from="1759889178751" duration="576000" />
-    </task>
-    <task id="LOCAL-00128" summary="fix ProxyUtil api.89ip.cn">
-      <option name="closed" value="true" />
-      <created>1756694805383</created>
-      <option name="number" value="00128" />
-      <option name="presentableId" value="LOCAL-00128" />
-      <option name="project" value="LOCAL" />
-      <updated>1756694805383</updated>
-    </task>
-    <task id="LOCAL-00129" summary="update ProxyUtil ip3366.net">
-      <option name="closed" value="true" />
-      <created>1756698283971</created>
-      <option name="number" value="00129" />
-      <option name="presentableId" value="LOCAL-00129" />
-      <option name="project" value="LOCAL" />
-      <updated>1756698283971</updated>
-    </task>
-    <task id="LOCAL-00130" summary="update LittlenightmareClient with scrapestack">
-      <option name="closed" value="true" />
-      <created>1756698886873</created>
-      <option name="number" value="00130" />
-      <option name="presentableId" value="LOCAL-00130" />
-      <option name="project" value="LOCAL" />
-      <updated>1756698886873</updated>
     </task>
     <task id="LOCAL-00131" summary="update LittlenightmareClient with scrapestack">
       <option name="closed" value="true" />
@@ -697,7 +674,31 @@
       <option name="project" value="LOCAL" />
       <updated>1759833486307</updated>
     </task>
-    <option name="localTasksCounter" value="177" />
+    <task id="LOCAL-00177" summary="update NAPCAT_HTTP_SERVER_URL">
+      <option name="closed" value="true" />
+      <created>1760076747387</created>
+      <option name="number" value="00177" />
+      <option name="presentableId" value="LOCAL-00177" />
+      <option name="project" value="LOCAL" />
+      <updated>1760076747387</updated>
+    </task>
+    <task id="LOCAL-00178" summary="update NAPCAT_HTTP_SERVER_URL">
+      <option name="closed" value="true" />
+      <created>1760076752179</created>
+      <option name="number" value="00178" />
+      <option name="presentableId" value="LOCAL-00178" />
+      <option name="project" value="LOCAL" />
+      <updated>1760076752179</updated>
+    </task>
+    <task id="LOCAL-00179" summary="update NAPCAT_HTTP_SERVER_URL">
+      <option name="closed" value="true" />
+      <created>1760076832937</created>
+      <option name="number" value="00179" />
+      <option name="presentableId" value="LOCAL-00179" />
+      <option name="project" value="LOCAL" />
+      <updated>1760076832937</updated>
+    </task>
+    <option name="localTasksCounter" value="180" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -732,7 +733,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update ProxyUtil ip3366.net" />
     <MESSAGE value="update LittlenightmareClient with scrapestack" />
     <MESSAGE value="update LittlenightmareClient add log" />
     <MESSAGE value="add handleMessage rules" />
@@ -757,30 +757,16 @@
     <MESSAGE value="fix PokeReply bugs" />
     <MESSAGE value="update PokeReply bugs" />
     <MESSAGE value="add phantom-group-id in config" />
-    <option name="LAST_COMMIT_MESSAGE" value="add phantom-group-id in config" />
+    <MESSAGE value="update NAPCAT_HTTP_SERVER_URL" />
+    <option name="LAST_COMMIT_MESSAGE" value="update NAPCAT_HTTP_SERVER_URL" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java</url>
-          <line>204</line>
-          <option name="timeStamp" value="99" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java</url>
-          <line>183</line>
-          <option name="timeStamp" value="100" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java</url>
-          <line>188</line>
-          <option name="timeStamp" value="102" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/LittlenightmareClient.java</url>
-          <line>216</line>
-          <option name="timeStamp" value="103" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java</url>
+          <line>74</line>
+          <option name="timeStamp" value="105" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
