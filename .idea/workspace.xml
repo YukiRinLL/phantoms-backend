@@ -7,8 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update NAPCAT_HTTP_SERVER_URL">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update Phantoms.drawio">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -304,14 +305,6 @@
       <workItem from="1759126190584" duration="3831000" />
       <workItem from="1759832179521" duration="1699000" />
       <workItem from="1759889178751" duration="576000" />
-    </task>
-    <task id="LOCAL-00138" summary="update http-server-url">
-      <option name="closed" value="true" />
-      <created>1757658985755</created>
-      <option name="number" value="00138" />
-      <option name="presentableId" value="LOCAL-00138" />
-      <option name="project" value="LOCAL" />
-      <updated>1757658985756</updated>
     </task>
     <task id="LOCAL-00139" summary="update http-server-url">
       <option name="closed" value="true" />
@@ -697,7 +690,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760177152040</updated>
     </task>
-    <option name="localTasksCounter" value="187" />
+    <task id="LOCAL-00187" summary="update Phantoms.drawio">
+      <option name="closed" value="true" />
+      <created>1760177953538</created>
+      <option name="number" value="00187" />
+      <option name="presentableId" value="LOCAL-00187" />
+      <option name="project" value="LOCAL" />
+      <updated>1760177953538</updated>
+    </task>
+    <option name="localTasksCounter" value="188" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -734,7 +735,6 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update http-server-url" />
     <MESSAGE value="update NapCatQQUtil" />
-    <MESSAGE value="update Phantoms.drawio" />
     <MESSAGE value="update getLatestMessages API adding nickname" />
     <MESSAGE value="try iPhone send message error fix" />
     <MESSAGE value="update DAOGU_KEY" />
@@ -757,7 +757,8 @@
     <MESSAGE value="remove retry of DirectConnection" />
     <MESSAGE value="add user recent message count func" />
     <MESSAGE value="update NAPCAT_HTTP_SERVER_URL" />
-    <option name="LAST_COMMIT_MESSAGE" value="update NAPCAT_HTTP_SERVER_URL" />
+    <MESSAGE value="update Phantoms.drawio" />
+    <option name="LAST_COMMIT_MESSAGE" value="update Phantoms.drawio" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
