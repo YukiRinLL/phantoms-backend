@@ -7,9 +7,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add user recent message count func">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update NAPCAT_HTTP_SERVER_URL">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -305,22 +304,6 @@
       <workItem from="1759126190584" duration="3831000" />
       <workItem from="1759832179521" duration="1699000" />
       <workItem from="1759889178751" duration="576000" />
-    </task>
-    <task id="LOCAL-00136" summary="update http-server-url">
-      <option name="closed" value="true" />
-      <created>1757303111627</created>
-      <option name="number" value="00136" />
-      <option name="presentableId" value="LOCAL-00136" />
-      <option name="project" value="LOCAL" />
-      <updated>1757303111627</updated>
-    </task>
-    <task id="LOCAL-00137" summary="update http-server-url">
-      <option name="closed" value="true" />
-      <created>1757390360982</created>
-      <option name="number" value="00137" />
-      <option name="presentableId" value="LOCAL-00137" />
-      <option name="project" value="LOCAL" />
-      <updated>1757390360984</updated>
     </task>
     <task id="LOCAL-00138" summary="update http-server-url">
       <option name="closed" value="true" />
@@ -698,7 +681,23 @@
       <option name="project" value="LOCAL" />
       <updated>1760162307976</updated>
     </task>
-    <option name="localTasksCounter" value="185" />
+    <task id="LOCAL-00185" summary="update NAPCAT_HTTP_SERVER_URL">
+      <option name="closed" value="true" />
+      <created>1760177100780</created>
+      <option name="number" value="00185" />
+      <option name="presentableId" value="LOCAL-00185" />
+      <option name="project" value="LOCAL" />
+      <updated>1760177100781</updated>
+    </task>
+    <task id="LOCAL-00186" summary="update NAPCAT_HTTP_SERVER_URL">
+      <option name="closed" value="true" />
+      <created>1760177152040</created>
+      <option name="number" value="00186" />
+      <option name="presentableId" value="LOCAL-00186" />
+      <option name="project" value="LOCAL" />
+      <updated>1760177152040</updated>
+    </task>
+    <option name="localTasksCounter" value="187" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -754,11 +753,11 @@
     <MESSAGE value="fix PokeReply bugs" />
     <MESSAGE value="update PokeReply bugs" />
     <MESSAGE value="add phantom-group-id in config" />
-    <MESSAGE value="update NAPCAT_HTTP_SERVER_URL" />
     <MESSAGE value="update LittlenightmareClient add RETRIES &amp; DELAY_MS" />
     <MESSAGE value="remove retry of DirectConnection" />
     <MESSAGE value="add user recent message count func" />
-    <option name="LAST_COMMIT_MESSAGE" value="add user recent message count func" />
+    <MESSAGE value="update NAPCAT_HTTP_SERVER_URL" />
+    <option name="LAST_COMMIT_MESSAGE" value="update NAPCAT_HTTP_SERVER_URL" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
