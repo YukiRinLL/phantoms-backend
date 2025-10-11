@@ -7,12 +7,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="remove retry of DirectConnection">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/onebot/PrimaryChatRecordRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/onebot/PrimaryChatRecordRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add user recent message count func">
+      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/git.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-10-10T15-20-13_793.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-10-10T15-20-40_990.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-10-10T16-05-23_362.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-10-10T16-05-39_107.dumpstream" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -308,14 +310,6 @@
       <workItem from="1759126190584" duration="3831000" />
       <workItem from="1759832179521" duration="1699000" />
       <workItem from="1759889178751" duration="576000" />
-    </task>
-    <task id="LOCAL-00135" summary="add handleMessage rules">
-      <option name="closed" value="true" />
-      <created>1756717417325</created>
-      <option name="number" value="00135" />
-      <option name="presentableId" value="LOCAL-00135" />
-      <option name="project" value="LOCAL" />
-      <updated>1756717417325</updated>
     </task>
     <task id="LOCAL-00136" summary="update http-server-url">
       <option name="closed" value="true" />
@@ -701,7 +695,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760083552131</updated>
     </task>
-    <option name="localTasksCounter" value="184" />
+    <task id="LOCAL-00184" summary="add user recent message count func">
+      <option name="closed" value="true" />
+      <created>1760162307976</created>
+      <option name="number" value="00184" />
+      <option name="presentableId" value="LOCAL-00184" />
+      <option name="project" value="LOCAL" />
+      <updated>1760162307976</updated>
+    </task>
+    <option name="localTasksCounter" value="185" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -736,7 +738,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add handleMessage rules" />
     <MESSAGE value="update http-server-url" />
     <MESSAGE value="update NapCatQQUtil" />
     <MESSAGE value="update Phantoms.drawio" />
@@ -761,7 +762,8 @@
     <MESSAGE value="update NAPCAT_HTTP_SERVER_URL" />
     <MESSAGE value="update LittlenightmareClient add RETRIES &amp; DELAY_MS" />
     <MESSAGE value="remove retry of DirectConnection" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove retry of DirectConnection" />
+    <MESSAGE value="add user recent message count func" />
+    <option name="LAST_COMMIT_MESSAGE" value="add user recent message count func" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
