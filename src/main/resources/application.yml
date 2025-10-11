@@ -121,7 +121,7 @@ shiro:
 
 #NapCatQQUtil
 napcat:
-  http-server-url: ${NAPCAT_HTTP_SERVER_URL:https://xtjcbcgttlkh.eu-central-1.clawcloudrun.com}
+  http-server-url: ${NAPCAT_HTTP_SERVER_URL:https://mfgqgvlj.us-west-1.clawcloudrun.com}
   access-token: ${NAPCAT_ACCESS_TOKEN:7saligia}
   default-group-id: ${NAPCAT_DEFAULT_GROUP_ID:595883141}
   phantom-group-id: ${NAPCAT_PHANTOM_GROUP_ID:787909466}
