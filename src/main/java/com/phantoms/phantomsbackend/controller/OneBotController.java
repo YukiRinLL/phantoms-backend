@@ -172,4 +172,26 @@ public class OneBotController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+
+    @GetMapping("/onebot/user-stats")
+    public ResponseEntity<Map<String, Object>> getUserMessageStats(
+            @RequestParam String search,
+            @RequestParam(defaultValue = "30") int days) {
+        try {
+            // 调用服务层获取用户消息统计
+            Map<String, Object> userStats = oneBotService.getUserMessageStats(search, days);
+
+            // 返回 JSON 格式的响应
+            return ResponseEntity.ok(userStats);
+        } catch (Exception e) {
+            // 记录错误日志
+            System.err.println("Error fetching user message stats: " + e.getMessage());
+
+            // 返回错误响应
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", "failed");
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
 }

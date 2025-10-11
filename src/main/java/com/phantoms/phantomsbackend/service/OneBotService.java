@@ -45,4 +45,6 @@ public interface OneBotService {
      * 获取群图片总数（所有时间）
      */
     long getTotalImageCount();
+
+    Map<String, Object> getUserMessageStats(String search, int days);
 }

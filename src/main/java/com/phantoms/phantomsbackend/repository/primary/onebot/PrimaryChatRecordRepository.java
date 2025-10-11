@@ -93,4 +93,24 @@ public interface PrimaryChatRecordRepository extends JpaRepository<ChatRecord, L
     // 查询戳一戳事件
     @Query(value = "SELECT * FROM onebot.chat_records cr WHERE cr.message_type = 'notice_poke' ORDER BY cr.created_at DESC LIMIT ?1", nativeQuery = true)
     List<ChatRecord> findTopPokeEvents(int limit);
+
+    // 查询用户指定天数内的每日消息统计
+    @Query(value = "SELECT " +
+            "DATE(cr.created_at) AS date, " +
+            "COUNT(*) AS message_count " +
+            "FROM onebot.chat_records cr " +
+            "WHERE cr.qq_user_id = ?1 " +
+            "AND cr.created_at >= CURRENT_DATE - MAKE_INTERVAL(days => ?2) " +
+            "GROUP BY DATE(cr.created_at) " +
+            "ORDER BY date DESC",
+            nativeQuery = true)
+    List<Object[]> findDailyMessageStatsByUserId(Long userId, int days);
+
+    // 根据昵称模式查找用户
+    @Query(value = "SELECT DISTINCT cr.qq_user_id, cr.message " +
+            "FROM onebot.chat_records cr " +
+            "WHERE cr.message LIKE ?1 " +
+            "LIMIT 10",
+            nativeQuery = true)
+    List<Object[]> findUsersByNicknamePattern(String pattern);
 }

@@ -641,4 +641,94 @@ public class OneBotServiceImpl implements OneBotService {
     public long getTotalImageCount() {
         return chatRecordRepository.countByMessageContaining("[CQ:image");
     }
+
+    @Override
+    public Map<String, Object> getUserMessageStats(String search, int days) {
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            // 1. 根据搜索词查找用户ID
+            Long userId = findUserIdBySearch(search);
+            if (userId == null) {
+                throw new RuntimeException("未找到用户: " + search);
+            }
+
+            // 2. 获取用户昵称
+            String nickname = getUserNickname(userId);
+
+            // 3. 查询指定天数内的每日消息统计
+            List<Object[]> dailyStats = chatRecordRepository.findDailyMessageStatsByUserId(userId, days);
+
+            // 4. 处理统计结果
+            List<Map<String, Object>> dailyStatsList = new ArrayList<>();
+            for (Object[] row : dailyStats) {
+                Map<String, Object> dayStat = new HashMap<>();
+                dayStat.put("date", row[0].toString());
+                dayStat.put("messageCount", ((Number) row[1]).longValue());
+                dailyStatsList.add(dayStat);
+            }
+
+            // 5. 构建返回结果
+            result.put("userId", userId);
+            result.put("nickname", nickname);
+            result.put("searchTerm", search);
+            result.put("days", days);
+            result.put("dailyStats", dailyStatsList);
+
+        } catch (Exception e) {
+            System.err.println("Error generating user message stats: " + e.getMessage());
+            throw new RuntimeException("生成用户消息统计失败: " + e.getMessage(), e);
+        }
+
+        return result;
+    }
+
+    /**
+     * 根据搜索词查找用户ID
+     */
+    private Long findUserIdBySearch(String search) {
+        try {
+            // 如果搜索词是纯数字，直接作为用户ID
+            if (search.matches("\\d+")) {
+                return Long.parseLong(search);
+            }
+
+            // 否则，从数据库中查找匹配昵称的用户
+            // 这里需要根据实际的群组ID来查询，使用默认群组
+            Long groupId = Long.parseLong(phantomGroupId);
+            Map<Long, String> memberMap = getGroupMemberMap(groupId);
+
+            for (Map.Entry<Long, String> entry : memberMap.entrySet()) {
+                if (entry.getValue().toLowerCase().contains(search.toLowerCase())) {
+                    return entry.getKey();
+                }
+            }
+
+            // 如果没有找到，从聊天记录中查找
+            List<Object[]> users = chatRecordRepository.findUsersByNicknamePattern("%" + search + "%");
+            if (!users.isEmpty()) {
+                return (Long) users.get(0)[0];
+            }
+
+            return null;
+
+        } catch (Exception e) {
+            System.err.println("Error finding user ID by search: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * 获取用户昵称
+     */
+    private String getUserNickname(Long userId) {
+        try {
+            Long groupId = Long.parseLong(phantomGroupId);
+            Map<Long, String> memberMap = getGroupMemberMap(groupId);
+            return memberMap.getOrDefault(userId, "Unknown" + userId);
+        } catch (Exception e) {
+            System.err.println("Error getting user nickname: " + e.getMessage());
+            return "Unknown" + userId;
+        }
+    }
 }
