@@ -55,21 +55,30 @@ public class OneBotServiceImpl implements OneBotService {
     @Override
     public List<ChatRecord> processOneBotRequest(Map<String, Object> requestBody) throws Exception {
         String postType = (String) requestBody.get("post_type");
+        String messageType = (String) requestBody.get("message_type");
 
-        // 添加调试日志
-        System.out.println("=== 收到 OneBot 请求 ===");
-        System.out.println("post_type: " + postType);
-        System.out.println("完整请求体: " + requestBody);
-        System.out.println("=====================");
+//        System.out.println("=== 收到 OneBot 请求 ===");
+//        System.out.println("post_type: " + postType);
+//        System.out.println("message_type: " + messageType);
+//        System.out.println("user_id: " + requestBody.get("user_id"));
+//        System.out.println("=====================");
 
+        // 处理通知事件
         if ("notice".equals(postType)) {
             System.out.println("处理通知事件");
             return handleNoticeEvent(requestBody);
         }
+        // 处理接收到的消息
         else if ("message".equals(postType)) {
-            System.out.println("处理消息事件");
-            return handleMessageEvent(requestBody);
+            System.out.println("处理接收到的消息");
+            return handleMessageEvent(requestBody, false); // false 表示接收的消息
         }
+        // 处理机器人发送的消息
+        else if ("message_sent".equals(postType)) {
+            System.out.println("处理机器人发送的消息");
+            return handleMessageEvent(requestBody, true); // true 表示发送的消息
+        }
+        // 其他类型的事件
         else {
             System.out.println("处理其他事件，post_type: " + postType);
             return handleOtherEvent(requestBody);
@@ -114,9 +123,9 @@ public class OneBotServiceImpl implements OneBotService {
     }
 
     /**
-     * 处理消息事件（原来的逻辑）
+     * 处理消息事件（支持区分发送和接收）
      */
-    private List<ChatRecord> handleMessageEvent(Map<String, Object> requestBody) throws Exception {
+    private List<ChatRecord> handleMessageEvent(Map<String, Object> requestBody, boolean isSentByBot) throws Exception {
         String messageType = (String) requestBody.get("message_type");
         Long userId = requestBody.get("user_id") != null ? Long.valueOf(requestBody.get("user_id").toString()) : null;
         Long groupId = requestBody.get("group_id") != null ? Long.valueOf(requestBody.get("group_id").toString()) : null;
@@ -130,12 +139,20 @@ public class OneBotServiceImpl implements OneBotService {
             List<?> messageList = (List<?>) messageObj;
             for (Object messageElement : messageList) {
                 ChatRecord chatRecord = createChatRecord(messageType, userId, groupId, messageElement.toString());
+                // 可以在这里标记消息是发送还是接收
+                if (isSentByBot) {
+                    // 可以设置特殊标记，或者保持原样
+                    System.out.println("保存机器人发送的消息");
+                }
                 chatRecordRepository.save(chatRecord);
                 chatRecords.add(chatRecord);
             }
         } else if (messageObj instanceof String) {
             // 如果是String，直接保存为一条ChatRecord
             ChatRecord chatRecord = createChatRecord(messageType, userId, groupId, (String) messageObj);
+            if (isSentByBot) {
+                System.out.println("保存机器人发送的消息");
+            }
             chatRecordRepository.save(chatRecord);
             chatRecords.add(chatRecord);
         } else {
