@@ -56,16 +56,22 @@ public class OneBotServiceImpl implements OneBotService {
     public List<ChatRecord> processOneBotRequest(Map<String, Object> requestBody) throws Exception {
         String postType = (String) requestBody.get("post_type");
 
-        // 处理通知事件（如戳一戳）
+        // 添加调试日志
+        System.out.println("=== 收到 OneBot 请求 ===");
+        System.out.println("post_type: " + postType);
+        System.out.println("完整请求体: " + requestBody);
+        System.out.println("=====================");
+
         if ("notice".equals(postType)) {
+            System.out.println("处理通知事件");
             return handleNoticeEvent(requestBody);
         }
-        // 处理消息事件
         else if ("message".equals(postType)) {
+            System.out.println("处理消息事件");
             return handleMessageEvent(requestBody);
         }
-        // 其他类型的事件
         else {
+            System.out.println("处理其他事件，post_type: " + postType);
             return handleOtherEvent(requestBody);
         }
     }
