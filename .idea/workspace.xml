@@ -8,11 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update note">
-      <change afterPath="$PROJECT_DIR$/doc/db_config.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/how-to-update-daoyukey.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/img_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/login_qr.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/doc/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/db_config.png" beforeDir="false" afterPath="$PROJECT_DIR$/doc/db_config.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/img_1.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -300,15 +299,7 @@
       <workItem from="1760405080633" duration="25563000" />
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
-      <workItem from="1761360693760" duration="1561000" />
-    </task>
-    <task id="LOCAL-00148" summary="update DAOGU_KEY">
-      <option name="closed" value="true" />
-      <created>1758514013018</created>
-      <option name="number" value="00148" />
-      <option name="presentableId" value="LOCAL-00148" />
-      <option name="project" value="LOCAL" />
-      <updated>1758514013018</updated>
+      <workItem from="1761360693760" duration="1718000" />
     </task>
     <task id="LOCAL-00149" summary="update todo list">
       <option name="closed" value="true" />
@@ -694,7 +685,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761277624070</updated>
     </task>
-    <option name="localTasksCounter" value="197" />
+    <task id="LOCAL-00197" summary="update note">
+      <option name="closed" value="true" />
+      <created>1761362295816</created>
+      <option name="number" value="00197" />
+      <option name="presentableId" value="LOCAL-00197" />
+      <option name="project" value="LOCAL" />
+      <updated>1761362295816</updated>
+    </task>
+    <option name="localTasksCounter" value="198" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

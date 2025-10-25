@@ -11,7 +11,7 @@
 **认证Cookie：** cookie: USERSESSID=DY_1FCEB820ADBB414F9298EB4C91B9B12A
 **获取到的daoyukey配置在数据库中：**
 库表：public.system_config
-![db_config.png](db_config.png)
+![db_config](db_config.png)
 
 ## 石之家登录流程
 
