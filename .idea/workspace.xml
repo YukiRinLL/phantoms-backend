@@ -7,11 +7,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update note">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/TestController.java" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="move data to doc path">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/CyouClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/HousingSale.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RedisUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RedisUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,11 +149,11 @@
       <recent name="com.phantoms.phantomsbackend" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.phantoms.phantomsbackend.service.scheduler" />
+      <recent name="com.phantoms.phantomsbackend.pojo.entity" />
+      <recent name="com.phantoms.phantomsbackend.common.utils" />
       <recent name="com.phantoms.phantomsbackend.controller" />
       <recent name="com.phantoms.phantomsbackend.common.config" />
-      <recent name="com.phantoms.phantomsbackend.repository.secondary" />
-      <recent name="com.phantoms.phantomsbackend.repository.primary" />
-      <recent name="com.phantoms.phantomsbackend.pojo.entity.secondary" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -307,22 +310,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00149" summary="update todo list">
-      <option name="closed" value="true" />
-      <created>1758523102848</created>
-      <option name="number" value="00149" />
-      <option name="presentableId" value="LOCAL-00149" />
-      <option name="project" value="LOCAL" />
-      <updated>1758523102848</updated>
-    </task>
-    <task id="LOCAL-00150" summary="get DAOYU_KEY from DB">
-      <option name="closed" value="true" />
-      <created>1758535450517</created>
-      <option name="number" value="00150" />
-      <option name="presentableId" value="LOCAL-00150" />
-      <option name="project" value="LOCAL" />
-      <updated>1758535450518</updated>
     </task>
     <task id="LOCAL-00151" summary="cache QQ nicknames to redis">
       <option name="closed" value="true" />
@@ -700,7 +687,23 @@
       <option name="project" value="LOCAL" />
       <updated>1761362295816</updated>
     </task>
-    <option name="localTasksCounter" value="198" />
+    <task id="LOCAL-00198" summary="add TestController">
+      <option name="closed" value="true" />
+      <created>1761823515793</created>
+      <option name="number" value="00198" />
+      <option name="presentableId" value="LOCAL-00198" />
+      <option name="project" value="LOCAL" />
+      <updated>1761823515793</updated>
+    </task>
+    <task id="LOCAL-00199" summary="move data to doc path">
+      <option name="closed" value="true" />
+      <created>1761823592232</created>
+      <option name="number" value="00199" />
+      <option name="presentableId" value="LOCAL-00199" />
+      <option name="project" value="LOCAL" />
+      <updated>1761823592232</updated>
+    </task>
+    <option name="localTasksCounter" value="200" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -735,8 +738,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update DAOGU_KEY" />
-    <MESSAGE value="update todo list" />
     <MESSAGE value="get DAOYU_KEY from DB" />
     <MESSAGE value="cache QQ nicknames to redis" />
     <MESSAGE value="add updateDaoYuKey API" />
@@ -760,7 +761,9 @@
     <MESSAGE value="fix bug handleOtherEvent" />
     <MESSAGE value="add banner" />
     <MESSAGE value="update note" />
-    <option name="LAST_COMMIT_MESSAGE" value="update note" />
+    <MESSAGE value="add TestController" />
+    <MESSAGE value="move data to doc path" />
+    <option name="LAST_COMMIT_MESSAGE" value="move data to doc path" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
