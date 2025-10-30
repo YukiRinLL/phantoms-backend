@@ -342,7 +342,7 @@ public class OneBotServiceImpl implements OneBotService {
     }
 
     @Override
-    public void sendGroupMessageWithDefaultGroup(String message, String groupId) throws Exception {
+    public void sendGroupMessage(String message, String groupId) throws Exception {
         String targetGroupId = groupId != null ? groupId : defaultGroupId;
         napCatQQUtil.sendGroupMessage(targetGroupId, message);
     }

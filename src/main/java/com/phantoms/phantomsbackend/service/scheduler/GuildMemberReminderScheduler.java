@@ -82,7 +82,7 @@ public class GuildMemberReminderScheduler {
                                                 String message = String.format("[系统提示]%s 已经%d天未登录，房屋信息：%s", member.getString("character_name"), daysBetween, houseInfo);
                                                 // 发送提醒信息到群聊
                                                 try {
-                                                    oneBotService.sendGroupMessageWithDefaultGroup(message, phantomGroupId);
+                                                    oneBotService.sendGroupMessage(message, phantomGroupId);
                                                 } catch (Exception e) {
                                                     throw new RuntimeException(e);
                                                 }
@@ -101,7 +101,7 @@ public class GuildMemberReminderScheduler {
                 // 打印未活跃成员名单（可选）
                 // System.out.println("未活跃成员名单：" + inactiveMembers);
                 try {
-                    oneBotService.sendGroupMessageWithDefaultGroup("未活跃成员名单：" + inactiveMembers, null);
+                    oneBotService.sendGroupMessage("未活跃成员名单：" + inactiveMembers, null);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -137,7 +137,7 @@ public class GuildMemberReminderScheduler {
                 // 发送活动信息到群聊
                 if (!filteredActivities.isEmpty()) {
                     // 先发送一个标题消息
-                    oneBotService.sendGroupMessageWithDefaultGroup("====== 当前FF14活动一览 ======", phantomGroupId);
+                    oneBotService.sendGroupMessage("====== 当前FF14活动一览 ======", phantomGroupId);
 
                     // 添加短暂延迟避免消息发送过快
                     Thread.sleep(1000);
@@ -170,7 +170,7 @@ public class GuildMemberReminderScheduler {
                         message.append("🔗 ").append(link);
 
                         // 发送活动信息
-                        oneBotService.sendGroupMessageWithDefaultGroup(message.toString(), phantomGroupId);
+                        oneBotService.sendGroupMessage(message.toString(), phantomGroupId);
 
                         // 添加短暂延迟避免消息发送过快
                         Thread.sleep(1000);
@@ -179,15 +179,15 @@ public class GuildMemberReminderScheduler {
                     // 发送结束消息
 //                    oneBotService.sendGroupMessageWithDefaultGroup("====== 活动信息发送完毕 ======", phantomGroupId);
                 } else {
-                    oneBotService.sendGroupMessageWithDefaultGroup("本周暂无FF14活动信息", phantomGroupId);
+                    oneBotService.sendGroupMessage("本周暂无FF14活动信息", phantomGroupId);
                 }
             } else {
-                oneBotService.sendGroupMessageWithDefaultGroup("获取FF14活动信息失败，请稍后重试", phantomGroupId);
+                oneBotService.sendGroupMessage("获取FF14活动信息失败，请稍后重试", phantomGroupId);
             }
         } catch (Exception e) {
             e.printStackTrace();
             try {
-                oneBotService.sendGroupMessageWithDefaultGroup("获取FF14活动信息时发生错误：" + e.getMessage(), phantomGroupId);
+                oneBotService.sendGroupMessage("获取FF14活动信息时发生错误：" + e.getMessage(), phantomGroupId);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

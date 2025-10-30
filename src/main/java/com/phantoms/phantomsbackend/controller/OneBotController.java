@@ -140,7 +140,7 @@ public class OneBotController {
             oneBotService.saveUserMessage(message, Long.valueOf(groupId.toString()), systemInfo);
 
             // Send the message to the default group
-            oneBotService.sendGroupMessageWithDefaultGroup(message, groupId);
+            oneBotService.sendGroupMessage(message, groupId);
 
             // Return success response
             return ResponseEntity.ok("{\"status\":\"ok\"}");

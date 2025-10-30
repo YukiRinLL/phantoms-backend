@@ -16,7 +16,7 @@ public interface OneBotService {
 
     List<ChatRecord> getLatestTextMessages(@RequestParam(defaultValue = "30") int limit);
 
-    void sendGroupMessageWithDefaultGroup(String message, String groupId) throws Exception;
+    void sendGroupMessage(String message, String groupId) throws Exception;
 
     void saveUserMessage(String message, Long groupId, Map<String, Object> systemInfo);
 

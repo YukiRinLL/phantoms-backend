@@ -326,7 +326,7 @@ public class HousingSaleScheduler {
                 message.append("----------------\n");
             }
 
-            oneBotService.sendGroupMessageWithDefaultGroup(message.toString(), null);
+            oneBotService.sendGroupMessage(message.toString(), null);
 
             logger.info("已发送 {} 的房屋通知，共 {} 套房屋", server, houses.size());
 

@@ -153,7 +153,7 @@ public class RecruitmentScheduler {
                 newRecruitments.forEach(recruitment -> {
                     try {
                         // 发送消息
-                        oneBotService.sendGroupMessageWithDefaultGroup(
+                        oneBotService.sendGroupMessage(
                             "[招募信息] (" + recruitment.getName() + ")\n" +
                                 "Category: " + recruitment.getCategory() + "\n" +
                                 "Duty: " + recruitment.getDuty() + "\n" +
