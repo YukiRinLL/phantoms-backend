@@ -25,7 +25,7 @@ _phantoms Java backend_
     - **`前端接口`**:支持前端有关XIVAPI/石之家/数据库查询等相关请求
 
 ## 系统架构图:
-![Phantoms.jpg](data/Phantoms.jpg)
+![Phantoms.jpg](doc/Phantoms.jpg)
 
 ## 开发备注:
 PS:由于Github的lfs存储空间有限，所以每次提交代码不保留旧版本文件
