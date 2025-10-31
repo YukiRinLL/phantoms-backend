@@ -7,11 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add .jar files to git">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/docker-build.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-    </list>
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix Github &amp; Render docker build" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -304,14 +300,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00155" summary="set daoyuKey in cache">
-      <option name="closed" value="true" />
-      <created>1758780382606</created>
-      <option name="number" value="00155" />
-      <option name="presentableId" value="LOCAL-00155" />
-      <option name="project" value="LOCAL" />
-      <updated>1758780382606</updated>
     </task>
     <task id="LOCAL-00156" summary="add syncExpeditionaryTeams in job">
       <option name="closed" value="true" />
@@ -697,7 +685,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761892343783</updated>
     </task>
-    <option name="localTasksCounter" value="204" />
+    <task id="LOCAL-00204" summary="fix Github &amp; Render docker build">
+      <option name="closed" value="true" />
+      <created>1761893454955</created>
+      <option name="number" value="00204" />
+      <option name="presentableId" value="LOCAL-00204" />
+      <option name="project" value="LOCAL" />
+      <updated>1761893454955</updated>
+    </task>
+    <option name="localTasksCounter" value="205" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -732,7 +728,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add syncExpeditionaryTeams in job" />
     <MESSAGE value="update README" />
     <MESSAGE value="add QQ getMonthlyStats API" />
     <MESSAGE value="add guild-member-dynamic API" />
@@ -757,7 +752,8 @@
     <MESSAGE value="rename sendGroupMessage func" />
     <MESSAGE value="add .jar files to git" />
     <MESSAGE value="add .jar files to git" />
-    <option name="LAST_COMMIT_MESSAGE" value="add .jar files to git" />
+    <MESSAGE value="fix Github &amp; Render docker build" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix Github &amp; Render docker build" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
