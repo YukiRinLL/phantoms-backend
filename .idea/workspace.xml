@@ -7,13 +7,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add HousingSale function">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/GuildMemberReminderScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/GuildMemberReminderScheduler.java" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="rename sendGroupMessage func">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/CyouClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/CyouClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -232,9 +230,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.PhantomsBackendApplication" />
         <item itemvalue="TestNG.NapCatQQTest" />
         <item itemvalue="JUnit.NapCatQQTest" />
-        <item itemvalue="Application.PhantomsBackendApplication" />
         <item itemvalue="TestNG.NapCatQQTest" />
         <item itemvalue="JUnit.NapCatQQTest" />
       </list>
@@ -309,14 +307,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00152" summary="cache QQ nicknames to redis">
-      <option name="closed" value="true" />
-      <created>1758539190409</created>
-      <option name="number" value="00152" />
-      <option name="presentableId" value="LOCAL-00152" />
-      <option name="project" value="LOCAL" />
-      <updated>1758539190409</updated>
     </task>
     <task id="LOCAL-00153" summary="add updateDaoYuKey API">
       <option name="closed" value="true" />
@@ -702,7 +692,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761824482035</updated>
     </task>
-    <option name="localTasksCounter" value="201" />
+    <task id="LOCAL-00201" summary="rename sendGroupMessage func">
+      <option name="closed" value="true" />
+      <created>1761824566533</created>
+      <option name="number" value="00201" />
+      <option name="presentableId" value="LOCAL-00201" />
+      <option name="project" value="LOCAL" />
+      <updated>1761824566533</updated>
+    </task>
+    <option name="localTasksCounter" value="202" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -737,7 +735,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="cache QQ nicknames to redis" />
     <MESSAGE value="add updateDaoYuKey API" />
     <MESSAGE value="set daoyuKey in cache" />
     <MESSAGE value="add syncExpeditionaryTeams in job" />
@@ -762,7 +759,8 @@
     <MESSAGE value="add TestController" />
     <MESSAGE value="move data to doc path" />
     <MESSAGE value="add HousingSale function" />
-    <option name="LAST_COMMIT_MESSAGE" value="add HousingSale function" />
+    <MESSAGE value="rename sendGroupMessage func" />
+    <option name="LAST_COMMIT_MESSAGE" value="rename sendGroupMessage func" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

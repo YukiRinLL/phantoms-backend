@@ -28,7 +28,7 @@ public class HousingSaleScheduler {
     private static final Logger logger = LoggerFactory.getLogger(HousingSaleScheduler.class);
 
     private static final String HOUSING_SALE_CACHE_PREFIX = "housing_sale:";
-    private static final long CACHE_EXPIRE_HOURS = 24;
+    private static final long CACHE_EXPIRE_HOURS = 72;
 
     @Autowired
     private OneBotService oneBotService;
@@ -48,8 +48,9 @@ public class HousingSaleScheduler {
     @Value("${housing.sale.notify.areas:0,1,2,3,4}")
     private String notifyAreas;
 
-    // 每天上午10点，下午2点，晚上8点执行
-    @Scheduled(cron = "0 0 10,14,20 * * ?")
+    // 每天0点执行
+    @Scheduled(cron = "0 0 0 * * ?")
+//    @Scheduled(fixedRate = 60000) // 每分钟执行一次
     public void fetchAndProcessHousingSales() {
         try {
             logger.info("开始获取房屋销售数据...");
@@ -87,14 +88,125 @@ public class HousingSaleScheduler {
     }
 
     /**
-     * 稳健的房屋数据保存方法
+     * 房屋数据保存方法 - 优先批量保存，失败则降级为逐个保存
      */
     private int robustSaveHousingSales(List<HousingSale> housingSales) {
         if (housingSales.isEmpty()) {
             return 0;
         }
 
-        logger.info("开始稳健保存 {} 条房屋数据", housingSales.size());
+        logger.info("开始保存 {} 条房屋数据", housingSales.size());
+
+        // 首先尝试批量保存
+        int batchSaved = batchSaveHousingSales(housingSales);
+        if (batchSaved == housingSales.size()) {
+            logger.info("批量保存成功，保存了 {} 条数据", batchSaved);
+            return batchSaved;
+        }
+
+        // 如果批量保存不完整，降级为逐个保存
+        logger.warn("批量保存不完整 ({} / {})，降级为逐个保存", batchSaved, housingSales.size());
+        int individualSaved = individualSaveHousingSales(housingSales);
+
+        logger.info("保存完成: 总共 {} 条，批量保存 {} 条，逐个保存 {} 条",
+            housingSales.size(), batchSaved, individualSaved);
+        return batchSaved + individualSaved;
+    }
+
+    /**
+     * 批量保存房屋数据
+     */
+    private int batchSaveHousingSales(List<HousingSale> housingSales) {
+        if (housingSales.isEmpty()) {
+            return 0;
+        }
+
+        String sql = "INSERT INTO public.housing_sales " +
+            "(server_id, area, slot, house_id, price, size, first_seen, last_seen, " +
+            "purchase_type, region_type, state, participate, winner, end_time, update_time) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+            "ON CONFLICT (server_id, area, slot, house_id) DO UPDATE SET " +
+            "price = EXCLUDED.price, " +
+            "last_seen = EXCLUDED.last_seen, " +
+            "purchase_type = EXCLUDED.purchase_type, " +
+            "state = EXCLUDED.state, " +
+            "participate = EXCLUDED.participate, " +
+            "winner = EXCLUDED.winner, " +
+            "end_time = EXCLUDED.end_time, " +
+            "update_time = EXCLUDED.update_time";
+
+        try {
+            int[] results = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+                @Override
+                public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    HousingSale sale = housingSales.get(i);
+                    ps.setString(1, sale.getServer());
+                    ps.setInt(2, sale.getArea());
+                    ps.setInt(3, sale.getSlot());
+                    ps.setInt(4, sale.getId());
+                    ps.setLong(5, sale.getPrice());
+                    ps.setInt(6, sale.getSize());
+
+                    if (sale.getFirstSeen() != null) {
+                        ps.setTimestamp(7, Timestamp.valueOf(sale.getFirstSeen().toLocalDateTime()));
+                    } else {
+                        ps.setNull(7, java.sql.Types.TIMESTAMP);
+                    }
+
+                    if (sale.getLastSeen() != null) {
+                        ps.setTimestamp(8, Timestamp.valueOf(sale.getLastSeen().toLocalDateTime()));
+                    } else {
+                        ps.setNull(8, java.sql.Types.TIMESTAMP);
+                    }
+
+                    ps.setInt(9, sale.getPurchaseType());
+                    ps.setInt(10, sale.getRegionType());
+                    ps.setInt(11, sale.getState());
+                    ps.setInt(12, sale.getParticipate());
+                    ps.setString(13, sale.getWinner());
+
+                    if (sale.getEndTime() != null) {
+                        ps.setTimestamp(14, Timestamp.valueOf(sale.getEndTime().toLocalDateTime()));
+                    } else {
+                        ps.setNull(14, java.sql.Types.TIMESTAMP);
+                    }
+
+                    if (sale.getUpdateTime() != null) {
+                        ps.setTimestamp(15, Timestamp.valueOf(sale.getUpdateTime().toLocalDateTime()));
+                    } else {
+                        ps.setNull(15, java.sql.Types.TIMESTAMP);
+                    }
+                }
+
+                @Override
+                public int getBatchSize() {
+                    return housingSales.size();
+                }
+            });
+
+            int successCount = 0;
+            for (int result : results) {
+                if (result >= 0) { // 0或1都表示成功（0表示没有变化，1表示插入或更新）
+                    successCount++;
+                }
+            }
+
+            logger.info("批量保存结果: 总共 {} 条，成功 {} 条", housingSales.size(), successCount);
+            return successCount;
+
+        } catch (Exception e) {
+            logger.error("批量保存失败: {}", e.getMessage(), e);
+            return 0;
+        }
+    }
+
+    /**
+     * 逐个保存房屋数据（降级方案）
+     */
+    private int individualSaveHousingSales(List<HousingSale> housingSales) {
+        if (housingSales.isEmpty()) {
+            return 0;
+        }
 
         int successCount = 0;
         int errorCount = 0;
@@ -149,7 +261,7 @@ public class HousingSaleScheduler {
                 }
 
                 if ((i + 1) % 100 == 0) {
-                    logger.info("保存进度: {}/{}，成功: {}，失败: {}",
+                    logger.info("逐个保存进度: {}/{}，成功: {}，失败: {}",
                         i + 1, housingSales.size(), successCount, errorCount);
                 }
 
@@ -159,6 +271,7 @@ public class HousingSaleScheduler {
                     sale.getServer(), sale.getArea(), sale.getSlot(), sale.getId(), e.getMessage());
             }
 
+            // 添加小延迟，避免对数据库造成过大压力
             if ((i + 1) % 50 == 0) {
                 try {
                     Thread.sleep(10);
@@ -169,7 +282,7 @@ public class HousingSaleScheduler {
             }
         }
 
-        logger.info("稳健保存完成: 总共 {} 条，成功 {} 条，失败 {} 条",
+        logger.info("逐个保存完成: 总共 {} 条，成功 {} 条，失败 {} 条",
             housingSales.size(), successCount, errorCount);
         return successCount;
     }
@@ -326,7 +439,7 @@ public class HousingSaleScheduler {
                 message.append("----------------\n");
             }
 
-            oneBotService.sendGroupMessage(message.toString(), null);
+            oneBotService.sendGroupMessage(message.toString(), "595883141");
 
             logger.info("已发送 {} 的房屋通知，共 {} 套房屋", server, houses.size());
 

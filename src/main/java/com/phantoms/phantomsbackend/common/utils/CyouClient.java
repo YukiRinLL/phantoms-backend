@@ -28,11 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class CyouClient {
 
     private static final Logger logger = LoggerFactory.getLogger(CyouClient.class);
-    private static final String BASE_URL = "https://xivpf.littlenightmare.top/api/listings";
-    private static final String ALLORIGINS_RAW_URL = "https://api.allorigins.win/raw?url=";
-    private static final String ALLORIGINS_GET_URL = "https://api.allorigins.win/get?url=";
     private static final String CORS_ANYWHERE_URL = "https://cors-anywhere.herokuapp.com/";
-    private static final String SCRAPESTACK_API_URL = "http://api.scrapestack.com/scrape";
     private static final int CONNECT_TIMEOUT = 10000;
     private static final int SOCKET_TIMEOUT = 10000;
 
@@ -94,7 +90,7 @@ public class CyouClient {
      * 获取指定服务器的房屋销售列表（带重试机制）
      */
     public static List<HousingSale> fetchHousingSales(String serverId) {
-        String url = "https://api.littlenightmare.top/api/sales?server=" + serverId;
+        String url = "https://house.ffxiv.cyou/api/sales?server=" + serverId;
 
         for (int retry = 0; retry < MAX_RETRIES; retry++) {
             try {
