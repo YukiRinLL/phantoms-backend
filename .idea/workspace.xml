@@ -7,13 +7,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix Github &amp; Render docker build">
-      <change afterPath="$PROJECT_DIR$/lib/ZXing-core-3.3.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/ZXing-javase-3.3.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/d1-jdbc-driver-1.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/d1-jdbc-driver-1.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/mssql-jdbc-6.4.0.jre7.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/xalan.jar" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add .jar files back to git">
+      <change afterPath="$PROJECT_DIR$/Dockerfile - backup" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +109,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "onboarding.tips.debug.path": "D:/phantoms-backend/src/main/java/com/phantoms/Main.java",
-    "project.structure.last.edited": "Project",
+    "project.structure.last.edited": "项目",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "run.code.analysis.last.selected.profile": "pProject Default",
@@ -307,14 +305,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00156" summary="add syncExpeditionaryTeams in job">
-      <option name="closed" value="true" />
-      <created>1758783239888</created>
-      <option name="number" value="00156" />
-      <option name="presentableId" value="LOCAL-00156" />
-      <option name="project" value="LOCAL" />
-      <updated>1758783239888</updated>
     </task>
     <task id="LOCAL-00157" summary="add syncExpeditionaryTeams in job">
       <option name="closed" value="true" />
@@ -700,7 +690,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761893454955</updated>
     </task>
-    <option name="localTasksCounter" value="205" />
+    <task id="LOCAL-00205" summary="add .jar files back to git">
+      <option name="closed" value="true" />
+      <created>1761894655510</created>
+      <option name="number" value="00205" />
+      <option name="presentableId" value="LOCAL-00205" />
+      <option name="project" value="LOCAL" />
+      <updated>1761894655510</updated>
+    </task>
+    <option name="localTasksCounter" value="206" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -735,7 +733,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update README" />
     <MESSAGE value="add QQ getMonthlyStats API" />
     <MESSAGE value="add guild-member-dynamic API" />
     <MESSAGE value="update data sync function" />
@@ -760,7 +757,8 @@
     <MESSAGE value="add .jar files to git" />
     <MESSAGE value="add .jar files to git" />
     <MESSAGE value="fix Github &amp; Render docker build" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix Github &amp; Render docker build" />
+    <MESSAGE value="add .jar files back to git" />
+    <option name="LAST_COMMIT_MESSAGE" value="add .jar files back to git" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

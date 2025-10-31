@@ -1,8 +1,5 @@
 # 多阶段构建：第一阶段构建，第二阶段运行
-FROM openjdk:23-jdk-bookworm AS builder
-
-# 安装 Maven
-RUN apt-get update && apt-get install -y maven
+FROM maven:3.8.6-openjdk-21 AS builder
 
 # 复制源码
 WORKDIR /app
