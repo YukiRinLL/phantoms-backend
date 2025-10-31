@@ -7,14 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="rename sendGroupMessage func">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add .jar files to git">
+      <change afterPath="$PROJECT_DIR$/.github/workflows/docker-build.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/git.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/git.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/phantoms-backend-1.0-SNAPSHOT.jar.original" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-10-15T17-23-15_677.dumpstream" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2025-10-15T17-23-42_314.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,7 +161,7 @@
       <command value="mvn clean package" />
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.NapCatQQTest">
+  <component name="RunManager" selected="应用程序.PhantomsBackendApplication">
     <configuration name="PhantomsBackendApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.phantoms.phantomsbackend.PhantomsBackendApplication" />
       <module name="phantoms-backend" />
@@ -308,22 +304,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00153" summary="add updateDaoYuKey API">
-      <option name="closed" value="true" />
-      <created>1758770786324</created>
-      <option name="number" value="00153" />
-      <option name="presentableId" value="LOCAL-00153" />
-      <option name="project" value="LOCAL" />
-      <updated>1758770786325</updated>
-    </task>
-    <task id="LOCAL-00154" summary="set daoyuKey in cache">
-      <option name="closed" value="true" />
-      <created>1758779701817</created>
-      <option name="number" value="00154" />
-      <option name="presentableId" value="LOCAL-00154" />
-      <option name="project" value="LOCAL" />
-      <updated>1758779701817</updated>
     </task>
     <task id="LOCAL-00155" summary="set daoyuKey in cache">
       <option name="closed" value="true" />
@@ -701,7 +681,23 @@
       <option name="project" value="LOCAL" />
       <updated>1761824566533</updated>
     </task>
-    <option name="localTasksCounter" value="202" />
+    <task id="LOCAL-00202" summary="add fetchAndProcessHousingSales scheduler">
+      <option name="closed" value="true" />
+      <created>1761892283865</created>
+      <option name="number" value="00202" />
+      <option name="presentableId" value="LOCAL-00202" />
+      <option name="project" value="LOCAL" />
+      <updated>1761892283865</updated>
+    </task>
+    <task id="LOCAL-00203" summary="add fetchAndProcessHousingSales scheduler">
+      <option name="closed" value="true" />
+      <created>1761892343783</created>
+      <option name="number" value="00203" />
+      <option name="presentableId" value="LOCAL-00203" />
+      <option name="project" value="LOCAL" />
+      <updated>1761892343783</updated>
+    </task>
+    <option name="localTasksCounter" value="204" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -736,8 +732,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add updateDaoYuKey API" />
-    <MESSAGE value="set daoyuKey in cache" />
     <MESSAGE value="add syncExpeditionaryTeams in job" />
     <MESSAGE value="update README" />
     <MESSAGE value="add QQ getMonthlyStats API" />
@@ -761,7 +755,9 @@
     <MESSAGE value="move data to doc path" />
     <MESSAGE value="add HousingSale function" />
     <MESSAGE value="rename sendGroupMessage func" />
-    <option name="LAST_COMMIT_MESSAGE" value="rename sendGroupMessage func" />
+    <MESSAGE value="add .jar files to git" />
+    <MESSAGE value="add .jar files to git" />
+    <option name="LAST_COMMIT_MESSAGE" value="add .jar files to git" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

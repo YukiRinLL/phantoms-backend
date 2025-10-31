@@ -1,0 +1,15 @@
+name: Build and Deploy Docker
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Docker image
+        run: |
+          docker build -t phantoms-backend .
+      - name: Deploy to Render
+        # 这里可以使用 Render 的 webhook 或 API 触发重新部署
