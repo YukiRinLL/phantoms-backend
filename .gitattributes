@@ -1,2 +1,6 @@
-target/*.jar filter=lfs diff=lfs merge=lfs -text
-*.jar filter=lfs diff=lfs merge=lfs -text
+# 只追踪自己生成的大 jar 包
+target/phantoms-backend-*.jar filter=lfs diff=lfs merge=lfs -text
+
+# 不追踪 lib/ 目录下的依赖 jargit add .gitattributes
+lib/*.jar -filter
+*.jar -filter
