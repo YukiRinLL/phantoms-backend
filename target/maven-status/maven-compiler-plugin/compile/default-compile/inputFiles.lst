@@ -27,6 +27,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\secon
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\XIVAPIClient.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\primary\SystemConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\secondary\AuthUser.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\TestController.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\exception\ServiceException.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\WebSocketConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\LeanCloudController.java
@@ -53,6 +54,7 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\secon
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\SwaggerConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\RedisUtil.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\RisingStonesController.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\HousingSale.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\primary\onebot\UserMessage.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\D1Service.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\secondary\BaseRepository.java
@@ -102,9 +104,11 @@ D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\controller\AuthUs
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\exception\GlobalExceptionHandler.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\config\AppConfig.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\primary\SystemConfigRepository.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\scheduler\HousingSaleScheduler.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\pojo\entity\RecruitmentResponse.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\secondary\SecondaryExpeditionaryTeamRepository.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\service\impl\LeanCloudServiceImpl.java
+D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\CyouClient.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\primary\PrimaryMessageRepository.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\common\utils\D1Util.java
 D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend\repository\secondary\SecondaryUserRepository.java
