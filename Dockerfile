@@ -1,5 +1,8 @@
 # 多阶段构建：第一阶段构建，第二阶段运行
-FROM maven:3.9.6-eclipse-temurin-23 AS builder
+FROM openjdk:23-jdk-bookworm AS builder
+
+# 安装 Maven
+RUN apt-get update && apt-get install -y maven
 
 # 复制源码
 WORKDIR /app
