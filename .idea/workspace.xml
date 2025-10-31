@@ -7,9 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add .jar files back to git">
-      <change afterPath="$PROJECT_DIR$/Dockerfile - backup" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix Github &amp; Render docker build">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
     </list>
@@ -305,22 +303,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00157" summary="add syncExpeditionaryTeams in job">
-      <option name="closed" value="true" />
-      <created>1758783384291</created>
-      <option name="number" value="00157" />
-      <option name="presentableId" value="LOCAL-00157" />
-      <option name="project" value="LOCAL" />
-      <updated>1758783384291</updated>
-    </task>
-    <task id="LOCAL-00158" summary="update README">
-      <option name="closed" value="true" />
-      <created>1758787868324</created>
-      <option name="number" value="00158" />
-      <option name="presentableId" value="LOCAL-00158" />
-      <option name="project" value="LOCAL" />
-      <updated>1758787868324</updated>
     </task>
     <task id="LOCAL-00159" summary="add QQ getMonthlyStats API">
       <option name="closed" value="true" />
@@ -698,7 +680,23 @@
       <option name="project" value="LOCAL" />
       <updated>1761894655510</updated>
     </task>
-    <option name="localTasksCounter" value="206" />
+    <task id="LOCAL-00206" summary="fix Github &amp; Render docker build">
+      <option name="closed" value="true" />
+      <created>1761894996331</created>
+      <option name="number" value="00206" />
+      <option name="presentableId" value="LOCAL-00206" />
+      <option name="project" value="LOCAL" />
+      <updated>1761894996331</updated>
+    </task>
+    <task id="LOCAL-00207" summary="fix Github &amp; Render docker build">
+      <option name="closed" value="true" />
+      <created>1761895173349</created>
+      <option name="number" value="00207" />
+      <option name="presentableId" value="LOCAL-00207" />
+      <option name="project" value="LOCAL" />
+      <updated>1761895173349</updated>
+    </task>
+    <option name="localTasksCounter" value="208" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -756,9 +754,9 @@
     <MESSAGE value="rename sendGroupMessage func" />
     <MESSAGE value="add .jar files to git" />
     <MESSAGE value="add .jar files to git" />
-    <MESSAGE value="fix Github &amp; Render docker build" />
     <MESSAGE value="add .jar files back to git" />
-    <option name="LAST_COMMIT_MESSAGE" value="add .jar files back to git" />
+    <MESSAGE value="fix Github &amp; Render docker build" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix Github &amp; Render docker build" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

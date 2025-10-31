@@ -1,10 +1,9 @@
 # 多阶段构建：第一阶段构建，第二阶段运行
 FROM maven:3.9.6-amazoncorretto-21 AS builder
 
-# 复制源码
+# 复制源码（包括 .git 目录）
 WORKDIR /app
-COPY pom.xml .
-COPY src ./src
+COPY . .
 
 # 构建应用
 RUN mvn clean package -DskipTests
