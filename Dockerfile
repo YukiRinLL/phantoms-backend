@@ -1,12 +1,13 @@
 # 多阶段构建：第一阶段构建，第二阶段运行
 FROM maven:3.9.6-amazoncorretto-21 AS builder
 
-# 复制源码（包括 .git 目录）
+# 复制源码
 WORKDIR /app
-COPY . .
+COPY pom.xml .
+COPY src ./src
 
-# 构建应用
-RUN mvn clean package -DskipTests
+# 构建应用（尝试不同的参数格式）
+RUN mvn clean package -DskipTests -Dmaven.gitcommitid.skip=true
 
 # 第二阶段：运行环境
 FROM openjdk:23-jdk-bookworm
