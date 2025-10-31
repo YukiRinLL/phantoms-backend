@@ -47,11 +47,14 @@ build/
 .idea
 *.iml
 *.ipr
-#out
+
+# 如果要推送.jar到Git的话需要注释掉out
+out
 gen
 
 # 编译输出目录
-#target/
+# 如果要推送.jar到Git的话需要注释掉target/
+target/
 build/
 
 # 临时文件
