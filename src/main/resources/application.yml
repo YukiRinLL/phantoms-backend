@@ -12,19 +12,21 @@ logging:
   level:
     # 全局日志级别
     root: info
-    # 框架日志级别 - 调整为INFO/WARN以减少输出
+    # 框架日志级别
     org.springframework: INFO
     org.springframework.web.socket: INFO
     org.springframework.messaging: INFO
     org.springframework.data.redis: WARN
-    # 业务包日志级别 - 保留DEBUG用于调试
-    org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    # 业务包日志级别
     com.phantoms.phantomsbackend: DEBUG
     # 数据库日志
-    springfox: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.postgresql: DEBUG
+    org.springframework.jdbc.core.JdbcTemplate: WARN
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+    org.postgresql: WARN
+    com.zaxxer.hikari: WARN
+    # 其他框架日志
+    springfox: WARN
 
 spring:
   # 应用名称[citation:4]
@@ -79,7 +81,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
 
   # E-mail (QQ 邮箱配置)
   mail:
