@@ -1,5 +1,5 @@
 # 多阶段构建：第一阶段构建，第二阶段运行
-FROM maven:3.8.6-openjdk-21 AS builder
+FROM maven:3.9.6-amazoncorretto-21 AS builder
 
 # 复制源码
 WORKDIR /app
