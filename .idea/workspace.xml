@@ -7,9 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix Github &amp; Render docker build">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update log level">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -296,14 +296,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00160" summary="add QQ getMonthlyStats API">
-      <option name="closed" value="true" />
-      <created>1758805503230</created>
-      <option name="number" value="00160" />
-      <option name="presentableId" value="LOCAL-00160" />
-      <option name="project" value="LOCAL" />
-      <updated>1758805503230</updated>
     </task>
     <task id="LOCAL-00161" summary="add guild-member-dynamic API">
       <option name="closed" value="true" />
@@ -689,7 +681,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761896104083</updated>
     </task>
-    <option name="localTasksCounter" value="209" />
+    <task id="LOCAL-00209" summary="update log level">
+      <option name="closed" value="true" />
+      <created>1761899296106</created>
+      <option name="number" value="00209" />
+      <option name="presentableId" value="LOCAL-00209" />
+      <option name="project" value="LOCAL" />
+      <updated>1761899296106</updated>
+    </task>
+    <option name="localTasksCounter" value="210" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -724,7 +724,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add QQ getMonthlyStats API" />
     <MESSAGE value="add guild-member-dynamic API" />
     <MESSAGE value="update data sync function" />
     <MESSAGE value="update RecruitmentScheduler" />
@@ -749,7 +748,8 @@
     <MESSAGE value="add .jar files to git" />
     <MESSAGE value="add .jar files back to git" />
     <MESSAGE value="fix Github &amp; Render docker build" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix Github &amp; Render docker build" />
+    <MESSAGE value="update log level" />
+    <option name="LAST_COMMIT_MESSAGE" value="update log level" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
