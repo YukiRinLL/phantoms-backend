@@ -180,6 +180,18 @@ public class HousingSaleScheduler {
     }
 
     /**
+     * 生成房屋描述文案
+     * 根据房屋特征生成吸引人的描述
+     */
+    private String generateBriefHouseDescription(HousingSale house) {
+        String areaName = getAreaName(house.getArea());
+        String sizeName = getSizeName(house.getSize());
+        String purchaseType = house.getPurchaseType() == PURCHASE_TYPE_LOTTERY ? "抽" : "抢";
+
+        return String.format("%s%s房 %s", areaName, sizeName, purchaseType);
+    }
+
+    /**
      * 房屋数据保存方法 - 优先批量保存，失败则降级为逐个保存
      */
     private int robustSaveHousingSales(List<HousingSale> housingSales) {
@@ -404,7 +416,8 @@ public class HousingSaleScheduler {
                         .collect(Collectors.groupingBy(HousingSale::getServer));
 
                 for (Map.Entry<String, List<HousingSale>> entry : housesByServer.entrySet()) {
-                    sendHouseNotification(entry.getKey(), entry.getValue());
+//                    sendHouseNotification(entry.getKey(), entry.getValue());
+                    sendBriefHouseNotification(entry.getKey(), entry.getValue());
                 }
 
                 cacheNewHouses(newHouses);
@@ -495,6 +508,55 @@ public class HousingSaleScheduler {
             }
         }
         logger.info("逐条缓存完成: 成功 {} 套", cachedCount);
+    }
+
+
+    /**
+     * 发送房屋通知 - 单条消息包含所有房屋信息
+     */
+    private void sendBriefHouseNotification(String server, List<HousingSale> houses) {
+        try {
+            StringBuilder message = new StringBuilder();
+
+            // 消息标题
+            message.append("🏠 发现 ").append(server).append(" 服务器 ").append(houses.size()).append(" 套新房源\n\n");
+
+            // 为每套房屋添加精简信息
+            for (int i = 0; i < houses.size(); i++) {
+                HousingSale house = houses.get(i);
+
+                // 生成精简描述
+                String briefDesc = generateBriefHouseDescription(house);
+                String areaName = getAreaName(house.getArea());
+                String sizeName = getSizeName(house.getSize());
+                String purchaseType = house.getPurchaseType() == PURCHASE_TYPE_LOTTERY ? "抽签" : "抢购";
+                String regionType = getRegionTypeName(house.getRegionType());
+
+                // 构建单行房屋信息
+                message.append(i + 1).append(". ")
+                        .append(briefDesc).append(" | ")
+                        .append(areaName).append(house.getSlot() + 1).append("区").append(house.getId()).append("号 | ")
+                        .append(formatPrice(house.getPrice()));
+
+                // 如果是抽签类型，显示参与人数
+                if (house.getPurchaseType() == PURCHASE_TYPE_LOTTERY && house.getParticipate() != null) {
+                    message.append(" | ").append(house.getParticipate()).append("人参与");
+                }
+
+                message.append("\n");
+            }
+
+            // 添加底部提示
+            message.append("\n🔥 现正火热预约中！");
+
+            // 发送单条合并消息
+            oneBotService.sendGroupMessage(message.toString(), "595883141");
+
+            logger.info("已发送 {} 服务器 {} 套房屋通知", server, houses.size());
+
+        } catch (Exception e) {
+            logger.error("发送房屋通知失败", e);
+        }
     }
 
     /**

@@ -7,9 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update HousingSaleScheduler sendHouseNotification func">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update banner">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/banner.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/banner.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -296,14 +296,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00162" summary="add guild-member-dynamic API">
-      <option name="closed" value="true" />
-      <created>1758865771799</created>
-      <option name="number" value="00162" />
-      <option name="presentableId" value="LOCAL-00162" />
-      <option name="project" value="LOCAL" />
-      <updated>1758865771799</updated>
     </task>
     <task id="LOCAL-00163" summary="update data sync function">
       <option name="closed" value="true" />
@@ -689,7 +681,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762138822918</updated>
     </task>
-    <option name="localTasksCounter" value="211" />
+    <task id="LOCAL-00211" summary="update banner">
+      <option name="closed" value="true" />
+      <created>1762139215783</created>
+      <option name="number" value="00211" />
+      <option name="presentableId" value="LOCAL-00211" />
+      <option name="project" value="LOCAL" />
+      <updated>1762139215783</updated>
+    </task>
+    <option name="localTasksCounter" value="212" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -724,7 +724,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update data sync function" />
     <MESSAGE value="update RecruitmentScheduler" />
     <MESSAGE value="add spring-dotenv" />
     <MESSAGE value="fix PokeReply bugs" />
@@ -749,7 +748,8 @@
     <MESSAGE value="fix Github &amp; Render docker build" />
     <MESSAGE value="update log level" />
     <MESSAGE value="update HousingSaleScheduler sendHouseNotification func" />
-    <option name="LAST_COMMIT_MESSAGE" value="update HousingSaleScheduler sendHouseNotification func" />
+    <MESSAGE value="update banner" />
+    <option name="LAST_COMMIT_MESSAGE" value="update banner" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
