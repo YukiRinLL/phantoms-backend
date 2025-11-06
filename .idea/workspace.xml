@@ -297,14 +297,6 @@
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
     </task>
-    <task id="LOCAL-00165" summary="update RecruitmentScheduler">
-      <option name="closed" value="true" />
-      <created>1759061991685</created>
-      <option name="number" value="00165" />
-      <option name="presentableId" value="LOCAL-00165" />
-      <option name="project" value="LOCAL" />
-      <updated>1759061991685</updated>
-    </task>
     <task id="LOCAL-00166" summary="update RecruitmentScheduler">
       <option name="closed" value="true" />
       <created>1759062064349</created>
@@ -689,7 +681,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762395799277</updated>
     </task>
-    <option name="localTasksCounter" value="214" />
+    <task id="LOCAL-00214" summary="update sendBriefHouseNotification func &amp; schedule time">
+      <option name="closed" value="true" />
+      <created>1762396098712</created>
+      <option name="number" value="00214" />
+      <option name="presentableId" value="LOCAL-00214" />
+      <option name="project" value="LOCAL" />
+      <updated>1762396098712</updated>
+    </task>
+    <option name="localTasksCounter" value="215" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

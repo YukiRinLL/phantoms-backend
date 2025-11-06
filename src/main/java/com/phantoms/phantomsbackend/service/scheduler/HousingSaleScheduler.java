@@ -67,6 +67,12 @@ public class HousingSaleScheduler {
     @Value("${housing.sale.notify.areas:0,1,2,3,4}")
     private String notifyAreas;
 
+    @Value("${napcat.default-group-id}")
+    private String defaultGroupId;
+
+    @Value("${napcat.phantom-group-id}")
+    private String phantomGroupId;
+
     // UTC+8每天23:05执行
     @Scheduled(cron = "0 5 15 * * ?")
 //    @Scheduled(fixedRate = 60000) // 每分钟执行一次
@@ -542,7 +548,7 @@ public class HousingSaleScheduler {
 //            message.append("\n🔥 现正火热预约中！");
 
             // 发送单条合并消息
-            oneBotService.sendGroupMessage(message.toString(), "787909466");
+            oneBotService.sendGroupMessage(message.toString(), phantomGroupId);
 
             logger.info("已发送 {} 服务器 {} 套房屋通知", server, houses.size());
 
@@ -595,7 +601,7 @@ public class HousingSaleScheduler {
                 message.append("\n🔥 现正火热预约中！\n");
 
                 // 发送单条房屋通知
-                oneBotService.sendGroupMessage(message.toString(), "595883141");
+                oneBotService.sendGroupMessage(message.toString(), defaultGroupId);
 
                 logger.info("已发送 {} 的房屋通知: {}-{}-{}-{}",
                         server, areaName, house.getSlot() + 1, house.getId(), sizeName);
