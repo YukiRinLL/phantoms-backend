@@ -38,7 +38,8 @@ public class GuildMemberReminderScheduler {
     @Value("${napcat.phantom-group-id}")
     private String phantomGroupId;
 
-    @Scheduled(cron = "0 0 0 * * ?") // 每天凌晨0点执行
+    // UTC+8每天8:00执行
+    @Scheduled(cron = "0 0 0 * * ?")
 //    @Scheduled(fixedRate = 60000) // 每分钟执行一次
     public void remindInactiveMembers() {
         try {

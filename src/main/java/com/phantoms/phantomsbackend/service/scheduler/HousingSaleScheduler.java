@@ -67,8 +67,8 @@ public class HousingSaleScheduler {
     @Value("${housing.sale.notify.areas:0,1,2,3,4}")
     private String notifyAreas;
 
-    // 每天0点执行
-    @Scheduled(cron = "0 0 0 * * ?")
+    // UTC+8每天23:05执行
+    @Scheduled(cron = "0 5 15 * * ?")
 //    @Scheduled(fixedRate = 60000) // 每分钟执行一次
     public void fetchAndProcessHousingSales() {
         try {
@@ -177,18 +177,6 @@ public class HousingSaleScheduler {
         }
 
         return "优质房产";
-    }
-
-    /**
-     * 生成房屋描述文案
-     * 根据房屋特征生成吸引人的描述
-     */
-    private String generateBriefHouseDescription(HousingSale house) {
-        String areaName = getAreaName(house.getArea());
-        String sizeName = getSizeName(house.getSize());
-        String purchaseType = house.getPurchaseType() == PURCHASE_TYPE_LOTTERY ? "抽" : "抢";
-
-        return String.format("%s%s房 %s", areaName, sizeName, purchaseType);
     }
 
     /**
@@ -526,28 +514,32 @@ public class HousingSaleScheduler {
                 HousingSale house = houses.get(i);
 
                 // 生成精简描述
-                String briefDesc = generateBriefHouseDescription(house);
                 String areaName = getAreaName(house.getArea());
                 String sizeName = getSizeName(house.getSize());
                 String purchaseType = house.getPurchaseType() == PURCHASE_TYPE_LOTTERY ? "抽签" : "抢购";
                 String regionType = getRegionTypeName(house.getRegionType());
 
+                // 计算推测截止时间
+                OffsetDateTime estimatedEndTime = calculateEstimatedEndTime(house);
+
                 // 构建单行房屋信息
                 message.append(i + 1).append(". ")
-                        .append(briefDesc).append(" | ")
+                        .append(sizeName).append(" | ")
                         .append(areaName).append(house.getSlot() + 1).append("区").append(house.getId()).append("号 | ")
-                        .append(formatPrice(house.getPrice()));
+                        .append(formatPrice(house.getPrice())).append(" | ")
+                        .append(regionType).append(" | ")
+                        .append(formatTime(estimatedEndTime)).append("截止");
 
                 // 如果是抽签类型，显示参与人数
                 if (house.getPurchaseType() == PURCHASE_TYPE_LOTTERY && house.getParticipate() != null) {
-                    message.append(" | ").append(house.getParticipate()).append("人参与");
+                    message.append(" | ").append(house.getParticipate()).append("参与");
                 }
 
                 message.append("\n");
             }
 
             // 添加底部提示
-            message.append("\n🔥 现正火热预约中！");
+//            message.append("\n🔥 现正火热预约中！");
 
             // 发送单条合并消息
             oneBotService.sendGroupMessage(message.toString(), "595883141");
@@ -673,7 +665,7 @@ public class HousingSaleScheduler {
 
     private String formatPrice(Long price) {
         if (price >= 10000) {
-            return String.format("%.1f万", price / 10000.0);
+            return String.format("%.1fw", price / 10000.0);
         }
         return price.toString();
     }
