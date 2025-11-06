@@ -404,7 +404,7 @@ public class HousingSaleScheduler {
                         .collect(Collectors.groupingBy(HousingSale::getServer));
 
                 for (Map.Entry<String, List<HousingSale>> entry : housesByServer.entrySet()) {
-//                    sendHouseNotification(entry.getKey(), entry.getValue());
+                    sendHouseNotification(entry.getKey(), entry.getValue());
                     sendBriefHouseNotification(entry.getKey(), entry.getValue());
                 }
 
@@ -542,7 +542,7 @@ public class HousingSaleScheduler {
 //            message.append("\n🔥 现正火热预约中！");
 
             // 发送单条合并消息
-            oneBotService.sendGroupMessage(message.toString(), "595883141");
+            oneBotService.sendGroupMessage(message.toString(), "787909466");
 
             logger.info("已发送 {} 服务器 {} 套房屋通知", server, houses.size());
 
