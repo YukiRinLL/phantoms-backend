@@ -49,6 +49,11 @@ public class HousingSaleScheduler {
     // 区域类型枚举
     private static final int REGION_TYPE_PERSONAL = 2;
 
+    private static final Map<String, String> SERVER_NAME_MAP = Map.of(
+            "1121", "拂晓之间",
+            "1081", "神意之地"
+    );
+
     @Autowired
     private OneBotService oneBotService;
 
@@ -512,8 +517,11 @@ public class HousingSaleScheduler {
         try {
             StringBuilder message = new StringBuilder();
 
+            // 获取服务器名称，如果没有映射则使用原编号
+            String serverName = SERVER_NAME_MAP.getOrDefault(server, server);
+
             // 消息标题
-            message.append("🏠 发现 ").append(server).append(" 服务器 ").append(houses.size()).append(" 套新房源\n\n");
+            message.append("🏠 发现 ").append(serverName).append(" 服务器 ").append(houses.size()).append(" 套新房源\n\n");
 
             // 为每套房屋添加精简信息
             for (int i = 0; i < houses.size(); i++) {
@@ -562,6 +570,9 @@ public class HousingSaleScheduler {
      */
     private void sendHouseNotification(String server, List<HousingSale> houses) {
         try {
+            // 获取服务器名称
+            String serverName = SERVER_NAME_MAP.getOrDefault(server, server);
+
             for (HousingSale house : houses) {
                 StringBuilder message = new StringBuilder();
 
@@ -604,7 +615,7 @@ public class HousingSaleScheduler {
                 oneBotService.sendGroupMessage(message.toString(), defaultGroupId);
 
                 logger.info("已发送 {} 的房屋通知: {}-{}-{}-{}",
-                        server, areaName, house.getSlot() + 1, house.getId(), sizeName);
+                        serverName, areaName, house.getSlot() + 1, house.getId(), sizeName);
 
                 // 添加间隔，避免消息过于密集
                 try {
