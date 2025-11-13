@@ -7,10 +7,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update sendBriefHouseNotification func &amp; schedule time">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add SERVER_NAME_MAP">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -297,14 +295,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00167" summary="update RecruitmentScheduler">
-      <option name="closed" value="true" />
-      <created>1759113744696</created>
-      <option name="number" value="00167" />
-      <option name="presentableId" value="LOCAL-00167" />
-      <option name="project" value="LOCAL" />
-      <updated>1759113744697</updated>
     </task>
     <task id="LOCAL-00168" summary="update RecruitmentScheduler">
       <option name="closed" value="true" />
@@ -690,7 +680,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762396219335</updated>
     </task>
-    <option name="localTasksCounter" value="216" />
+    <task id="LOCAL-00216" summary="add SERVER_NAME_MAP">
+      <option name="closed" value="true" />
+      <created>1762742645319</created>
+      <option name="number" value="00216" />
+      <option name="presentableId" value="LOCAL-00216" />
+      <option name="project" value="LOCAL" />
+      <updated>1762742645319</updated>
+    </task>
+    <option name="localTasksCounter" value="217" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -725,7 +723,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix PokeReply bugs" />
     <MESSAGE value="update PokeReply bugs" />
     <MESSAGE value="add phantom-group-id in config" />
     <MESSAGE value="update LittlenightmareClient add RETRIES &amp; DELAY_MS" />
@@ -750,7 +747,8 @@
     <MESSAGE value="update banner" />
     <MESSAGE value="sendBriefHouseNotification" />
     <MESSAGE value="update sendBriefHouseNotification func &amp; schedule time" />
-    <option name="LAST_COMMIT_MESSAGE" value="update sendBriefHouseNotification func &amp; schedule time" />
+    <MESSAGE value="add SERVER_NAME_MAP" />
+    <option name="LAST_COMMIT_MESSAGE" value="add SERVER_NAME_MAP" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
