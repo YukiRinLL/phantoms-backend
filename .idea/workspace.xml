@@ -7,12 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="switch monitor notify-on-success to false">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="turn off email sending in DaoYuKeyMonitorScheduler">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/doc/TODO.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/db_config.png" beforeDir="false" afterPath="$PROJECT_DIR$/doc/db_config.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/how-to-update-daoyukey.md" beforeDir="false" afterPath="$PROJECT_DIR$/doc/how-to-update-daoyukey.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DaoYuKeyMonitorScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DaoYuKeyMonitorScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -299,22 +296,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00174" summary="update PokeReply bugs">
-      <option name="closed" value="true" />
-      <created>1759224419711</created>
-      <option name="number" value="00174" />
-      <option name="presentableId" value="LOCAL-00174" />
-      <option name="project" value="LOCAL" />
-      <updated>1759224419711</updated>
-    </task>
-    <task id="LOCAL-00175" summary="update PokeReply bugs">
-      <option name="closed" value="true" />
-      <created>1759224517332</created>
-      <option name="number" value="00175" />
-      <option name="presentableId" value="LOCAL-00175" />
-      <option name="project" value="LOCAL" />
-      <updated>1759224517332</updated>
     </task>
     <task id="LOCAL-00176" summary="add phantom-group-id in config">
       <option name="closed" value="true" />
@@ -692,7 +673,23 @@
       <option name="project" value="LOCAL" />
       <updated>1764301030878</updated>
     </task>
-    <option name="localTasksCounter" value="223" />
+    <task id="LOCAL-00223" summary="update doc">
+      <option name="closed" value="true" />
+      <created>1764310295246</created>
+      <option name="number" value="00223" />
+      <option name="presentableId" value="LOCAL-00223" />
+      <option name="project" value="LOCAL" />
+      <updated>1764310295246</updated>
+    </task>
+    <task id="LOCAL-00224" summary="turn off email sending in DaoYuKeyMonitorScheduler">
+      <option name="closed" value="true" />
+      <created>1764310334255</created>
+      <option name="number" value="00224" />
+      <option name="presentableId" value="LOCAL-00224" />
+      <option name="project" value="LOCAL" />
+      <updated>1764310334255</updated>
+    </task>
+    <option name="localTasksCounter" value="225" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -727,8 +724,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update Phantoms.drawio" />
-    <MESSAGE value="update NAPCAT_HTTP_SERVER_URL" />
     <MESSAGE value="add logs to try fix bug handleOtherEvent" />
     <MESSAGE value="fix bug handleOtherEvent" />
     <MESSAGE value="add banner" />
@@ -752,7 +747,9 @@
     <MESSAGE value="update Dockerfile using amazoncorretto-21" />
     <MESSAGE value="add sendDaoYuKeyNotificationEmail func" />
     <MESSAGE value="switch monitor notify-on-success to false" />
-    <option name="LAST_COMMIT_MESSAGE" value="switch monitor notify-on-success to false" />
+    <MESSAGE value="update doc" />
+    <MESSAGE value="turn off email sending in DaoYuKeyMonitorScheduler" />
+    <option name="LAST_COMMIT_MESSAGE" value="turn off email sending in DaoYuKeyMonitorScheduler" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

@@ -1,6 +1,7 @@
 package com.phantoms.phantomsbackend.controller;
 
 import com.phantoms.phantomsbackend.common.utils.RisingStonesLoginTool;
+import com.phantoms.phantomsbackend.service.scheduler.DaoYuKeyMonitorScheduler;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.HikariPoolMXBean;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,7 +60,7 @@ public class PingController {
     private RisingStonesLoginTool risingStonesLoginTool;
 
     @Autowired
-    private com.phantoms.phantomsbackend.common.scheduler.DaoYuKeyMonitorScheduler daoYuKeyMonitorScheduler;
+    private DaoYuKeyMonitorScheduler daoYuKeyMonitorScheduler;
 
     @Value("${app.version:unknown}")
     private String appVersion;
