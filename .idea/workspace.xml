@@ -7,9 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add DaoYuKey Monitor">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update Dockerfile using openjdk-21" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -295,14 +293,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00170" summary="add spring-dotenv">
-      <option name="closed" value="true" />
-      <created>1759218607286</created>
-      <option name="number" value="00170" />
-      <option name="presentableId" value="LOCAL-00170" />
-      <option name="project" value="LOCAL" />
-      <updated>1759218607286</updated>
     </task>
     <task id="LOCAL-00171" summary="fix PokeReply bugs">
       <option name="closed" value="true" />
@@ -688,7 +678,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764296153602</updated>
     </task>
-    <option name="localTasksCounter" value="219" />
+    <task id="LOCAL-00219" summary="update Dockerfile using openjdk-21">
+      <option name="closed" value="true" />
+      <created>1764297243109</created>
+      <option name="number" value="00219" />
+      <option name="presentableId" value="LOCAL-00219" />
+      <option name="project" value="LOCAL" />
+      <updated>1764297243109</updated>
+    </task>
+    <option name="localTasksCounter" value="220" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -723,7 +721,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add phantom-group-id in config" />
     <MESSAGE value="update LittlenightmareClient add RETRIES &amp; DELAY_MS" />
     <MESSAGE value="remove retry of DirectConnection" />
     <MESSAGE value="add user recent message count func" />
@@ -748,7 +745,8 @@
     <MESSAGE value="add SERVER_NAME_MAP" />
     <MESSAGE value="update note" />
     <MESSAGE value="add DaoYuKey Monitor" />
-    <option name="LAST_COMMIT_MESSAGE" value="add DaoYuKey Monitor" />
+    <MESSAGE value="update Dockerfile using openjdk-21" />
+    <option name="LAST_COMMIT_MESSAGE" value="update Dockerfile using openjdk-21" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

@@ -11,7 +11,7 @@ RUN mvn clean package -DskipTests -Dmaven.gitcommitid.skip=true
 
 # 第二阶段：运行环境
 #FROM openjdk:23-jdk-bookworm
-FROM openjdk:21-jdk-bookworm
+FROM amazoncorretto:21-alpine-jdk
 
 # 从构建阶段复制 jar 文件
 COPY --from=builder /app/target/phantoms-backend-1.0-SNAPSHOT.jar /app/phantoms-backend.jar
