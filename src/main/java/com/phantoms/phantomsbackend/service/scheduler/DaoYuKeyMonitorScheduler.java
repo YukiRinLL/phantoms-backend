@@ -1,4 +1,4 @@
-package com.phantoms.phantomsbackend.common.scheduler;
+package com.phantoms.phantomsbackend.service.scheduler;
 
 import com.phantoms.phantomsbackend.common.utils.EmailUtil;
 import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
@@ -162,7 +162,8 @@ public class DaoYuKeyMonitorScheduler {
         );
 
         // 发送邮件通知
-        sendEmailNotification(subject, content, "success");
+        // todo:从render发送邮件有问题（见todo文档），暂时关闭邮件发送
+        //sendEmailNotification(subject, content, "success");
 
         // 发送QQ消息通知
         sendQQNotification("✅ " + subject + "\n" + content);
