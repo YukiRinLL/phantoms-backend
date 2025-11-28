@@ -159,6 +159,15 @@ napcat:
   access-token: ${NAPCAT_ACCESS_TOKEN:7saligia}
   default-group-id: ${NAPCAT_DEFAULT_GROUP_ID:595883141}
   phantom-group-id: ${NAPCAT_PHANTOM_GROUP_ID:787909466}
+  admin-qq: "944989026"
+
+# DaoYu Key监控配置
+monitor:
+  check:
+    enabled: true
+  notification:
+    email: 944989026@qq.com  # 替换为你的邮箱
+    notify-on-success: true  # 成功时也发送通知
 
 xivapi:
   base-url: "https://v2.xivapi.com/api"
