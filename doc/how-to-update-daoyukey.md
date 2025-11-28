@@ -13,6 +13,19 @@
 库表：public.system_config
 ![db_config](db_config.png)
 
+直接在库表中修改值，Scheduler会每30分钟一次定时获取并更新缓存。
+也可以使用以下API更新/检查配置
+```
+获取状态
+Get /status/daoyu-key
+手动检查
+Post /check/daoyu-key
+刷新缓存
+Post /refresh/daoyu-key
+切换通知配置
+Post /config/daoyu-notification
+```
+
 ## 石之家登录流程
 
 ### 完整登录步骤：
