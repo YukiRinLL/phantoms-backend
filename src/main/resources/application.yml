@@ -166,7 +166,7 @@ monitor:
   check:
     enabled: true
   notification:
-    email: 944989026@qq.com  # 替换为你的邮箱
+    email: 944989026@qq.com  # 通知邮箱
     notify-on-success: true  # 成功时也发送通知
 
 xivapi:

@@ -216,19 +216,56 @@ public class DaoYuKeyMonitorScheduler {
     private void sendEmailNotification(String subject, String content, String type) {
         if (notificationEmail != null && !notificationEmail.isEmpty()) {
             try {
-                Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put("title", subject);
-                templateVariables.put("content", content.replace("\n", "<br>"));
-                templateVariables.put("timestamp", LocalDateTime.now().format(formatter));
-                templateVariables.put("type", type); // success, warning, recovery
+                // 根据类型设置不同的邮件内容
+                String recipientName = "尊敬的系统管理员：";
+                String messageBody = content.replace("\n", "<br>");
+                String footerText = getFooterTextByType(type);
+                String buttonLink = "#";
+                String buttonText = getButtonTextByType(type);
+                String footerCopyright = "版权所有 © 2025 Phantoms系统监控平台";
 
-                emailUtil.sendDefaultHtmlEmail(notificationEmail, subject, templateVariables);
+                emailUtil.sendDaoYuKeyNotificationEmail(
+                        notificationEmail,
+                        subject,
+                        recipientName,
+                        messageBody,
+                        footerText,
+                        buttonLink,
+                        buttonText,
+                        footerCopyright
+                );
                 logger.info("DaoYu Key {}邮件已发送至: {}", type, notificationEmail);
             } catch (Exception e) {
                 logger.error("发送DaoYu Key {}邮件失败", type, e);
             }
         } else {
             logger.warn("未配置通知邮箱，跳过邮件发送");
+        }
+    }
+
+    private String getFooterTextByType(String type) {
+        switch (type) {
+            case "success":
+                return "系统运行正常，无需操作。";
+            case "warning":
+                return "请及时处理系统异常，避免影响服务。";
+            case "recovery":
+                return "系统已恢复正常运行。";
+            default:
+                return "感谢您的关注。";
+        }
+    }
+
+    private String getButtonTextByType(String type) {
+        switch (type) {
+            case "success":
+                return "✅ 系统正常";
+            case "warning":
+                return "🚨 立即处理";
+            case "recovery":
+                return "🔄 已恢复";
+            default:
+                return "查看详情";
         }
     }
 
