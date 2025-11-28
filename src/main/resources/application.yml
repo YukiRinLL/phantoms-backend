@@ -167,7 +167,7 @@ monitor:
     enabled: true
   notification:
     email: 944989026@qq.com  # 通知邮箱
-    notify-on-success: true  # 成功时也发送通知
+    notify-on-success: false  # 成功时也发送通知
 
 xivapi:
   base-url: "https://v2.xivapi.com/api"
