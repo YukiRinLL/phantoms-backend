@@ -44,7 +44,7 @@ public class DaoYuKeyMonitorScheduler {
     @Value("${monitor.check.enabled:true}")
     private boolean monitorEnabled;
 
-    @Value("${monitor.notify.on-success:true}")
+    @Value("${monitor.notify-on-success:false}")
     private boolean notifyOnSuccess;
 
     // 连续失败次数

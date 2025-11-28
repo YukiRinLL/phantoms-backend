@@ -7,9 +7,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="turn off email sending in DaoYuKeyMonitorScheduler">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update PingController">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -296,14 +295,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00176" summary="add phantom-group-id in config">
-      <option name="closed" value="true" />
-      <created>1759833486307</created>
-      <option name="number" value="00176" />
-      <option name="presentableId" value="LOCAL-00176" />
-      <option name="project" value="LOCAL" />
-      <updated>1759833486307</updated>
     </task>
     <task id="LOCAL-00177" summary="update NAPCAT_HTTP_SERVER_URL">
       <option name="closed" value="true" />
@@ -689,7 +680,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764310334255</updated>
     </task>
-    <option name="localTasksCounter" value="225" />
+    <task id="LOCAL-00225" summary="update PingController">
+      <option name="closed" value="true" />
+      <created>1764311392147</created>
+      <option name="number" value="00225" />
+      <option name="presentableId" value="LOCAL-00225" />
+      <option name="project" value="LOCAL" />
+      <updated>1764311392147</updated>
+    </task>
+    <option name="localTasksCounter" value="226" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -724,7 +723,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add logs to try fix bug handleOtherEvent" />
     <MESSAGE value="fix bug handleOtherEvent" />
     <MESSAGE value="add banner" />
     <MESSAGE value="add TestController" />
@@ -749,7 +747,8 @@
     <MESSAGE value="switch monitor notify-on-success to false" />
     <MESSAGE value="update doc" />
     <MESSAGE value="turn off email sending in DaoYuKeyMonitorScheduler" />
-    <option name="LAST_COMMIT_MESSAGE" value="turn off email sending in DaoYuKeyMonitorScheduler" />
+    <MESSAGE value="update PingController" />
+    <option name="LAST_COMMIT_MESSAGE" value="update PingController" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
