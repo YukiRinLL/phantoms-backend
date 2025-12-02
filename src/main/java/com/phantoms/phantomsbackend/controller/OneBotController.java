@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,10 +155,17 @@ public class OneBotController {
     }
 
     @GetMapping("/onebot/monthly-stats")
-    public ResponseEntity<Map<String, Object>> getMonthlyStats() {
+    public ResponseEntity<Map<String, Object>> getMonthlyStats(
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month) {
         try {
+            // 如果未提供年月，使用当前年月
+            LocalDate now = LocalDate.now();
+            int targetYear = (year != null) ? year : now.getYear();
+            int targetMonth = (month != null) ? month : now.getMonthValue();
+
             // 调用服务层获取月度统计
-            Map<String, Object> monthlyStats = oneBotService.getMonthlyStats();
+            Map<String, Object> monthlyStats = oneBotService.getMonthlyStats(targetYear, targetMonth);
 
             // 返回 JSON 格式的响应
             return ResponseEntity.ok(monthlyStats);

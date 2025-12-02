@@ -419,26 +419,33 @@ public class OneBotServiceImpl implements OneBotService {
     }
 
     @Override
-    public Map<String, Object> getMonthlyStats() {
+    public Map<String, Object> getMonthlyStats(int year, int month) {
         Map<String, Object> result = new HashMap<>();
 
         try {
+            // 验证月份有效性
+            if (month < 1 || month > 12) {
+                throw new IllegalArgumentException("月份必须在1-12之间");
+            }
+
             // 添加总量统计数据
-            result.put("monthlyMessageCount", getMonthlyMessageCount());
-            result.put("monthlyImageCount", getMonthlyImageCount());
+            result.put("year", year);
+            result.put("month", month);
+            result.put("monthlyMessageCount", getMonthlyMessageCount(year, month));
+            result.put("monthlyImageCount", getMonthlyImageCount(year, month));
             result.put("totalMessageCount", getTotalMessageCount());
             result.put("totalImageCount", getTotalImageCount());
 
             // 1. 发送消息数量排名
-            List<Object[]> messageRanking = chatRecordRepository.findMonthlyMessageRanking();
+            List<Object[]> messageRanking = chatRecordRepository.findMonthlyMessageRanking(year, month);
             List<Map<String, Object>> messageRankingList = new ArrayList<>();
 
             // 2. 发送图片数量排名
-            List<Object[]> imageRanking = chatRecordRepository.findMonthlyImageRanking();
+            List<Object[]> imageRanking = chatRecordRepository.findMonthlyImageRanking(year, month);
             List<Map<String, Object>> imageRankingList = new ArrayList<>();
 
             // 3. 图片比例排名
-            List<Object[]> ratioRanking = chatRecordRepository.findMonthlyImageRatioRanking();
+            List<Object[]> ratioRanking = chatRecordRepository.findMonthlyImageRatioRanking(year, month);
             List<Map<String, Object>> ratioRankingList = new ArrayList<>();
 
             // 收集所有需要查询的群组ID（假设统计的是默认群组的数据）
@@ -646,13 +653,13 @@ public class OneBotServiceImpl implements OneBotService {
     }
 
     @Override
-    public long getMonthlyMessageCount() {
-        return chatRecordRepository.countMonthlyMessages();
+    public long getMonthlyMessageCount(int year, int month) {
+        return chatRecordRepository.countMonthlyMessages(year, month);
     }
 
     @Override
-    public long getMonthlyImageCount() {
-        return chatRecordRepository.countMonthlyImages();
+    public long getMonthlyImageCount(int year, int month) {
+        return chatRecordRepository.countMonthlyImages(year, month);
     }
 
     @Override

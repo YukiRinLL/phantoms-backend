@@ -21,20 +21,22 @@ public interface OneBotService {
     void saveUserMessage(String message, Long groupId, Map<String, Object> systemInfo);
 
     /**
-     * 获取本月度消息统计
+     * 获取指定年月度的消息统计
+     * @param year 年份
+     * @param month 月份 (1-12)
      * @return 包含多个统计结果的Map
      */
-    Map<String, Object> getMonthlyStats();
+    Map<String, Object> getMonthlyStats(int year, int month);
 
     /**
-     * 获取本月消息总数
+     * 获取指定年月度的消息总数
      */
-    long getMonthlyMessageCount();
+    long getMonthlyMessageCount(int year, int month);
 
     /**
-     * 获取本月图片总数
+     * 获取指定年月度的图片总数
      */
-    long getMonthlyImageCount();
+    long getMonthlyImageCount(int year, int month);
 
     /**
      * 获取群消息总数（所有时间）
