@@ -21,9 +21,9 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Long>,
             "VALUES (:#{#recruitment.id}, :#{#recruitment.name}, :#{#recruitment.description}, " +
             ":#{#recruitment.createdWorld}, :#{#recruitment.createdWorldId}, :#{#recruitment.homeWorld}, " +
             ":#{#recruitment.homeWorldId}, :#{#recruitment.category}, :#{#recruitment.categoryId}, " +
-            ":#{#recruitment.duty}, :{#recruitment.minItemLevel}, :#{#recruitment.slotsFilled}, " +
+            ":#{#recruitment.duty}, :#{#recruitment.minItemLevel}, :#{#recruitment.slotsFilled}, " +
             ":#{#recruitment.slotsAvailable}, :#{#recruitment.timeLeft}, :#{#recruitment.updatedAt}, " +
-            ":#{#recruitment.crossWorld}, :#{#recruitment.datacenter}) " +
+            ":#{#recruitment.isCrossWorld}, :#{#recruitment.datacenter}) " +
             "ON CONFLICT (id) DO NOTHING",
             nativeQuery = true)
     void insertIgnore(@Param("recruitment") Recruitment recruitment);
