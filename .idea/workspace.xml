@@ -7,12 +7,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix monitor.notify-on-success:false">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update QQ chat monthly-stats functions">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RecruitmentController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/RecruitmentService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneBotController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/onebot/PrimaryChatRecordRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/onebot/PrimaryChatRecordRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneBotService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/RecruitmentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/repository/primary/RecruitmentRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +102,7 @@
     &quot;TestNG.NapCatQQTest.executor&quot;: &quot;Run&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/phantoms-backend&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/phantoms-backend/src/main/java/com/phantoms/phantomsbackend&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -130,11 +129,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend" />
       <recent name="D:\phantoms-backend" />
       <recent name="D:\phantoms-backend\doc" />
       <recent name="D:\phantoms-backend\src\main\resources\templates" />
       <recent name="D:\phantoms-backend\src\main\resources" />
-      <recent name="D:\phantoms-backend\src\test\java\com\phantoms\phantomsbackend" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\phantoms-backend\doc" />
@@ -147,11 +146,11 @@
       <recent name="com.phantoms.phantomsbackend" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.phantoms.phantomsbackend.controller" />
+      <recent name="com.phantoms.phantomsbackend.service" />
       <recent name="com.phantoms.phantomsbackend.service.scheduler" />
       <recent name="com.phantoms.phantomsbackend.pojo.entity" />
       <recent name="com.phantoms.phantomsbackend.common.utils" />
-      <recent name="com.phantoms.phantomsbackend.controller" />
-      <recent name="com.phantoms.phantomsbackend.common.config" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -299,14 +298,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00178" summary="update NAPCAT_HTTP_SERVER_URL">
-      <option name="closed" value="true" />
-      <created>1760076752179</created>
-      <option name="number" value="00178" />
-      <option name="presentableId" value="LOCAL-00178" />
-      <option name="project" value="LOCAL" />
-      <updated>1760076752179</updated>
     </task>
     <task id="LOCAL-00179" summary="update NAPCAT_HTTP_SERVER_URL">
       <option name="closed" value="true" />
@@ -692,7 +683,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764312493678</updated>
     </task>
-    <option name="localTasksCounter" value="227" />
+    <task id="LOCAL-00227" summary="update QQ chat monthly-stats functions">
+      <option name="closed" value="true" />
+      <created>1764660429233</created>
+      <option name="number" value="00227" />
+      <option name="presentableId" value="LOCAL-00227" />
+      <option name="project" value="LOCAL" />
+      <updated>1764660429233</updated>
+    </task>
+    <option name="localTasksCounter" value="228" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -727,7 +726,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add banner" />
     <MESSAGE value="add TestController" />
     <MESSAGE value="move data to doc path" />
     <MESSAGE value="add HousingSale function" />
@@ -752,7 +750,8 @@
     <MESSAGE value="turn off email sending in DaoYuKeyMonitorScheduler" />
     <MESSAGE value="update PingController" />
     <MESSAGE value="fix monitor.notify-on-success:false" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix monitor.notify-on-success:false" />
+    <MESSAGE value="update QQ chat monthly-stats functions" />
+    <option name="LAST_COMMIT_MESSAGE" value="update QQ chat monthly-stats functions" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
