@@ -30,6 +30,8 @@ public class RisingStonesServiceImpl implements RisingStonesService {
     private long tokenObtainTime;
 
     // Redis缓存键前缀
+    private static final String USER_INFO_CACHE_PREFIX = "user:info:";
+    private static final String GUILD_INFO_CACHE_PREFIX = "guild:info:";
     private static final String GUILD_MEMBER_CACHE_PREFIX = "guild:member:";
     private static final String GUILD_MEMBER_DYNAMIC_CACHE_PREFIX = "guild:member:dynamic:";
 
@@ -55,14 +57,62 @@ public class RisingStonesServiceImpl implements RisingStonesService {
 
     @Override
     public JSONObject getUserInfo(String uuid) throws IOException {
-        ensureTokenAndCookie();
-        return RisingStonesUtils.getUserInfo(uuid, daoyuToken, cookie);
+        String cacheKey = USER_INFO_CACHE_PREFIX + uuid;
+        JSONObject result = null;
+        
+        try {
+            // 先尝试从叨鱼工具查询
+            ensureTokenAndCookie();
+            result = RisingStonesUtils.getUserInfo(uuid, daoyuToken, cookie);
+            
+            // 如果查询成功，异步写入缓存
+            if (result != null && result.getInteger("code") == 10000) {
+                asyncCacheResult(cacheKey, result);
+            }
+        } catch (Exception e) {
+            // 查询失败，从缓存获取
+            logger.error("Failed to get user info from RisingStonesUtils, trying cache", e);
+            result = (JSONObject) redisUtil.get(cacheKey);
+            
+            // 如果缓存也没有，返回空或错误
+            if (result == null) {
+                result = new JSONObject();
+                result.put("code", 500);
+                result.put("message", "Failed to get user info");
+            }
+        }
+        
+        return result;
     }
 
     @Override
     public JSONObject getGuildInfo(String guildId) throws IOException {
-        ensureTokenAndCookie();
-        return RisingStonesUtils.getGuildInfo(guildId, daoyuToken, cookie);
+        String cacheKey = GUILD_INFO_CACHE_PREFIX + guildId;
+        JSONObject result = null;
+        
+        try {
+            // 先尝试从叨鱼工具查询
+            ensureTokenAndCookie();
+            result = RisingStonesUtils.getGuildInfo(guildId, daoyuToken, cookie);
+            
+            // 如果查询成功，异步写入缓存
+            if (result != null && result.getInteger("code") == 10000) {
+                asyncCacheResult(cacheKey, result);
+            }
+        } catch (Exception e) {
+            // 查询失败，从缓存获取
+            logger.error("Failed to get guild info from RisingStonesUtils, trying cache", e);
+            result = (JSONObject) redisUtil.get(cacheKey);
+            
+            // 如果缓存也没有，返回空或错误
+            if (result == null) {
+                result = new JSONObject();
+                result.put("code", 500);
+                result.put("message", "Failed to get guild info");
+            }
+        }
+        
+        return result;
     }
 
     @Override
