@@ -39,7 +39,7 @@ public class GuildMemberReminderScheduler {
     private String phantomGroupId;
 
     // UTC+8每天8:00执行
-    @Scheduled(cron = "0 0 0 * * ?")
+//    @Scheduled(cron = "0 0 0 * * ?") //todo 石之家现在屏蔽了别人房屋信息，通过当前登录daoyukey不能获取到房屋信息
 //    @Scheduled(fixedRate = 60000) // 每分钟执行一次
     public void remindInactiveMembers() {
         try {
