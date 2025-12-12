@@ -7,9 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix bug RecruitmentRepository insertIgnore func">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="turn off GuildMemberReminderScheduler">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/GuildMemberReminderScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/GuildMemberReminderScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/CacheConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/CacheConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/RisingStonesServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/RisingStonesServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -296,14 +297,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00181" summary="update LittlenightmareClient add RETRIES &amp; DELAY_MS">
-      <option name="closed" value="true" />
-      <created>1760080853965</created>
-      <option name="number" value="00181" />
-      <option name="presentableId" value="LOCAL-00181" />
-      <option name="project" value="LOCAL" />
-      <updated>1760080853965</updated>
     </task>
     <task id="LOCAL-00182" summary="remove retry of DirectConnection">
       <option name="closed" value="true" />
@@ -689,7 +682,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765363139973</updated>
     </task>
-    <option name="localTasksCounter" value="230" />
+    <task id="LOCAL-00230" summary="turn off GuildMemberReminderScheduler">
+      <option name="closed" value="true" />
+      <created>1765526797397</created>
+      <option name="number" value="00230" />
+      <option name="presentableId" value="LOCAL-00230" />
+      <option name="project" value="LOCAL" />
+      <updated>1765526797397</updated>
+    </task>
+    <option name="localTasksCounter" value="231" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -731,7 +732,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add HousingSale function" />
     <MESSAGE value="rename sendGroupMessage func" />
     <MESSAGE value="add .jar files to git" />
     <MESSAGE value="add .jar files to git" />
@@ -756,7 +756,8 @@
     <MESSAGE value="update QQ chat monthly-stats functions" />
     <MESSAGE value="add recruitments api" />
     <MESSAGE value="fix bug RecruitmentRepository insertIgnore func" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix bug RecruitmentRepository insertIgnore func" />
+    <MESSAGE value="turn off GuildMemberReminderScheduler" />
+    <option name="LAST_COMMIT_MESSAGE" value="turn off GuildMemberReminderScheduler" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

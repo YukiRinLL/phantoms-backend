@@ -1,10 +1,14 @@
 package com.phantoms.phantomsbackend.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.phantoms.phantomsbackend.common.utils.RedisUtil;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesLoginTool;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesUtils;
 import com.phantoms.phantomsbackend.service.RisingStonesService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -13,12 +17,28 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RisingStonesServiceImpl implements RisingStonesService {
 
+    private static final Logger logger = LoggerFactory.getLogger(RisingStonesServiceImpl.class);
+
     @Autowired
     private RisingStonesLoginTool risingStonesLoginTool;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     private String daoyuToken;
     private String cookie;
     private long tokenObtainTime;
+
+    // Redis缓存键前缀
+    private static final String GUILD_MEMBER_CACHE_PREFIX = "guild:member:";
+    private static final String GUILD_MEMBER_DYNAMIC_CACHE_PREFIX = "guild:member:dynamic:";
+
+    // 异步写入缓存的方法
+    @Async
+    private void asyncCacheResult(String key, JSONObject result) {
+        // 设置为永不过期的缓存
+        redisUtil.set(key, result);
+    }
 
     private synchronized void ensureTokenAndCookie() throws IOException {
         long currentTime = System.currentTimeMillis();
@@ -47,13 +67,61 @@ public class RisingStonesServiceImpl implements RisingStonesService {
 
     @Override
     public JSONObject getGuildMember(String guildId) throws IOException {
-        ensureTokenAndCookie();
-        return RisingStonesUtils.getGuildMember(guildId, daoyuToken, cookie);
+        String cacheKey = GUILD_MEMBER_CACHE_PREFIX + guildId;
+        JSONObject result = null;
+        
+        try {
+            // 先尝试从叨鱼工具查询
+            ensureTokenAndCookie();
+            result = RisingStonesUtils.getGuildMember(guildId, daoyuToken, cookie);
+            
+            // 如果查询成功，异步写入缓存
+            if (result != null && result.getInteger("code") == 10000) {
+                asyncCacheResult(cacheKey, result);
+            }
+        } catch (Exception e) {
+            // 查询失败，从缓存获取
+            logger.error("Failed to get guild member from RisingStonesUtils, trying cache", e);
+            result = (JSONObject) redisUtil.get(cacheKey);
+            
+            // 如果缓存也没有，返回空或错误
+            if (result == null) {
+                result = new JSONObject();
+                result.put("code", 500);
+                result.put("message", "Failed to get guild member info");
+            }
+        }
+        
+        return result;
     }
 
     @Override
     public JSONObject getGuildMemberDynamic(String guildId, int page, int limit) throws IOException {
-        ensureTokenAndCookie();
-        return RisingStonesUtils.getGuildMemberDynamic(guildId, page, limit, daoyuToken, cookie);
+        String cacheKey = GUILD_MEMBER_DYNAMIC_CACHE_PREFIX + guildId + ":" + page + ":" + limit;
+        JSONObject result = null;
+        
+        try {
+            // 先尝试从叨鱼工具查询
+            ensureTokenAndCookie();
+            result = RisingStonesUtils.getGuildMemberDynamic(guildId, page, limit, daoyuToken, cookie);
+            
+            // 如果查询成功，异步写入缓存
+            if (result != null && result.getInteger("code") == 10000) {
+                asyncCacheResult(cacheKey, result);
+            }
+        } catch (Exception e) {
+            // 查询失败，从缓存获取
+            logger.error("Failed to get guild member dynamic from RisingStonesUtils, trying cache", e);
+            result = (JSONObject) redisUtil.get(cacheKey);
+            
+            // 如果缓存也没有，返回空或错误
+            if (result == null) {
+                result = new JSONObject();
+                result.put("code", 500);
+                result.put("message", "Failed to get guild member dynamic info");
+            }
+        }
+        
+        return result;
     }
 }
