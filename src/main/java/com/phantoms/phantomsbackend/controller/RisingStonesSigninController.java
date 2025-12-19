@@ -1,13 +1,12 @@
 package com.phantoms.phantomsbackend.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.phantoms.phantomsbackend.common.utils.FfxivSigninHelper;
+import com.phantoms.phantomsbackend.common.utils.RisingStonesSigninHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -15,7 +14,7 @@ import java.util.Map;
 public class RisingStonesSigninController {
 
     @Autowired
-    private FfxivSigninHelper ffxivSigninHelper;
+    private RisingStonesSigninHelper ffxivSigninHelper;
 
     /**
      * 1. 获取登录二维码
@@ -45,7 +44,7 @@ public class RisingStonesSigninController {
     @GetMapping("/login/status")
     public ResponseEntity<?> checkLoginStatus() {
         try {
-            JSONObject loginInfo = ffxivSigninHelper.getLoginInfo(FfxivSigninHelper.SSO_REDIRECT_URL);
+            JSONObject loginInfo = ffxivSigninHelper.getLoginInfo(RisingStonesSigninHelper.SSO_REDIRECT_URL);
             JSONObject data = loginInfo.getJSONObject("data");
             
             // 检查是否有ticket（登录成功）
