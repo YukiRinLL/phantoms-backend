@@ -1,0 +1,503 @@
+{
+  "info": {
+    "_postman_id": "6b7c8d9e-1234-5678-90ab-cdef12345678",
+    "name": "FFXIV Rising Stones API",
+    "description": "基于ffxiv-signin-helper实现的FFXIV Rising Stones API集合",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variables": [
+    {
+      "key": "BASE_URL",
+      "value": "https://apiff14risingstones.web.sdo.com/api/home/",
+      "type": "string"
+    },
+    {
+      "key": "USER_AGENT",
+      "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
+      "type": "string"
+    },
+    {
+      "key": "REFERER",
+      "value": "https://ff14risingstones.web.sdo.com/",
+      "type": "string"
+    },
+    {
+      "key": "cookies",
+      "value": "",
+      "type": "string",
+      "description": "登录后的Cookie信息"
+    }
+  ],
+  "item": [
+    {
+      "name": "检查登录状态",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "{{USER_AGENT}}",
+            "type": "text"
+          },
+          {
+            "key": "Cookie",
+            "value": "{{cookies}}",
+            "type": "text"
+          },
+          {
+            "key": "Referer",
+            "value": "{{REFERER}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}GHome/isLogin?tempsuid={{$guid}}",
+          "host": [
+            "{{BASE_URL}}GHome/isLogin"
+          ],
+          "query": [
+            {
+              "key": "tempsuid",
+              "value": "{{$guid}}",
+              "type": "string"
+            }
+          ]
+        },
+        "description": "检查登录状态，获取登录信息"
+      },
+      "response": []
+    },
+    {
+      "name": "获取角色绑定信息",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "{{USER_AGENT}}",
+            "type": "text"
+          },
+          {
+            "key": "Cookie",
+            "value": "{{cookies}}",
+            "type": "text"
+          },
+          {
+            "key": "Referer",
+            "value": "{{REFERER}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}groupAndRole/getCharacterBindInfo?platform=1&tempsuid={{$guid}}",
+          "query": [
+            {
+              "key": "platform",
+              "value": "1",
+              "type": "string"
+            },
+            {
+              "key": "tempsuid",
+              "value": "{{$guid}}",
+              "type": "string"
+            }
+          ]
+        },
+        "description": "获取角色绑定信息"
+      },
+      "response": []
+    },
+    {
+      "name": "执行签到",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "{{USER_AGENT}}",
+            "type": "text"
+          },
+          {
+            "key": "Cookie",
+            "value": "{{cookies}}",
+            "type": "text"
+          },
+          {
+            "key": "Referer",
+            "value": "{{REFERER}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}sign/signIn?tempsuid={{$guid}}",
+          "query": [
+            {
+              "key": "tempsuid",
+              "value": "{{$guid}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "tempsuid",
+              "value": "{{$guid}}",
+              "type": "string"
+            }
+          ]
+        },
+        "description": "执行签到操作"
+      },
+      "response": []
+    },
+    {
+      "name": "获取签到日志",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "{{USER_AGENT}}",
+            "type": "text"
+          },
+          {
+            "key": "Cookie",
+            "value": "{{cookies}}",
+            "type": "text"
+          },
+          {
+            "key": "Referer",
+            "value": "{{REFERER}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}sign/mySignLog?month={{$timestamp}}&tempsuid={{$guid}}",
+          "query": [
+            {
+              "key": "month",
+              "value": "{{$timestamp}}",
+              "type": "string",
+              "description": "格式：YYYY-MM"
+            },
+            {
+              "key": "tempsuid",
+              "value": "{{$guid}}",
+              "type": "string"
+            }
+          ]
+        },
+        "description": "获取签到日志"
+      },
+      "response": []
+    },
+    {
+      "name": "获取签到奖励列表",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "{{USER_AGENT}}",
+            "type": "text"
+          },
+          {
+            "key": "Cookie",
+            "value": "{{cookies}}",
+            "type": "text"
+          },
+          {
+            "key": "Referer",
+            "value": "{{REFERER}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}sign/signRewardList?month={{$timestamp}}&tempsuid={{$guid}}",
+          "query": [
+            {
+              "key": "month",
+              "value": "{{$timestamp}}",
+              "type": "string",
+              "description": "格式：YYYY-MM"
+            },
+            {
+              "key": "tempsuid",
+              "value": "{{$guid}}",
+              "type": "string"
+            }
+          ]
+        },
+        "description": "获取签到奖励列表"
+      },
+      "response": []
+    },
+    {
+      "name": "领取签到奖励",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "{{USER_AGENT}}",
+            "type": "text"
+          },
+          {
+            "key": "Cookie",
+            "value": "{{cookies}}",
+            "type": "text"
+          },
+          {
+            "key": "Referer",
+            "value": "{{REFERER}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}sign/getSignReward?tempsuid={{$guid}}",
+          "query": [
+            {
+              "key": "tempsuid",
+              "value": "{{$guid}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "id",
+              "value": "1",
+              "type": "string",
+              "description": "奖励ID"
+            },
+            {
+              "key": "month",
+              "value": "{{$timestamp}}",
+              "type": "string",
+              "description": "格式：YYYY-MM"
+            },
+            {
+              "key": "tempsuid",
+              "value": "{{$guid}}",
+              "type": "string"
+            }
+          ]
+        },
+        "description": "领取签到奖励"
+      },
+      "response": []
+    },
+    {
+      "name": "创建动态评论",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "{{USER_AGENT}}",
+            "type": "text"
+          },
+          {
+            "key": "Cookie",
+            "value": "{{cookies}}",
+            "type": "text"
+          },
+          {
+            "key": "Referer",
+            "value": "{{REFERER}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}posts/comment?tempsuid={{$guid}}",
+          "query": [
+            {
+              "key": "tempsuid",
+              "value": "{{$guid}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "content",
+              "value": "这是一条测试评论",
+              "type": "string",
+              "description": "评论内容"
+            },
+            {
+              "key": "posts_id",
+              "value": "123",
+              "type": "string",
+              "description": "动态ID"
+            },
+            {
+              "key": "parent_id",
+              "value": "0",
+              "type": "string",
+              "description": "父评论ID"
+            },
+            {
+              "key": "root_parent",
+              "value": "0",
+              "type": "string",
+              "description": "根评论ID"
+            },
+            {
+              "key": "comment_pic",
+              "value": "",
+              "type": "string",
+              "description": "评论图片"
+            },
+            {
+              "key": "tempsuid",
+              "value": "{{$guid}}",
+              "type": "string"
+            }
+          ]
+        },
+        "description": "创建动态评论"
+      },
+      "response": []
+    },
+    {
+      "name": "创建动态",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "{{USER_AGENT}}",
+            "type": "text"
+          },
+          {
+            "key": "Cookie",
+            "value": "{{cookies}}",
+            "type": "text"
+          },
+          {
+            "key": "Referer",
+            "value": "{{REFERER}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}dynamic/create?tempsuid={{$guid}}",
+          "query": [
+            {
+              "key": "tempsuid",
+              "value": "{{$guid}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "content",
+              "value": "这是一条测试动态",
+              "type": "string",
+              "description": "动态内容"
+            },
+            {
+              "key": "scope",
+              "value": "1",
+              "type": "string",
+              "description": "可见范围：1-公开，2-好友，3-仅自己"
+            },
+            {
+              "key": "pic_url",
+              "value": "",
+              "type": "string",
+              "description": "动态图片"
+            },
+            {
+              "key": "tempsuid",
+              "value": "{{$guid}}",
+              "type": "string"
+            }
+          ]
+        },
+        "description": "创建动态"
+      },
+      "response": []
+    },
+    {
+      "name": "删除动态",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "User-Agent",
+            "value": "{{USER_AGENT}}",
+            "type": "text"
+          },
+          {
+            "key": "Cookie",
+            "value": "{{cookies}}",
+            "type": "text"
+          },
+          {
+            "key": "Referer",
+            "value": "{{REFERER}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}dynamic/deleteDynamic?tempsuid={{$guid}}",
+          "query": [
+            {
+              "key": "tempsuid",
+              "value": "{{$guid}}",
+              "type": "string"
+            }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"dynamic_id\": 123}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "删除动态"
+      },
+      "response": []
+    }
+  ],
+  "protocolProfileBehavior": {}
+}

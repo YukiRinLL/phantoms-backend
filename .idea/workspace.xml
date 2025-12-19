@@ -7,10 +7,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="turn off GuildMemberReminderScheduler">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update RisingStonesService add redis cache">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/FfxivSigninHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/FfxivSigninController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/CacheConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/CacheConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/RisingStonesServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/RisingStonesServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -297,22 +299,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00182" summary="remove retry of DirectConnection">
-      <option name="closed" value="true" />
-      <created>1760083484052</created>
-      <option name="number" value="00182" />
-      <option name="presentableId" value="LOCAL-00182" />
-      <option name="project" value="LOCAL" />
-      <updated>1760083484052</updated>
-    </task>
-    <task id="LOCAL-00183" summary="remove retry of DirectConnection">
-      <option name="closed" value="true" />
-      <created>1760083552131</created>
-      <option name="number" value="00183" />
-      <option name="presentableId" value="LOCAL-00183" />
-      <option name="project" value="LOCAL" />
-      <updated>1760083552131</updated>
     </task>
     <task id="LOCAL-00184" summary="add user recent message count func">
       <option name="closed" value="true" />
@@ -690,7 +676,23 @@
       <option name="project" value="LOCAL" />
       <updated>1765526797397</updated>
     </task>
-    <option name="localTasksCounter" value="231" />
+    <task id="LOCAL-00231" summary="update RisingStonesService add redis cache">
+      <option name="closed" value="true" />
+      <created>1765529093550</created>
+      <option name="number" value="00231" />
+      <option name="presentableId" value="LOCAL-00231" />
+      <option name="project" value="LOCAL" />
+      <updated>1765529093550</updated>
+    </task>
+    <task id="LOCAL-00232" summary="update RisingStonesService add redis cache">
+      <option name="closed" value="true" />
+      <created>1765529342049</created>
+      <option name="number" value="00232" />
+      <option name="presentableId" value="LOCAL-00232" />
+      <option name="project" value="LOCAL" />
+      <updated>1765529342050</updated>
+    </task>
+    <option name="localTasksCounter" value="233" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -732,7 +734,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="rename sendGroupMessage func" />
     <MESSAGE value="add .jar files to git" />
     <MESSAGE value="add .jar files to git" />
     <MESSAGE value="add .jar files back to git" />
@@ -757,7 +758,8 @@
     <MESSAGE value="add recruitments api" />
     <MESSAGE value="fix bug RecruitmentRepository insertIgnore func" />
     <MESSAGE value="turn off GuildMemberReminderScheduler" />
-    <option name="LAST_COMMIT_MESSAGE" value="turn off GuildMemberReminderScheduler" />
+    <MESSAGE value="update RisingStonesService add redis cache" />
+    <option name="LAST_COMMIT_MESSAGE" value="update RisingStonesService add redis cache" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
