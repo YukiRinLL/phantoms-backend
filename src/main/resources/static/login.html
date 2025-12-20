@@ -242,10 +242,7 @@
             <button onclick="fullLogin()" class="secondary">完整登录流程</button>
         </div>
 
-        <div id="cookiesSection" style="display: none; margin-top: 20px;">
-            <h4>Cookies信息：</h4>
-            <div id="cookiesInfo"></div>
-        </div>
+        
     </div>
 
     <div id="userInfo" class="section" style="display: none;">
@@ -253,7 +250,7 @@
         <div class="info-grid" id="loginInfo"></div>
 
         <div class="button-group">
-            <button onclick="checkLoginStatusWithCookies()">检查登录状态</button>
+            <button onclick="checkLoginStatus()">检查登录状态</button>
             <button onclick="getCharacterBindInfo()">获取角色信息</button>
             <button onclick="doSignIn()" class="success-text">执行签到</button>
         </div>
@@ -286,7 +283,6 @@
     let checkInterval = null;
     let qrExpireTimer = null;
     let qrExpireTime = null;
-    let currentCookies = null;
     let qrCodeInstance = null; // 用于保存二维码实例
     const baseUrl = 'http://localhost:8080'; // 根据实际情况修改
     const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
@@ -492,7 +488,7 @@
         }
     }
 
-    // 完成登录，获取cookies
+    // 完成登录
     async function finishLogin(ticket) {
         try {
             const response = await fetch(`${baseUrl}/api/ffxiv/signin/login/finish`, {
@@ -506,13 +502,7 @@
             const data = await response.json();
 
             if (data.success) {
-                currentCookies = data.data.cookies;
-                showStatus('登录完成！已获取Cookies', 'success');
-
-                // 显示cookies信息
-                document.getElementById('cookiesSection').style.display = 'block';
-                document.getElementById('cookiesInfo').textContent =
-                    currentCookies.substring(0, 100) + '...';
+                showStatus('登录完成！', 'success');
 
                 // 启用其他功能
                 document.getElementById('userInfo').style.display = 'block';
@@ -526,7 +516,7 @@
                 document.getElementById('generateBtn').disabled = false;
 
                 // 加载用户信息
-                checkLoginStatusWithCookies();
+                checkLoginStatus();
             } else {
                 showStatus(`完成登录失败: ${data.message}`, 'error');
                 document.getElementById('checkBtnText').style.display = 'inline';
@@ -552,13 +542,7 @@
             const data = await response.json();
 
             if (data.success) {
-                currentCookies = data.data.cookies;
                 showStatus('完整登录流程完成！', 'success');
-
-                // 显示cookies信息
-                document.getElementById('cookiesSection').style.display = 'block';
-                document.getElementById('cookiesInfo').textContent =
-                    currentCookies.substring(0, 100) + '...';
 
                 // 启用其他功能
                 document.getElementById('userInfo').style.display = 'block';
@@ -566,7 +550,7 @@
                 document.getElementById('dynamicSection').style.display = 'block';
 
                 // 加载用户信息
-                checkLoginStatusWithCookies();
+                checkLoginStatus();
             } else {
                 showStatus(`完整登录失败: ${data.message}`, 'error');
             }
@@ -578,20 +562,15 @@
         }
     }
 
-    // 使用cookies检查登录状态
-    async function checkLoginStatusWithCookies() {
-        if (!currentCookies) {
-            showStatus('请先登录获取cookies', 'error');
-            return;
-        }
-
+    // 检查登录状态
+    async function checkLoginStatus() {
         try {
             const response = await fetch(`${baseUrl}/api/ffxiv/signin/check/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ cookies: currentCookies })
+                body: JSON.stringify({})
             });
 
             const data = await response.json();
@@ -617,31 +596,41 @@
 
     // 获取角色绑定信息
     async function getCharacterBindInfo() {
-        if (!currentCookies) {
-            showStatus('请先登录获取cookies', 'error');
-            return;
-        }
-
         try {
             const response = await fetch(`${baseUrl}/api/ffxiv/signin/character/bind`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ cookies: currentCookies })
+                body: JSON.stringify({})
             });
 
             const data = await response.json();
 
             if (data.success) {
-                const result = data.data;
+                const result = data.data.data; // 修正：角色信息在data.data.data中
                 let html = `
                     <div class="info-card">
                         <h4>角色信息</h4>
-                        <p>角色ID: ${result.roleId || '未知'}</p>
-                        <p>角色名: ${result.roleName || '未知'}</p>
-                        <p>服务器: ${result.serverName || '未知'}</p>
+                        <p>角色ID: ${result.character_id || '未知'}</p>
+                        <p>角色名: ${result.character_name || '未知'}</p>
+                        <p>服务器: ${result.area_name || '未知'}</p>
+                        <p>所属群组: ${result.group_name || '未知'}</p>
+                        <p>是否签到: ${result.isSign ? '已签到' : '未签到'}</p>
                     </div>`;
+
+                // 如果有角色详细信息，也显示出来
+                if (result.characterDetail) {
+                    html += `
+                        <div class="info-card">
+                            <h4>角色详细信息</h4>
+                            <p>创建时间: ${result.characterDetail.create_time || '未知'}</p>
+                            <p>最后登录时间: ${result.characterDetail.last_login_time || '未知'}</p>
+                            <p>游戏时长: ${result.characterDetail.play_time || '未知'}</p>
+                            <p>公会名称: ${result.characterDetail.guild_name || '无'}</p>
+                            <p>公会标签: ${result.characterDetail.guild_tag || '无'}</p>
+                        </div>`;
+                }
 
                 document.getElementById('loginInfo').innerHTML += html;
                 showStatus('获取角色信息成功', 'success');
@@ -655,18 +644,13 @@
 
     // 执行签到
     async function doSignIn() {
-        if (!currentCookies) {
-            showStatus('请先登录获取cookies', 'error');
-            return;
-        }
-
         try {
             const response = await fetch(`${baseUrl}/api/ffxiv/signin/sign/in`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ cookies: currentCookies })
+                body: JSON.stringify({})
             });
 
             const data = await response.json();
@@ -700,11 +684,6 @@
 
     // 获取签到日志
     async function getSignLog() {
-        if (!currentCookies) {
-            showStatus('请先登录获取cookies', 'error');
-            return;
-        }
-
         try {
             const response = await fetch(`${baseUrl}/api/ffxiv/signin/sign/log`, {
                 method: 'POST',
@@ -712,7 +691,6 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    cookies: currentCookies,
                     month: currentMonth
                 })
             });
@@ -754,11 +732,6 @@
 
     // 获取签到奖励列表
     async function getSignRewardList() {
-        if (!currentCookies) {
-            showStatus('请先登录获取cookies', 'error');
-            return;
-        }
-
         try {
             const response = await fetch(`${baseUrl}/api/ffxiv/signin/sign/reward/list`, {
                 method: 'POST',
@@ -766,7 +739,6 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    cookies: currentCookies,
                     month: currentMonth
                 })
             });
@@ -815,11 +787,6 @@
 
     // 领取指定奖励
     async function getSignReward(rewardId) {
-        if (!currentCookies) {
-            showStatus('请先登录获取cookies', 'error');
-            return;
-        }
-
         try {
             const response = await fetch(`${baseUrl}/api/ffxiv/signin/sign/reward/get`, {
                 method: 'POST',
@@ -827,7 +794,6 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    cookies: currentCookies,
                     id: rewardId,
                     month: currentMonth
                 })
@@ -849,11 +815,6 @@
 
     // 创建动态
     async function createDynamic() {
-        if (!currentCookies) {
-            showStatus('请先登录获取cookies', 'error');
-            return;
-        }
-
         const content = prompt('请输入动态内容：');
         if (!content) return;
 
@@ -866,7 +827,6 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    cookies: currentCookies,
                     content: content,
                     scope: parseInt(scope),
                     pic_url: ""
@@ -897,11 +857,6 @@
 
     // 创建评论
     async function createComment() {
-        if (!currentCookies) {
-            showStatus('请先登录获取cookies', 'error');
-            return;
-        }
-
         const posts_id = prompt('请输入动态ID：');
         if (!posts_id) return;
 
@@ -915,7 +870,6 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    cookies: currentCookies,
                     content: content,
                     posts_id: posts_id,
                     parent_id: "0",
@@ -954,11 +908,9 @@
         }
 
         if (qrExpireTimer) {
-            clearInterval(qrExpireTimer);
-            qrExpireTimer = null;
-        }
-
-        currentCookies = null;
+        clearInterval(qrExpireTimer);
+        qrExpireTimer = null;
+    }
         document.getElementById('qrCodeContainer').style.display = 'none';
         document.getElementById('qrInfo').style.display = 'none';
         document.getElementById('mobileHint').style.display = 'none';
