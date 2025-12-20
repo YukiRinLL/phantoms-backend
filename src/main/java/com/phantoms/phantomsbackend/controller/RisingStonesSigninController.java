@@ -102,13 +102,9 @@ public class RisingStonesSigninController {
         
         try {
             ffxivSigninHelper.finishLogin(ticket);
-            String cookies = ffxivSigninHelper.getCookies();
             return ResponseEntity.ok(Map.of(
                     "success", true,
-                    "data", Map.of(
-                            "cookies", cookies
-                    ),
-                    "message", "登录完成，获取Cookies成功"
+                    "message", "登录完成"
             ));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
@@ -151,17 +147,9 @@ public class RisingStonesSigninController {
      * 5. 检查登录状态（使用Cookies）
      */
     @PostMapping("/check/login")
-    public ResponseEntity<?> checkLoginStatus(@RequestBody Map<String, String> request) {
-        String cookies = request.get("cookies");
-        if (cookies == null || cookies.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "cookies不能为空"
-            ));
-        }
-        
+    public ResponseEntity<?> checkLoginStatusWithCookies() {
         try {
-            JSONObject result = ffxivSigninHelper.checkLoginStatus(cookies);
+            JSONObject result = ffxivSigninHelper.checkLoginStatus();
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", result,
@@ -179,17 +167,9 @@ public class RisingStonesSigninController {
      * 6. 获取角色绑定信息
      */
     @PostMapping("/character/bind")
-    public ResponseEntity<?> getCharacterBindInfo(@RequestBody Map<String, String> request) {
-        String cookies = request.get("cookies");
-        if (cookies == null || cookies.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "cookies不能为空"
-            ));
-        }
-        
+    public ResponseEntity<?> getCharacterBindInfo() {
         try {
-            JSONObject result = ffxivSigninHelper.getCharacterBindInfo(cookies);
+            JSONObject result = ffxivSigninHelper.getCharacterBindInfo();
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", result,
@@ -207,17 +187,9 @@ public class RisingStonesSigninController {
      * 7. 执行签到
      */
     @PostMapping("/sign/in")
-    public ResponseEntity<?> doSignIn(@RequestBody Map<String, String> request) {
-        String cookies = request.get("cookies");
-        if (cookies == null || cookies.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "cookies不能为空"
-            ));
-        }
-        
+    public ResponseEntity<?> doSignIn() {
         try {
-            JSONObject result = ffxivSigninHelper.doSignIn(cookies);
+            JSONObject result = ffxivSigninHelper.doSignIn();
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", result,
@@ -236,15 +208,7 @@ public class RisingStonesSigninController {
      */
     @PostMapping("/sign/log")
     public ResponseEntity<?> getSignLog(@RequestBody Map<String, String> request) {
-        String cookies = request.get("cookies");
         String month = request.get("month");
-        
-        if (cookies == null || cookies.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "cookies不能为空"
-            ));
-        }
         
         if (month == null || month.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of(
@@ -254,7 +218,7 @@ public class RisingStonesSigninController {
         }
         
         try {
-            JSONObject result = ffxivSigninHelper.getSignLog(cookies, month);
+            JSONObject result = ffxivSigninHelper.getSignLog(month);
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", result,
@@ -273,15 +237,7 @@ public class RisingStonesSigninController {
      */
     @PostMapping("/sign/reward/list")
     public ResponseEntity<?> getSignInRewardList(@RequestBody Map<String, String> request) {
-        String cookies = request.get("cookies");
         String month = request.get("month");
-        
-        if (cookies == null || cookies.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "cookies不能为空"
-            ));
-        }
         
         if (month == null || month.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of(
@@ -291,7 +247,7 @@ public class RisingStonesSigninController {
         }
         
         try {
-            JSONObject result = ffxivSigninHelper.getSignInRewardList(cookies, month);
+            JSONObject result = ffxivSigninHelper.getSignInRewardList(month);
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", result,
@@ -310,16 +266,8 @@ public class RisingStonesSigninController {
      */
     @PostMapping("/sign/reward/get")
     public ResponseEntity<?> getSignInReward(@RequestBody Map<String, Object> request) {
-        String cookies = (String) request.get("cookies");
         Integer id = (Integer) request.get("id");
         String month = (String) request.get("month");
-        
-        if (cookies == null || cookies.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "cookies不能为空"
-            ));
-        }
         
         if (id == null) {
             return ResponseEntity.badRequest().body(Map.of(
@@ -336,7 +284,7 @@ public class RisingStonesSigninController {
         }
         
         try {
-            JSONObject result = ffxivSigninHelper.getSignInReward(cookies, id, month);
+            JSONObject result = ffxivSigninHelper.getSignInReward(id, month);
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", result,
@@ -355,17 +303,9 @@ public class RisingStonesSigninController {
      */
     @PostMapping("/dynamic/create")
     public ResponseEntity<?> createDynamic(@RequestBody Map<String, Object> request) {
-        String cookies = (String) request.get("cookies");
         String content = (String) request.get("content");
         Integer scope = (Integer) request.get("scope");
         String pic_url = (String) request.get("pic_url");
-        
-        if (cookies == null || cookies.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "cookies不能为空"
-            ));
-        }
         
         if (content == null || content.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of(
@@ -382,7 +322,7 @@ public class RisingStonesSigninController {
         }
         
         try {
-            JSONObject result = ffxivSigninHelper.createDynamic(cookies, content, scope, pic_url != null ? pic_url : "");
+            JSONObject result = ffxivSigninHelper.createDynamic(content, scope, pic_url != null ? pic_url : "");
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", result,
@@ -401,19 +341,11 @@ public class RisingStonesSigninController {
      */
     @PostMapping("/post/comment")
     public ResponseEntity<?> createPostComment(@RequestBody Map<String, String> request) {
-        String cookies = request.get("cookies");
         String content = request.get("content");
         String posts_id = request.get("posts_id");
         String parent_id = request.get("parent_id");
         String root_parent = request.get("root_parent");
         String comment_pic = request.get("comment_pic");
-        
-        if (cookies == null || cookies.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "cookies不能为空"
-            ));
-        }
         
         if (content == null || content.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of(
@@ -431,7 +363,6 @@ public class RisingStonesSigninController {
         
         try {
             JSONObject result = ffxivSigninHelper.createPostComment(
-                    cookies,
                     content,
                     posts_id,
                     parent_id != null ? parent_id : "0",

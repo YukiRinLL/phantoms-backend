@@ -5,6 +5,7 @@ import okhttp3.*;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
@@ -18,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.phantoms.phantomsbackend.service.SystemConfigService;
 
 // 二维码解析和生成相关依赖（需要引入ZXing库）
 import com.google.zxing.*;
@@ -42,6 +44,9 @@ public class RisingStonesSigninHelper {
 
     private OkHttpClient client;
     private final MyCookieJar cookieJar;
+
+    @Autowired
+    private SystemConfigService systemConfigService;
 
     public RisingStonesSigninHelper() {
         this.cookieJar = new MyCookieJar();
@@ -217,7 +222,9 @@ public class RisingStonesSigninHelper {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response.code());
-            // 不需要解析响应，只需要获取cookies
+            // 获取cookies并保存到数据库
+            String cookies = getCookies();
+            systemConfigService.updateLoginCookies(cookies);
         }
     }
 
@@ -240,7 +247,12 @@ public class RisingStonesSigninHelper {
     /**
      * 检查登录状态
      */
-    public JSONObject checkLoginStatus(String cookies) throws IOException {
+    public JSONObject checkLoginStatus() throws IOException {
+        String cookies = systemConfigService.getLoginCookies();
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+        
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "GHome/isLogin").newBuilder()
             .addQueryParameter("tempsuid", tempsuid)
@@ -271,11 +283,23 @@ public class RisingStonesSigninHelper {
             return JSONObject.parseObject(response.body().string());
         }
     }
+    
+    /**
+     * 检查登录状态（兼容旧版接口，保留cookies参数但不使用）
+     */
+    public JSONObject checkLoginStatus(String cookies) throws IOException {
+        return checkLoginStatus();
+    }
 
     /**
      * 获取角色绑定信息
      */
-    public JSONObject getCharacterBindInfo(String cookies) throws IOException {
+    public JSONObject getCharacterBindInfo() throws IOException {
+        String cookies = systemConfigService.getLoginCookies();
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+        
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "groupAndRole/getCharacterBindInfo").newBuilder()
             .addQueryParameter("platform", "1")
@@ -307,11 +331,23 @@ public class RisingStonesSigninHelper {
             return JSONObject.parseObject(response.body().string());
         }
     }
+    
+    /**
+     * 获取角色绑定信息（兼容旧版接口，保留cookies参数但不使用）
+     */
+    public JSONObject getCharacterBindInfo(String cookies) throws IOException {
+        return getCharacterBindInfo();
+    }
 
     /**
      * 执行签到
      */
-    public JSONObject doSignIn(String cookies) throws IOException {
+    public JSONObject doSignIn() throws IOException {
+        String cookies = systemConfigService.getLoginCookies();
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+        
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "sign/signIn").newBuilder()
             .addQueryParameter("tempsuid", tempsuid)
@@ -348,11 +384,23 @@ public class RisingStonesSigninHelper {
             return JSONObject.parseObject(response.body().string());
         }
     }
+    
+    /**
+     * 执行签到（兼容旧版接口，保留cookies参数但不使用）
+     */
+    public JSONObject doSignIn(String cookies) throws IOException {
+        return doSignIn();
+    }
 
     /**
      * 获取签到日志
      */
-    public JSONObject getSignLog(String cookies, String month) throws IOException {
+    public JSONObject getSignLog(String month) throws IOException {
+        String cookies = systemConfigService.getLoginCookies();
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+        
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "sign/mySignLog").newBuilder()
             .addQueryParameter("month", month)
@@ -384,11 +432,23 @@ public class RisingStonesSigninHelper {
             return JSONObject.parseObject(response.body().string());
         }
     }
+    
+    /**
+     * 获取签到日志（兼容旧版接口，保留cookies参数但不使用）
+     */
+    public JSONObject getSignLog(String cookies, String month) throws IOException {
+        return getSignLog(month);
+    }
 
     /**
      * 获取签到奖励列表
      */
-    public JSONObject getSignInRewardList(String cookies, String month) throws IOException {
+    public JSONObject getSignInRewardList(String month) throws IOException {
+        String cookies = systemConfigService.getLoginCookies();
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+        
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "sign/signRewardList").newBuilder()
             .addQueryParameter("month", month)
@@ -420,11 +480,23 @@ public class RisingStonesSigninHelper {
             return JSONObject.parseObject(response.body().string());
         }
     }
+    
+    /**
+     * 获取签到奖励列表（兼容旧版接口，保留cookies参数但不使用）
+     */
+    public JSONObject getSignInRewardList(String cookies, String month) throws IOException {
+        return getSignInRewardList(month);
+    }
 
     /**
      * 领取签到奖励
      */
-    public JSONObject getSignInReward(String cookies, int id, String month) throws IOException {
+    public JSONObject getSignInReward(int id, String month) throws IOException {
+        String cookies = systemConfigService.getLoginCookies();
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+        
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "sign/getSignReward").newBuilder()
             .addQueryParameter("tempsuid", tempsuid)
@@ -463,12 +535,24 @@ public class RisingStonesSigninHelper {
             return JSONObject.parseObject(response.body().string());
         }
     }
+    
+    /**
+     * 领取签到奖励（兼容旧版接口，保留cookies参数但不使用）
+     */
+    public JSONObject getSignInReward(String cookies, int id, String month) throws IOException {
+        return getSignInReward(id, month);
+    }
 
     /**
      * 创建动态评论
      */
-    public JSONObject createPostComment(String cookies, String content, String posts_id, 
+    public JSONObject createPostComment(String content, String posts_id, 
                                        String parent_id, String root_parent, String comment_pic) throws IOException {
+        String cookies = systemConfigService.getLoginCookies();
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+        
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "posts/comment").newBuilder()
             .addQueryParameter("tempsuid", tempsuid)
@@ -512,9 +596,22 @@ public class RisingStonesSigninHelper {
     }
 
     /**
+     * 创建动态评论（兼容旧版接口，保留cookies参数但不使用）
+     */
+    public JSONObject createPostComment(String cookies, String content, String posts_id, 
+                                       String parent_id, String root_parent, String comment_pic) throws IOException {
+        return createPostComment(content, posts_id, parent_id, root_parent, comment_pic);
+    }
+
+    /**
      * 创建动态
      */
-    public JSONObject createDynamic(String cookies, String content, int scope, String pic_url) throws IOException {
+    public JSONObject createDynamic(String content, int scope, String pic_url) throws IOException {
+        String cookies = systemConfigService.getLoginCookies();
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+        
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "dynamic/create").newBuilder()
             .addQueryParameter("tempsuid", tempsuid)
@@ -556,9 +653,21 @@ public class RisingStonesSigninHelper {
     }
 
     /**
+     * 创建动态（兼容旧版接口，保留cookies参数但不使用）
+     */
+    public JSONObject createDynamic(String cookies, String content, int scope, String pic_url) throws IOException {
+        return createDynamic(content, scope, pic_url);
+    }
+
+    /**
      * 删除动态
      */
-    public JSONObject deleteDynamic(String cookies, int dynamic_id) throws IOException {
+    public JSONObject deleteDynamic(int dynamic_id) throws IOException {
+        String cookies = systemConfigService.getLoginCookies();
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+        
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "dynamic/deleteDynamic").newBuilder()
             .addQueryParameter("tempsuid", tempsuid)
@@ -588,6 +697,13 @@ public class RisingStonesSigninHelper {
             }
             return JSONObject.parseObject(response.body().string());
         }
+    }
+
+    /**
+     * 删除动态（兼容旧版接口，保留cookies参数但不使用）
+     */
+    public JSONObject deleteDynamic(String cookies, int dynamic_id) throws IOException {
+        return deleteDynamic(dynamic_id);
     }
 
     /**

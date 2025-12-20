@@ -5,6 +5,7 @@ import com.phantoms.phantomsbackend.common.utils.RedisUtil;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesLoginTool;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesUtils;
 import com.phantoms.phantomsbackend.service.RisingStonesService;
+import com.phantoms.phantomsbackend.service.SystemConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,8 @@ public class RisingStonesServiceImpl implements RisingStonesService {
     @Autowired
     private RedisUtil redisUtil;
 
-    private String daoyuToken;
-    private String cookie;
-    private long tokenObtainTime;
+    @Autowired
+    private SystemConfigService systemConfigService;
 
     // Redis缓存键前缀
     private static final String USER_INFO_CACHE_PREFIX = "user:info:";
@@ -44,14 +44,25 @@ public class RisingStonesServiceImpl implements RisingStonesService {
 
     private synchronized void ensureTokenAndCookie() throws IOException {
         long currentTime = System.currentTimeMillis();
-        if (daoyuToken == null
-            || cookie == null
+        
+        // 从数据库获取当前的token、cookie和获取时间
+        String currentDaoyuToken = systemConfigService.getDaoyuToken();
+        String currentCookie = systemConfigService.getLoginCookies();
+        long tokenObtainTime = systemConfigService.getTokenObtainTime();
+        
+        if (currentDaoyuToken == null
+            || currentCookie == null
             || currentTime - tokenObtainTime > TimeUnit.MINUTES.toMillis(720) // 判断DaoyuToken在12小时后过期
         ) {
+            // 获取新的token和cookie
             String[] tokenAndCookie = risingStonesLoginTool.getDaoYuTokenAndCookie();
-            daoyuToken = tokenAndCookie[0];
-            cookie = tokenAndCookie[1];
-            tokenObtainTime = currentTime;
+            String newDaoyuToken = tokenAndCookie[0];
+            String newCookie = tokenAndCookie[1];
+            
+            // 保存到数据库
+            systemConfigService.updateDaoyuToken(newDaoyuToken);
+            systemConfigService.updateLoginCookies(newCookie);
+            systemConfigService.updateTokenObtainTime(currentTime);
         }
     }
 
@@ -63,6 +74,9 @@ public class RisingStonesServiceImpl implements RisingStonesService {
         try {
             // 先尝试从叨鱼工具查询
             ensureTokenAndCookie();
+            // 从数据库获取最新的token和cookie
+            String daoyuToken = systemConfigService.getDaoyuToken();
+            String cookie = systemConfigService.getLoginCookies();
             result = RisingStonesUtils.getUserInfo(uuid, daoyuToken, cookie);
             
             // 如果查询成功，异步写入缓存
@@ -93,6 +107,9 @@ public class RisingStonesServiceImpl implements RisingStonesService {
         try {
             // 先尝试从叨鱼工具查询
             ensureTokenAndCookie();
+            // 从数据库获取最新的token和cookie
+            String daoyuToken = systemConfigService.getDaoyuToken();
+            String cookie = systemConfigService.getLoginCookies();
             result = RisingStonesUtils.getGuildInfo(guildId, daoyuToken, cookie);
             
             // 如果查询成功，异步写入缓存
@@ -123,6 +140,9 @@ public class RisingStonesServiceImpl implements RisingStonesService {
         try {
             // 先尝试从叨鱼工具查询
             ensureTokenAndCookie();
+            // 从数据库获取最新的token和cookie
+            String daoyuToken = systemConfigService.getDaoyuToken();
+            String cookie = systemConfigService.getLoginCookies();
             result = RisingStonesUtils.getGuildMember(guildId, daoyuToken, cookie);
             
             // 如果查询成功，异步写入缓存
@@ -153,6 +173,9 @@ public class RisingStonesServiceImpl implements RisingStonesService {
         try {
             // 先尝试从叨鱼工具查询
             ensureTokenAndCookie();
+            // 从数据库获取最新的token和cookie
+            String daoyuToken = systemConfigService.getDaoyuToken();
+            String cookie = systemConfigService.getLoginCookies();
             result = RisingStonesUtils.getGuildMemberDynamic(guildId, page, limit, daoyuToken, cookie);
             
             // 如果查询成功，异步写入缓存
