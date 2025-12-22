@@ -40,8 +40,9 @@ spring:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   datasource:
     primary:
-      # Supabase Transaction Pooler mode
-      url: ${SUPABASE_PRIMARY_URL:jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres}
+      # Direct Connection mode - port 5432
+      # Transaction Pooler mode - port 6543
+      url: ${SUPABASE_PRIMARY_URL:jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres}
       username: ${SUPABASE_PRIMARY_USERNAME:postgres.dshmbsawwrbuycnivcjs}
       password: ${SUPABASE_PRIMARY_PASSWORD}
       driver-class-name: org.postgresql.Driver
