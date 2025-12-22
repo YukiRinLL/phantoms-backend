@@ -7,8 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="remove RisingStonesLoginTool &amp; update RisingStonesUtils to using RisingStonesSigninHelper">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update todo">
       <change beforePath="$PROJECT_DIR$/doc/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/doc/TODO.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -296,22 +295,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00188" summary="update NAPCAT_HTTP_SERVER_URL">
-      <option name="closed" value="true" />
-      <created>1760179075771</created>
-      <option name="number" value="00188" />
-      <option name="presentableId" value="LOCAL-00188" />
-      <option name="project" value="LOCAL" />
-      <updated>1760179075771</updated>
-    </task>
-    <task id="LOCAL-00189" summary="update NAPCAT_HTTP_SERVER_URL">
-      <option name="closed" value="true" />
-      <created>1760179160536</created>
-      <option name="number" value="00189" />
-      <option name="presentableId" value="LOCAL-00189" />
-      <option name="project" value="LOCAL" />
-      <updated>1760179160536</updated>
     </task>
     <task id="LOCAL-00190" summary="add logs to try fix bug handleOtherEvent">
       <option name="closed" value="true" />
@@ -689,7 +672,23 @@
       <option name="project" value="LOCAL" />
       <updated>1766370248774</updated>
     </task>
-    <option name="localTasksCounter" value="237" />
+    <task id="LOCAL-00237" summary="update todo">
+      <option name="closed" value="true" />
+      <created>1766371219847</created>
+      <option name="number" value="00237" />
+      <option name="presentableId" value="LOCAL-00237" />
+      <option name="project" value="LOCAL" />
+      <updated>1766371219847</updated>
+    </task>
+    <task id="LOCAL-00238" summary="update todo">
+      <option name="closed" value="true" />
+      <created>1766371284604</created>
+      <option name="number" value="00238" />
+      <option name="presentableId" value="LOCAL-00238" />
+      <option name="project" value="LOCAL" />
+      <updated>1766371284604</updated>
+    </task>
+    <option name="localTasksCounter" value="239" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -731,7 +730,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix Github &amp; Render docker build" />
     <MESSAGE value="update log level" />
     <MESSAGE value="update HousingSaleScheduler sendHouseNotification func" />
     <MESSAGE value="update banner" />
@@ -756,7 +754,8 @@
     <MESSAGE value="add FfxivSigninHelper" />
     <MESSAGE value="put cookies from frontend to backend" />
     <MESSAGE value="remove RisingStonesLoginTool &amp; update RisingStonesUtils to using RisingStonesSigninHelper" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove RisingStonesLoginTool &amp; update RisingStonesUtils to using RisingStonesSigninHelper" />
+    <MESSAGE value="update todo" />
+    <option name="LAST_COMMIT_MESSAGE" value="update todo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
