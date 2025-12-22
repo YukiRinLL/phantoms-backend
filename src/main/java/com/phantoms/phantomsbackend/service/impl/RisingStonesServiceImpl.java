@@ -2,7 +2,7 @@ package com.phantoms.phantomsbackend.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.phantoms.phantomsbackend.common.utils.RedisUtil;
-import com.phantoms.phantomsbackend.common.utils.RisingStonesLoginTool;
+//import com.phantoms.phantomsbackend.common.utils.RisingStonesLoginTool;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesUtils;
 import com.phantoms.phantomsbackend.service.RisingStonesService;
 import com.phantoms.phantomsbackend.service.SystemConfigService;
@@ -20,8 +20,8 @@ public class RisingStonesServiceImpl implements RisingStonesService {
 
     private static final Logger logger = LoggerFactory.getLogger(RisingStonesServiceImpl.class);
 
-    @Autowired
-    private RisingStonesLoginTool risingStonesLoginTool;
+//    @Autowired
+//    private RisingStonesLoginTool risingStonesLoginTool;
 
     @Autowired
     private RedisUtil redisUtil;
@@ -42,29 +42,29 @@ public class RisingStonesServiceImpl implements RisingStonesService {
         redisUtil.set(key, result);
     }
 
-    private synchronized void ensureTokenAndCookie() throws IOException {
-        long currentTime = System.currentTimeMillis();
-        
-        // 从数据库获取当前的token、cookie和获取时间
-        String currentDaoyuToken = systemConfigService.getDaoyuToken();
-        String currentCookie = systemConfigService.getLoginCookies();
-        long tokenObtainTime = systemConfigService.getTokenObtainTime();
-        
-        if (currentDaoyuToken == null
-            || currentCookie == null
-            || currentTime - tokenObtainTime > TimeUnit.MINUTES.toMillis(720) // 判断DaoyuToken在12小时后过期
-        ) {
-            // 获取新的token和cookie
-            String[] tokenAndCookie = risingStonesLoginTool.getDaoYuTokenAndCookie();
-            String newDaoyuToken = tokenAndCookie[0];
-            String newCookie = tokenAndCookie[1];
-            
-            // 保存到数据库
-            systemConfigService.updateDaoyuToken(newDaoyuToken);
-            systemConfigService.updateLoginCookies(newCookie);
-            systemConfigService.updateTokenObtainTime(currentTime);
-        }
-    }
+//    private synchronized void ensureTokenAndCookie() throws IOException {
+//        long currentTime = System.currentTimeMillis();
+//
+//        // 从数据库获取当前的token、cookie和获取时间
+//        String currentDaoyuToken = systemConfigService.getDaoyuToken();
+//        String currentCookie = systemConfigService.getLoginCookies();
+//        long tokenObtainTime = systemConfigService.getTokenObtainTime();
+//
+//        if (currentDaoyuToken == null
+//            || currentCookie == null
+//            || currentTime - tokenObtainTime > TimeUnit.MINUTES.toMillis(720) // 判断DaoyuToken在12小时后过期
+//        ) {
+//            // 获取新的token和cookie
+//            String[] tokenAndCookie = risingStonesLoginTool.getDaoYuTokenAndCookie();
+//            String newDaoyuToken = tokenAndCookie[0];
+//            String newCookie = tokenAndCookie[1];
+//
+//            // 保存到数据库
+//            systemConfigService.updateDaoyuToken(newDaoyuToken);
+//            systemConfigService.updateLoginCookies(newCookie);
+//            systemConfigService.updateTokenObtainTime(currentTime);
+//        }
+//    }
 
     @Override
     public JSONObject getUserInfo(String uuid) throws IOException {
@@ -73,11 +73,8 @@ public class RisingStonesServiceImpl implements RisingStonesService {
         
         try {
             // 先尝试从叨鱼工具查询
-            ensureTokenAndCookie();
-            // 从数据库获取最新的token和cookie
-            String daoyuToken = systemConfigService.getDaoyuToken();
-            String cookie = systemConfigService.getLoginCookies();
-            result = RisingStonesUtils.getUserInfo(uuid, daoyuToken, cookie);
+//            ensureTokenAndCookie();
+            result = RisingStonesUtils.getUserInfo(uuid);
             
             // 如果查询成功，异步写入缓存
             if (result != null && result.getInteger("code") == 10000) {
@@ -106,11 +103,8 @@ public class RisingStonesServiceImpl implements RisingStonesService {
         
         try {
             // 先尝试从叨鱼工具查询
-            ensureTokenAndCookie();
-            // 从数据库获取最新的token和cookie
-            String daoyuToken = systemConfigService.getDaoyuToken();
-            String cookie = systemConfigService.getLoginCookies();
-            result = RisingStonesUtils.getGuildInfo(guildId, daoyuToken, cookie);
+//            ensureTokenAndCookie();
+            result = RisingStonesUtils.getGuildInfo(guildId);
             
             // 如果查询成功，异步写入缓存
             if (result != null && result.getInteger("code") == 10000) {
@@ -139,11 +133,8 @@ public class RisingStonesServiceImpl implements RisingStonesService {
         
         try {
             // 先尝试从叨鱼工具查询
-            ensureTokenAndCookie();
-            // 从数据库获取最新的token和cookie
-            String daoyuToken = systemConfigService.getDaoyuToken();
-            String cookie = systemConfigService.getLoginCookies();
-            result = RisingStonesUtils.getGuildMember(guildId, daoyuToken, cookie);
+//            ensureTokenAndCookie();
+            result = RisingStonesUtils.getGuildMember(guildId);
             
             // 如果查询成功，异步写入缓存
             if (result != null && result.getInteger("code") == 10000) {
@@ -172,11 +163,8 @@ public class RisingStonesServiceImpl implements RisingStonesService {
         
         try {
             // 先尝试从叨鱼工具查询
-            ensureTokenAndCookie();
-            // 从数据库获取最新的token和cookie
-            String daoyuToken = systemConfigService.getDaoyuToken();
-            String cookie = systemConfigService.getLoginCookies();
-            result = RisingStonesUtils.getGuildMemberDynamic(guildId, page, limit, daoyuToken, cookie);
+//            ensureTokenAndCookie();
+            result = RisingStonesUtils.getGuildMemberDynamic(guildId, page, limit);
             
             // 如果查询成功，异步写入缓存
             if (result != null && result.getInteger("code") == 10000) {

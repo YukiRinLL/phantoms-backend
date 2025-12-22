@@ -1,7 +1,7 @@
 package com.phantoms.phantomsbackend.controller;
 
-import com.phantoms.phantomsbackend.common.utils.RisingStonesLoginTool;
-import com.phantoms.phantomsbackend.service.scheduler.DaoYuKeyMonitorScheduler;
+//import com.phantoms.phantomsbackend.common.utils.RisingStonesLoginTool;
+//import com.phantoms.phantomsbackend.service.scheduler.DaoYuKeyMonitorScheduler;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.HikariPoolMXBean;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,11 +56,11 @@ public class PingController {
     @Autowired
     private RedisConnectionFactory redisConnectionFactory;
 
-    @Autowired
-    private RisingStonesLoginTool risingStonesLoginTool;
+//    @Autowired
+//    private RisingStonesLoginTool risingStonesLoginTool;
 
-    @Autowired
-    private DaoYuKeyMonitorScheduler daoYuKeyMonitorScheduler;
+//    @Autowired
+//    private DaoYuKeyMonitorScheduler daoYuKeyMonitorScheduler;
 
     @Value("${app.version:unknown}")
     private String appVersion;
@@ -228,169 +228,170 @@ public class PingController {
         return details;
     }
 
-    @PostMapping("/check/daoyu-key")
-    @Operation(summary = "手动检查DaoYu Key有效性",
-            description = "手动触发DaoYu Key有效性检查，并返回检查结果",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "检查完成",
-                            content = @Content(schema = @Schema(implementation = Map.class)))
-            })
-    public ResponseEntity<Map<String, Object>> checkDaoYuKey() {
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
+//    @PostMapping("/check/daoyu-key")
+//    @Operation(summary = "手动检查DaoYu Key有效性",
+//            description = "手动触发DaoYu Key有效性检查，并返回检查结果",
+//            responses = {
+//                    @ApiResponse(responseCode = "200", description = "检查完成",
+//                            content = @Content(schema = @Schema(implementation = Map.class)))
+//            })
+//    public ResponseEntity<Map<String, Object>> checkDaoYuKey() {
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("timestamp", LocalDateTime.now());
+//
+//        try {
+//            // 获取当前监控状态
+//            Map<String, Object> monitorStatus = daoYuKeyMonitorScheduler.getMonitorStatus();
+//            response.put("monitorStatus", monitorStatus);
+//
+//            // 执行手动检查
+//            daoYuKeyMonitorScheduler.manualCheck();
+//
+//            // 获取检查后的状态
+//            Map<String, Object> updatedStatus = daoYuKeyMonitorScheduler.getMonitorStatus();
+//            response.put("updatedStatus", updatedStatus);
+//
+//            // 尝试获取登录结果
+//            String[] loginResult = risingStonesLoginTool.getDaoYuTokenAndCookie();
+//            if (loginResult[0] != null && loginResult[1] != null) {
+//                response.put("status", "SUCCESS");
+//                response.put("message", "DaoYu Key检查通过，系统正常运行");
+//                response.put("tokenAvailable", true);
+//                response.put("tokenPrefix", loginResult[0].substring(0, Math.min(20, loginResult[0].length())) + "...");
+//                response.put("cookieAvailable", true);
+//            } else {
+//                response.put("status", "FAILED");
+//                response.put("message", "DaoYu Key检查失败，返回的token或cookie为空");
+//                response.put("tokenAvailable", false);
+//                response.put("cookieAvailable", false);
+//            }
+//
+//        } catch (Exception e) {
+//            response.put("status", "ERROR");
+//            response.put("message", "DaoYu Key检查过程中发生异常: " + e.getMessage());
+//            response.put("error", e.getClass().getSimpleName());
+//            response.put("tokenAvailable", false);
+//            response.put("cookieAvailable", false);
+//        }
+//
+//        return ResponseEntity.ok(response);
+//    }
+//
+//    @GetMapping("/status/daoyu-key")
+//    @Operation(summary = "获取DaoYu Key监控状态",
+//            description = "获取当前DaoYu Key监控的状态信息，不触发实际检查",
+//            responses = {
+//                    @ApiResponse(responseCode = "200", description = "状态信息获取成功",
+//                            content = @Content(schema = @Schema(implementation = Map.class)))
+//            })
+//    public ResponseEntity<Map<String, Object>> getDaoYuKeyStatus() {
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("timestamp", LocalDateTime.now());
+//
+//        try {
+//            // 获取监控状态
+//            Map<String, Object> monitorStatus = daoYuKeyMonitorScheduler.getMonitorStatus();
+//            response.putAll(monitorStatus);
+//
+//            // 尝试快速检查当前状态（不发送通知）
+//            String[] loginResult = risingStonesLoginTool.getDaoYuTokenAndCookie();
+//            boolean isKeyValid = loginResult[0] != null && loginResult[1] != null;
+//
+//            response.put("currentKeyValid", isKeyValid);
+//            response.put("lastCheckTime", LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+//
+//            if (isKeyValid) {
+//                response.put("status", "HEALTHY");
+//                response.put("message", "DaoYu Key当前有效");
+//                response.put("tokenPrefix", loginResult[0].substring(0, Math.min(20, loginResult[0].length())) + "...");
+//            } else {
+//                response.put("status", "UNHEALTHY");
+//                response.put("message", "DaoYu Key当前无效");
+//            }
+//
+//        } catch (Exception e) {
+//            response.put("status", "UNKNOWN");
+//            response.put("message", "无法确定DaoYu Key状态: " + e.getMessage());
+//            response.put("error", e.getClass().getSimpleName());
+//            response.put("currentKeyValid", false);
+//        }
+//
+//        return ResponseEntity.ok(response);
+//    }
+//
+//    @PostMapping("/refresh/daoyu-key")
+//    @Operation(summary = "手动刷新DaoYu Key缓存",
+//            description = "手动刷新DaoYu Key缓存并检查有效性",
+//            responses = {
+//                    @ApiResponse(responseCode = "200", description = "刷新完成",
+//                            content = @Content(schema = @Schema(implementation = Map.class)))
+//            })
+//    public ResponseEntity<Map<String, Object>> refreshDaoYuKey() {
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("timestamp", LocalDateTime.now());
+//
+//        try {
+//            // 获取刷新前的状态
+//            Map<String, Object> beforeStatus = daoYuKeyMonitorScheduler.getMonitorStatus();
+//            response.put("beforeRefresh", beforeStatus);
+//
+//            // 执行手动刷新
+//            risingStonesLoginTool.refreshDaoYuKeyCache();
+//
+//            // 等待缓存刷新完成
+//            Thread.sleep(3000);
+//
+//            // 执行检查
+//            daoYuKeyMonitorScheduler.manualCheck();
+//
+//            // 获取刷新后的状态
+//            Map<String, Object> afterStatus = daoYuKeyMonitorScheduler.getMonitorStatus();
+//            response.put("afterRefresh", afterStatus);
+//
+//            response.put("status", "SUCCESS");
+//            response.put("message", "DaoYu Key缓存刷新完成");
+//
+//        } catch (Exception e) {
+//            response.put("status", "ERROR");
+//            response.put("message", "DaoYu Key缓存刷新失败: " + e.getMessage());
+//            response.put("error", e.getClass().getSimpleName());
+//        }
+//
+//        return ResponseEntity.ok(response);
+//    }
+//
+//    @PostMapping("/config/daoyu-notification")
+//    @Operation(summary = "配置DaoYu Key通知设置",
+//            description = "修改DaoYu Key监控的通知配置",
+//            responses = {
+//                    @ApiResponse(responseCode = "200", description = "配置更新成功",
+//                            content = @Content(schema = @Schema(implementation = Map.class)))
+//            })
+//    public ResponseEntity<Map<String, Object>> configureDaoYuNotification() {
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("timestamp", LocalDateTime.now());
+//
+//        try {
+//            // 获取当前配置
+//            Map<String, Object> currentStatus = daoYuKeyMonitorScheduler.getMonitorStatus();
+//            boolean currentNotifyOnSuccess = (boolean) currentStatus.get("notifyOnSuccess");
+//
+//            // 切换配置（这里可以根据需求改为接收参数）
+//            boolean newNotifyOnSuccess = !currentNotifyOnSuccess;
+//            daoYuKeyMonitorScheduler.setNotifyOnSuccess(newNotifyOnSuccess);
+//
+//            response.put("status", "SUCCESS");
+//            response.put("message", "通知配置已更新");
+//            response.put("notifyOnSuccess", newNotifyOnSuccess);
+//            response.put("previousNotifyOnSuccess", currentNotifyOnSuccess);
+//
+//        } catch (Exception e) {
+//            response.put("status", "ERROR");
+//            response.put("message", "配置更新失败: " + e.getMessage());
+//            response.put("error", e.getClass().getSimpleName());
+//        }
+//
+//        return ResponseEntity.ok(response);
+//    }
 
-        try {
-            // 获取当前监控状态
-            Map<String, Object> monitorStatus = daoYuKeyMonitorScheduler.getMonitorStatus();
-            response.put("monitorStatus", monitorStatus);
-
-            // 执行手动检查
-            daoYuKeyMonitorScheduler.manualCheck();
-
-            // 获取检查后的状态
-            Map<String, Object> updatedStatus = daoYuKeyMonitorScheduler.getMonitorStatus();
-            response.put("updatedStatus", updatedStatus);
-
-            // 尝试获取登录结果
-            String[] loginResult = risingStonesLoginTool.getDaoYuTokenAndCookie();
-            if (loginResult[0] != null && loginResult[1] != null) {
-                response.put("status", "SUCCESS");
-                response.put("message", "DaoYu Key检查通过，系统正常运行");
-                response.put("tokenAvailable", true);
-                response.put("tokenPrefix", loginResult[0].substring(0, Math.min(20, loginResult[0].length())) + "...");
-                response.put("cookieAvailable", true);
-            } else {
-                response.put("status", "FAILED");
-                response.put("message", "DaoYu Key检查失败，返回的token或cookie为空");
-                response.put("tokenAvailable", false);
-                response.put("cookieAvailable", false);
-            }
-
-        } catch (Exception e) {
-            response.put("status", "ERROR");
-            response.put("message", "DaoYu Key检查过程中发生异常: " + e.getMessage());
-            response.put("error", e.getClass().getSimpleName());
-            response.put("tokenAvailable", false);
-            response.put("cookieAvailable", false);
-        }
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/status/daoyu-key")
-    @Operation(summary = "获取DaoYu Key监控状态",
-            description = "获取当前DaoYu Key监控的状态信息，不触发实际检查",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "状态信息获取成功",
-                            content = @Content(schema = @Schema(implementation = Map.class)))
-            })
-    public ResponseEntity<Map<String, Object>> getDaoYuKeyStatus() {
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-
-        try {
-            // 获取监控状态
-            Map<String, Object> monitorStatus = daoYuKeyMonitorScheduler.getMonitorStatus();
-            response.putAll(monitorStatus);
-
-            // 尝试快速检查当前状态（不发送通知）
-            String[] loginResult = risingStonesLoginTool.getDaoYuTokenAndCookie();
-            boolean isKeyValid = loginResult[0] != null && loginResult[1] != null;
-
-            response.put("currentKeyValid", isKeyValid);
-            response.put("lastCheckTime", LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
-            if (isKeyValid) {
-                response.put("status", "HEALTHY");
-                response.put("message", "DaoYu Key当前有效");
-                response.put("tokenPrefix", loginResult[0].substring(0, Math.min(20, loginResult[0].length())) + "...");
-            } else {
-                response.put("status", "UNHEALTHY");
-                response.put("message", "DaoYu Key当前无效");
-            }
-
-        } catch (Exception e) {
-            response.put("status", "UNKNOWN");
-            response.put("message", "无法确定DaoYu Key状态: " + e.getMessage());
-            response.put("error", e.getClass().getSimpleName());
-            response.put("currentKeyValid", false);
-        }
-
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/refresh/daoyu-key")
-    @Operation(summary = "手动刷新DaoYu Key缓存",
-            description = "手动刷新DaoYu Key缓存并检查有效性",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "刷新完成",
-                            content = @Content(schema = @Schema(implementation = Map.class)))
-            })
-    public ResponseEntity<Map<String, Object>> refreshDaoYuKey() {
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-
-        try {
-            // 获取刷新前的状态
-            Map<String, Object> beforeStatus = daoYuKeyMonitorScheduler.getMonitorStatus();
-            response.put("beforeRefresh", beforeStatus);
-
-            // 执行手动刷新
-            risingStonesLoginTool.refreshDaoYuKeyCache();
-
-            // 等待缓存刷新完成
-            Thread.sleep(3000);
-
-            // 执行检查
-            daoYuKeyMonitorScheduler.manualCheck();
-
-            // 获取刷新后的状态
-            Map<String, Object> afterStatus = daoYuKeyMonitorScheduler.getMonitorStatus();
-            response.put("afterRefresh", afterStatus);
-
-            response.put("status", "SUCCESS");
-            response.put("message", "DaoYu Key缓存刷新完成");
-
-        } catch (Exception e) {
-            response.put("status", "ERROR");
-            response.put("message", "DaoYu Key缓存刷新失败: " + e.getMessage());
-            response.put("error", e.getClass().getSimpleName());
-        }
-
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/config/daoyu-notification")
-    @Operation(summary = "配置DaoYu Key通知设置",
-            description = "修改DaoYu Key监控的通知配置",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "配置更新成功",
-                            content = @Content(schema = @Schema(implementation = Map.class)))
-            })
-    public ResponseEntity<Map<String, Object>> configureDaoYuNotification() {
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-
-        try {
-            // 获取当前配置
-            Map<String, Object> currentStatus = daoYuKeyMonitorScheduler.getMonitorStatus();
-            boolean currentNotifyOnSuccess = (boolean) currentStatus.get("notifyOnSuccess");
-
-            // 切换配置（这里可以根据需求改为接收参数）
-            boolean newNotifyOnSuccess = !currentNotifyOnSuccess;
-            daoYuKeyMonitorScheduler.setNotifyOnSuccess(newNotifyOnSuccess);
-
-            response.put("status", "SUCCESS");
-            response.put("message", "通知配置已更新");
-            response.put("notifyOnSuccess", newNotifyOnSuccess);
-            response.put("previousNotifyOnSuccess", currentNotifyOnSuccess);
-
-        } catch (Exception e) {
-            response.put("status", "ERROR");
-            response.put("message", "配置更新失败: " + e.getMessage());
-            response.put("error", e.getClass().getSimpleName());
-        }
-
-        return ResponseEntity.ok(response);
-    }
 }
