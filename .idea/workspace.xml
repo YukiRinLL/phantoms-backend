@@ -7,15 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="put cookies from frontend to backend">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="remove RisingStonesLoginTool &amp; update RisingStonesUtils to using RisingStonesSigninHelper">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesLoginTool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/PingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RisingStonesSigninController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RisingStonesSigninController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/RisingStonesServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/RisingStonesServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DaoYuKeyMonitorScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DaoYuKeyMonitorScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/doc/TODO.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -302,14 +296,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00187" summary="update Phantoms.drawio">
-      <option name="closed" value="true" />
-      <created>1760177953538</created>
-      <option name="number" value="00187" />
-      <option name="presentableId" value="LOCAL-00187" />
-      <option name="project" value="LOCAL" />
-      <updated>1760177953538</updated>
     </task>
     <task id="LOCAL-00188" summary="update NAPCAT_HTTP_SERVER_URL">
       <option name="closed" value="true" />
@@ -695,7 +681,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766216668289</updated>
     </task>
-    <option name="localTasksCounter" value="236" />
+    <task id="LOCAL-00236" summary="remove RisingStonesLoginTool &amp; update RisingStonesUtils to using RisingStonesSigninHelper">
+      <option name="closed" value="true" />
+      <created>1766370248774</created>
+      <option name="number" value="00236" />
+      <option name="presentableId" value="LOCAL-00236" />
+      <option name="project" value="LOCAL" />
+      <updated>1766370248774</updated>
+    </task>
+    <option name="localTasksCounter" value="237" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -737,7 +731,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add .jar files back to git" />
     <MESSAGE value="fix Github &amp; Render docker build" />
     <MESSAGE value="update log level" />
     <MESSAGE value="update HousingSaleScheduler sendHouseNotification func" />
@@ -762,14 +755,15 @@
     <MESSAGE value="update RisingStonesService add redis cache" />
     <MESSAGE value="add FfxivSigninHelper" />
     <MESSAGE value="put cookies from frontend to backend" />
-    <option name="LAST_COMMIT_MESSAGE" value="put cookies from frontend to backend" />
+    <MESSAGE value="remove RisingStonesLoginTool &amp; update RisingStonesUtils to using RisingStonesSigninHelper" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove RisingStonesLoginTool &amp; update RisingStonesUtils to using RisingStonesSigninHelper" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java</url>
-          <line>35</line>
+          <line>37</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>

@@ -54,3 +54,14 @@ https://ide.goorm.io/my/dashboard#/containers
 可以部署环境但是收代币有点多
 
 
+1.更新html，调整HTML的显示逻辑，以及绑定到云服务器地址
+2.写文档，写一个md文档简介怎么在页面上进行cookie更新操作
+3.整理代码，目前有一些和登录无关的方法可以从RisingStonesSigninHelper放进RisingStonesUtils
+4.RisingStonesLoginTool去掉之后导致的影响
+    4.1 PingController中检查登录状态的API已经不可用，需要写成新的方式
+    4.2 DaoYuKeyMonitorScheduler中检查登录状态的定时任务已经不可用，需要写成新的方式
+    4.3 RisingStonesServiceImpl中原本有ensureTokenAndCookie方法用于重新使用daoyukey登录获取最新登录信息，
+    现在已经没有这个机制了，需要检查是否需要增加这个机制
+5.更新检查定时任务（邮件发送好像还是不可用）
+6.增加定时签到任务，由于已经实现了签到相关的方法，可以写定时器完成每日签到
+7.其他项。由于改动代码太多需要做回归测试，考虑可能影响或者需要完善的功能
