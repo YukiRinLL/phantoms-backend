@@ -114,34 +114,34 @@ public class RisingStonesSigninController {
         }
     }
 
-    /**
-     * 4. 完整登录流程（测试用）
-     * 一次性完成整个登录流程（不推荐生产环境使用，因为需要等待用户扫描二维码）
-     */
-    @GetMapping("/login/full")
-    public ResponseEntity<?> fullLogin() {
-        try {
-            String cookies = ffxivSigninHelper.login();
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "data", Map.of(
-                            "cookies", cookies
-                    ),
-                    "message", "完整登录流程完成"
-            ));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(Map.of(
-                    "success", false,
-                    "message", "登录超时: " + e.getMessage()
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "success", false,
-                    "message", "登录失败: " + e.getMessage()
-            ));
-        }
-    }
+//    /**
+//     * 4. 完整登录流程（测试用）
+//     * 一次性完成整个登录流程（不推荐生产环境使用，因为需要等待用户扫描二维码）
+//     */
+//    @GetMapping("/login/full")
+//    public ResponseEntity<?> fullLogin() {
+//        try {
+//            String cookies = ffxivSigninHelper.login();
+//            return ResponseEntity.ok(Map.of(
+//                    "success", true,
+//                    "data", Map.of(
+//                            "cookies", cookies
+//                    ),
+//                    "message", "完整登录流程完成"
+//            ));
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//            return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(Map.of(
+//                    "success", false,
+//                    "message", "登录超时: " + e.getMessage()
+//            ));
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+//                    "success", false,
+//                    "message", "登录失败: " + e.getMessage()
+//            ));
+//        }
+//    }
 
     /**
      * 5. 检查登录状态（使用Cookies）

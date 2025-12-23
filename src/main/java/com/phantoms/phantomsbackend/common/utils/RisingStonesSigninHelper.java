@@ -177,32 +177,32 @@ public class RisingStonesSigninHelper {
         }
     }
 
-    /**
-     * 等待二维码扫描登录
-     */
-    public String waitLoginQRCode() throws IOException, NotFoundException, InterruptedException {
-        String loginQRCode = getLoginQRCode();
-        logger.log(Level.INFO, "登录二维码内容: {0}", loginQRCode);
-        logger.log(Level.INFO, "请使用叨鱼扫描二维码登录");
-
-        long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < 60 * 1000) { // 等待60秒
-            JSONObject loginInfo = getLoginInfo(SSO_REDIRECT_URL);
-            JSONObject data = loginInfo.getJSONObject("data");
-            
-            if (data.containsKey("ticket")) {
-                return data.getString("ticket");
-            }
-            
-            if (data.containsKey("mappedErrorCode") && data.getInteger("mappedErrorCode") == -10515801) {
-                throw new IOException("二维码已失效");
-            }
-
-            Thread.sleep(1000); // 每秒检查一次
-        }
-
-        throw new IOException("二维码扫描超时");
-    }
+//    /**
+//     * 等待二维码扫描登录
+//     */
+//    public String waitLoginQRCode() throws IOException, NotFoundException, InterruptedException {
+//        String loginQRCode = getLoginQRCode();
+//        logger.log(Level.INFO, "登录二维码内容: {0}", loginQRCode);
+//        logger.log(Level.INFO, "请使用叨鱼扫描二维码登录");
+//
+//        long startTime = System.currentTimeMillis();
+//        while (System.currentTimeMillis() - startTime < 60 * 1000) { // 等待60秒
+//            JSONObject loginInfo = getLoginInfo(SSO_REDIRECT_URL);
+//            JSONObject data = loginInfo.getJSONObject("data");
+//
+//            if (data.containsKey("ticket")) {
+//                return data.getString("ticket");
+//            }
+//
+//            if (data.containsKey("mappedErrorCode") && data.getInteger("mappedErrorCode") == -10515801) {
+//                throw new IOException("二维码已失效");
+//            }
+//
+//            Thread.sleep(1000); // 每秒检查一次
+//        }
+//
+//        throw new IOException("二维码扫描超时");
+//    }
 
     /**
      * 完成登录流程
@@ -228,14 +228,14 @@ public class RisingStonesSigninHelper {
         }
     }
 
-    /**
-     * 执行完整的登录流程
-     */
-    public String login() throws IOException, NotFoundException, InterruptedException {
-        String ticket = waitLoginQRCode();
-        finishLogin(ticket);
-        return cookieJar.getCookieString("https://apiff14risingstones.web.sdo.com/");
-    }
+//    /**
+//     * 执行完整的登录流程
+//     */
+//    public String login() throws IOException, NotFoundException, InterruptedException {
+//        String ticket = waitLoginQRCode();
+//        finishLogin(ticket);
+//        return cookieJar.getCookieString("https://apiff14risingstones.web.sdo.com/");
+//    }
 
     /**
      * 获取当前的cookies
