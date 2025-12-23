@@ -56,7 +56,7 @@ https://ide.goorm.io/my/dashboard#/containers
 
 1.更新html，调整HTML的显示逻辑，以及绑定到云服务器地址(已完成)
 2.写文档，写一个md文档简介怎么在页面上进行cookie更新操作(已完成)
-3.整理代码，目前有一些和登录无关的方法可以从RisingStonesSigninHelper放进RisingStonesUtils
+3.整理代码，目前有一些和登录无关的方法可以从RisingStonesSigninHelper放进RisingStonesUtils(已完成)
 4.RisingStonesLoginTool去掉之后导致的影响
     4.1 PingController中检查登录状态的API已经不可用，需要写成新的方式
     4.2 DaoYuKeyMonitorScheduler中检查登录状态的定时任务已经不可用，需要写成新的方式
