@@ -276,10 +276,7 @@ public class RisingStonesSigninHelper {
             .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for checkLoginStatus", response.code());
-                throw new IOException("Unexpected code " + response.code());
-            }
+            logger.log(Level.INFO, "Response code for checkLoginStatus: {0}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -324,10 +321,7 @@ public class RisingStonesSigninHelper {
             .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for getCharacterBindInfo", response.code());
-                throw new IOException("Unexpected code " + response.code());
-            }
+            logger.log(Level.INFO, "Response code for getCharacterBindInfo: {0}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -377,10 +371,7 @@ public class RisingStonesSigninHelper {
             .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for doSignIn", response.code());
-                throw new IOException("Unexpected code " + response.code());
-            }
+            logger.log(Level.INFO, "Response code for doSignIn: {0}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -425,10 +416,7 @@ public class RisingStonesSigninHelper {
             .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for getSignLog", response.code());
-                throw new IOException("Unexpected code " + response.code());
-            }
+            logger.log(Level.INFO, "Response code for getSignLog: {0}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -473,10 +461,7 @@ public class RisingStonesSigninHelper {
             .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for getSignInRewardList", response.code());
-                throw new IOException("Unexpected code " + response.code());
-            }
+            logger.log(Level.INFO, "Response code for getSignInRewardList: {0}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -528,10 +513,7 @@ public class RisingStonesSigninHelper {
             .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for getSignInReward", response.code());
-                throw new IOException("Unexpected code " + response.code());
-            }
+            logger.log(Level.INFO, "Response code for getSignInReward: {0}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -587,10 +569,7 @@ public class RisingStonesSigninHelper {
             .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for createPostComment", response.code());
-                throw new IOException("Unexpected code " + response.code());
-            }
+            logger.log(Level.INFO, "Response code for createPostComment: {0}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -644,10 +623,7 @@ public class RisingStonesSigninHelper {
             .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for createDynamic", response.code());
-                throw new IOException("Unexpected code " + response.code());
-            }
+            logger.log(Level.INFO, "Response code for createDynamic: {0}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -691,10 +667,7 @@ public class RisingStonesSigninHelper {
             .build();
 
         try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for deleteDynamic", response.code());
-                throw new IOException("Unexpected code " + response.code());
-            }
+            logger.log(Level.INFO, "Response code for deleteDynamic: {0}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
