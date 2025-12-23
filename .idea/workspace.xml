@@ -7,9 +7,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update login.html and docs">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="remove response.isSuccessful() judge">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesSigninHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesSigninHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RisingStonesSigninController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RisingStonesSigninController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -296,14 +298,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00192" summary="fix bug handleOtherEvent">
-      <option name="closed" value="true" />
-      <created>1760354400600</created>
-      <option name="number" value="00192" />
-      <option name="presentableId" value="LOCAL-00192" />
-      <option name="project" value="LOCAL" />
-      <updated>1760354400600</updated>
     </task>
     <task id="LOCAL-00193" summary="fix bug handleOtherEvent">
       <option name="closed" value="true" />
@@ -689,7 +683,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766458008970</updated>
     </task>
-    <option name="localTasksCounter" value="241" />
+    <task id="LOCAL-00241" summary="remove response.isSuccessful() judge">
+      <option name="closed" value="true" />
+      <created>1766461005413</created>
+      <option name="number" value="00241" />
+      <option name="presentableId" value="LOCAL-00241" />
+      <option name="project" value="LOCAL" />
+      <updated>1766461005413</updated>
+    </task>
+    <option name="localTasksCounter" value="242" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -741,7 +743,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update HousingSaleScheduler sendHouseNotification func" />
     <MESSAGE value="update banner" />
     <MESSAGE value="sendBriefHouseNotification" />
     <MESSAGE value="update sendBriefHouseNotification func &amp; schedule time" />
@@ -766,14 +767,15 @@
     <MESSAGE value="remove RisingStonesLoginTool &amp; update RisingStonesUtils to using RisingStonesSigninHelper" />
     <MESSAGE value="update todo" />
     <MESSAGE value="update login.html and docs" />
-    <option name="LAST_COMMIT_MESSAGE" value="update login.html and docs" />
+    <MESSAGE value="remove response.isSuccessful() judge" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove response.isSuccessful() judge" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java</url>
-          <line>37</line>
+          <line>39</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>

@@ -2,6 +2,7 @@ package com.phantoms.phantomsbackend.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesSigninHelper;
+import com.phantoms.phantomsbackend.common.utils.RisingStonesUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,9 @@ public class RisingStonesSigninController {
 
     @Autowired
     private RisingStonesSigninHelper ffxivSigninHelper;
+
+    @Autowired
+    private RisingStonesUtils risingStonesUtils;
 
     /**
      * 1. 获取登录二维码
@@ -169,7 +173,7 @@ public class RisingStonesSigninController {
     @PostMapping("/character/bind")
     public ResponseEntity<?> getCharacterBindInfo() {
         try {
-            JSONObject result = ffxivSigninHelper.getCharacterBindInfo();
+            JSONObject result = risingStonesUtils.getCharacterBindInfo();
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", result,
@@ -189,7 +193,7 @@ public class RisingStonesSigninController {
     @PostMapping("/sign/in")
     public ResponseEntity<?> doSignIn() {
         try {
-            JSONObject result = ffxivSigninHelper.doSignIn();
+            JSONObject result = risingStonesUtils.doSignIn();
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", result,
@@ -218,7 +222,7 @@ public class RisingStonesSigninController {
         }
         
         try {
-            JSONObject result = ffxivSigninHelper.getSignLog(month);
+            JSONObject result = risingStonesUtils.getSignLog(month);
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", result,
@@ -247,7 +251,7 @@ public class RisingStonesSigninController {
         }
         
         try {
-            JSONObject result = ffxivSigninHelper.getSignInRewardList(month);
+            JSONObject result = risingStonesUtils.getSignInRewardList(month);
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", result,
@@ -284,7 +288,7 @@ public class RisingStonesSigninController {
         }
         
         try {
-            JSONObject result = ffxivSigninHelper.getSignInReward(id, month);
+            JSONObject result = risingStonesUtils.getSignInReward(id, month);
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", result,
@@ -322,7 +326,7 @@ public class RisingStonesSigninController {
         }
         
         try {
-            JSONObject result = ffxivSigninHelper.createDynamic(content, scope, pic_url != null ? pic_url : "");
+            JSONObject result = risingStonesUtils.createDynamic(content, scope, pic_url != null ? pic_url : "");
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", result,
@@ -362,7 +366,7 @@ public class RisingStonesSigninController {
         }
         
         try {
-            JSONObject result = ffxivSigninHelper.createPostComment(
+            JSONObject result = risingStonesUtils.createPostComment(
                     content,
                     posts_id,
                     parent_id != null ? parent_id : "0",
