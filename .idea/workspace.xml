@@ -8,7 +8,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update todo">
+      <change afterPath="$PROJECT_DIR$/doc/RisingStones Login.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/how-to-login.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/doc/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/doc/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/how-to-update-daoyukey.md" beforeDir="false" afterPath="$PROJECT_DIR$/doc/how-to-update-daoyukey.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/login.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,75 +66,75 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.NapCatQQTest.executor&quot;: &quot;Debug&quot;,
-    &quot;Application.PhantomsBackendApplication.executor&quot;: &quot;Debug&quot;,
-    &quot;Application.XIVAPIExample.executor&quot;: &quot;Debug&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.MySQLConnectionTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.MySQLConnectionTest.testMySQLConnection.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.NapCatQQTest.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.PhantomsBackendApplicationTests.testMapper.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.XIVAPIExample.executor&quot;: &quot;Coverage&quot;,
-    &quot;Maven.phantoms-backend [-X,clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [clean,compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [clean,package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [dependency:tree].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [deploy].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [org.apache.maven.plugins:maven-clean-plugin:3.2.0:clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [org.apache.maven.plugins:maven-compiler-plugin:3.10.1:compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [org.apache.maven.plugins:maven-deploy-plugin:3.0.0:deploy].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [org.apache.maven.plugins:maven-install-plugin:3.0.1:install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [validate].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.phantoms-backend [verify].executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;Spring Boot.PhantomsBackendApplication.executor&quot;: &quot;Debug&quot;,
-    &quot;TestNG.NapCatQQTest.executor&quot;: &quot;Run&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/phantoms-backend/src/main/java/com/phantoms/phantomsbackend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;D:/phantoms-backend/src/main/java/com/phantoms/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;项目&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;应用程序.NapCatQQTest.executor&quot;: &quot;Debug&quot;,
-    &quot;应用程序.PhantomsBackendApplication.executor&quot;: &quot;Debug&quot;,
-    &quot;应用程序.RisingStonesLogin.executor&quot;: &quot;Debug&quot;,
-    &quot;应用程序.RisingStonesLoginTool.executor&quot;: &quot;Debug&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.NapCatQQTest.executor": "Debug",
+    "Application.PhantomsBackendApplication.executor": "Debug",
+    "Application.XIVAPIExample.executor": "Debug",
+    "Docker.Dockerfile.executor": "Run",
+    "JUnit.MySQLConnectionTest.executor": "Run",
+    "JUnit.MySQLConnectionTest.testMySQLConnection.executor": "Run",
+    "JUnit.NapCatQQTest.executor": "Debug",
+    "JUnit.PhantomsBackendApplicationTests.testMapper.executor": "Run",
+    "JUnit.XIVAPIExample.executor": "Coverage",
+    "Maven.phantoms-backend [-X,clean,install].executor": "Run",
+    "Maven.phantoms-backend [clean,compile].executor": "Run",
+    "Maven.phantoms-backend [clean,install].executor": "Run",
+    "Maven.phantoms-backend [clean,package].executor": "Run",
+    "Maven.phantoms-backend [clean].executor": "Run",
+    "Maven.phantoms-backend [compile].executor": "Run",
+    "Maven.phantoms-backend [dependency:tree].executor": "Run",
+    "Maven.phantoms-backend [deploy].executor": "Run",
+    "Maven.phantoms-backend [install].executor": "Run",
+    "Maven.phantoms-backend [org.apache.maven.plugins:maven-clean-plugin:3.2.0:clean].executor": "Run",
+    "Maven.phantoms-backend [org.apache.maven.plugins:maven-compiler-plugin:3.10.1:compile].executor": "Run",
+    "Maven.phantoms-backend [org.apache.maven.plugins:maven-deploy-plugin:3.0.0:deploy].executor": "Run",
+    "Maven.phantoms-backend [org.apache.maven.plugins:maven-install-plugin:3.0.1:install].executor": "Run",
+    "Maven.phantoms-backend [package].executor": "Run",
+    "Maven.phantoms-backend [validate].executor": "Run",
+    "Maven.phantoms-backend [verify].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "Spring Boot.PhantomsBackendApplication.executor": "Debug",
+    "TestNG.NapCatQQTest.executor": "Run",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/phantoms-backend/doc",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "D:/phantoms-backend/src/main/java/com/phantoms/Main.java",
+    "project.structure.last.edited": "项目",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true",
+    "应用程序.NapCatQQTest.executor": "Debug",
+    "应用程序.PhantomsBackendApplication.executor": "Debug",
+    "应用程序.RisingStonesLogin.executor": "Debug",
+    "应用程序.RisingStonesLoginTool.executor": "Debug"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;java.sql.Driver&quot;,
-      &quot;0545e1c4-d0e1-4d8a-9496-a5a03d11dafc&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "java.sql.Driver",
+      "0545e1c4-d0e1-4d8a-9496-a5a03d11dafc"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\phantoms-backend\doc" />
       <recent name="D:\phantoms-backend\src\main\java\com\phantoms\phantomsbackend" />
       <recent name="D:\phantoms-backend" />
-      <recent name="D:\phantoms-backend\doc" />
       <recent name="D:\phantoms-backend\src\main\resources\templates" />
       <recent name="D:\phantoms-backend\src\main\resources" />
     </key>
@@ -295,14 +301,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00190" summary="add logs to try fix bug handleOtherEvent">
-      <option name="closed" value="true" />
-      <created>1760353252287</created>
-      <option name="number" value="00190" />
-      <option name="presentableId" value="LOCAL-00190" />
-      <option name="project" value="LOCAL" />
-      <updated>1760353252287</updated>
     </task>
     <task id="LOCAL-00191" summary="add logs to try fix bug handleOtherEvent">
       <option name="closed" value="true" />
@@ -688,7 +686,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766371284604</updated>
     </task>
-    <option name="localTasksCounter" value="239" />
+    <task id="LOCAL-00239" summary="update todo">
+      <option name="closed" value="true" />
+      <created>1766371378304</created>
+      <option name="number" value="00239" />
+      <option name="presentableId" value="LOCAL-00239" />
+      <option name="project" value="LOCAL" />
+      <updated>1766371378304</updated>
+    </task>
+    <option name="localTasksCounter" value="240" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

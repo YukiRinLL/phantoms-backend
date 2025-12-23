@@ -154,17 +154,6 @@
         .success-text {
             color: #28a745;
         }
-        #cookiesInfo {
-            word-wrap: break-word;
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-radius: 5px;
-            font-family: monospace;
-            font-size: 12px;
-            max-height: 100px;
-            overflow-y: auto;
-            margin: 10px 0;
-        }
         .loading {
             display: inline-block;
             width: 20px;
@@ -205,6 +194,28 @@
             width: 250px !important;
             height: 250px !important;
         }
+        .quick-actions {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            text-align: left;
+        }
+        .quick-actions h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .action-buttons button {
+            margin: 0;
+            flex: 1;
+            min-width: 150px;
+        }
     </style>
 </head>
 <body>
@@ -214,7 +225,7 @@
 
     <div class="login-container">
         <div class="status info" id="status">
-            点击"生成登录二维码"开始登录流程
+            点击"检查登录状态"查看当前状态，或点击"生成登录二维码"开始登录
         </div>
 
         <div id="qrCodeContainer" style="display: none;">
@@ -233,37 +244,35 @@
         </div>
 
         <div class="button-group">
-            <button onclick="generateQrCode()" id="generateBtn">生成登录二维码</button>
-            <button onclick="startPolling()" disabled id="checkBtn">
-                <span id="checkBtnText">检查登录状态</span>
-                <span id="loadingSpinner" style="display:none;" class="loading"></span>
+            <button onclick="checkLoginStatus()" id="checkStatusBtn">
+                <span id="checkStatusBtnText">检查登录状态</span>
+                <span id="checkStatusLoading" style="display:none;" class="loading"></span>
             </button>
-            <button onclick="clearSession()" class="secondary">清除登录信息</button>
+            <button onclick="generateQrCode()" id="generateBtn">生成登录二维码</button>
             <button onclick="fullLogin()" class="secondary">完整登录流程</button>
         </div>
 
-        
+        <!-- 快速操作区域 -->
+        <div class="quick-actions" id="quickActions" style="display: none;">
+            <h3>快速操作</h3>
+            <p id="loginStatusInfo"></p>
+            <div class="action-buttons">
+                <button onclick="getCharacterBindInfo()">获取角色信息</button>
+                <button onclick="doSignIn()" class="success-text">执行签到</button>
+                <button onclick="getSignRewardList()">查看签到奖励</button>
+                <button onclick="getSignLog()">查看签到日志</button>
+            </div>
+        </div>
     </div>
 
     <div id="userInfo" class="section" style="display: none;">
         <h2>用户信息</h2>
         <div class="info-grid" id="loginInfo"></div>
-
-        <div class="button-group">
-            <button onclick="checkLoginStatus()">检查登录状态</button>
-            <button onclick="getCharacterBindInfo()">获取角色信息</button>
-            <button onclick="doSignIn()" class="success-text">执行签到</button>
-        </div>
     </div>
 
     <div id="signSection" class="section" style="display: none;">
         <h3>签到功能</h3>
         <div id="signInResult"></div>
-
-        <div class="button-group">
-            <button onclick="getSignLog()">获取签到日志</button>
-            <button onclick="getSignRewardList()">获取奖励列表</button>
-        </div>
 
         <div id="signLogResult" style="margin-top: 20px;"></div>
         <div id="rewardsList" style="margin-top: 20px;"></div>
@@ -283,9 +292,99 @@
     let checkInterval = null;
     let qrExpireTimer = null;
     let qrExpireTime = null;
-    let qrCodeInstance = null; // 用于保存二维码实例
-    const baseUrl = 'http://localhost:8080'; // 根据实际情况修改
+    let qrCodeInstance = null;
+    const baseUrl = 'https://phantoms-backend.onrender.com';
+    // const baseUrl = 'http://localhost:8080'; // 根据实际情况修改
     const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
+
+    // 页面加载时立即检查登录状态
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('页面已加载');
+        if (typeof QRCode === 'undefined') {
+            console.error('QRCode库未加载！请检查网络连接或CDN地址');
+            showStatus('二维码库加载失败，部分功能可能受限', 'warning');
+        } else {
+            console.log('QRCode库已加载，版本:', QRCode.version);
+        }
+
+        // 自动检查登录状态
+        setTimeout(checkLoginStatus, 500);
+    });
+
+    // 检查登录状态
+    async function checkLoginStatus() {
+        showButtonLoading('checkStatusBtn', true);
+
+        try {
+            const response = await fetch(`${baseUrl}/api/ffxiv/signin/check/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                const result = data.data;
+                const isLoggedIn = result.isLogin;
+
+                if (isLoggedIn) {
+                    showStatus('已登录，可以执行相关操作', 'success');
+
+                    // 显示用户信息
+                    document.getElementById('userInfo').style.display = 'block';
+                    document.getElementById('signSection').style.display = 'block';
+                    document.getElementById('dynamicSection').style.display = 'block';
+
+                    // 显示快速操作区域
+                    document.getElementById('quickActions').style.display = 'block';
+                    document.getElementById('loginStatusInfo').innerHTML = `
+                        <strong>登录状态：</strong><span class="success-text">已登录</span><br>
+                        <strong>用户ID：</strong>${result.userId || '未知'}<br>
+                        <strong>昵称：</strong>${result.nickname || '未知'}
+                    `;
+
+                    // 加载基本用户信息
+                    loadBasicUserInfo(result);
+                } else {
+                    showStatus('未登录，请生成二维码进行登录', 'info');
+                    document.getElementById('quickActions').style.display = 'block';
+                    document.getElementById('loginStatusInfo').innerHTML = `
+                        <strong>登录状态：</strong><span class="danger">未登录</span><br>
+                        <p>请点击"生成登录二维码"进行登录</p>
+                    `;
+                    hideSections();
+                }
+            } else {
+                showStatus(`检查登录状态失败: ${data.message}`, 'error');
+                document.getElementById('quickActions').style.display = 'block';
+                document.getElementById('loginStatusInfo').innerHTML = `
+                    <strong>登录状态：</strong><span class="danger">检查失败</span><br>
+                    <p>${data.message}</p>
+                `;
+            }
+        } catch (error) {
+            showStatus(`检查登录状态错误: ${error.message}`, 'error');
+        } finally {
+            showButtonLoading('checkStatusBtn', false);
+        }
+    }
+
+    // 加载基本用户信息
+    function loadBasicUserInfo(userData) {
+        let html = `
+            <div class="info-card">
+                <h4>登录状态</h4>
+                <p>状态: <span class="highlight success-text">已登录</span></p>
+                <p>用户ID: ${userData.userId || '未知'}</p>
+                ${userData.nickname ? `<p>昵称: ${userData.nickname}</p>` : ''}
+                ${userData.avatar ? `<p>头像: ${userData.avatar}</p>` : ''}
+            </div>`;
+
+        document.getElementById('loginInfo').innerHTML = html;
+    }
 
     // 生成二维码并显示
     async function generateQrCode() {
@@ -297,7 +396,7 @@
             const data = await response.json();
 
             if (data.success) {
-                const qrCodeUrl = data.data; // 后端返回的是二维码链接
+                const qrCodeUrl = data.data;
                 showStatus('二维码已生成，请使用叨鱼APP扫描', 'info');
 
                 // 显示二维码容器
@@ -313,13 +412,10 @@
                 qrLink.href = qrCodeUrl;
                 qrLink.textContent = qrCodeUrl;
 
-                // 设置二维码过期时间（通常为2分钟）
-                setQrExpireTimer(120); // 120秒后过期
+                // 设置二维码过期时间
+                setQrExpireTimer(120);
 
-                // 启用检查按钮
-                document.getElementById('checkBtn').disabled = false;
-
-                // 自动开始轮询检查登录状态
+                // 开始轮询检查登录状态
                 startPolling();
             } else {
                 showStatus(`生成二维码失败: ${data.message}`, 'error');
@@ -338,22 +434,19 @@
         // 清空之前的二维码
         qrcodeDiv.innerHTML = '';
 
-        // 使用qrcodejs库生成二维码
         try {
             if (typeof QRCode !== 'undefined') {
-                // qrcodejs库的构造函数：new QRCode(element, options)
                 qrCodeInstance = new QRCode(qrcodeDiv, {
                     text: url,
                     width: 250,
                     height: 250,
                     colorDark: "#000000",
                     colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H // 高容错率
+                    correctLevel: QRCode.CorrectLevel.H
                 });
                 console.log('二维码生成成功');
             } else {
                 console.error('QRCode库未加载');
-                // 如果库未加载，显示备用方案
                 showQRCodeFallback(url, qrcodeDiv);
             }
         } catch (error) {
@@ -362,7 +455,7 @@
         }
     }
 
-    // 备用方案：如果二维码库失败，显示链接
+    // 备用方案
     function showQRCodeFallback(url, container) {
         container.innerHTML = `
             <div style="text-align: center; padding: 20px;">
@@ -413,30 +506,26 @@
 
     // 开始轮询检查登录状态
     function startPolling() {
-        document.getElementById('checkBtn').disabled = true;
-        document.getElementById('checkBtnText').style.display = 'none';
-        document.getElementById('loadingSpinner').style.display = 'inline-block';
         showStatus('正在检查登录状态...', 'info');
 
         // 先立即检查一次
-        checkLoginStatus();
+        checkLoginPoll();
 
         // 然后每2秒检查一次
         if (checkInterval) clearInterval(checkInterval);
-        checkInterval = setInterval(checkLoginStatus, 2000);
+        checkInterval = setInterval(checkLoginPoll, 2000);
     }
 
-    // 检查登录状态
-    async function checkLoginStatus() {
+    // 轮询检查登录状态
+    async function checkLoginPoll() {
         try {
             const response = await fetch(`${baseUrl}/api/ffxiv/signin/login/status`);
             const data = await response.json();
 
             if (data.success) {
                 if (data.data.status === 'LOGIN_SUCCESS') {
-                    // 登录成功，获取ticket
                     const ticket = data.data.ticket;
-                    showStatus('登录成功！正在获取Cookies...', 'success');
+                    showStatus('登录成功！正在完成登录流程...', 'success');
                     clearInterval(checkInterval);
                     checkInterval = null;
 
@@ -451,40 +540,29 @@
                     document.getElementById('qrInfo').style.display = 'none';
                     document.getElementById('mobileHint').style.display = 'none';
 
-                    // 完成登录流程，获取cookies
+                    // 完成登录流程
                     finishLogin(ticket);
                 } else if (data.data.status === 'QRCODE_EXPIRED') {
                     showStatus('二维码已失效，请重新生成', 'error');
                     clearInterval(checkInterval);
                     checkInterval = null;
 
-                    // 更新倒计时显示
                     document.getElementById('countdown').innerHTML =
                         '<span class="qr-expired">二维码已失效，请重新生成</span>';
 
-                    document.getElementById('checkBtn').disabled = true;
                     document.getElementById('generateBtn').disabled = false;
-                    document.getElementById('checkBtnText').style.display = 'inline';
-                    document.getElementById('loadingSpinner').style.display = 'none';
                 } else if (data.data.status === 'WAITING_FOR_SCAN') {
                     showStatus('等待用户扫描二维码...', 'info');
-                    // 继续轮询
                 }
             } else {
                 showStatus(`检查登录状态失败: ${data.message}`, 'error');
                 clearInterval(checkInterval);
                 checkInterval = null;
-                document.getElementById('checkBtn').disabled = true;
-                document.getElementById('checkBtnText').style.display = 'inline';
-                document.getElementById('loadingSpinner').style.display = 'none';
             }
         } catch (error) {
             showStatus(`检查登录状态错误: ${error.message}`, 'error');
             clearInterval(checkInterval);
             checkInterval = null;
-            document.getElementById('checkBtn').disabled = true;
-            document.getElementById('checkBtnText').style.display = 'inline';
-            document.getElementById('loadingSpinner').style.display = 'none';
         }
     }
 
@@ -503,39 +581,24 @@
 
             if (data.success) {
                 showStatus('登录完成！', 'success');
-
-                // 启用其他功能
-                document.getElementById('userInfo').style.display = 'block';
-                document.getElementById('signSection').style.display = 'block';
-                document.getElementById('dynamicSection').style.display = 'block';
-
-                // 重置按钮状态
-                document.getElementById('checkBtnText').style.display = 'inline';
-                document.getElementById('loadingSpinner').style.display = 'none';
-                document.getElementById('checkBtn').disabled = true;
                 document.getElementById('generateBtn').disabled = false;
 
-                // 加载用户信息
-                checkLoginStatus();
+                // 重新检查登录状态以更新界面
+                setTimeout(checkLoginStatus, 1000);
             } else {
                 showStatus(`完成登录失败: ${data.message}`, 'error');
-                document.getElementById('checkBtnText').style.display = 'inline';
-                document.getElementById('loadingSpinner').style.display = 'none';
-                document.getElementById('checkBtn').disabled = false;
+                document.getElementById('generateBtn').disabled = false;
             }
         } catch (error) {
             showStatus(`完成登录错误: ${error.message}`, 'error');
-            document.getElementById('checkBtnText').style.display = 'inline';
-            document.getElementById('loadingSpinner').style.display = 'none';
-            document.getElementById('checkBtn').disabled = false;
+            document.getElementById('generateBtn').disabled = false;
         }
     }
 
-    // 完整登录流程（一次性）
+    // 完整登录流程
     async function fullLogin() {
         showStatus('开始完整登录流程...', 'info');
         document.getElementById('generateBtn').disabled = true;
-        document.getElementById('checkBtn').disabled = true;
 
         try {
             const response = await fetch(`${baseUrl}/api/ffxiv/signin/login/full`);
@@ -543,14 +606,7 @@
 
             if (data.success) {
                 showStatus('完整登录流程完成！', 'success');
-
-                // 启用其他功能
-                document.getElementById('userInfo').style.display = 'block';
-                document.getElementById('signSection').style.display = 'block';
-                document.getElementById('dynamicSection').style.display = 'block';
-
-                // 加载用户信息
-                checkLoginStatus();
+                setTimeout(checkLoginStatus, 1000);
             } else {
                 showStatus(`完整登录失败: ${data.message}`, 'error');
             }
@@ -558,39 +614,6 @@
             showStatus(`完整登录错误: ${error.message}`, 'error');
         } finally {
             document.getElementById('generateBtn').disabled = false;
-            document.getElementById('checkBtn').disabled = false;
-        }
-    }
-
-    // 检查登录状态
-    async function checkLoginStatus() {
-        try {
-            const response = await fetch(`${baseUrl}/api/ffxiv/signin/check/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                const result = data.data;
-                let html = `
-                    <div class="info-card">
-                        <h4>登录状态</h4>
-                        <p>状态: <span class="highlight">${result.isLogin ? '已登录' : '未登录'}</span></p>
-                        <p>用户ID: ${result.userId || '未知'}</p>
-                    </div>`;
-
-                document.getElementById('loginInfo').innerHTML = html;
-                showStatus('登录状态检查成功', 'success');
-            } else {
-                showStatus(`检查登录状态失败: ${data.message}`, 'error');
-            }
-        } catch (error) {
-            showStatus(`检查登录状态错误: ${error.message}`, 'error');
         }
     }
 
@@ -608,7 +631,7 @@
             const data = await response.json();
 
             if (data.success) {
-                const result = data.data.data; // 修正：角色信息在data.data.data中
+                const result = data.data.data;
                 let html = `
                     <div class="info-card">
                         <h4>角色信息</h4>
@@ -632,7 +655,7 @@
                         </div>`;
                 }
 
-                document.getElementById('loginInfo').innerHTML += html;
+                document.getElementById('loginInfo').innerHTML = html;
                 showStatus('获取角色信息成功', 'success');
             } else {
                 showStatus(`获取角色信息失败: ${data.message}`, 'error');
@@ -666,6 +689,9 @@
                     </div>`;
 
                 document.getElementById('signInResult').innerHTML = html;
+
+                // 刷新签到日志
+                setTimeout(getSignLog, 1000);
             } else {
                 document.getElementById('signInResult').innerHTML = `
                     <div class="status error">
@@ -900,39 +926,6 @@
         }
     }
 
-    // 清除会话
-    async function clearSession() {
-        if (checkInterval) {
-            clearInterval(checkInterval);
-            checkInterval = null;
-        }
-
-        if (qrExpireTimer) {
-        clearInterval(qrExpireTimer);
-        qrExpireTimer = null;
-    }
-        document.getElementById('qrCodeContainer').style.display = 'none';
-        document.getElementById('qrInfo').style.display = 'none';
-        document.getElementById('mobileHint').style.display = 'none';
-        document.getElementById('cookiesSection').style.display = 'none';
-        document.getElementById('userInfo').style.display = 'none';
-        document.getElementById('signSection').style.display = 'none';
-        document.getElementById('dynamicSection').style.display = 'none';
-        document.getElementById('checkBtn').disabled = true;
-        document.getElementById('generateBtn').disabled = false;
-        document.getElementById('checkBtnText').style.display = 'inline';
-        document.getElementById('loadingSpinner').style.display = 'none';
-
-        // 清空二维码
-        if (qrCodeInstance) {
-            qrCodeInstance.clear();
-            qrCodeInstance = null;
-        }
-        document.getElementById('qrcode').innerHTML = '';
-
-        showStatus('登录信息已清除，可以重新开始登录流程', 'info');
-    }
-
     // 显示状态信息
     function showStatus(message, type) {
         const statusDiv = document.getElementById('status');
@@ -940,16 +933,39 @@
         statusDiv.className = `status ${type}`;
     }
 
-    // 页面加载时检查库是否加载
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('页面已加载');
-        if (typeof QRCode === 'undefined') {
-            console.error('QRCode库未加载！请检查网络连接或CDN地址');
-            showStatus('二维码库加载失败，部分功能可能受限', 'warning');
+    // 显示/隐藏按钮加载状态
+    function showButtonLoading(buttonId, isLoading) {
+        const button = document.getElementById(buttonId);
+        const textSpan = button.querySelector('span:first-child');
+        const loadingSpan = button.querySelector('.loading');
+
+        if (isLoading) {
+            textSpan.style.display = 'none';
+            loadingSpan.style.display = 'inline-block';
+            button.disabled = true;
         } else {
-            console.log('QRCode库已加载，版本:', QRCode.version);
+            textSpan.style.display = 'inline';
+            loadingSpan.style.display = 'none';
+            button.disabled = false;
         }
-    });
+    }
+
+    // 隐藏所有功能区域
+    function hideSections() {
+        document.getElementById('userInfo').style.display = 'none';
+        document.getElementById('signSection').style.display = 'none';
+        document.getElementById('dynamicSection').style.display = 'none';
+        document.getElementById('qrCodeContainer').style.display = 'none';
+        document.getElementById('qrInfo').style.display = 'none';
+        document.getElementById('mobileHint').style.display = 'none';
+
+        // 清空内容
+        document.getElementById('loginInfo').innerHTML = '';
+        document.getElementById('signInResult').innerHTML = '';
+        document.getElementById('signLogResult').innerHTML = '';
+        document.getElementById('rewardsList').innerHTML = '';
+        document.getElementById('dynamicResult').innerHTML = '';
+    }
 </script>
 </body>
 </html>
