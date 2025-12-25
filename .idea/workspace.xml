@@ -7,11 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="remove response.isSuccessful() judge">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update note">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesSigninHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesSigninHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RisingStonesSigninController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RisingStonesSigninController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -298,22 +296,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00193" summary="fix bug handleOtherEvent">
-      <option name="closed" value="true" />
-      <created>1760354531977</created>
-      <option name="number" value="00193" />
-      <option name="presentableId" value="LOCAL-00193" />
-      <option name="project" value="LOCAL" />
-      <updated>1760354531977</updated>
-    </task>
-    <task id="LOCAL-00194" summary="add banner">
-      <option name="closed" value="true" />
-      <created>1760428580413</created>
-      <option name="number" value="00194" />
-      <option name="presentableId" value="LOCAL-00194" />
-      <option name="project" value="LOCAL" />
-      <updated>1760428580413</updated>
     </task>
     <task id="LOCAL-00195" summary="add banner">
       <option name="closed" value="true" />
@@ -691,7 +673,23 @@
       <option name="project" value="LOCAL" />
       <updated>1766461005413</updated>
     </task>
-    <option name="localTasksCounter" value="242" />
+    <task id="LOCAL-00242" summary="move functions from RisingStonesSigninHelpe to RisingStonesUtils">
+      <option name="closed" value="true" />
+      <created>1766461355948</created>
+      <option name="number" value="00242" />
+      <option name="presentableId" value="LOCAL-00242" />
+      <option name="project" value="LOCAL" />
+      <updated>1766461355948</updated>
+    </task>
+    <task id="LOCAL-00243" summary="update note">
+      <option name="closed" value="true" />
+      <created>1766461395681</created>
+      <option name="number" value="00243" />
+      <option name="presentableId" value="LOCAL-00243" />
+      <option name="project" value="LOCAL" />
+      <updated>1766461395681</updated>
+    </task>
+    <option name="localTasksCounter" value="244" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -743,11 +741,9 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update banner" />
     <MESSAGE value="sendBriefHouseNotification" />
     <MESSAGE value="update sendBriefHouseNotification func &amp; schedule time" />
     <MESSAGE value="add SERVER_NAME_MAP" />
-    <MESSAGE value="update note" />
     <MESSAGE value="add DaoYuKey Monitor" />
     <MESSAGE value="update Dockerfile using openjdk-21" />
     <MESSAGE value="update Dockerfile using amazoncorretto-21" />
@@ -768,7 +764,9 @@
     <MESSAGE value="update todo" />
     <MESSAGE value="update login.html and docs" />
     <MESSAGE value="remove response.isSuccessful() judge" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove response.isSuccessful() judge" />
+    <MESSAGE value="move functions from RisingStonesSigninHelpe to RisingStonesUtils" />
+    <MESSAGE value="update note" />
+    <option name="LAST_COMMIT_MESSAGE" value="update note" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -40,9 +40,20 @@ spring:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   datasource:
     primary:
+      url: ${SUPABASE_PRIMARY_URL:jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=require&gssEncMode=disable}
+
       # Direct Connection mode - port 5432
+      # postgresql://postgres:[YOUR-PASSWORD]@db.dshmbsawwrbuycnivcjs.supabase.co:5432/postgres
+      # url: ${SUPABASE_PRIMARY_URL:jdbc:postgresql://db.dshmbsawwrbuycnivcjs.supabase.co:5432/postgres}
+
       # Transaction Pooler mode - port 6543
-      url: ${SUPABASE_PRIMARY_URL:jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres}
+      # postgresql://postgres.dshmbsawwrbuycnivcjs:[YOUR-PASSWORD]@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
+      # url: ${SUPABASE_PRIMARY_URL:jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres}
+
+      # Session Pooler mode - port 5432
+      # postgresql://postgres.dshmbsawwrbuycnivcjs:[YOUR-PASSWORD]@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
+      # url: ${SUPABASE_PRIMARY_URL:jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres}
+
       username: ${SUPABASE_PRIMARY_USERNAME:postgres.dshmbsawwrbuycnivcjs}
       password: ${SUPABASE_PRIMARY_PASSWORD}
       driver-class-name: org.postgresql.Driver
