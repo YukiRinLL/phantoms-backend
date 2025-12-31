@@ -40,7 +40,7 @@ spring:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   datasource:
     primary:
-      url: ${SUPABASE_PRIMARY_URL:jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=require&gssEncMode=disable}
+      url: ${SUPABASE_PRIMARY_URL:jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres}
 
       # Direct Connection mode - port 5432
       # postgresql://postgres:[YOUR-PASSWORD]@db.dshmbsawwrbuycnivcjs.supabase.co:5432/postgres
