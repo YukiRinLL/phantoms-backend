@@ -7,9 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix RisingStonesUtils as Component">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="switch primary datasource mode to Direct Connection">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RisingStonesSigninController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RisingStonesSigninController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -296,6 +296,14 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
+    </task>
+    <task id="LOCAL-00197" summary="update note">
+      <option name="closed" value="true" />
+      <created>1761362295816</created>
+      <option name="number" value="00197" />
+      <option name="presentableId" value="LOCAL-00197" />
+      <option name="project" value="LOCAL" />
+      <updated>1761362295816</updated>
     </task>
     <task id="LOCAL-00198" summary="add TestController">
       <option name="closed" value="true" />
@@ -681,15 +689,7 @@
       <option name="project" value="LOCAL" />
       <updated>1767146657086</updated>
     </task>
-    <task id="LOCAL-00246" summary="fix RisingStonesUtils as Component">
-      <option name="closed" value="true" />
-      <created>1767148870913</created>
-      <option name="number" value="00246" />
-      <option name="presentableId" value="LOCAL-00246" />
-      <option name="project" value="LOCAL" />
-      <updated>1767148870913</updated>
-    </task>
-    <option name="localTasksCounter" value="247" />
+    <option name="localTasksCounter" value="246" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -741,6 +741,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <MESSAGE value="add SERVER_NAME_MAP" />
     <MESSAGE value="add DaoYuKey Monitor" />
     <MESSAGE value="update Dockerfile using openjdk-21" />
     <MESSAGE value="update Dockerfile using amazoncorretto-21" />
@@ -765,15 +766,14 @@
     <MESSAGE value="update note" />
     <MESSAGE value="switch primary datasource mode to Transaction Pooler" />
     <MESSAGE value="switch primary datasource mode to Direct Connection" />
-    <MESSAGE value="fix RisingStonesUtils as Component" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix RisingStonesUtils as Component" />
+    <option name="LAST_COMMIT_MESSAGE" value="switch primary datasource mode to Direct Connection" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java</url>
-          <line>41</line>
+          <line>39</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
