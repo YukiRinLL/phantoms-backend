@@ -4,6 +4,7 @@ import okhttp3.*;
 import com.alibaba.fastjson.JSONObject;
 import com.phantoms.phantomsbackend.service.SystemConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;
@@ -11,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Component
 public class RisingStonesUtils {
 
     private static final Logger logger = Logger.getLogger(RisingStonesUtils.class.getName());
