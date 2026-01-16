@@ -55,7 +55,7 @@ public class PrimaryDataSourceConfig {
     @Value("${spring.datasource.hikari.minimum-idle}")
     private int hikariMinimumIdle;
 
-    @Value("${spring.datasource.hikari.pool-name}")
+    @Value("${spring.datasource.primary.hikari.pool-name}")
     private String hikariPoolName;
 
     @Value("${spring.datasource.hikari.data-source-properties.preparedStatementCacheQueries}")
@@ -96,7 +96,7 @@ public class PrimaryDataSourceConfig {
             EntityManagerFactoryBuilder builder, @Qualifier("primaryDataSource") DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
-                .packages("com.phantoms.phantomsbackend.pojo.entity")
+                .packages("com.phantoms.phantomsbackend.pojo.entity.primary")
                 .persistenceUnit("primary")
                 .build();
     }

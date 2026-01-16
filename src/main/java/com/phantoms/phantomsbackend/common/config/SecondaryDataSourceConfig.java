@@ -17,6 +17,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
@@ -54,7 +56,7 @@ public class SecondaryDataSourceConfig {
     @Value("${spring.datasource.hikari.minimum-idle}")
     private int hikariMinimumIdle;
 
-    @Value("${spring.datasource.hikari.pool-name}")
+    @Value("${spring.datasource.secondary.hikari.pool-name}")
     private String hikariPoolName;
 
     @Value("${spring.datasource.hikari.data-source-properties.preparedStatementCacheQueries}")
@@ -91,10 +93,15 @@ public class SecondaryDataSourceConfig {
     @Bean(name = "secondaryEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean secondaryEntityManagerFactory(
             EntityManagerFactoryBuilder builder, @Qualifier("secondaryDataSource") DataSource dataSource) {
+        // 为MySQL设置独立的JPA方言
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+        
         return builder
                 .dataSource(dataSource)
-                .packages("com.phantoms.phantomsbackend.pojo.entity")
+                .packages("com.phantoms.phantomsbackend.pojo.entity.secondary")
                 .persistenceUnit("secondary")
+                .properties(properties)
                 .build();
     }
 

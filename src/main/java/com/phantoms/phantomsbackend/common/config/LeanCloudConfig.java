@@ -4,8 +4,8 @@ import cn.leancloud.LCLogger;
 import cn.leancloud.core.LeanCloud;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import jakarta.annotation.PostConstruct;
 
 @Data
 @Configuration
@@ -16,7 +16,7 @@ public class LeanCloudConfig {
     private String serverUrl;
     private String logLevel;
 
-    @Bean
+    @PostConstruct
     public void initializeLeanCloud() {
         // 设置日志级别
         LeanCloud.setLogLevel(LCLogger.Level.valueOf(logLevel));
