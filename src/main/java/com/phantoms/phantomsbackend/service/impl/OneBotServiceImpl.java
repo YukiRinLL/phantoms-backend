@@ -348,6 +348,12 @@ public class OneBotServiceImpl implements OneBotService {
     }
 
     @Override
+    public void sendGroupImage(String imageUrl, String groupId) throws Exception {
+        String targetGroupId = groupId != null ? groupId : defaultGroupId;
+        napCatQQUtil.sendGroupImage(targetGroupId, imageUrl);
+    }
+
+    @Override
     public void saveUserMessage(String message, Long groupId, Map<String, Object> systemInfo) {
         UserMessage userMessage = new UserMessage();
         userMessage.setMessage(message);

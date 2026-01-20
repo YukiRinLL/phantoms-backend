@@ -14,13 +14,19 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
 
 @Component
 public class HousingSaleScheduler {
@@ -515,11 +521,26 @@ public class HousingSaleScheduler {
      */
     private void sendBriefHouseNotification(String server, List<HousingSale> houses) {
         try {
-            StringBuilder message = new StringBuilder();
-
-            // 获取服务器名称，如果没有映射则使用原编号
+            // 获取服务器名称
             String serverName = SERVER_NAME_MAP.getOrDefault(server, server);
-
+            
+            // 优先尝试发送表格图片
+            try {
+                // 生成表格图片
+                String imageUrl = generateHousingTableImage(server, houses);
+                
+                // 发送群图片
+                oneBotService.sendGroupImage(imageUrl, phantomGroupId);
+                
+                logger.info("已发送 {} 服务器 {} 套房屋表格图片通知", server, houses.size());
+                return;
+            } catch (Exception e) {
+                logger.warn("发送表格图片失败，降级为文本消息: {}", e.getMessage());
+            }
+            
+            // 如果图片发送失败，降级为文本消息
+            StringBuilder message = new StringBuilder();
+            
             // 消息标题
             message.append("🏠 发现 ").append(serverName).append(" 服务器 ").append(houses.size()).append(" 套新房源\n\n");
 
@@ -552,13 +573,10 @@ public class HousingSaleScheduler {
                 message.append("\n");
             }
 
-            // 添加底部提示
-//            message.append("\n🔥 现正火热预约中！");
-
-            // 发送单条合并消息
+            // 发送单条合并文本消息
             oneBotService.sendGroupMessage(message.toString(), phantomGroupId);
 
-            logger.info("已发送 {} 服务器 {} 套房屋通知", server, houses.size());
+            logger.info("已发送 {} 服务器 {} 套房屋文本通知", server, houses.size());
 
         } catch (Exception e) {
             logger.error("发送房屋通知失败", e);
@@ -691,6 +709,124 @@ public class HousingSaleScheduler {
         return time.format(java.time.format.DateTimeFormatter.ofPattern("MM-dd HH:mm"));
     }
 
+    /**
+     * 生成房屋信息表格图片
+     */
+    private String generateHousingTableImage(String server, List<HousingSale> houses) throws IOException {
+        // 获取服务器名称
+        String serverName = SERVER_NAME_MAP.getOrDefault(server, server);
+        
+        // 计算表格尺寸
+        int rows = houses.size() + 2; // 表头 + 数据 + 标题
+        int cols = 6; // 列数：序号、尺寸、位置、价格、限制、截止时间
+        
+        // 图片尺寸设置
+        int cellWidth = 150;
+        int cellHeight = 40;
+        int padding = 20;
+        int imageWidth = cellWidth * cols + padding * 2;
+        int imageHeight = cellHeight * rows + padding * 2;
+        
+        // 创建图片
+        BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = image.createGraphics();
+        
+        // 设置背景色
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, imageWidth, imageHeight);
+        
+        // 设置边框和表头颜色
+        g2d.setColor(Color.BLACK);
+        g2d.setStroke(new BasicStroke(1));
+        
+        // 绘制标题
+        g2d.setFont(new Font("宋体", Font.BOLD, 24));
+        String title = "🏠 " + serverName + " 服务器新房源信息";
+        FontMetrics titleMetrics = g2d.getFontMetrics();
+        int titleX = (imageWidth - titleMetrics.stringWidth(title)) / 2;
+        int titleY = padding + titleMetrics.getHeight();
+        g2d.drawString(title, titleX, titleY);
+        
+        // 绘制表头
+        g2d.setFont(new Font("宋体", Font.BOLD, 14));
+        String[] headers = {"序号", "尺寸", "位置", "价格", "限制", "截止时间"};
+        int headerY = titleY + cellHeight;
+        
+        for (int i = 0; i < cols; i++) {
+            int x = padding + i * cellWidth;
+            int y = headerY;
+            g2d.drawRect(x, y, cellWidth, cellHeight);
+            
+            // 绘制表头文本
+            String header = headers[i];
+            FontMetrics metrics = g2d.getFontMetrics();
+            int textX = x + (cellWidth - metrics.stringWidth(header)) / 2;
+            int textY = y + (cellHeight + metrics.getHeight()) / 2 - metrics.getDescent();
+            g2d.drawString(header, textX, textY);
+        }
+        
+        // 绘制数据行
+        g2d.setFont(new Font("宋体", Font.PLAIN, 12));
+        
+        for (int row = 0; row < houses.size(); row++) {
+            HousingSale house = houses.get(row);
+            int rowY = headerY + (row + 1) * cellHeight;
+            
+            // 序号
+            String serial = String.valueOf(row + 1);
+            drawTableCell(g2d, padding + 0 * cellWidth, rowY, cellWidth, cellHeight, serial);
+            
+            // 尺寸
+            String size = getSizeName(house.getSize());
+            drawTableCell(g2d, padding + 1 * cellWidth, rowY, cellWidth, cellHeight, size);
+            
+            // 位置
+            String area = getAreaName(house.getArea());
+            String position = area + (house.getSlot() + 1) + "区" + house.getId() + "号";
+            drawTableCell(g2d, padding + 2 * cellWidth, rowY, cellWidth, cellHeight, position);
+            
+            // 价格
+            String price = formatPrice(house.getPrice());
+            drawTableCell(g2d, padding + 3 * cellWidth, rowY, cellWidth, cellHeight, price);
+            
+            // 限制
+            String regionType = getRegionTypeName(house.getRegionType());
+            drawTableCell(g2d, padding + 4 * cellWidth, rowY, cellWidth, cellHeight, regionType);
+            
+            // 截止时间
+            OffsetDateTime estimatedEndTime = calculateEstimatedEndTime(house);
+            String endTime = formatTime(estimatedEndTime) + "截止";
+            drawTableCell(g2d, padding + 5 * cellWidth, rowY, cellWidth, cellHeight, endTime);
+        }
+        
+        // 释放资源
+        g2d.dispose();
+        
+        // 保存图片到临时文件
+        File tempDir = new File(System.getProperty("java.io.tmpdir"));
+        File tempFile = File.createTempFile("housing_sale_", ".png", tempDir);
+        ImageIO.write(image, "PNG", tempFile);
+        
+        logger.info("生成房屋表格图片成功: {}", tempFile.getAbsolutePath());
+        
+        // 返回图片的本地路径，添加file://前缀以便OneBot协议识别
+        return "file://" + tempFile.getAbsolutePath();
+    }
+    
+    /**
+     * 绘制表格单元格
+     */
+    private void drawTableCell(Graphics2D g2d, int x, int y, int width, int height, String text) {
+        // 绘制边框
+        g2d.drawRect(x, y, width, height);
+        
+        // 绘制文本
+        FontMetrics metrics = g2d.getFontMetrics();
+        int textX = x + (width - metrics.stringWidth(text)) / 2;
+        int textY = y + (height + metrics.getHeight()) / 2 - metrics.getDescent();
+        g2d.drawString(text, textX, textY);
+    }
+    
     /**
      * 手动触发房屋数据获取（用于测试）
      */

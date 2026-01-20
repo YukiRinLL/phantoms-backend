@@ -18,6 +18,8 @@ public interface OneBotService {
 
     void sendGroupMessage(String message, String groupId) throws Exception;
 
+    void sendGroupImage(String imageUrl, String groupId) throws Exception;
+
     void saveUserMessage(String message, Long groupId, Map<String, Object> systemInfo);
 
     /**
