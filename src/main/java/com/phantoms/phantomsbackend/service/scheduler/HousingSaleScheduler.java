@@ -16,13 +16,14 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
 import java.util.*;
+import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -527,10 +528,10 @@ public class HousingSaleScheduler {
             // 优先尝试发送表格图片
             try {
                 // 生成表格图片
-                String imageUrl = generateHousingTableImage(server, houses);
+                String image = generateHousingTableImage(server, houses);
                 
                 // 发送群图片
-                oneBotService.sendGroupImage(imageUrl, phantomGroupId);
+                oneBotService.sendGroupImage(image, phantomGroupId);
                 
                 logger.info("已发送 {} 服务器 {} 套房屋表格图片通知", server, houses.size());
                 return;
@@ -802,15 +803,22 @@ public class HousingSaleScheduler {
         // 释放资源
         g2d.dispose();
         
-        // 保存图片到临时文件
-        File tempDir = new File(System.getProperty("java.io.tmpdir"));
-        File tempFile = File.createTempFile("housing_sale_", ".png", tempDir);
-        ImageIO.write(image, "PNG", tempFile);
+        // 将图片转换为base64编码
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "PNG", baos);
+        baos.flush();
+        byte[] imageBytes = baos.toByteArray();
+        baos.close();
         
-        logger.info("生成房屋表格图片成功: {}", tempFile.getAbsolutePath());
+        // 使用Base64编码
+        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
         
-        // 返回图片的本地路径，添加file://前缀以便OneBot协议识别
-        return "file://" + tempFile.getAbsolutePath();
+        // 添加base64://前缀，符合Napcat的要求
+        String result = "base64://" + base64Image;
+        
+        logger.info("生成房屋表格图片base64编码成功，长度: {}", result.length());
+        
+        return result;
     }
     
     /**

@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -379,9 +381,24 @@ public class NapCatQQUtil {
      * 发送群图片
      */
     public String sendGroupImage(String groupId, String imageUrl) throws IOException {
+        // 创建图片消息对象
+        Map<String, Object> imageData = new HashMap<>();
+        imageData.put("file", imageUrl);
+        imageData.put("summary", "[图片]");
+        
+        Map<String, Object> imageMessage = new HashMap<>();
+        imageMessage.put("type", "image");
+        imageMessage.put("data", imageData);
+        
+        // 创建消息列表
+        List<Map<String, Object>> messageList = new ArrayList<>();
+        messageList.add(imageMessage);
+        
+        // 设置请求参数
         Map<String, Object> params = new HashMap<>();
         params.put("group_id", groupId);
-        params.put("image", imageUrl);
+        params.put("message", messageList);
+        
         return makeRequest("/send_group_msg", params);
     }
 
