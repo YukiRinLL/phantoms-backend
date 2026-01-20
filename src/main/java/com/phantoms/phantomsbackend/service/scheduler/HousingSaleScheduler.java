@@ -717,16 +717,33 @@ public class HousingSaleScheduler {
         // 获取服务器名称
         String serverName = SERVER_NAME_MAP.getOrDefault(server, server);
         
-        // 计算表格尺寸
+        // 定义表头和对应的数据获取函数
+        String[] headers = {"序号", "尺寸", "位置", "价格", "购买方式", "限制", "参与人数", "截止时间", "首次发现"};
+        int cols = headers.length;
         int rows = houses.size() + 2; // 表头 + 数据 + 标题
-        int cols = 6; // 列数：序号、尺寸、位置、价格、限制、截止时间
+        
+        // 设置字体
+        Font headerFont = new Font("黑体", Font.BOLD, 14);
+        Font dataFont = new Font("黑体", Font.PLAIN, 12);
+        Font titleFont = new Font("黑体", Font.BOLD, 24);
+        
+        // 计算动态列宽
+        int[] columnWidths = calculateColumnWidths(houses, headers, headerFont, dataFont);
+        
+        // 创建临时图像获取标题字体信息
+        BufferedImage tempImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D tempG2d = tempImage.createGraphics();
+        tempG2d.setFont(titleFont);
+        String title = "🏠 " + serverName + " 服务器新房源信息";
+        FontMetrics titleMetrics = tempG2d.getFontMetrics();
+        tempG2d.dispose();
         
         // 图片尺寸设置
-        int cellWidth = 150;
-        int cellHeight = 40;
+        int cellHeight = 35; // 增加行高以适应更多内容
         int padding = 20;
-        int imageWidth = cellWidth * cols + padding * 2;
-        int imageHeight = cellHeight * rows + padding * 2;
+        int titleSpacing = cellHeight / 2; // 标题与表格的间距
+        int imageWidth = Arrays.stream(columnWidths).sum() + padding * 2;
+        int imageHeight = titleMetrics.getHeight() + titleSpacing + cellHeight * (rows - 1) + padding * 2;
         
         // 创建图片
         BufferedImage image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB);
@@ -741,63 +758,102 @@ public class HousingSaleScheduler {
         g2d.setStroke(new BasicStroke(1));
         
         // 绘制标题
-        g2d.setFont(new Font("宋体", Font.BOLD, 24));
-        String title = "🏠 " + serverName + " 服务器新房源信息";
-        FontMetrics titleMetrics = g2d.getFontMetrics();
+        g2d.setFont(titleFont);
         int titleX = (imageWidth - titleMetrics.stringWidth(title)) / 2;
         int titleY = padding + titleMetrics.getHeight();
         g2d.drawString(title, titleX, titleY);
         
         // 绘制表头
-        g2d.setFont(new Font("宋体", Font.BOLD, 14));
-        String[] headers = {"序号", "尺寸", "位置", "价格", "限制", "截止时间"};
-        int headerY = titleY + cellHeight;
+        g2d.setFont(headerFont);
+        int headerY = titleY + cellHeight / 2; // 增加标题与表格的间距
+        int currentX = padding;
+        
+        // 表头背景色
+        Color headerBgColor = new Color(240, 240, 240);
         
         for (int i = 0; i < cols; i++) {
-            int x = padding + i * cellWidth;
-            int y = headerY;
-            g2d.drawRect(x, y, cellWidth, cellHeight);
+            int width = columnWidths[i];
+            // 绘制表头背景
+            g2d.setColor(headerBgColor);
+            g2d.fillRect(currentX + 1, headerY + 1, width - 1, cellHeight - 1);
+            
+            // 绘制表头边框
+            g2d.setColor(Color.BLACK);
+            g2d.drawRect(currentX, headerY, width, cellHeight);
             
             // 绘制表头文本
             String header = headers[i];
             FontMetrics metrics = g2d.getFontMetrics();
-            int textX = x + (cellWidth - metrics.stringWidth(header)) / 2;
-            int textY = y + (cellHeight + metrics.getHeight()) / 2 - metrics.getDescent();
+            int textX = currentX + (width - metrics.stringWidth(header)) / 2;
+            int textY = headerY + (cellHeight + metrics.getHeight()) / 2 - metrics.getDescent();
             g2d.drawString(header, textX, textY);
+            
+            currentX += width;
         }
         
         // 绘制数据行
-        g2d.setFont(new Font("宋体", Font.PLAIN, 12));
+        g2d.setFont(dataFont);
         
         for (int row = 0; row < houses.size(); row++) {
             HousingSale house = houses.get(row);
             int rowY = headerY + (row + 1) * cellHeight;
+            currentX = padding;
             
-            // 序号
+            // 设置行背景色（交替行）
+            if (row % 2 == 1) {
+                g2d.setColor(new Color(250, 250, 250));
+                int totalWidth = Arrays.stream(columnWidths).sum();
+                g2d.fillRect(currentX + 1, rowY + 1, totalWidth - 1, cellHeight - 1);
+                g2d.setColor(Color.BLACK); // 恢复边框颜色
+            }
+            
+            // 1. 序号
             String serial = String.valueOf(row + 1);
-            drawTableCell(g2d, padding + 0 * cellWidth, rowY, cellWidth, cellHeight, serial);
+            drawTableCell(g2d, currentX, rowY, columnWidths[0], cellHeight, serial);
+            currentX += columnWidths[0];
             
-            // 尺寸
+            // 2. 尺寸
             String size = getSizeName(house.getSize());
-            drawTableCell(g2d, padding + 1 * cellWidth, rowY, cellWidth, cellHeight, size);
+            drawTableCell(g2d, currentX, rowY, columnWidths[1], cellHeight, size);
+            currentX += columnWidths[1];
             
-            // 位置
+            // 3. 位置
             String area = getAreaName(house.getArea());
             String position = area + (house.getSlot() + 1) + "区" + house.getId() + "号";
-            drawTableCell(g2d, padding + 2 * cellWidth, rowY, cellWidth, cellHeight, position);
+            drawTableCell(g2d, currentX, rowY, columnWidths[2], cellHeight, position);
+            currentX += columnWidths[2];
             
-            // 价格
+            // 4. 价格
             String price = formatPrice(house.getPrice());
-            drawTableCell(g2d, padding + 3 * cellWidth, rowY, cellWidth, cellHeight, price);
+            drawTableCell(g2d, currentX, rowY, columnWidths[3], cellHeight, price);
+            currentX += columnWidths[3];
             
-            // 限制
+            // 5. 购买方式
+            String purchaseType = getPurchaseTypeName(house.getPurchaseType());
+            drawTableCell(g2d, currentX, rowY, columnWidths[4], cellHeight, purchaseType);
+            currentX += columnWidths[4];
+            
+            // 6. 限制
             String regionType = getRegionTypeName(house.getRegionType());
-            drawTableCell(g2d, padding + 4 * cellWidth, rowY, cellWidth, cellHeight, regionType);
+            drawTableCell(g2d, currentX, rowY, columnWidths[5], cellHeight, regionType);
+            currentX += columnWidths[5];
             
-            // 截止时间
+            // 7. 参与人数
+            String participate = house.getPurchaseType() == PURCHASE_TYPE_LOTTERY && house.getParticipate() != null ? 
+                                String.valueOf(house.getParticipate()) : "-";
+            drawTableCell(g2d, currentX, rowY, columnWidths[6], cellHeight, participate);
+            currentX += columnWidths[6];
+            
+            // 8. 截止时间
             OffsetDateTime estimatedEndTime = calculateEstimatedEndTime(house);
             String endTime = formatTime(estimatedEndTime) + "截止";
-            drawTableCell(g2d, padding + 5 * cellWidth, rowY, cellWidth, cellHeight, endTime);
+            drawTableCell(g2d, currentX, rowY, columnWidths[7], cellHeight, endTime);
+            currentX += columnWidths[7];
+            
+            // 9. 首次发现
+            String firstSeen = house.getFirstSeen() != null ? 
+                              formatTime(house.getFirstSeen()) : "-";
+            drawTableCell(g2d, currentX, rowY, columnWidths[8], cellHeight, firstSeen);
         }
         
         // 释放资源
@@ -819,6 +875,88 @@ public class HousingSaleScheduler {
         logger.info("生成房屋表格图片base64编码成功，长度: {}", result.length());
         
         return result;
+    }
+    
+    /**
+     * 计算动态列宽
+     */
+    private int[] calculateColumnWidths(List<HousingSale> houses, String[] headers, Font headerFont, Font dataFont) {
+        int cols = headers.length;
+        int[] columnWidths = new int[cols];
+        
+        // 创建临时图像用于测量文本宽度
+        BufferedImage tempImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = tempImage.createGraphics();
+        
+        // 计算表头所需宽度
+        g2d.setFont(headerFont);
+        for (int i = 0; i < cols; i++) {
+            int width = g2d.getFontMetrics().stringWidth(headers[i]) + 20; // 增加20像素边距
+            columnWidths[i] = Math.max(columnWidths[i], width);
+        }
+        
+        // 计算数据所需宽度
+        g2d.setFont(dataFont);
+        for (HousingSale house : houses) {
+            // 序号
+            String serial = String.valueOf(houses.indexOf(house) + 1);
+            int width = g2d.getFontMetrics().stringWidth(serial) + 20;
+            columnWidths[0] = Math.max(columnWidths[0], width);
+            
+            // 尺寸
+            String size = getSizeName(house.getSize());
+            width = g2d.getFontMetrics().stringWidth(size) + 20;
+            columnWidths[1] = Math.max(columnWidths[1], width);
+            
+            // 位置
+            String area = getAreaName(house.getArea());
+            String position = area + (house.getSlot() + 1) + "区" + house.getId() + "号";
+            width = g2d.getFontMetrics().stringWidth(position) + 20;
+            columnWidths[2] = Math.max(columnWidths[2], width);
+            
+            // 价格
+            String price = formatPrice(house.getPrice());
+            width = g2d.getFontMetrics().stringWidth(price) + 20;
+            columnWidths[3] = Math.max(columnWidths[3], width);
+            
+            // 购买方式
+            String purchaseType = getPurchaseTypeName(house.getPurchaseType());
+            width = g2d.getFontMetrics().stringWidth(purchaseType) + 20;
+            columnWidths[4] = Math.max(columnWidths[4], width);
+            
+            // 限制
+            String regionType = getRegionTypeName(house.getRegionType());
+            width = g2d.getFontMetrics().stringWidth(regionType) + 20;
+            columnWidths[5] = Math.max(columnWidths[5], width);
+            
+            // 参与人数
+            String participate = house.getPurchaseType() == PURCHASE_TYPE_LOTTERY && house.getParticipate() != null ? 
+                                String.valueOf(house.getParticipate()) : "-";
+            width = g2d.getFontMetrics().stringWidth(participate) + 20;
+            columnWidths[6] = Math.max(columnWidths[6], width);
+            
+            // 截止时间
+            OffsetDateTime estimatedEndTime = calculateEstimatedEndTime(house);
+            String endTime = formatTime(estimatedEndTime) + "截止";
+            width = g2d.getFontMetrics().stringWidth(endTime) + 20;
+            columnWidths[7] = Math.max(columnWidths[7], width);
+            
+            // 首次发现
+            String firstSeen = house.getFirstSeen() != null ? 
+                              formatTime(house.getFirstSeen()) : "-";
+            width = g2d.getFontMetrics().stringWidth(firstSeen) + 20;
+            columnWidths[8] = Math.max(columnWidths[8], width);
+        }
+        
+        // 设置最小列宽，确保表格美观
+        for (int i = 0; i < cols; i++) {
+            columnWidths[i] = Math.max(columnWidths[i], 80); // 最小列宽80像素
+        }
+        
+        // 释放资源
+        g2d.dispose();
+        
+        return columnWidths;
     }
     
     /**
