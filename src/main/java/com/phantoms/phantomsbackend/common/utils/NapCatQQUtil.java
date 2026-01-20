@@ -128,9 +128,14 @@ public class NapCatQQUtil {
     /**
      * 设置消息已读
      */
-    public String markMessageAsRead(String messageId) throws IOException {
+    public String markMessageAsRead(String groupId, String userId) throws IOException {
         Map<String, Object> params = new HashMap<>();
-        params.put("message_id", messageId);
+        if (groupId != null) {
+            params.put("group_id", groupId);
+        }
+        if (userId != null) {
+            params.put("user_id", userId);
+        }
         return makeRequest("/mark_msg_as_read", params);
     }
 
@@ -396,8 +401,8 @@ public class NapCatQQUtil {
     public String sendGroupJson(String groupId, String json) throws IOException {
         Map<String, Object> params = new HashMap<>();
         params.put("group_id", groupId);
-        params.put("message", "[CQ:json,data=" + json + "]");
-        return makeRequest("/send_group_msg", params);
+        params.put("json", json);
+        return makeRequest("/send_group_json", params);
     }
 
     /**
@@ -447,7 +452,7 @@ public class NapCatQQUtil {
     public String sendGroupDice(String groupId) throws IOException {
         Map<String, Object> params = new HashMap<>();
         params.put("group_id", groupId);
-        return makeRequest("/send_group_msg", params);
+        return makeRequest("/send_group_dice", params);
     }
 
     /**
@@ -456,7 +461,7 @@ public class NapCatQQUtil {
     public String sendGroupRPS(String groupId) throws IOException {
         Map<String, Object> params = new HashMap<>();
         params.put("group_id", groupId);
-        return makeRequest("/send_group_msg", params);
+        return makeRequest("/send_group_rps", params);
     }
 
     /**
@@ -547,8 +552,8 @@ public class NapCatQQUtil {
     public String sendPrivateJson(String userId, String json) throws IOException {
         Map<String, Object> params = new HashMap<>();
         params.put("user_id", userId);
-        params.put("message", "[CQ:json,data=" + json + "]");
-        return makeRequest("/send_private_msg", params);
+        params.put("json", json);
+        return makeRequest("/send_private_json", params);
     }
 
     /**
@@ -608,7 +613,7 @@ public class NapCatQQUtil {
     public String sendPrivateDice(String userId) throws IOException {
         Map<String, Object> params = new HashMap<>();
         params.put("user_id", userId);
-        return makeRequest("/send_private_msg", params);
+        return makeRequest("/send_private_dice", params);
     }
 
     /**
@@ -617,7 +622,7 @@ public class NapCatQQUtil {
     public String sendPrivateRPS(String userId) throws IOException {
         Map<String, Object> params = new HashMap<>();
         params.put("user_id", userId);
-        return makeRequest("/send_private_msg", params);
+        return makeRequest("/send_private_rps", params);
     }
 
     /**
@@ -1099,6 +1104,16 @@ public class NapCatQQUtil {
         return makeRequest("/group_sign_in", params);
     }
 
+    /**
+     * 设置群代办
+     */
+    public String setGroupTodo(String groupId, String todo) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("group_id", groupId);
+        params.put("todo", todo);
+        return makeRequest("/set_group_todo", params);
+    }
+
     // ==================== 文件相关方法 ====================
 
     /**
@@ -1258,6 +1273,66 @@ public class NapCatQQUtil {
         return makeRequest("/clear_cache", new HashMap<>());
     }
 
+    // ==================== 群相册相关方法 ====================
+
+    /**
+     * 删除群相册文件
+     */
+    public String deleteGroupAlbumFile(String groupId, String fileId) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("group_id", groupId);
+        params.put("file_id", fileId);
+        return makeRequest("/delete_group_album_file", params);
+    }
+
+    /**
+     * 点赞群相册
+     */
+    public String likeGroupAlbum(String groupId, String fileId) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("group_id", groupId);
+        params.put("file_id", fileId);
+        return makeRequest("/like_group_album", params);
+    }
+
+    /**
+     * 查看群相册评论
+     */
+    public String viewGroupAlbumComments(String groupId, String fileId) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("group_id", groupId);
+        params.put("file_id", fileId);
+        return makeRequest("/view_group_album_comments", params);
+    }
+
+    /**
+     * 获取群相册列表
+     */
+    public String getGroupAlbumList(String groupId) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("group_id", groupId);
+        return makeRequest("/get_group_album_list", params);
+    }
+
+    /**
+     * 上传图片到群相册
+     */
+    public String uploadImageToGroupAlbum(String groupId, String image) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("group_id", groupId);
+        params.put("image", image);
+        return makeRequest("/upload_image_to_group_album", params);
+    }
+
+    /**
+     * 获取群相册总列表
+     */
+    public String getGroupAlbumTotalList(String groupId) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("group_id", groupId);
+        return makeRequest("/get_group_album_total_list", params);
+    }
+
     // ==================== 密钥相关方法 ====================
 
     /**
@@ -1279,6 +1354,41 @@ public class NapCatQQUtil {
      */
     public String getCsrfToken() throws IOException {
         return makeRequest("/get_csrf_token", new HashMap<>());
+    }
+
+    // ==================== 系统操作相关方法 ====================
+    /**
+     * 获取机器人账号范围
+     */
+    public String getRobotAccountRange() throws IOException {
+        return makeRequest("/get_robot_account_range", new HashMap<>());
+    }
+
+    /**
+     * 账号退出
+     */
+    public String accountExit() throws IOException {
+        return makeRequest("/account_exit", new HashMap<>());
+    }
+
+    // ==================== 个人操作相关方法 ====================
+
+    /**
+     * 获取陌生人信息
+     */
+    public String getStrangerInfo(String userId) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("user_id", userId);
+        return makeRequest("/get_stranger_info", params);
+    }
+
+    /**
+     * 获取好友信息
+     */
+    public String getFriendInfo(String userId) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("user_id", userId);
+        return makeRequest("/get_friend_info", params);
     }
 
     /**
