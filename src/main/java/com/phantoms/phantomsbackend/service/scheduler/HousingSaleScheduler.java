@@ -722,10 +722,10 @@ public class HousingSaleScheduler {
         int cols = headers.length;
         int rows = houses.size() + 2; // 表头 + 数据 + 标题
         
-        // 设置字体
-        Font headerFont = new Font("黑体", Font.BOLD, 14);
-        Font dataFont = new Font("黑体", Font.PLAIN, 12);
-        Font titleFont = new Font("黑体", Font.BOLD, 24);
+        // 设置字体，添加降级机制
+        Font headerFont = getFontWithFallback("Noto Sans CJK SC", Font.BOLD, 14);
+        Font dataFont = getFontWithFallback("Noto Sans CJK SC", Font.PLAIN, 12);
+        Font titleFont = getFontWithFallback("Noto Sans CJK SC", Font.BOLD, 24);
         
         // 计算动态列宽
         int[] columnWidths = calculateColumnWidths(houses, headers, headerFont, dataFont);
@@ -979,5 +979,41 @@ public class HousingSaleScheduler {
     public void manualTriggerHousingDataFetch() {
         logger.info("手动触发房屋数据获取");
         fetchAndProcessHousingSales();
+    }
+    
+    /**
+     * 获取字体，添加降级机制
+     * @param fontName 字体名称
+     * @param style 字体样式
+     * @param size 字体大小
+     * @return 字体对象
+     */
+    private Font getFontWithFallback(String fontName, int style, int size) {
+        // 字体优先级列表，适用于 Alpine Linux 环境
+        String[] fontPriorities = {
+            fontName,          // 用户指定的字体
+            "Noto Sans CJK SC",    // 思源黑体（Google开源字体，现代无衬线字体）
+            "WenQuanYi Micro Hei", // 文泉驿微米黑（轻量中文字体）
+            "Droid Sans Fallback", // Android 回退字体
+            Font.SANS_SERIF         // 系统默认无衬线字体
+        };
+        
+        for (String currentFontName : fontPriorities) {
+            try {
+                // 尝试加载当前字体
+                Font font = new Font(currentFontName, style, size);
+                // 检查字体是否成功加载
+                if (font != null && !font.getFontName().equals("Dialog")) {
+                    return font;
+                }
+            } catch (Exception e) {
+                // 捕获字体加载异常，继续尝试下一个字体
+                logger.debug("加载字体 {} 失败: {}", currentFontName, e.getMessage());
+            }
+        }
+        
+        // 如果所有字体都加载失败，使用系统默认字体
+        logger.warn("所有字体加载失败，使用系统默认字体");
+        return new Font(Font.SANS_SERIF, style, size);
     }
 }
