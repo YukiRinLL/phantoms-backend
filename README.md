@@ -1,6 +1,8 @@
 # phantoms-backend
 _phantoms Java backend_
 
+![Alt](https://repobeats.axiom.co/api/embed/dd194003fcac6a0aef94580777d8891f99392778.svg "Repobeats analytics image")
+
 ## 主要功能:
 - **特性**
     - D1 / LeanCloud 相关交互
