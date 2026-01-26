@@ -57,30 +57,24 @@ public class OneBotServiceImpl implements OneBotService {
         String postType = (String) requestBody.get("post_type");
         String messageType = (String) requestBody.get("message_type");
 
-//        System.out.println("=== 收到 OneBot 请求 ===");
-//        System.out.println("post_type: " + postType);
-//        System.out.println("message_type: " + messageType);
-//        System.out.println("user_id: " + requestBody.get("user_id"));
-//        System.out.println("=====================");
-
         // 处理通知事件
         if ("notice".equals(postType)) {
-            System.out.println("处理通知事件");
+            // System.out.println("处理通知事件");
             return handleNoticeEvent(requestBody);
         }
         // 处理接收到的消息
         else if ("message".equals(postType)) {
-            System.out.println("处理接收到的消息");
+            // System.out.println("处理接收到的消息");
             return handleMessageEvent(requestBody, false); // false 表示接收的消息
         }
         // 处理机器人发送的消息
         else if ("message_sent".equals(postType)) {
-            System.out.println("处理机器人发送的消息");
+            // System.out.println("处理机器人发送的消息");
             return handleMessageEvent(requestBody, true); // true 表示发送的消息
         }
         // 其他类型的事件
         else {
-            System.out.println("处理其他事件，post_type: " + postType);
+            // System.out.println("处理其他事件，post_type: " + postType);
             return handleOtherEvent(requestBody);
         }
     }
@@ -142,7 +136,7 @@ public class OneBotServiceImpl implements OneBotService {
                 // 可以在这里标记消息是发送还是接收
                 if (isSentByBot) {
                     // 可以设置特殊标记，或者保持原样
-                    System.out.println("保存机器人发送的消息");
+                    // System.out.println("保存机器人发送的消息");
                 }
                 chatRecordRepository.save(chatRecord);
                 chatRecords.add(chatRecord);
@@ -151,7 +145,7 @@ public class OneBotServiceImpl implements OneBotService {
             // 如果是String，直接保存为一条ChatRecord
             ChatRecord chatRecord = createChatRecord(messageType, userId, groupId, (String) messageObj);
             if (isSentByBot) {
-                System.out.println("保存机器人发送的消息");
+                // System.out.println("保存机器人发送的消息");
             }
             chatRecordRepository.save(chatRecord);
             chatRecords.add(chatRecord);
@@ -203,15 +197,15 @@ public class OneBotServiceImpl implements OneBotService {
             // 如果被戳的是机器人自己
             if (targetId != null && isBotUserId(targetId)) {
                 String[] replies = {
-                    //一些文案（不能包含‘戳’字）
-                    "> <",
-                    "袜",
-                    "你干嘛",
-                    "嗯？",
-                    "哎呀，被发现了",
-                    "我还以为没人理我呢",
-                    "痒痒的",
-                    "www"
+                        //一些文案（不能包含‘戳’字）
+                        "> <",
+                        "袜",
+                        "你干嘛",
+                        "嗯？",
+                        "哎呀，被发现了",
+                        "我还以为没人理我呢",
+                        "痒痒的",
+                        "www"
                 };
                 String reply = replies[(int) (Math.random() * replies.length)];
 
@@ -222,7 +216,7 @@ public class OneBotServiceImpl implements OneBotService {
             // 如果是机器人戳别人（理论上不会发生，但可以记录）
             else if (userId != null && isBotUserId(userId)) {
                 // 机器人主动戳别人，记录日志
-                System.out.println("机器人戳了用户: " + targetId);
+                // System.out.println("机器人戳了用户: " + targetId);
             }
         } catch (Exception e) {
             System.err.println("处理戳一戳回复失败: " + e.getMessage());
@@ -298,9 +292,9 @@ public class OneBotServiceImpl implements OneBotService {
 
         // 统计所有需要查询的群组ID
         Set<Long> groupIds = chatRecords.stream()
-            .map(ChatRecord::getGroupId)
-            .filter(Objects::nonNull)
-            .collect(Collectors.toSet());
+                .map(ChatRecord::getGroupId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
 
         // 缓存每个群组的成员列表
         Map<Long, Map<Long, String>> groupMemberMap = new HashMap<>();
@@ -321,18 +315,93 @@ public class OneBotServiceImpl implements OneBotService {
             chatRecordDTO.setCreatedAt(chatRecord.getCreatedAt());
             chatRecordDTO.setUpdatedAt(chatRecord.getUpdatedAt());
 
-            // 设置昵称
-            Map<Long, String> memberMap = groupMemberMap.get(chatRecord.getGroupId());
-            if (memberMap != null) {
-                chatRecordDTO.setNickname(memberMap.getOrDefault(chatRecord.getUserId(), "Unknown" + chatRecord.getUserId()));
-            } else {
-                chatRecordDTO.setNickname("Unknown" + chatRecord.getUserId());
+            try {
+                // 步骤1：获取群组ID
+                Long groupId = chatRecord.getGroupId();
+                // System.out.println("[DEBUG] 步骤1 - 获取群组ID: " + groupId);
+
+                // 步骤2：从Map中获取该群的成员映射
+                Map<Long, String> memberMap = groupMemberMap.get(groupId);
+                // System.out.println("[DEBUG] 步骤2 - 获取memberMap: " + memberMap);
+                // System.out.println("[DEBUG] groupMemberMap是否包含群组" + groupId + ": " + groupMemberMap.containsKey(groupId));
+
+                if (memberMap != null) {
+                    // 步骤3：获取用户ID
+                    Long userId = chatRecord.getUserId();
+                    // System.out.println("[DEBUG] 步骤3 - 获取用户ID: " + userId);
+
+                    // 步骤4：从memberMap中获取昵称 - 修复了获取逻辑
+                    String nickname = getNicknameFromMemberMap(memberMap, userId);
+                    // System.out.println("[DEBUG] 步骤4 - 从memberMap获取昵称: " + nickname);
+
+                    // 步骤5：如果昵称为null，使用默认值
+                    if (nickname == null) {
+                        nickname = "Unknown" + userId;
+                        // System.out.println("[DEBUG] 步骤5 - 昵称为null，使用默认值: " + nickname);
+                    } else {
+                        // System.out.println("[DEBUG] 步骤5 - 找到昵称: " + nickname);
+                    }
+
+                    // 步骤6：设置昵称到DTO
+                    chatRecordDTO.setNickname(nickname);
+                    // System.out.println("[DEBUG] 步骤6 - 设置昵称为: " + nickname);
+
+                } else {
+                    // 步骤7：memberMap为null的情况
+                    Long userId = chatRecord.getUserId();
+                    // System.out.println("[DEBUG] 步骤7 - memberMap为null，用户ID: " + userId);
+
+                    String nickname = "Unknown" + userId;
+                    chatRecordDTO.setNickname(nickname);
+                    // System.out.println("[DEBUG] 步骤7 - 设置默认昵称: " + nickname);
+                }
+
+            } catch (Exception e) {
+                System.err.println("[ERROR] 设置昵称时发生错误: " + e.getMessage());
+                e.printStackTrace();
+                // 确保有默认值
+                Long userId = chatRecord.getUserId();
+                String defaultNickname = "ErrorUnknown" + userId;
+                chatRecordDTO.setNickname(defaultNickname);
+                // System.out.println("[DEBUG] 异常处理 - 设置默认昵称: " + defaultNickname);
             }
 
             chatRecordDTOs.add(chatRecordDTO);
         }
 
         return chatRecordDTOs;
+    }
+
+    /**
+     * 从memberMap中获取昵称 - 修复了Key类型不匹配的问题
+     */
+    private String getNicknameFromMemberMap(Map<Long, String> memberMap, Long userId) {
+        if (memberMap == null || userId == null) {
+            return null;
+        }
+
+        // 方法1：直接使用Long类型的Key查询
+        String nickname = memberMap.get(userId);
+        if (nickname != null) {
+            return nickname;
+        }
+
+        // 方法2：如果直接查询失败，遍历查找
+        for (Map.Entry<Long, String> entry : memberMap.entrySet()) {
+            if (entry.getKey().equals(userId)) {
+                return entry.getValue();
+            }
+        }
+
+        // 方法3：检查Key的实际类型
+        for (Object key : memberMap.keySet()) {
+            // System.out.println("[DEBUG] Key类型: " + key.getClass() + ", Key值: " + key);
+            if (key.toString().equals(userId.toString())) {
+                return memberMap.get(key);
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -480,7 +549,7 @@ public class OneBotServiceImpl implements OneBotService {
                 Map<String, Object> userStat = new HashMap<>();
                 userStat.put("userId", userId);
                 userStat.put("messageCount", messageCount);
-                userStat.put("nickname", defaultGroupMemberMap.getOrDefault(userId, "Unknown" + userId));
+                userStat.put("nickname", getNicknameFromMemberMap(defaultGroupMemberMap, userId));
                 messageRankingList.add(userStat);
             }
             result.put("messageRanking", messageRankingList);
@@ -493,7 +562,7 @@ public class OneBotServiceImpl implements OneBotService {
                 Map<String, Object> userStat = new HashMap<>();
                 userStat.put("userId", userId);
                 userStat.put("imageCount", imageCount);
-                userStat.put("nickname", defaultGroupMemberMap.getOrDefault(userId, "Unknown" + userId));
+                userStat.put("nickname", getNicknameFromMemberMap(defaultGroupMemberMap, userId));
                 imageRankingList.add(userStat);
             }
             result.put("imageRanking", imageRankingList);
@@ -520,7 +589,7 @@ public class OneBotServiceImpl implements OneBotService {
                 userStat.put("totalMessages", totalMessages);
                 userStat.put("totalImages", totalImages);
                 userStat.put("imageRatio", String.format("%.2f%%", imageRatio * 100));
-                userStat.put("nickname", defaultGroupMemberMap.getOrDefault(userId, "Unknown" + userId));
+                userStat.put("nickname", getNicknameFromMemberMap(defaultGroupMemberMap, userId));
                 ratioRankingList.add(userStat);
             }
             result.put("ratioRanking", ratioRankingList);
@@ -579,7 +648,25 @@ public class OneBotServiceImpl implements OneBotService {
         try {
             Object cachedData = redisUtil.get(cacheKey);
             if (cachedData instanceof Map) {
-                return (Map<Long, String>) cachedData;
+                Map<?, ?> rawMap = (Map<?, ?>) cachedData;
+                // 确保转换后的Map的Key是Long类型
+                Map<Long, String> convertedMap = new HashMap<>();
+                for (Map.Entry<?, ?> entry : rawMap.entrySet()) {
+                    if (entry.getKey() != null && entry.getValue() != null) {
+                        Long key;
+                        if (entry.getKey() instanceof Long) {
+                            key = (Long) entry.getKey();
+                        } else if (entry.getKey() instanceof Integer) {
+                            key = ((Integer) entry.getKey()).longValue();
+                        } else if (entry.getKey() instanceof String) {
+                            key = Long.parseLong((String) entry.getKey());
+                        } else {
+                            continue; // 跳过不支持的Key类型
+                        }
+                        convertedMap.put(key, entry.getValue().toString());
+                    }
+                }
+                return convertedMap;
             }
         } catch (Exception e) {
             System.err.println("Error getting group member map from cache for key " + cacheKey + ": " + e.getMessage());
@@ -606,7 +693,7 @@ public class OneBotServiceImpl implements OneBotService {
     }
 
     /**
-     * 从NapCat服务器获取群组成员映射
+     * 从NapCat服务器获取群组成员映射 - 修复了Key类型问题
      */
     private Map<Long, String> fetchGroupMemberMapFromNapCat(Long groupId) {
         try {
@@ -625,6 +712,7 @@ public class OneBotServiceImpl implements OneBotService {
             JsonNode dataNode = groupMemberListNode.path("data");
 
             for (JsonNode memberNode : dataNode) {
+                // 确保使用Long类型的Key
                 Long userId = memberNode.path("user_id").asLong();
                 // 优先使用群名片，如果没有则使用昵称
                 String card = memberNode.path("card").asText();
@@ -632,8 +720,15 @@ public class OneBotServiceImpl implements OneBotService {
                 String displayName = card.isEmpty() ? nickname : card;
 
                 if (!displayName.isEmpty()) {
-                    memberMap.put(userId, displayName);
+                    // 确保使用Long.valueOf()而不是Long.parseLong()来保持一致
+                    memberMap.put(Long.valueOf(userId), displayName);
                 }
+            }
+
+            // System.out.println("[DEBUG] 从NapCat获取的群组成员映射: " + memberMap);
+            if (!memberMap.isEmpty()) {
+                // System.out.println("[DEBUG] 第一个Key的类型: " + memberMap.keySet().iterator().next().getClass());
+                // System.out.println("[DEBUG] 第一个Key的值: " + memberMap.keySet().iterator().next());
             }
 
             return memberMap;
@@ -761,7 +856,7 @@ public class OneBotServiceImpl implements OneBotService {
         try {
             Long groupId = Long.parseLong(phantomGroupId);
             Map<Long, String> memberMap = getGroupMemberMap(groupId);
-            return memberMap.getOrDefault(userId, "Unknown" + userId);
+            return getNicknameFromMemberMap(memberMap, userId);
         } catch (Exception e) {
             System.err.println("Error getting user nickname: " + e.getMessage());
             return "Unknown" + userId;
