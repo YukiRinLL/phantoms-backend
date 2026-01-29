@@ -14,17 +14,18 @@ import java.util.concurrent.ExecutionException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    private final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
-        log.error("Runtime exception occurred", ex);
+        logger.error("Runtime exception occurred", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred: " + ex.getMessage());
     }
 
 
     @ExceptionHandler(ExecutionException.class)
     public ResponseEntity<ApiResponse<String>> handleExecutionException(ExecutionException ex, WebRequest request) {
+        logger.error("Execution exception occurred", ex);
         ApiResponse<String> response = new ApiResponse<>();
         response.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.setMessage("Failed to execute request: " + ex.getMessage());
@@ -33,6 +34,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InterruptedException.class)
     public ResponseEntity<ApiResponse<String>> handleInterruptedException(InterruptedException ex, WebRequest request) {
+        logger.error("InterruptedException occurred", ex);
         ApiResponse<String> response = new ApiResponse<>();
         response.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.setMessage("Request was interrupted: " + ex.getMessage());
@@ -41,6 +43,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<String>> handleGlobalException(Exception ex, WebRequest request) {
+        logger.error("Global exception occurred", ex);
         ApiResponse<String> response = new ApiResponse<>();
         response.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.setMessage("An unexpected error occurred: " + ex.getMessage());

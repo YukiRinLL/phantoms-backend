@@ -1,15 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} [%M:%L] - %msg%n</Property>
+        <Property name="LOG_FILE_PATH">logs</Property>
+    </Properties>
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+            <PatternLayout pattern="${LOG_PATTERN}" />
         </Console>
+        
+        <!-- 错误日志文件 -->
+        <RollingFile name="errorFile" fileName="${LOG_FILE_PATH}/error.log" 
+                     filePattern="${LOG_FILE_PATH}/error-%d{yyyy-MM-dd}-%i.log.gz">
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10" />
+        </RollingFile>
+        
+        <!-- 信息日志文件 -->
+        <RollingFile name="infoFile" fileName="${LOG_FILE_PATH}/info.log" 
+                     filePattern="${LOG_FILE_PATH}/info-%d{yyyy-MM-dd}-%i.log.gz">
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY" />
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10" />
+        </RollingFile>
+        
+        <!-- 调试日志文件 -->
+        <RollingFile name="debugFile" fileName="${LOG_FILE_PATH}/debug.log" 
+                     filePattern="${LOG_FILE_PATH}/debug-%d{yyyy-MM-dd}-%i.log.gz">
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY" />
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10" />
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="INFO">
             <AppenderRef ref="console" />
+            <AppenderRef ref="errorFile" />
+            <AppenderRef ref="infoFile" />
         </Root>
-        <Logger name="org.springframework" level="INFO" />
-        <Logger name="springfox" level="INFO" />
+        <Logger name="org.springframework" level="WARN" />
+        <Logger name="springfox" level="WARN" />
+        <Logger name="com.phantoms.phantomsbackend" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="errorFile" />
+            <AppenderRef ref="debugFile" />
+        </Logger>
     </Loggers>
 </Configuration>
