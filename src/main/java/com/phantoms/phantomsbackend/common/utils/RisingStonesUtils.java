@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 @Component
 public class RisingStonesUtils {
@@ -113,11 +114,11 @@ public class RisingStonesUtils {
 
         try (Response response = tempClient.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for getting guild info", response.code());
+                logger.error("Unexpected code {} for getting guild info", response.code());
                 throw new IOException("Unexpected code " + response.code());
             }
             String responseBody = response.body().string();
-            logger.log(Level.FINE, "Guild info response: {0}", responseBody);
+            logger.debug("Guild info response: {}", responseBody);
             return JSONObject.parseObject(responseBody);
         }
     }
@@ -125,7 +126,7 @@ public class RisingStonesUtils {
     public static JSONObject getGuildMember(String guildId) throws IOException {
         String cookies = getSystemConfigService().getLoginCookies();
         if (cookies == null || cookies.isEmpty()) {
-            logger.log(Level.SEVERE, "未找到登录cookies，请先登录");
+            logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
         }
 
@@ -154,11 +155,11 @@ public class RisingStonesUtils {
 
         try (Response response = tempClient.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for getting guild member", response.code());
+                logger.error("Unexpected code {} for getting guild member", response.code());
                 throw new IOException("Unexpected code " + response.code());
             }
             String responseBody = response.body().string();
-            logger.log(Level.FINE, "Guild member response: {0}", responseBody);
+            logger.debug("Guild member response: {}", responseBody);
             return JSONObject.parseObject(responseBody);
         }
     }
@@ -178,7 +179,7 @@ public class RisingStonesUtils {
     public static JSONObject getGuildMemberDynamic(String guildId, int page, int limit) throws IOException {
         String cookies = getSystemConfigService().getLoginCookies();
         if (cookies == null || cookies.isEmpty()) {
-            logger.log(Level.SEVERE, "未找到登录cookies，请先登录");
+            logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
         }
 
@@ -209,11 +210,11 @@ public class RisingStonesUtils {
 
         try (Response response = tempClient.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for getting guild member dynamic", response.code());
+                logger.error("Unexpected code {} for getting guild member dynamic", response.code());
                 throw new IOException("Unexpected code " + response.code());
             }
             String responseBody = response.body().string();
-            logger.log(Level.FINE, "Guild member dynamic response: {0}", responseBody);
+            logger.debug("Guild member dynamic response: {}", responseBody);
             return JSONObject.parseObject(responseBody);
         }
     }
@@ -251,7 +252,7 @@ public class RisingStonesUtils {
                 .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            logger.log(Level.INFO, "Response code for getCharacterBindInfo: {0}", response.code());
+            logger.info("Response code for getCharacterBindInfo: {}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -301,7 +302,7 @@ public class RisingStonesUtils {
                 .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            logger.log(Level.INFO, "Response code for doSignIn: {0}", response.code());
+            logger.info("Response code for doSignIn: {}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -346,7 +347,7 @@ public class RisingStonesUtils {
                 .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            logger.log(Level.INFO, "Response code for getSignLog: {0}", response.code());
+            logger.info("Response code for getSignLog: {}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -391,7 +392,7 @@ public class RisingStonesUtils {
                 .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            logger.log(Level.INFO, "Response code for getSignInRewardList: {0}", response.code());
+            logger.info("Response code for getSignInRewardList: {}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -443,7 +444,7 @@ public class RisingStonesUtils {
                 .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            logger.log(Level.INFO, "Response code for getSignInReward: {0}", response.code());
+            logger.info("Response code for getSignInReward: {}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -499,7 +500,7 @@ public class RisingStonesUtils {
                 .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            logger.log(Level.INFO, "Response code for createPostComment: {0}", response.code());
+            logger.info("Response code for createPostComment: {}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -553,7 +554,7 @@ public class RisingStonesUtils {
                 .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            logger.log(Level.INFO, "Response code for createDynamic: {0}", response.code());
+            logger.info("Response code for createDynamic: {}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }
@@ -597,7 +598,7 @@ public class RisingStonesUtils {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            logger.log(Level.INFO, "Response code for deleteDynamic: {0}", response.code());
+            logger.info("Response code for deleteDynamic: {}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }

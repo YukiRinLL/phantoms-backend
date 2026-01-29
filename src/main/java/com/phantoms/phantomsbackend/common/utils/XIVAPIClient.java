@@ -334,19 +334,19 @@ public class XIVAPIClient {
     private <T> T parseResponse(HttpResponse<String> response, TypeReference<T> typeReference) {
         if (response.statusCode() == 200) {
             try {
-                log.info("Response body: {}", response.body());
+                logger.info("Response body: {}", response.body());
                 return objectMapper.readValue(response.body(), typeReference);
             } catch (IOException e) {
-                log.error("Failed to parse response: {}", response.body(), e);
+                logger.error("Failed to parse response: {}", response.body(), e);
                 throw new RuntimeException("Failed to parse response", e);
             }
         } else {
             try {
                 ApiResponse<?> errorResponse = objectMapper.readValue(response.body(), ApiResponse.class);
-                log.error("API request failed with status code: {} and body: {}", response.statusCode(), response.body());
+                logger.error("API request failed with status code: {} and body: {}", response.statusCode(), response.body());
                 throw new RuntimeException("API request failed: " + errorResponse.getMessage());
             } catch (IOException e) {
-                log.error("API request failed with status code: {} and body: {}", response.statusCode(), response.body());
+                logger.error("API request failed with status code: {} and body: {}", response.statusCode(), response.body());
                 throw new RuntimeException("API request failed with status code: " + response.statusCode());
             }
         }
