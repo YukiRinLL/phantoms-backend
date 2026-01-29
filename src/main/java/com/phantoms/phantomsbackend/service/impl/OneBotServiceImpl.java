@@ -26,9 +26,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class OneBotServiceImpl implements OneBotService {
+
+    private static final Logger logger = LoggerFactory.getLogger(OneBotServiceImpl.class);
 
     @Autowired
     private PrimaryChatRecordRepository chatRecordRepository;
@@ -219,7 +223,7 @@ public class OneBotServiceImpl implements OneBotService {
                 // System.out.println("机器人戳了用户: " + targetId);
             }
         } catch (Exception e) {
-            System.err.println("处理戳一戳回复失败: " + e.getMessage());
+            logger.error("处理戳一戳回复失败: {}", e.getMessage(), e);
         }
     }
 
@@ -357,7 +361,7 @@ public class OneBotServiceImpl implements OneBotService {
                 }
 
             } catch (Exception e) {
-                System.err.println("[ERROR] 设置昵称时发生错误: " + e.getMessage());
+                logger.error("[ERROR] 设置昵称时发生错误: {}", e.getMessage(), e);
                 e.printStackTrace();
                 // 确保有默认值
                 Long userId = chatRecord.getUserId();
@@ -595,7 +599,7 @@ public class OneBotServiceImpl implements OneBotService {
             result.put("ratioRanking", ratioRankingList);
 
         } catch (Exception e) {
-            System.err.println("Error generating monthly stats: " + e.getMessage());
+            logger.error("Error generating monthly stats: {}", e.getMessage(), e);
             throw new RuntimeException("生成月度统计失败", e);
         }
 
@@ -635,7 +639,7 @@ public class OneBotServiceImpl implements OneBotService {
             return new HashMap<>();
 
         } catch (Exception e) {
-            System.err.println("Error getting group member map for group " + groupId + ": " + e.getMessage());
+            logger.error("Error getting group member map for group {}: {}", groupId, e.getMessage(), e);
             return new HashMap<>();
         }
     }
@@ -669,7 +673,7 @@ public class OneBotServiceImpl implements OneBotService {
                 return convertedMap;
             }
         } catch (Exception e) {
-            System.err.println("Error getting group member map from cache for key " + cacheKey + ": " + e.getMessage());
+            logger.error("Error getting group member map from cache for key {}: {}", cacheKey, e.getMessage(), e);
         }
         return null;
     }
@@ -681,7 +685,7 @@ public class OneBotServiceImpl implements OneBotService {
         try {
             redisUtil.setWithExpire(cacheKey, data, expireTime, timeUnit);
         } catch (Exception e) {
-            System.err.println("Error saving data to cache for key " + cacheKey + ": " + e.getMessage());
+            logger.error("Error saving data to cache for key {}: {}", cacheKey, e.getMessage(), e);
         }
     }
 
@@ -704,7 +708,7 @@ public class OneBotServiceImpl implements OneBotService {
             try {
                 groupMemberListNode = objectMapper.readTree(groupMemberListJson);
             } catch (Exception e) {
-                System.err.println("Error parsing group member list JSON for group " + groupId + ": " + e.getMessage());
+                logger.error("Error parsing group member list JSON for group {}: {}", groupId, e.getMessage(), e);
                 return new HashMap<>();
             }
 
@@ -733,7 +737,7 @@ public class OneBotServiceImpl implements OneBotService {
 
             return memberMap;
         } catch (Exception e) {
-            System.err.println("Error fetching group member map from NapCat for group " + groupId + ": " + e.getMessage());
+            logger.error("Error fetching group member map from NapCat for group {}: {}", groupId, e.getMessage(), e);
             return new HashMap<>();
         }
     }
@@ -807,7 +811,7 @@ public class OneBotServiceImpl implements OneBotService {
             result.put("dailyStats", dailyStatsList);
 
         } catch (Exception e) {
-            System.err.println("Error generating user message stats: " + e.getMessage());
+            logger.error("Error generating user message stats: {}", e.getMessage(), e);
             throw new RuntimeException("生成用户消息统计失败: " + e.getMessage(), e);
         }
 
@@ -844,7 +848,7 @@ public class OneBotServiceImpl implements OneBotService {
             return null;
 
         } catch (Exception e) {
-            System.err.println("Error finding user ID by search: " + e.getMessage());
+            logger.error("Error finding user ID by search: {}", e.getMessage(), e);
             return null;
         }
     }
@@ -858,7 +862,7 @@ public class OneBotServiceImpl implements OneBotService {
             Map<Long, String> memberMap = getGroupMemberMap(groupId);
             return getNicknameFromMemberMap(memberMap, userId);
         } catch (Exception e) {
-            System.err.println("Error getting user nickname: " + e.getMessage());
+            logger.error("Error getting user nickname: {}", e.getMessage(), e);
             return "Unknown" + userId;
         }
     }

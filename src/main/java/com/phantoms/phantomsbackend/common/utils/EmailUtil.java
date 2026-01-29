@@ -10,11 +10,15 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 @Component
 public class EmailUtil {
+
+    private static final Logger logger = LoggerFactory.getLogger(EmailUtil.class);
 
     @Autowired
     private JavaMailSender mailSender;
@@ -42,7 +46,7 @@ public class EmailUtil {
         message.setSubject(subject);
         message.setText(text);
         mailSender.send(message);
-        System.out.println("Simple email sent successfully");
+        logger.info("Simple email sent successfully");
     }
 
     /**
@@ -61,7 +65,7 @@ public class EmailUtil {
             helper.setSubject(subject);
             helper.setText(html, true); // true 表示内容为 HTML
             mailSender.send(message);
-            System.out.println("HTML email sent successfully");
+            logger.info("HTML email sent successfully");
         } catch (MessagingException e) {
             e.printStackTrace();
         }
@@ -80,7 +84,7 @@ public class EmailUtil {
             String htmlContent = generateHtmlContent("email/defaultEmailTemplate", templateVariables);
             helper.setText(htmlContent, true); // true 表示内容为 HTML
             mailSender.send(message);
-            System.out.println("HTML email sent successfully");
+            logger.info("HTML email sent successfully");
         } catch (MessagingException e) {
             e.printStackTrace();
         }
@@ -99,7 +103,7 @@ public class EmailUtil {
             String htmlContent = generateHtmlContent("email/welcomeEmailTemplate", templateVariables);
             helper.setText(htmlContent, true); // true 表示内容为 HTML
             mailSender.send(message);
-            System.out.println("HTML email sent successfully");
+            logger.info("HTML email sent successfully");
         } catch (MessagingException e) {
             e.printStackTrace();
         }
@@ -132,7 +136,7 @@ public class EmailUtil {
             String htmlContent = templateEngine.process("email/defaultEmailTemplate", context);
             helper.setText(htmlContent, true);
             mailSender.send(message);
-            System.out.println("DaoYu Key notification email sent successfully");
+            logger.info("DaoYu Key notification email sent successfully");
         } catch (MessagingException e) {
             e.printStackTrace();
         }
@@ -177,7 +181,7 @@ public class EmailUtil {
             String htmlContent = templateEngine.process("email/defaultEmailTemplate", context);
             helper.setText(htmlContent, true);
             mailSender.send(messageObj);
-            System.out.println("DaoYu Key status email sent successfully");
+            logger.info("DaoYu Key status email sent successfully");
         } catch (MessagingException e) {
             e.printStackTrace();
         }

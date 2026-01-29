@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 @Component
 public class XIVAPIClient {
-    private final Logger log = LoggerFactory.getLogger(XIVAPIClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(XIVAPIClient.class);
 
     private final String baseUrl;
     private final HttpClient httpClient;
@@ -59,8 +59,16 @@ public class XIVAPIClient {
                 .GET()
                 .build();
 
+        logger.debug("Requesting XIVAPI asset: path={}, format={}, version={}", path, format, version);
         return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofByteArray())
-                .thenApply(HttpResponse::body);
+                .thenApply(response -> {
+                    logger.debug("XIVAPI asset request completed with status: {}", response.statusCode());
+                    return response.body();
+                })
+                .exceptionally(ex -> {
+                    logger.error("Error requesting XIVAPI asset: path={}, format={}", path, format, ex);
+                    return null;
+                });
     }
 
     /**

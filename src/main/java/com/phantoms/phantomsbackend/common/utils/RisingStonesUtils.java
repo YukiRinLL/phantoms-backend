@@ -3,19 +3,19 @@ package com.phantoms.phantomsbackend.common.utils;
 import okhttp3.*;
 import com.alibaba.fastjson.JSONObject;
 import com.phantoms.phantomsbackend.service.SystemConfigService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Component
 public class RisingStonesUtils {
 
-    private static final Logger logger = Logger.getLogger(RisingStonesUtils.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(RisingStonesUtils.class);
     private static final String BASE_URL = "https://apiff14risingstones.web.sdo.com/api/home/";
     private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36";
     private static final String REFERER = "https://ff14risingstones.web.sdo.com/";
@@ -43,7 +43,7 @@ public class RisingStonesUtils {
     public static JSONObject getUserInfo(String uuid) throws IOException {
         String cookies = getSystemConfigService().getLoginCookies();
         if (cookies == null || cookies.isEmpty()) {
-            logger.log(Level.SEVERE, "未找到登录cookies，请先登录");
+            logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
         }
         
@@ -72,11 +72,11 @@ public class RisingStonesUtils {
 
         try (Response response = tempClient.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for getting user info", response.code());
+                logger.error("Unexpected code {} for getting user info", response.code());
                 throw new IOException("Unexpected code " + response.code());
             }
             String responseBody = response.body().string();
-            logger.log(Level.FINE, "User info response: {0}", responseBody);
+            logger.debug("User info response: {}", responseBody);
             return JSONObject.parseObject(responseBody);
         }
     }
@@ -84,7 +84,7 @@ public class RisingStonesUtils {
     public static JSONObject getGuildInfo(String guildId) throws IOException {
         String cookies = getSystemConfigService().getLoginCookies();
         if (cookies == null || cookies.isEmpty()) {
-            logger.log(Level.SEVERE, "未找到登录cookies，请先登录");
+            logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
         }
 

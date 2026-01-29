@@ -2,6 +2,8 @@ package com.phantoms.phantomsbackend.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,8 @@ import java.util.Map;
 
 @Component
 public class NapCatQQUtil {
+
+    private static final Logger logger = LoggerFactory.getLogger(NapCatQQUtil.class);
 
     @Value("${napcat.http-server-url}")
     private String httpServerUrl;
@@ -38,11 +42,18 @@ public class NapCatQQUtil {
             .post(body)
             .build();
 
+        logger.debug("Sending request to NapCat: endpoint={}, params={}", endpoint, params);
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
+                logger.error("NapCat request failed: endpoint={}, code={}, message={}", endpoint, response.code(), response.message());
                 throw new IOException("Unexpected code " + response);
             }
-            return response.body().string();
+            String responseBody = response.body().string();
+            logger.debug("NapCat request successful: endpoint={}, response={}", endpoint, responseBody);
+            return responseBody;
+        } catch (IOException e) {
+            logger.error("Error sending request to NapCat: endpoint={}, error={}", endpoint, e.getMessage(), e);
+            throw e;
         }
     }
 

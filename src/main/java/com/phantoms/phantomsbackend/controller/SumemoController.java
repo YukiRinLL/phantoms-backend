@@ -14,8 +14,7 @@
 //import java.io.IOException;
 //import java.util.*;
 //import java.util.concurrent.*;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
+
 //
 //@RestController
 //@RequestMapping("/api/sumemo")
@@ -23,7 +22,7 @@
 //    @Autowired
 //    private RisingStonesService risingStonesService;
 //
-//    private static final Logger logger = Logger.getLogger(SumemoController.class.getName());
+
 //    private static final ExecutorService executorService = Executors.newFixedThreadPool(10);
 //
 //    /**

@@ -9,6 +9,8 @@ import com.phantoms.phantomsbackend.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +19,8 @@ import java.util.Optional;
 
 @Service
 public class EmailServiceImpl implements EmailService {
+
+    private static final Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     @Autowired
     private EmailUtil emailUtil;
@@ -35,9 +39,9 @@ public class EmailServiceImpl implements EmailService {
             String email = user.getEmail();
             if (email != null && !email.trim().isEmpty()) {
 //                emailUtil.sendSimpleEmail(email, subject, text);//TODO 测试，正常需要打开
-                System.out.println("Email sent to: " + email);
+                logger.info("Email sent to: {}", email);
             } else {
-                System.out.println("Skipping user with ID " + user.getId() + " due to missing email address.");
+                logger.warn("Skipping user with ID {} due to missing email address.", user.getId());
             }
         }
     }
@@ -98,7 +102,7 @@ public class EmailServiceImpl implements EmailService {
 
             emailUtil.sendWelcomeHtmlEmail(authUser.getEmail(), subject, templateVariables);
         } else {
-            System.out.println("User not found for email: " + email);
+            logger.warn("User not found for email: {}", email);
         }
     }
 }

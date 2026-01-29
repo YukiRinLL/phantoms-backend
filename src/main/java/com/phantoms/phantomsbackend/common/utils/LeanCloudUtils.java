@@ -6,6 +6,8 @@ import cn.leancloud.LCObject;
 import cn.leancloud.LCQuery;
 import cn.leancloud.types.LCNull;
 import io.reactivex.Observable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -15,6 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class LeanCloudUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(LeanCloudUtils.class);
 
     // Store key-value pairs with ACL
     public static boolean storeKV(String key, String value, String userId) {
@@ -32,7 +36,7 @@ public class LeanCloudUtils {
             observable.blockingFirst();
             return true;
         } catch (Exception e) {
-            System.out.println("Storage failed: " + e.getMessage());
+            logger.error("Storage failed: {}", e.getMessage(), e);
             return false;
         }
     }
@@ -57,7 +61,7 @@ public class LeanCloudUtils {
                 return null;
             }
         } catch (Exception e) {
-            System.out.println("Retrieval failed: " + e.getMessage());
+            logger.error("Retrieval failed: {}", e.getMessage(), e);
             return null;
         }
     }
@@ -85,7 +89,7 @@ public class LeanCloudUtils {
                 return false;
             }
         } catch (Exception e) {
-            System.out.println("Update failed: " + e.getMessage());
+            logger.error("Update failed: {}", e.getMessage(), e);
             return false;
         }
     }
@@ -109,11 +113,11 @@ public class LeanCloudUtils {
 //                    return false;
 //                }
             } else {
-                System.out.println("No record found for key: " + key);
+                logger.warn("No record found for key: {}", key);
                 return false;
             }
         } catch (Exception e) {
-            System.out.println("Deletion failed: " + e.getMessage());
+            logger.error("Deletion failed: {}", e.getMessage(), e);
             return false;
         }
     }
@@ -135,7 +139,7 @@ public class LeanCloudUtils {
                 if (isLeanCloudSupportedType(value)) {
                     lcObject.put(key.toString(), value);
                 } else {
-                    System.out.println("Unsupported field type: " + key + " with value: " + value);
+                    logger.warn("Unsupported field type: {} with value: {}", key, value);
                 }
             }
         } else {
@@ -153,11 +157,11 @@ public class LeanCloudUtils {
                             lcObject.put(field.getName(), value);
                         } else {
                             lcObject.put(field.getName(), value.toString());
-                            System.out.println("[cast to String]Unsupported field type: " + field.getName() + " with value: " + value);
+                            logger.warn("[cast to String]Unsupported field type: {} with value: {}", field.getName(), value);
                         }
                     }
                 } catch (IllegalAccessException e) {
-                    System.out.println("Failed to access field: " + field.getName());
+                    logger.error("Failed to access field: {}", field.getName(), e);
                     return false;
                 }
             }

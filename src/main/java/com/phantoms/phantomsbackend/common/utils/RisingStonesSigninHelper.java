@@ -15,8 +15,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.phantoms.phantomsbackend.service.SystemConfigService;
@@ -29,7 +29,7 @@ import com.google.zxing.common.HybridBinarizer;
 @Component
 public class RisingStonesSigninHelper {
 
-    private static final Logger logger = Logger.getLogger(RisingStonesSigninHelper.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(RisingStonesSigninHelper.class);
     private static final String BASE_URL = "https://apiff14risingstones.web.sdo.com/api/home/";
     private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36";
     private static final String REFERER = "https://ff14risingstones.web.sdo.com/";
@@ -276,7 +276,7 @@ public class RisingStonesSigninHelper {
             .build();
 
         try (Response response = tempClient.newCall(request).execute()) {
-            logger.log(Level.INFO, "Response code for checkLoginStatus: {0}", response.code());
+            logger.info("Response code for checkLoginStatus: {}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
     }

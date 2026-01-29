@@ -9,13 +9,13 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class SumemoUtils {
 
-    private static final Logger logger = Logger.getLogger(SumemoUtils.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(SumemoUtils.class);
     private static final String BASE_URL = "https://api.sumemo.dev/";
     private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36";
 
@@ -48,11 +48,11 @@ public class SumemoUtils {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for getting player best duty", response.code());
+                logger.error("Unexpected code {} for getting player best duty", response.code());
                 throw new IOException("Unexpected code " + response.code());
             }
             String responseBody = response.body().string();
-            logger.log(Level.FINE, "Player best duty response: {0}", responseBody);
+            logger.debug("Player best duty response: {}", responseBody);
             return JSONObject.parseObject(responseBody);
         }
     }
@@ -78,11 +78,11 @@ public class SumemoUtils {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for getting player latest duty", response.code());
+                logger.error("Unexpected code {} for getting player latest duty", response.code());
                 throw new IOException("Unexpected code " + response.code());
             }
             String responseBody = response.body().string();
-            logger.log(Level.FINE, "Player latest duty response: {0}", responseBody);
+            logger.debug("Player latest duty response: {}", responseBody);
             return JSONArray.parseArray(responseBody);
         }
     }
@@ -103,11 +103,11 @@ public class SumemoUtils {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for getting duty info", response.code());
+                logger.error("Unexpected code {} for getting duty info", response.code());
                 throw new IOException("Unexpected code " + response.code());
             }
             String responseBody = response.body().string();
-            logger.log(Level.FINE, "Duty info response: {0}", responseBody);
+            logger.debug("Duty info response: {}", responseBody);
             return JSONObject.parseObject(responseBody);
         }
     }
@@ -128,7 +128,7 @@ public class SumemoUtils {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                logger.log(Level.SEVERE, "Unexpected code {0} for getting duty name", response.code());
+                logger.error("Unexpected code {} for getting duty name", response.code());
                 throw new IOException("Unexpected code " + response.code());
             }
             String responseBody = response.body().string();

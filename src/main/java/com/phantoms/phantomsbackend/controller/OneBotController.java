@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -22,6 +24,8 @@ import java.util.Map;
 
 @RestController
 public class OneBotController {
+
+    private static final Logger logger = LoggerFactory.getLogger(OneBotController.class);
 
     @Value("${napcat.default-group-id}")
     private String defaultGroupId;
@@ -42,10 +46,8 @@ public class OneBotController {
         String noticeType = (String) requestBody.get("notice_type");
         String subType = (String) requestBody.get("sub_type");
 
-        System.out.println("Received request - post_type: " + postType +
-            ", notice_type: " + noticeType +
-            ", sub_type: " + subType);
-        System.out.println("Full request: " + requestBody);
+        logger.info("Received request - post_type: {}, notice_type: {}, sub_type: {}", postType, noticeType, subType);
+        logger.debug("Full request: {}", requestBody);
 
         try {
             // 调用服务层处理请求
@@ -69,7 +71,7 @@ public class OneBotController {
             return ResponseEntity.ok(jsonResponse.toString());
         } catch (Exception e) {
             // 记录错误日志
-            System.err.println("Error processing request: " + e.getMessage());
+            logger.error("Error processing request: {}", e.getMessage(), e);
             e.printStackTrace();
 
             // 使用 Jackson 构建 JSON 错误响应
@@ -92,7 +94,7 @@ public class OneBotController {
             return ResponseEntity.ok(latestMessages);
         } catch (Exception e) {
             // 记录错误日志
-            System.err.println("Error fetching latest messages: " + e.getMessage());
+            logger.error("Error fetching latest messages: {}", e.getMessage(), e);
             // 返回错误响应
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -108,7 +110,7 @@ public class OneBotController {
             return ResponseEntity.ok(latestMessages);
         } catch (Exception e) {
             // 记录错误日志
-            System.err.println("Error fetching latest messages: " + e.getMessage());
+            logger.error("Error fetching latest messages: {}", e.getMessage(), e);
             // 返回错误响应
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -126,7 +128,7 @@ public class OneBotController {
             Map<String, Object> systemInfo = (Map<String, Object>) requestBody.get("systemInfo");
 
             // Log system information for investigation purposes
-            System.out.println("System Information: " + systemInfo);
+            logger.info("System Information: {}", systemInfo);
 
             // Ensure systemInfo is not null
             if (systemInfo == null) {
@@ -147,7 +149,7 @@ public class OneBotController {
             return ResponseEntity.ok("{\"status\":\"ok\"}");
         } catch (Exception e) {
             // Log error
-            System.err.println("Error sending message to group: " + e.getMessage());
+            logger.error("Error sending message to group: {}", e.getMessage(), e);
 
             // Return error response
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"status\":\"failed\",\"error\":\"" + e.getMessage() + "\"}");
@@ -171,7 +173,7 @@ public class OneBotController {
             return ResponseEntity.ok(monthlyStats);
         } catch (Exception e) {
             // 记录错误日志
-            System.err.println("Error fetching monthly stats: " + e.getMessage());
+            logger.error("Error fetching monthly stats: {}", e.getMessage(), e);
 
             // 返回错误响应
             Map<String, Object> errorResponse = new HashMap<>();
@@ -193,7 +195,7 @@ public class OneBotController {
             return ResponseEntity.ok(userStats);
         } catch (Exception e) {
             // 记录错误日志
-            System.err.println("Error fetching user message stats: " + e.getMessage());
+            logger.error("Error fetching user message stats: {}", e.getMessage(), e);
 
             // 返回错误响应
             Map<String, Object> errorResponse = new HashMap<>();
