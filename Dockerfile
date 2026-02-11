@@ -13,6 +13,9 @@ RUN mvn clean package -DskipTests -Dmaven.gitcommitid.skip=true
 #FROM openjdk:23-jdk-bookworm
 FROM amazoncorretto:21-alpine-jdk
 
+# 安装字体和字体配置工具
+RUN apk --no-cache add \n    fontconfig \n    ttf-dejavu \n    ttf-droid \n    ttf-freefont \n    ttf-liberation \n    font-noto-cjk \n    && fc-cache -f -v
+
 # 从构建阶段复制 jar 文件
 COPY --from=builder /app/target/phantoms-backend-1.0-SNAPSHOT.jar /app/phantoms-backend.jar
 
