@@ -7,9 +7,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update Dockerfile add font support">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update napcat http-server-url">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -296,22 +295,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00212" summary="sendBriefHouseNotification">
-      <option name="closed" value="true" />
-      <created>1762225643990</created>
-      <option name="number" value="00212" />
-      <option name="presentableId" value="LOCAL-00212" />
-      <option name="project" value="LOCAL" />
-      <updated>1762225643990</updated>
-    </task>
-    <task id="LOCAL-00213" summary="update sendBriefHouseNotification func &amp; schedule time">
-      <option name="closed" value="true" />
-      <created>1762395799277</created>
-      <option name="number" value="00213" />
-      <option name="presentableId" value="LOCAL-00213" />
-      <option name="project" value="LOCAL" />
-      <updated>1762395799277</updated>
     </task>
     <task id="LOCAL-00214" summary="update sendBriefHouseNotification func &amp; schedule time">
       <option name="closed" value="true" />
@@ -689,7 +672,23 @@
       <option name="project" value="LOCAL" />
       <updated>1770779678891</updated>
     </task>
-    <option name="localTasksCounter" value="261" />
+    <task id="LOCAL-00261" summary="update napcat http-server-url">
+      <option name="closed" value="true" />
+      <created>1771563298946</created>
+      <option name="number" value="00261" />
+      <option name="presentableId" value="LOCAL-00261" />
+      <option name="project" value="LOCAL" />
+      <updated>1771563298947</updated>
+    </task>
+    <task id="LOCAL-00262" summary="update napcat http-server-url">
+      <option name="closed" value="true" />
+      <created>1771564437158</created>
+      <option name="number" value="00262" />
+      <option name="presentableId" value="LOCAL-00262" />
+      <option name="project" value="LOCAL" />
+      <updated>1771564437158</updated>
+    </task>
+    <option name="localTasksCounter" value="263" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -734,7 +733,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update QQ chat monthly-stats functions" />
     <MESSAGE value="add recruitments api" />
     <MESSAGE value="fix bug RecruitmentRepository insertIgnore func" />
     <MESSAGE value="turn off GuildMemberReminderScheduler" />
@@ -759,7 +757,8 @@
     <MESSAGE value="fix OneBotService setNickname error" />
     <MESSAGE value="update logger to use log4j2" />
     <MESSAGE value="update Dockerfile add font support" />
-    <option name="LAST_COMMIT_MESSAGE" value="update Dockerfile add font support" />
+    <MESSAGE value="update napcat http-server-url" />
+    <option name="LAST_COMMIT_MESSAGE" value="update napcat http-server-url" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
