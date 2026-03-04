@@ -39,7 +39,7 @@ public class GuildMemberReminderScheduler {
     private String phantomGroupId;
 
     // UTC+8每天8:00执行
-//    @Scheduled(cron = "0 0 0 * * ?") //todo 石之家现在屏蔽了别人房屋信息，通过当前登录daoyukey不能获取到房屋信息
+    @Scheduled(cron = "0 0 0 * * ?")
 //    @Scheduled(fixedRate = 60000) // 每分钟执行一次
     public void remindInactiveMembers() {
         try {
@@ -151,24 +151,15 @@ public class GuildMemberReminderScheduler {
                         String link = activity.getString("OutLink");
                         String publishDate = activity.getString("PublishDate");
 
-                        // 1. 先发送活动图片
-//                        if (imageUrl != null && !imageUrl.isEmpty()) {
-//                            try {
-//                                // 使用图片发送方法
-//                                napCatQQUtil.sendGroupImage(phantomGroupId, imageUrl); //todo 这里发送图片没有生效，似乎是需要先上传图片到QQ图片服务器
-//                                Thread.sleep(500); // 短暂延迟避免消息发送过快
-//                            } catch (Exception e) {
-//                                System.err.println("发送图片失败: " + imageUrl);
-//                                e.printStackTrace();
-//                            }
-//                        }
-
-                        // 2. 发送活动详细信息
+                        // 发送活动详细信息
                         StringBuilder message = new StringBuilder();
+                        if (imageUrl != null && !imageUrl.isEmpty()) {
+                            message.append("[CQ:image,file=").append(imageUrl).append("]");
+                        }
                         message.append(title).append("\n");
-                        message.append("📅 ").append(publishDate).append("\n");
-                        message.append("📝 ").append(summary).append("\n");
-                        message.append("🔗 ").append(link);
+                        message.append("📅").append(publishDate).append("\n");
+                        message.append("📝").append(summary).append("\n");
+                        message.append("🔗").append(link);
 
                         // 发送活动信息
                         oneBotService.sendGroupMessage(message.toString(), phantomGroupId);

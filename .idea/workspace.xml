@@ -7,10 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update news functions">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="switch on news functions">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/FF14GlobalNewsScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/FF14GlobalNewsScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/FF14NewsScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/FF14NewsScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/GuildMemberReminderScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/GuildMemberReminderScheduler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -297,14 +296,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00217" summary="update note">
-      <option name="closed" value="true" />
-      <created>1763034014915</created>
-      <option name="number" value="00217" />
-      <option name="presentableId" value="LOCAL-00217" />
-      <option name="project" value="LOCAL" />
-      <updated>1763034014915</updated>
     </task>
     <task id="LOCAL-00218" summary="add DaoYuKey Monitor">
       <option name="closed" value="true" />
@@ -690,7 +681,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772614088064</updated>
     </task>
-    <option name="localTasksCounter" value="266" />
+    <task id="LOCAL-00266" summary="switch on news functions">
+      <option name="closed" value="true" />
+      <created>1772615013642</created>
+      <option name="number" value="00266" />
+      <option name="presentableId" value="LOCAL-00266" />
+      <option name="project" value="LOCAL" />
+      <updated>1772615013642</updated>
+    </task>
+    <option name="localTasksCounter" value="267" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -735,7 +734,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="turn off GuildMemberReminderScheduler" />
     <MESSAGE value="update RisingStonesService add redis cache" />
     <MESSAGE value="add FfxivSigninHelper" />
     <MESSAGE value="put cookies from frontend to backend" />
@@ -760,7 +758,8 @@
     <MESSAGE value="update napcat http-server-url" />
     <MESSAGE value="add news functions" />
     <MESSAGE value="update news functions" />
-    <option name="LAST_COMMIT_MESSAGE" value="update news functions" />
+    <MESSAGE value="switch on news functions" />
+    <option name="LAST_COMMIT_MESSAGE" value="switch on news functions" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
