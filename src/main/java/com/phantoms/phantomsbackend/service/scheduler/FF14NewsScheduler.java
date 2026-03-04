@@ -19,7 +19,7 @@ public class FF14NewsScheduler {
 
     private static final Logger logger = LoggerFactory.getLogger(FF14NewsScheduler.class);
 
-    private static final String FF14_NEWS_CACHE_KEY = "ff14:news:last_ids";
+    private static final String FF14_NEWS_CACHE_KEY = "news:cqnews:last_ids";
 
     @Autowired
     private FF14NewsUtils ff14NewsUtils;
@@ -50,9 +50,11 @@ public class FF14NewsScheduler {
                 .collect(Collectors.toList());
 
             Object cachedIdsObj = redisUtil.get(FF14_NEWS_CACHE_KEY);
-            List<String> cachedIds = new ArrayList<>();
+            List<String> cachedIds;
             if (cachedIdsObj instanceof List) {
-                cachedIds.addAll((List<String>) cachedIdsObj);
+                cachedIds = (List<String>) cachedIdsObj;
+            } else {
+                cachedIds = new ArrayList<>();
             }
 
             List<FF14NewsUtils.NewsItem> newNewsList = newsList.stream()
@@ -82,13 +84,16 @@ public class FF14NewsScheduler {
                 StringBuilder message = new StringBuilder();
                 
                 if (news.getImageUrl() != null && !news.getImageUrl().isEmpty()) {
-                    message.append("[CQ:image,file=").append(news.getImageUrl()).append("]\n");
+                    message.append("[CQ:image,file=").append(news.getImageUrl()).append("]");
                 }
                 message.append(news.getTitle()).append("\n");
-                if (news.getDescription() != null && !news.getDescription().isEmpty()) {
+                if (news.getDescription() != null && !news.getDescription().isEmpty() && !news.getDescription().equals(news.getTitle())) {
                     message.append(news.getDescription()).append("\n");
                 }
-                message.append(news.getDate());
+                message.append(news.getDate()).append("\n");
+                if (news.getLinkUrl() != null && !news.getLinkUrl().isEmpty()) {
+                    message.append(news.getLinkUrl());
+                }
 
                 napCatQQUtil.sendGroupMessage(defaultGroupId, message.toString());
                 logger.info("已发送新闻: {}", news.getTitle());
