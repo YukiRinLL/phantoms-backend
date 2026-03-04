@@ -30,8 +30,8 @@ public class FF14NewsScheduler {
     @Autowired
     private RedisUtil redisUtil;
 
-    @Value("${napcat.default-group-id}")
-    private String defaultGroupId;
+    @Value("${napcat.phantom-group-id}")
+    private String phantomGroupId;
 
     @Scheduled(fixedRate = 5 * 60 * 1000)
     public void fetchAndSendFF14News() {
@@ -95,7 +95,7 @@ public class FF14NewsScheduler {
                     message.append(news.getLinkUrl());
                 }
 
-                napCatQQUtil.sendGroupMessage(defaultGroupId, message.toString());
+                napCatQQUtil.sendGroupMessage(phantomGroupId, message.toString());
                 logger.info("已发送新闻: {}", news.getTitle());
                 
                 Thread.sleep(1000);
