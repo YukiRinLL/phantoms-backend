@@ -1,0 +1,105 @@
+package com.phantoms.phantomsbackend.service.scheduler;
+
+import com.phantoms.phantomsbackend.common.utils.FF14NewsUtils;
+import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
+import com.phantoms.phantomsbackend.common.utils.RedisUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
+public class FF14NewsScheduler {
+
+    private static final Logger logger = LoggerFactory.getLogger(FF14NewsScheduler.class);
+
+    private static final String FF14_NEWS_CACHE_KEY = "ff14:news:last_ids";
+
+    @Autowired
+    private FF14NewsUtils ff14NewsUtils;
+
+    @Autowired
+    private NapCatQQUtil napCatQQUtil;
+
+    @Autowired
+    private RedisUtil redisUtil;
+
+    @Value("${napcat.default-group-id}")
+    private String defaultGroupId;
+
+    @Scheduled(fixedRate = 5 * 60 * 1000)
+    public void fetchAndSendFF14News() {
+        logger.info("开始获取FF14新闻列表");
+
+        try {
+            List<FF14NewsUtils.NewsItem> newsList = ff14NewsUtils.fetchNewsList();
+
+            if (newsList.isEmpty()) {
+                logger.warn("未获取到FF14新闻");
+                return;
+            }
+
+            List<String> currentIds = newsList.stream()
+                .map(FF14NewsUtils.NewsItem::getId)
+                .collect(Collectors.toList());
+
+            Object cachedIdsObj = redisUtil.get(FF14_NEWS_CACHE_KEY);
+            List<String> cachedIds = new ArrayList<>();
+            if (cachedIdsObj instanceof List) {
+                cachedIds.addAll((List<String>) cachedIdsObj);
+            }
+
+            List<FF14NewsUtils.NewsItem> newNewsList = newsList.stream()
+                .filter(news -> {
+                    final List<String> finalCachedIds = cachedIds;
+                    return !finalCachedIds.contains(news.getId());
+                })
+                .collect(Collectors.toList());
+
+            if (!newNewsList.isEmpty()) {
+                logger.info("发现 {} 条新新闻", newNewsList.size());
+                sendNewsToGroup(newNewsList);
+            } else {
+                logger.debug("没有新新闻");
+            }
+
+            redisUtil.set(FF14_NEWS_CACHE_KEY, currentIds);
+
+        } catch (Exception e) {
+            logger.error("获取FF14新闻失败", e);
+        }
+    }
+
+    private void sendNewsToGroup(List<FF14NewsUtils.NewsItem> newsList) {
+        try {
+            for (FF14NewsUtils.NewsItem news : newsList) {
+                StringBuilder message = new StringBuilder();
+                
+                if (news.getImageUrl() != null && !news.getImageUrl().isEmpty()) {
+                    message.append("[CQ:image,file=").append(news.getImageUrl()).append("]\n");
+                }
+                message.append(news.getTitle()).append("\n");
+                if (news.getDescription() != null && !news.getDescription().isEmpty()) {
+                    message.append(news.getDescription()).append("\n");
+                }
+                message.append(news.getDate());
+
+                napCatQQUtil.sendGroupMessage(defaultGroupId, message.toString());
+                logger.info("已发送新闻: {}", news.getTitle());
+                
+                Thread.sleep(1000);
+            }
+            
+            logger.info("成功发送 {} 条FF14新闻到QQ群", newsList.size());
+
+        } catch (Exception e) {
+            logger.error("发送FF14新闻到QQ群失败", e);
+        }
+    }
+}
