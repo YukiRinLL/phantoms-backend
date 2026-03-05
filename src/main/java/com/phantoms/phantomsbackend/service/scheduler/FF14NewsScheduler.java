@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import javax.annotation.PostConstruct;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,38 @@ public class FF14NewsScheduler {
 
     @Value("${napcat.default-group-id}")
     private String defaultGroupId;
+
+    @PostConstruct
+    public void initCache() {
+        logger.info("初始化FF14新闻缓存");
+        try {
+            // 尝试从Redis读取缓存
+            try {
+                Object cachedIdsObj = redisUtil.get(FF14_NEWS_CACHE_KEY);
+                if (cachedIdsObj instanceof List) {
+                    inMemoryCache = (List<String>) cachedIdsObj;
+                    logger.info("从Redis加载缓存成功，共 {} 条新闻ID", inMemoryCache.size());
+                    return;
+                }
+            } catch (Exception e) {
+                logger.warn("从Redis读取缓存失败: {}", e.getMessage());
+            }
+
+            // 如果Redis不可用，从新闻源获取最新新闻列表作为初始缓存
+            logger.info("Redis不可用，从新闻源获取初始缓存");
+            List<FF14NewsUtils.NewsItem> newsList = ff14NewsUtils.fetchNewsList();
+            if (!newsList.isEmpty()) {
+                inMemoryCache = newsList.stream()
+                    .map(FF14NewsUtils.NewsItem::getId)
+                    .collect(Collectors.toList());
+                logger.info("从新闻源加载初始缓存成功，共 {} 条新闻ID", inMemoryCache.size());
+            } else {
+                logger.warn("从新闻源获取初始缓存失败，使用空缓存");
+            }
+        } catch (Exception e) {
+            logger.error("初始化缓存失败", e);
+        }
+    }
 
     @Scheduled(fixedRate = 5 * 60 * 1000)
     public void fetchAndSendFF14News() {
@@ -111,7 +144,7 @@ public class FF14NewsScheduler {
                     message.append(news.getLinkUrl());
                 }
 
-                napCatQQUtil.sendGroupMessage(defaultGroupId, message.toString());
+                napCatQQUtil.sendGroupMessage(phantomGroupId, message.toString());
                 logger.info("已发送新闻: {}", news.getTitle());
                 
                 Thread.sleep(1000);
