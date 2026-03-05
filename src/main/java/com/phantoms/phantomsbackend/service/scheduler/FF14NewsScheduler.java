@@ -36,6 +36,9 @@ public class FF14NewsScheduler {
     @Value("${napcat.phantom-group-id}")
     private String phantomGroupId;
 
+    @Value("${napcat.default-group-id}")
+    private String defaultGroupId;
+
     @Scheduled(fixedRate = 5 * 60 * 1000)
     public void fetchAndSendFF14News() {
         logger.info("开始获取FF14新闻列表");
@@ -108,7 +111,7 @@ public class FF14NewsScheduler {
                     message.append(news.getLinkUrl());
                 }
 
-                napCatQQUtil.sendGroupMessage(phantomGroupId, message.toString());
+                napCatQQUtil.sendGroupMessage(defaultGroupId, message.toString());
                 logger.info("已发送新闻: {}", news.getTitle());
                 
                 Thread.sleep(1000);
