@@ -54,62 +54,94 @@ public class FF14NewsUtils {
         List<NewsItem> newsList = new ArrayList<>();
 
         try {
-            HttpUrl url = HttpUrl.parse(NEWS_API_URL).newBuilder()
-                .addQueryParameter("gameCode", "ff")
-                .addQueryParameter("CategoryCode", "8324,8325,8326,8327,5309,5310,5311,5312,5313")
-                .addQueryParameter("pageIndex", "0")
-                .addQueryParameter("pageSize", "5")
-                .build();
-
-            Request request = new Request.Builder()
-                .url(url)
-                .header("User-Agent", USER_AGENT)
-                .header("Referer", "https://ff.web.sdo.com/")
-                .get()
-                .build();
-
-            try (Response response = client.newCall(request).execute()) {
-                if (!response.isSuccessful()) {
-                    logger.error("Failed to fetch FF14 news: code={}, url={}", response.code(), url);
-                    return newsList;
-                }
-
-                String responseBody = response.body().string();
-                logger.debug("FF14 news response: {}", responseBody);
-
-                JSONObject jsonResponse = JSONObject.parseObject(responseBody);
-                JSONArray dataList = jsonResponse.getJSONArray("Data");
-
-                if (dataList != null) {
-                    for (int i = 0; i < dataList.size(); i++) {
-                        JSONObject item = dataList.getJSONObject(i);
-                        
-                        String id = item.getString("Id") != null ? item.getString("Id") : "";
-                        String title = item.getString("Title") != null ? item.getString("Title") : "";
-                        String description = item.getString("Summary") != null ? item.getString("Summary") : "";
-                        String date = item.getString("PublishDate") != null ? item.getString("PublishDate") : "";
-                        String imageUrl = item.getString("HomeImagePath") != null ? item.getString("HomeImagePath").trim() : "";
-                        String outLink = item.getString("OutLink") != null ? item.getString("OutLink") : "";
-                        
-                        String linkUrl;
-                        if (!outLink.isEmpty()) {
-                            linkUrl = outLink;
-                        } else {
-                            linkUrl = "https://ff.web.sdo.com/web8/index.html#/newstab/newscont/" + id;
-                        }
-
-                        if (date.length() >= 10) {
-                            date = date.substring(0, 10);
-                        }
-
-                        newsList.add(new NewsItem(title, description, date, imageUrl, linkUrl, id));
-                    }
-                }
+            // 首先获取第一页数据，了解总页数
+            JSONObject firstPageResponse = fetchPage(0, 100);
+            if (firstPageResponse == null) {
+                return newsList;
             }
+
+            // 解析第一页数据
+            parseNewsData(firstPageResponse, newsList);
+
+            // 获取总页数
+            int pageCount = firstPageResponse.getIntValue("PageCount");
+            logger.info("Total pages: {}", pageCount);
+
+            // 循环获取剩余页面的数据
+            for (int pageIndex = 1; pageIndex < pageCount; pageIndex++) {
+                logger.info("Fetching page: {}/{}", pageIndex + 1, pageCount);
+                JSONObject pageResponse = fetchPage(pageIndex, 100);
+                if (pageResponse != null) {
+                    parseNewsData(pageResponse, newsList);
+                }
+                // 避免请求过快，添加短暂延迟
+                Thread.sleep(100);
+            }
+
+            logger.info("Total news items fetched: {}", newsList.size());
+
         } catch (Exception e) {
             logger.error("Error fetching FF14 news", e);
         }
 
         return newsList;
+    }
+
+    private JSONObject fetchPage(int pageIndex, int pageSize) throws IOException {
+        HttpUrl url = HttpUrl.parse(NEWS_API_URL).newBuilder()
+            .addQueryParameter("gameCode", "ff")
+            .addQueryParameter("CategoryCode", "8324,8325,8326,8327,5309,5310,5311,5312,5313")
+            .addQueryParameter("pageIndex", String.valueOf(pageIndex))
+            .addQueryParameter("pageSize", String.valueOf(pageSize))
+            .build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .header("User-Agent", USER_AGENT)
+            .header("Referer", "https://ff.web.sdo.com/")
+            .get()
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                logger.error("Failed to fetch FF14 news page {}: code={}, url={}", pageIndex, response.code(), url);
+                return null;
+            }
+
+            String responseBody = response.body().string();
+            logger.debug("FF14 news page {} response: {}", pageIndex, responseBody);
+
+            return JSONObject.parseObject(responseBody);
+        }
+    }
+
+    private void parseNewsData(JSONObject jsonResponse, List<NewsItem> newsList) {
+        JSONArray dataList = jsonResponse.getJSONArray("Data");
+
+        if (dataList != null) {
+            for (int i = 0; i < dataList.size(); i++) {
+                JSONObject item = dataList.getJSONObject(i);
+                
+                String id = item.getString("Id") != null ? item.getString("Id") : "";
+                String title = item.getString("Title") != null ? item.getString("Title") : "";
+                String description = item.getString("Summary") != null ? item.getString("Summary") : "";
+                String date = item.getString("PublishDate") != null ? item.getString("PublishDate") : "";
+                String imageUrl = item.getString("HomeImagePath") != null ? item.getString("HomeImagePath").trim() : "";
+                String outLink = item.getString("OutLink") != null ? item.getString("OutLink") : "";
+                
+                String linkUrl;
+                if (!outLink.isEmpty()) {
+                    linkUrl = outLink;
+                } else {
+                    linkUrl = "https://ff.web.sdo.com/web8/index.html#/newstab/newscont/" + id;
+                }
+
+                if (date.length() >= 10) {
+                    date = date.substring(0, 10);
+                }
+
+                newsList.add(new NewsItem(title, description, date, imageUrl, linkUrl, id));
+            }
+        }
     }
 }

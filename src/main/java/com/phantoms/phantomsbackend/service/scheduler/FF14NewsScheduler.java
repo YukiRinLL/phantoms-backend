@@ -20,6 +20,9 @@ public class FF14NewsScheduler {
     private static final Logger logger = LoggerFactory.getLogger(FF14NewsScheduler.class);
 
     private static final String FF14_NEWS_CACHE_KEY = "news:cqnews:last_ids";
+    
+    // 内存缓存，当Redis不可用时使用
+    private List<String> inMemoryCache = new ArrayList<>();
 
     @Autowired
     private FF14NewsUtils ff14NewsUtils;
@@ -49,19 +52,21 @@ public class FF14NewsScheduler {
                 .map(FF14NewsUtils.NewsItem::getId)
                 .collect(Collectors.toList());
 
-            Object cachedIdsObj = redisUtil.get(FF14_NEWS_CACHE_KEY);
-            List<String> cachedIds;
-            if (cachedIdsObj instanceof List) {
-                cachedIds = (List<String>) cachedIdsObj;
-            } else {
-                cachedIds = new ArrayList<>();
+            // 获取缓存的新闻ID，增加异常处理
+            List<String> cachedIds = new ArrayList<>();
+            try {
+                Object cachedIdsObj = redisUtil.get(FF14_NEWS_CACHE_KEY);
+                if (cachedIdsObj instanceof List) {
+                    cachedIds = (List<String>) cachedIdsObj;
+                }
+            } catch (Exception e) {
+                logger.warn("Redis读取缓存失败，使用内存缓存: {}", e.getMessage());
+                cachedIds = new ArrayList<>(inMemoryCache);
             }
 
+            List<String> finalCachedIds = cachedIds;
             List<FF14NewsUtils.NewsItem> newNewsList = newsList.stream()
-                .filter(news -> {
-                    final List<String> finalCachedIds = cachedIds;
-                    return !finalCachedIds.contains(news.getId());
-                })
+                .filter(news -> !finalCachedIds.contains(news.getId()))
                 .collect(Collectors.toList());
 
             if (!newNewsList.isEmpty()) {
@@ -71,7 +76,15 @@ public class FF14NewsScheduler {
                 logger.debug("没有新新闻");
             }
 
-            redisUtil.set(FF14_NEWS_CACHE_KEY, currentIds);
+            // 更新缓存，增加异常处理
+            try {
+                redisUtil.set(FF14_NEWS_CACHE_KEY, currentIds);
+                // 同时更新内存缓存
+                inMemoryCache = new ArrayList<>(currentIds);
+            } catch (Exception e) {
+                logger.warn("Redis更新缓存失败，仅更新内存缓存: {}", e.getMessage());
+                inMemoryCache = new ArrayList<>(currentIds);
+            }
 
         } catch (Exception e) {
             logger.error("获取FF14新闻失败", e);
