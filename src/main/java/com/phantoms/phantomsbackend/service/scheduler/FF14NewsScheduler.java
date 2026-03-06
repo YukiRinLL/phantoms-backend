@@ -105,6 +105,21 @@ public class FF14NewsScheduler {
                 .filter(news -> !finalCachedIds.contains(news.getId()))
                 .collect(Collectors.toList());
 
+            // 如果新新闻数量超过5条，判定为缓存丢失
+            if (newNewsList.size() > 5) {
+                logger.warn("检测到缓存丢失，新新闻数量 {} 条超过阈值，使用最新新闻更新缓存", newNewsList.size());
+                // 更新缓存为当前所有新闻ID，不发送消息
+                try {
+                    redisUtil.set(FF14_NEWS_CACHE_KEY, currentIds);
+                    inMemoryCache = new ArrayList<>(currentIds);
+                    logger.info("缓存已更新，共 {} 条新闻ID", currentIds.size());
+                } catch (Exception e) {
+                    logger.warn("Redis更新缓存失败，仅更新内存缓存: {}", e.getMessage());
+                    inMemoryCache = new ArrayList<>(currentIds);
+                }
+                return;
+            }
+
             if (!newNewsList.isEmpty()) {
                 logger.info("发现 {} 条新新闻", newNewsList.size());
                 sendNewsToGroup(newNewsList);
