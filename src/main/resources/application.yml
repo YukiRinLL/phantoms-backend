@@ -177,6 +177,7 @@ napcat:
   access-token: ${NAPCAT_ACCESS_TOKEN:7saligia}
   default-group-id: ${NAPCAT_DEFAULT_GROUP_ID:595883141}
   phantom-group-id: ${NAPCAT_PHANTOM_GROUP_ID:787909466}
+  crystal-group-id: ${NAPCAT_CRYSTAL_GROUP_ID:936746977}
   admin-qq: "944989026"
 
 # DaoYu Key监控配置
