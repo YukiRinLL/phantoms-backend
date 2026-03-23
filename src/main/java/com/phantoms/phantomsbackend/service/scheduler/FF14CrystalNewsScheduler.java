@@ -156,23 +156,24 @@ public class FF14CrystalNewsScheduler {
         try {
             for (FF14CrystalNewsUtils.NewsItem news : newsList) {
                 StringBuilder message = new StringBuilder();
-//                message.append("【FF14水晶世界新闻】\n");
+                message.append("【FF14水晶世界新闻】\n");
                 
-                if (news.getImageUrl() != null && !news.getImageUrl().isEmpty()) {
-                    message.append("[CQ:image,file=").append(news.getImageUrl()).append("]");
-                }
+                // Napcat富媒体传输失败,已关闭 "errMsg":"rich media transfer failed"
+//                if (news.getImageUrl() != null && !news.getImageUrl().isEmpty()) {
+//                    message.append("[CQ:image,file=").append(news.getImageUrl()).append("]");
+//                }
                 message.append(news.getTitle()).append("\n");
                 if (news.getAuthor() != null && !news.getAuthor().isEmpty()) {
-                    message.append("创建者: ").append(news.getAuthor()).append("\n");
+                    message.append("Author: ").append(news.getAuthor()).append("\n");
                 }
                 if (news.getDate() != null && !news.getDate().isEmpty()) {
-                    message.append("创建时间: ").append(news.getDate()).append("\n");
+                    message.append("Create Time: ").append(news.getDate()).append("\n");
                 }
                 if (news.getLinkUrl() != null && !news.getLinkUrl().isEmpty()) {
-                    message.append("详情链接: ").append(news.getLinkUrl()).append("\n");
+                    message.append("Detail: ").append(news.getLinkUrl()).append("\n");
                 }
 
-                napCatQQUtil.sendGroupMessage(defaultGroupId, message.toString());
+                napCatQQUtil.sendGroupMessage(crystalGroupId, message.toString());
                 logger.info("已发送FF14水晶世界新闻: {}", news.getTitle());
                 
                 Thread.sleep(1000);
