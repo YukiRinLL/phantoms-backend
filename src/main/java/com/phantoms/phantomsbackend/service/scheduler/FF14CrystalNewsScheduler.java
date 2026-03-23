@@ -156,12 +156,11 @@ public class FF14CrystalNewsScheduler {
         try {
             for (FF14CrystalNewsUtils.NewsItem news : newsList) {
                 StringBuilder message = new StringBuilder();
-                message.append("【FF14水晶世界新闻】\n");
-                
-                // Napcat富媒体传输失败,已关闭 "errMsg":"rich media transfer failed"
-//                if (news.getImageUrl() != null && !news.getImageUrl().isEmpty()) {
-//                    message.append("[CQ:image,file=").append(news.getImageUrl()).append("]");
-//                }
+//                message.append("【FF14水晶世界新闻】\n");
+
+                if (news.getImageUrl() != null && !news.getImageUrl().isEmpty()) {
+                    message.append("[CQ:image,file=").append(news.getImageUrl()).append("]");
+                }
                 message.append(news.getTitle()).append("\n");
                 if (news.getAuthor() != null && !news.getAuthor().isEmpty()) {
                     message.append("Author: ").append(news.getAuthor()).append("\n");
