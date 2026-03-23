@@ -118,6 +118,11 @@ public class FF14CrystalNewsUtils {
                             String coverUrl = cover.getString("url");
 
                             if (coverUrl != null && !coverUrl.isEmpty()) {
+                                // 修复URL格式，确保有正确的协议前缀
+                                if (!coverUrl.startsWith("http://") && !coverUrl.startsWith("https://")) {
+                                    coverUrl = "https:" + coverUrl;
+                                }
+                                
                                 if ("502*282".equals(size)) {
                                     imageUrl = coverUrl;
                                     break;

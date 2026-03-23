@@ -74,66 +74,81 @@ public class FF14CrystalNewsScheduler {
 
     @Scheduled(fixedRate = 5 * 60 * 1000)
     public void fetchAndSendFF14CrystalNews() {
-        logger.info("开始获取FF14水晶世界新闻列表");
+        long start = System.currentTimeMillis();
+        logger.info("开始获取FF14水晶世界新闻列表（耗时监控）");
 
         try {
-            List<FF14CrystalNewsUtils.NewsItem> newsList = ff14CrystalNewsUtils.fetchCrystalNews();
-
-            if (newsList.isEmpty()) {
-                logger.warn("未获取到FF14水晶世界新闻");
-                return;
-            }
-
-            List<String> currentIds = newsList.stream()
-                .map(FF14CrystalNewsUtils.NewsItem::getId)
-                .collect(Collectors.toList());
-
-            List<String> cachedIds = new ArrayList<>();
-            try {
-                Object cachedIdsObj = redisUtil.get(FF14_CRYSTAL_NEWS_CACHE_KEY);
-                if (cachedIdsObj instanceof List) {
-                    cachedIds = (List<String>) cachedIdsObj;
-                }
-            } catch (Exception e) {
-                logger.warn("Redis读取缓存失败，使用内存缓存: {}", e.getMessage());
-                cachedIds = new ArrayList<>(inMemoryCache);
-            }
-
-            List<String> finalCachedIds = cachedIds;
-            List<FF14CrystalNewsUtils.NewsItem> newNewsList = newsList.stream()
-                .filter(news -> !finalCachedIds.contains(news.getId()))
-                .collect(Collectors.toList());
-
-            if (newNewsList.size() > 5) {
-                logger.warn("检测到缓存丢失，新新闻数量 {} 条超过阈值，使用最新新闻更新缓存", newNewsList.size());
+            // 任务超时控制：超过30秒则中断
+            java.util.concurrent.CompletableFuture.runAsync(() -> {
                 try {
-                    redisUtil.set(FF14_CRYSTAL_NEWS_CACHE_KEY, currentIds);
-                    inMemoryCache = new ArrayList<>(currentIds);
-                    logger.info("缓存已更新，共 {} 条水晶世界新闻ID", currentIds.size());
+                    List<FF14CrystalNewsUtils.NewsItem> newsList = ff14CrystalNewsUtils.fetchCrystalNews();
+
+                    if (newsList.isEmpty()) {
+                        logger.warn("未获取到FF14水晶世界新闻");
+                        return;
+                    }
+
+                    List<String> currentIds = newsList.stream()
+                        .map(FF14CrystalNewsUtils.NewsItem::getId)
+                        .collect(Collectors.toList());
+
+                    List<String> cachedIds = new ArrayList<>();
+                    try {
+                        Object cachedIdsObj = redisUtil.get(FF14_CRYSTAL_NEWS_CACHE_KEY);
+                        if (cachedIdsObj instanceof List) {
+                            cachedIds = (List<String>) cachedIdsObj;
+                        }
+                    } catch (Exception e) {
+                        logger.warn("Redis读取缓存失败，使用内存缓存: {}", e.getMessage());
+                        cachedIds = new ArrayList<>(inMemoryCache);
+                    }
+
+                    List<String> finalCachedIds = cachedIds;
+                    List<FF14CrystalNewsUtils.NewsItem> newNewsList = newsList.stream()
+                        .filter(news -> !finalCachedIds.contains(news.getId()))
+                        .collect(Collectors.toList());
+
+                    if (newNewsList.size() > 5) {
+                        logger.warn("检测到缓存丢失，新新闻数量 {} 条超过阈值，使用最新新闻更新缓存", newNewsList.size());
+                        try {
+                            redisUtil.set(FF14_CRYSTAL_NEWS_CACHE_KEY, currentIds);
+                            inMemoryCache = new ArrayList<>(currentIds);
+                            logger.info("缓存已更新，共 {} 条水晶世界新闻ID", currentIds.size());
+                        } catch (Exception e) {
+                            logger.warn("Redis更新缓存失败，仅更新内存缓存: {}", e.getMessage());
+                            inMemoryCache = new ArrayList<>(currentIds);
+                        }
+                        return;
+                    }
+
+                    if (!newNewsList.isEmpty()) {
+                        logger.info("发现 {} 条FF14水晶世界新新闻", newNewsList.size());
+                        sendNewsToGroup(newNewsList);
+                    } else {
+                        logger.debug("没有FF14水晶世界新新闻");
+                    }
+
+                    try {
+                        redisUtil.set(FF14_CRYSTAL_NEWS_CACHE_KEY, currentIds);
+                        inMemoryCache = new ArrayList<>(currentIds);
+                    } catch (Exception e) {
+                        logger.warn("Redis更新缓存失败，仅更新内存缓存: {}", e.getMessage());
+                        inMemoryCache = new ArrayList<>(currentIds);
+                    }
+
                 } catch (Exception e) {
-                    logger.warn("Redis更新缓存失败，仅更新内存缓存: {}", e.getMessage());
-                    inMemoryCache = new ArrayList<>(currentIds);
+                    logger.error("获取FF14水晶世界新闻失败", e);
                 }
-                return;
-            }
+            }).orTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .exceptionally(e -> {
+                logger.error("定时任务执行超时/异常", e);
+                return null;
+            }).join();
 
-            if (!newNewsList.isEmpty()) {
-                logger.info("发现 {} 条FF14水晶世界新新闻", newNewsList.size());
-                sendNewsToGroup(newNewsList);
-            } else {
-                logger.debug("没有FF14水晶世界新新闻");
-            }
-
-            try {
-                redisUtil.set(FF14_CRYSTAL_NEWS_CACHE_KEY, currentIds);
-                inMemoryCache = new ArrayList<>(currentIds);
-            } catch (Exception e) {
-                logger.warn("Redis更新缓存失败，仅更新内存缓存: {}", e.getMessage());
-                inMemoryCache = new ArrayList<>(currentIds);
-            }
-
-        } catch (Exception e) {
-            logger.error("获取FF14水晶世界新闻失败", e);
+        } catch (Throwable e) {
+            logger.error("定时任务主流程异常", e);
+        } finally {
+            logger.info("获取FF14水晶世界新闻列表结束，耗时 {}ms", System.currentTimeMillis() - start);
         }
     }
 
