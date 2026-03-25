@@ -7,10 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add news memory cache">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix QQ14 news scheduler">
+      <change afterPath="$PROJECT_DIR$/issue.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/FF14GlobalNewsScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/FF14GlobalNewsScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/FF14NewsScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/FF14NewsScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +101,7 @@
     &quot;TestNG.NapCatQQTest.executor&quot;: &quot;Run&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/FFXIV_Phantoms_MainPage&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/phantoms-backend&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -297,46 +297,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00223" summary="update doc">
-      <option name="closed" value="true" />
-      <created>1764310295246</created>
-      <option name="number" value="00223" />
-      <option name="presentableId" value="LOCAL-00223" />
-      <option name="project" value="LOCAL" />
-      <updated>1764310295246</updated>
-    </task>
-    <task id="LOCAL-00224" summary="turn off email sending in DaoYuKeyMonitorScheduler">
-      <option name="closed" value="true" />
-      <created>1764310334255</created>
-      <option name="number" value="00224" />
-      <option name="presentableId" value="LOCAL-00224" />
-      <option name="project" value="LOCAL" />
-      <updated>1764310334255</updated>
-    </task>
-    <task id="LOCAL-00225" summary="update PingController">
-      <option name="closed" value="true" />
-      <created>1764311392147</created>
-      <option name="number" value="00225" />
-      <option name="presentableId" value="LOCAL-00225" />
-      <option name="project" value="LOCAL" />
-      <updated>1764311392147</updated>
-    </task>
-    <task id="LOCAL-00226" summary="fix monitor.notify-on-success:false">
-      <option name="closed" value="true" />
-      <created>1764312493678</created>
-      <option name="number" value="00226" />
-      <option name="presentableId" value="LOCAL-00226" />
-      <option name="project" value="LOCAL" />
-      <updated>1764312493678</updated>
-    </task>
-    <task id="LOCAL-00227" summary="update QQ chat monthly-stats functions">
-      <option name="closed" value="true" />
-      <created>1764660429233</created>
-      <option name="number" value="00227" />
-      <option name="presentableId" value="LOCAL-00227" />
-      <option name="project" value="LOCAL" />
-      <updated>1764660429233</updated>
     </task>
     <task id="LOCAL-00228" summary="add recruitments api">
       <option name="closed" value="true" />
@@ -690,7 +650,47 @@
       <option name="project" value="LOCAL" />
       <updated>1772682885409</updated>
     </task>
-    <option name="localTasksCounter" value="272" />
+    <task id="LOCAL-00272" summary="update news cache lost bug">
+      <option name="closed" value="true" />
+      <created>1772796703264</created>
+      <option name="number" value="00272" />
+      <option name="presentableId" value="LOCAL-00272" />
+      <option name="project" value="LOCAL" />
+      <updated>1772796703264</updated>
+    </task>
+    <task id="LOCAL-00273" summary="add FF14CrystalNews func">
+      <option name="closed" value="true" />
+      <created>1774233067675</created>
+      <option name="number" value="00273" />
+      <option name="presentableId" value="LOCAL-00273" />
+      <option name="project" value="LOCAL" />
+      <updated>1774233067675</updated>
+    </task>
+    <task id="LOCAL-00274" summary="fix news scheduler">
+      <option name="closed" value="true" />
+      <created>1774237777917</created>
+      <option name="number" value="00274" />
+      <option name="presentableId" value="LOCAL-00274" />
+      <option name="project" value="LOCAL" />
+      <updated>1774237777917</updated>
+    </task>
+    <task id="LOCAL-00275" summary="fix QQ14 news scheduler">
+      <option name="closed" value="true" />
+      <created>1774257736958</created>
+      <option name="number" value="00275" />
+      <option name="presentableId" value="LOCAL-00275" />
+      <option name="project" value="LOCAL" />
+      <updated>1774257736958</updated>
+    </task>
+    <task id="LOCAL-00276" summary="fix QQ14 news scheduler">
+      <option name="closed" value="true" />
+      <created>1774266056230</created>
+      <option name="number" value="00276" />
+      <option name="presentableId" value="LOCAL-00276" />
+      <option name="project" value="LOCAL" />
+      <updated>1774266056230</updated>
+    </task>
+    <option name="localTasksCounter" value="277" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -735,11 +735,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update login.html and docs" />
-    <MESSAGE value="remove response.isSuccessful() judge" />
-    <MESSAGE value="move functions from RisingStonesSigninHelpe to RisingStonesUtils" />
-    <MESSAGE value="update note" />
-    <MESSAGE value="switch primary datasource mode to Transaction Pooler" />
     <MESSAGE value="switch primary datasource mode to Direct Connection" />
     <MESSAGE value="update datasource config" />
     <MESSAGE value="add RisingStonesLoginStatusMonitor" />
@@ -760,7 +755,12 @@
     <MESSAGE value="debug news func using defaultGroupId" />
     <MESSAGE value="add cqnews types note" />
     <MESSAGE value="add news memory cache" />
-    <option name="LAST_COMMIT_MESSAGE" value="add news memory cache" />
+    <MESSAGE value="fix news cache lost bug" />
+    <MESSAGE value="fix news cache lost bug" />
+    <MESSAGE value="add FF14CrystalNews func" />
+    <MESSAGE value="fix news scheduler" />
+    <MESSAGE value="fix QQ14 news scheduler" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix QQ14 news scheduler" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
