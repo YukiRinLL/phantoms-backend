@@ -32,39 +32,66 @@ public class OneLiveWebhookServiceImpl implements OneLiveWebhookService {
     private static final String DEFAULT_QQ = "944989026";
 
     @Override
-    public void handleNotification(String title, String content, String type, List<String> qq, List<String> groupId) {
-        // 如果没有传入QQ号，使用默认值
-        if (qq == null || qq.isEmpty()) {
-            qq = new ArrayList<>();
-            qq.add(DEFAULT_QQ);
-        }
-
-        // 如果没有传入群聊ID，使用默认值
-        if (groupId == null || groupId.isEmpty()) {
-            groupId = new ArrayList<>();
-            groupId.add(defaultGroupId);
-        }
-
+    public void handleNotification(String title, String content, String type, String qq, String groupId) {
         // 构建消息内容
         String message = buildMessage(title, content, type);
 
-        // 发送消息到个人QQ
-        for (String qqNumber : qq) {
+        // 标志位，用于判断是否需要使用默认值
+        boolean hasQQ = qq != null && !qq.isEmpty();
+        boolean hasGroupId = groupId != null && !groupId.isEmpty();
+
+        // 如果只提供了QQ号，只发送到个人QQ
+        if (hasQQ && !hasGroupId) {
             try {
-                napCatQQUtil.sendPrivateMessage(qqNumber, message);
-                logger.info("发送消息到个人QQ {} 成功", qqNumber);
+                napCatQQUtil.sendPrivateMessage(qq, message);
+                logger.info("发送消息到个人QQ {} 成功", qq);
             } catch (IOException e) {
-                logger.error("发送消息到个人QQ {} 失败: {}", qqNumber, e.getMessage());
+                logger.error("发送消息到个人QQ {} 失败: {}", qq, e.getMessage());
             }
         }
-
-        // 发送消息到QQ群聊
-        for (String group : groupId) {
+        // 如果只提供了群聊ID，只发送到QQ群聊
+        else if (!hasQQ && hasGroupId) {
             try {
-                napCatQQUtil.sendGroupMessage(group, message);
-                logger.info("发送消息到QQ群聊 {} 成功", group);
+                napCatQQUtil.sendGroupMessage(groupId, message);
+                logger.info("发送消息到QQ群聊 {} 成功", groupId);
             } catch (IOException e) {
-                logger.error("发送消息到QQ群聊 {} 失败: {}", group, e.getMessage());
+                logger.error("发送消息到QQ群聊 {} 失败: {}", groupId, e.getMessage());
+            }
+        }
+        // 如果同时提供了QQ号和群聊ID，都发送
+        else if (hasQQ && hasGroupId) {
+            // 发送到个人QQ
+            try {
+                napCatQQUtil.sendPrivateMessage(qq, message);
+                logger.info("发送消息到个人QQ {} 成功", qq);
+            } catch (IOException e) {
+                logger.error("发送消息到个人QQ {} 失败: {}", qq, e.getMessage());
+            }
+
+            // 发送到QQ群聊
+            try {
+                napCatQQUtil.sendGroupMessage(groupId, message);
+                logger.info("发送消息到QQ群聊 {} 成功", groupId);
+            } catch (IOException e) {
+                logger.error("发送消息到QQ群聊 {} 失败: {}", groupId, e.getMessage());
+            }
+        }
+        // 如果都没有提供，使用默认值
+        else {
+            // 发送到默认个人QQ
+            try {
+                napCatQQUtil.sendPrivateMessage(DEFAULT_QQ, message);
+                logger.info("发送消息到默认个人QQ {} 成功", DEFAULT_QQ);
+            } catch (IOException e) {
+                logger.error("发送消息到默认个人QQ {} 失败: {}", DEFAULT_QQ, e.getMessage());
+            }
+
+            // 发送到默认QQ群聊
+            try {
+                napCatQQUtil.sendGroupMessage(defaultGroupId, message);
+                logger.info("发送消息到默认QQ群聊 {} 成功", defaultGroupId);
+            } catch (IOException e) {
+                logger.error("发送消息到默认QQ群聊 {} 失败: {}", defaultGroupId, e.getMessage());
             }
         }
     }
