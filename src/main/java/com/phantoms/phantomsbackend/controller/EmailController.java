@@ -25,6 +25,14 @@ public class EmailController {
     private EmailService emailService;
 
     @GetMapping("/send-test-email")
+    @Operation(
+            summary = "Send test email",
+            description = "Sends a test email to the specified recipient",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Test email sent successfully"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid email address")
+            }
+    )
     public ResponseEntity<String> sendEmail(@RequestParam String to) {
         String subject = "Test Subject";
         Map<String, Object> templateVariables = new HashMap<>();
@@ -44,7 +52,11 @@ public class EmailController {
     @PostMapping("/send-email-to-all")
     @Operation(
             summary = "Send email to all users",
-            description = "Send an email to all registered users with the specified subject and text"
+            description = "Send an email to all registered users with the specified subject and text",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Email sent to all users successfully"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Failed to send email")
+            }
     )
     public ResultInfo<String> sendEmailToAllUsers(@RequestBody EmailContent emailContent) {
         emailService.sendEmailToAllUsers(emailContent.getSubject(), emailContent.getText());
@@ -58,6 +70,14 @@ public class EmailController {
     }
 
     @PostMapping("/auth-user-info")
+    @Operation(
+            summary = "Send auth user info email",
+            description = "Sends authentication user information email to the specified email address",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Auth user info email sent successfully"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid email address")
+            }
+    )
     public String newUser(@RequestBody AuthUserEmailDTO authUserEmailDTO) {
         emailService.sendAuthUserDetailEmail(authUserEmailDTO.getEmail());
         System.out.println("Auth user info sent: " + authUserEmailDTO.getEmail());

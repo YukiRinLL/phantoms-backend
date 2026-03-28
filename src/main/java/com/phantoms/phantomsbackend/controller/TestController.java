@@ -1,5 +1,7 @@
 package com.phantoms.phantomsbackend.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +17,17 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/test")
+@Tag(name = "Test", description = "测试接口，用于调试和验证请求")
 public class TestController {
 
     @RequestMapping("/**")
+    @Operation(
+            summary = "通用测试接口",
+            description = "接收所有/test路径下的请求，返回详细的请求信息，用于调试和测试",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "请求已成功接收并记录")
+            }
+    )
     public ResponseEntity<Map<String, Object>> handleAllWebServiceRequests(
         HttpServletRequest request,
         @RequestBody(required = false) Object requestBody) {
@@ -26,13 +36,11 @@ public class TestController {
         String method = request.getMethod();
         String clientIp = getClientIp(request);
 
-        // 详细日志记录
         log.info("🚀 收到WebService请求");
         log.info("📝 完整路径: {}", requestURI);
         log.info("⚡ 请求方法: {}", method);
         log.info("🌐 客户端IP: {}", clientIp);
 
-        // 收集请求头信息
         Map<String, String> headers = new LinkedHashMap<>();
         Enumeration<String> headerNames = request.getHeaderNames();
         if (headerNames != null) {
@@ -45,7 +53,6 @@ public class TestController {
             }
         }
 
-        // 收集请求参数
         Map<String, String[]> requestParams = request.getParameterMap();
         Map<String, Object> parameters = new LinkedHashMap<>();
         if (!requestParams.isEmpty()) {
@@ -57,12 +64,10 @@ public class TestController {
             });
         }
 
-        // 记录请求体 - 关键修改：使用自定义方法格式化显示null值
         Object requestBodyData = null;
         if (requestBody != null) {
             requestBodyData = requestBody;
             if (requestBody instanceof Map) {
-                // 如果是Map类型，使用自定义格式化方法
                 String formattedBody = formatMapWithNull((Map<?, ?>) requestBody);
                 log.info("📦 请求体数据: {}", formattedBody);
             } else {
@@ -74,14 +79,12 @@ public class TestController {
 
         log.info("✅ 请求处理完成");
 
-        // 返回统一响应，包含所有请求数据
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("code", 200);
         response.put("success", true);
         response.put("message", "请求已成功接收并记录");
         response.put("timestamp", System.currentTimeMillis());
 
-        // 请求信息
         Map<String, Object> requestInfo = new LinkedHashMap<>();
         requestInfo.put("path", requestURI);
         requestInfo.put("method", method);
@@ -96,7 +99,6 @@ public class TestController {
 
         response.put("requestInfo", requestInfo);
 
-        // 请求数据
         Map<String, Object> requestData = new LinkedHashMap<>();
         requestData.put("headers", headers);
         requestData.put("parameters", parameters);
@@ -107,9 +109,6 @@ public class TestController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * 自定义Map格式化方法，明确显示null值
-     */
     private String formatMapWithNull(Map<?, ?> map) {
         if (map == null || map.isEmpty()) {
             return "{}";
@@ -133,10 +132,8 @@ public class TestController {
             if (value == null) {
                 sb.append("null");
             } else if (value instanceof Map) {
-                // 递归处理嵌套Map
                 sb.append(formatMapWithNull((Map<?, ?>) value));
             } else if (value instanceof Iterable) {
-                // 处理List等集合类型
                 sb.append(formatIterableWithNull((Iterable<?>) value));
             } else {
                 sb.append(value);
@@ -147,9 +144,6 @@ public class TestController {
         return sb.toString();
     }
 
-    /**
-     * 格式化集合类型，明确显示null值
-     */
     private String formatIterableWithNull(Iterable<?> iterable) {
         if (iterable == null) {
             return "null";
@@ -180,9 +174,6 @@ public class TestController {
         return sb.toString();
     }
 
-    /**
-     * 获取客户端真实IP地址
-     */
     private String getClientIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
@@ -201,7 +192,6 @@ public class TestController {
             ip = request.getRemoteAddr();
         }
 
-        // 对于通过多个代理的情况，第一个IP为客户端真实IP
         if (ip != null && ip.contains(",")) {
             ip = ip.substring(0, ip.indexOf(",")).trim();
         }

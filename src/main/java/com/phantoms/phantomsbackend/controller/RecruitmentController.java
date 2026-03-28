@@ -2,6 +2,9 @@ package com.phantoms.phantomsbackend.controller;
 
 import com.phantoms.phantomsbackend.pojo.entity.primary.Recruitment;
 import com.phantoms.phantomsbackend.service.RecruitmentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,40 +15,32 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/recruitments")
+@Tag(name = "Recruitment", description = "招募信息相关接口")
 public class RecruitmentController {
 
     @Autowired
     private RecruitmentService recruitmentService;
 
-    /**
-     * 多条件组合查询招募信息
-     *
-     * @param name        名称（模糊）
-     * @param description 描述（模糊）
-     * @param homeWorld   所在世界
-     * @param category    类别
-     * @param minItemLevel 最低装备等级
-     * @param isCrossWorld 是否跨服
-     * @param datacenter  数据中心
-     * @param page        页码，默认 0
-     * @param size        每页大小，默认 10
-     * @param sortBy      排序字段，默认 updatedAt
-     * @param direction   排序方向，默认 DESC
-     * @return 分页结果
-     */
     @GetMapping("/search")
+    @Operation(
+            summary = "多条件组合查询招募信息",
+            description = "支持按名称、描述、世界、类别、装备等级、跨服、数据中心等条件查询招募信息",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "查询成功")
+            }
+    )
     public ResponseEntity<Page<Recruitment>> searchRecruitments(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String description,
-            @RequestParam(required = false) String homeWorld,
-            @RequestParam(required = false) String category,
-            @RequestParam(required = false) Integer minItemLevel,
-            @RequestParam(required = false) Boolean isCrossWorld,
-            @RequestParam(required = false) String datacenter,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "updatedAt") String sortBy,
-            @RequestParam(defaultValue = "DESC") String direction) {
+            @Parameter(description = "名称（模糊匹配）") @RequestParam(required = false) String name,
+            @Parameter(description = "描述（模糊匹配）") @RequestParam(required = false) String description,
+            @Parameter(description = "所在世界") @RequestParam(required = false) String homeWorld,
+            @Parameter(description = "类别") @RequestParam(required = false) String category,
+            @Parameter(description = "最低装备等级") @RequestParam(required = false) Integer minItemLevel,
+            @Parameter(description = "是否跨服") @RequestParam(required = false) Boolean isCrossWorld,
+            @Parameter(description = "数据中心") @RequestParam(required = false) String datacenter,
+            @Parameter(description = "页码，默认0") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "每页大小，默认10") @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "排序字段，默认updatedAt") @RequestParam(defaultValue = "updatedAt") String sortBy,
+            @Parameter(description = "排序方向，默认DESC") @RequestParam(defaultValue = "DESC") String direction) {
 
         Sort sort = direction.equalsIgnoreCase("DESC") ?
                 Sort.by(sortBy).descending() :

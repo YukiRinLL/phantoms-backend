@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.phantoms.phantomsbackend.pojo.dto.ChatRecordDTO;
 import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.ChatRecord;
 import com.phantoms.phantomsbackend.service.OneBotService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@Tag(name = "OneBot Controller", description = "OneBot/QQ机器人消息处理接口")
 public class OneBotController {
 
     private static final Logger logger = LoggerFactory.getLogger(OneBotController.class);
@@ -40,8 +44,15 @@ public class OneBotController {
     }
 
     @PostMapping("/onebot")
+    @Operation(
+            summary = "处理OneBot请求",
+            description = "接收并处理来自OneBot的消息请求",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "请求处理成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "请求处理失败")
+            }
+    )
     public ResponseEntity<String> handleOneBotRequest(@RequestBody Map<String, Object> requestBody) {
-        // 打印接收到的请求内容和类型
         String postType = (String) requestBody.get("post_type");
         String noticeType = (String) requestBody.get("notice_type");
         String subType = (String) requestBody.get("sub_type");
@@ -50,10 +61,8 @@ public class OneBotController {
         logger.debug("Full request: {}", requestBody);
 
         try {
-            // 调用服务层处理请求
             List<ChatRecord> chatRecords = oneBotService.processOneBotRequest(requestBody);
 
-            // 使用 Jackson 构建 JSON 响应
             ObjectNode jsonResponse = objectMapper.createObjectNode();
             jsonResponse.put("status", "ok");
 
@@ -67,115 +76,121 @@ public class OneBotController {
             }
             jsonResponse.set("data", data);
 
-            // 返回 JSON 格式的响应
             return ResponseEntity.ok(jsonResponse.toString());
         } catch (Exception e) {
-            // 记录错误日志
             logger.error("Error processing request: {}", e.getMessage(), e);
             e.printStackTrace();
 
-            // 使用 Jackson 构建 JSON 错误响应
             ObjectNode jsonError = objectMapper.createObjectNode();
             jsonError.put("status", "failed");
             jsonError.put("error", e.getMessage());
 
-            // 返回 JSON 格式的错误响应
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonError.toString());
         }
     }
 
     @GetMapping("/onebot/latest")
-    public ResponseEntity<List<ChatRecordDTO>> getLatestMessages(@RequestParam(defaultValue = "30") int limit) {
+    @Operation(
+            summary = "获取最新消息",
+            description = "获取最新的聊天消息记录",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "获取成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "服务器内部错误")
+            }
+    )
+    public ResponseEntity<List<ChatRecordDTO>> getLatestMessages(
+            @Parameter(description = "返回消息数量限制，默认30条") @RequestParam(defaultValue = "30") int limit) {
         try {
-            // 调用服务层获取最新的几条消息
             List<ChatRecordDTO> latestMessages = oneBotService.getLatestMessages(limit);
-
-            // 返回 JSON 格式的响应
             return ResponseEntity.ok(latestMessages);
         } catch (Exception e) {
-            // 记录错误日志
             logger.error("Error fetching latest messages: {}", e.getMessage(), e);
-            // 返回错误响应
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     @GetMapping("/onebot/latest/text")
-    public ResponseEntity<List<ChatRecord>> getLatestTextMessages(@RequestParam(defaultValue = "30") int limit) {
+    @Operation(
+            summary = "获取最新文本消息",
+            description = "获取最新的纯文本聊天消息记录",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "获取成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "服务器内部错误")
+            }
+    )
+    public ResponseEntity<List<ChatRecord>> getLatestTextMessages(
+            @Parameter(description = "返回消息数量限制，默认30条") @RequestParam(defaultValue = "30") int limit) {
         try {
-            // 调用服务层获取最新的几条消息
             List<ChatRecord> latestMessages = oneBotService.getLatestTextMessages(limit);
-
-            // 返回 JSON 格式的响应
             return ResponseEntity.ok(latestMessages);
         } catch (Exception e) {
-            // 记录错误日志
             logger.error("Error fetching latest messages: {}", e.getMessage(), e);
-            // 返回错误响应
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     @PostMapping("/onebot/send-to-group")
-    public ResponseEntity<String> sendToGroup(@RequestBody Map<String, Object> requestBody, @RequestParam(required = false) String groupId) {
+    @Operation(
+            summary = "发送消息到群组",
+            description = "向指定QQ群发送消息",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "消息发送成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "消息发送失败")
+            }
+    )
+    public ResponseEntity<String> sendToGroup(
+            @RequestBody Map<String, Object> requestBody,
+            @Parameter(description = "群组ID，不指定则使用默认群组") @RequestParam(required = false) String groupId) {
         try {
             if (StringUtils.isEmpty(groupId)) {
                 groupId = defaultGroupId;
             }
 
-            // Extract message and system information
             String message = (String) requestBody.get("message");
             Map<String, Object> systemInfo = (Map<String, Object>) requestBody.get("systemInfo");
 
-            // Log system information for investigation purposes
             logger.info("System Information: {}", systemInfo);
 
-            // Ensure systemInfo is not null
             if (systemInfo == null) {
                 systemInfo = new HashMap<>();
             }
 
-            // Ensure network and connection are not null
             Map<String, Object> network = (Map<String, Object>) systemInfo.getOrDefault("network", new HashMap<>());
             Map<String, Object> connection = (Map<String, Object>) network.getOrDefault("connection", new HashMap<>());
 
-            // Save the message and system information to the database
             oneBotService.saveUserMessage(message, Long.valueOf(groupId.toString()), systemInfo);
-
-            // Send the message to the default group
             oneBotService.sendGroupMessage(message, groupId);
 
-            // Return success response
             return ResponseEntity.ok("{\"status\":\"ok\"}");
         } catch (Exception e) {
-            // Log error
             logger.error("Error sending message to group: {}", e.getMessage(), e);
-
-            // Return error response
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"status\":\"failed\",\"error\":\"" + e.getMessage() + "\"}");
         }
     }
 
     @GetMapping("/onebot/monthly-stats")
+    @Operation(
+            summary = "获取月度统计",
+            description = "获取指定月份的消息统计数据",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "获取成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "服务器内部错误")
+            }
+    )
     public ResponseEntity<Map<String, Object>> getMonthlyStats(
-            @RequestParam(required = false) Integer year,
-            @RequestParam(required = false) Integer month) {
+            @Parameter(description = "年份，不指定则使用当前年份") @RequestParam(required = false) Integer year,
+            @Parameter(description = "月份，不指定则使用当前月份") @RequestParam(required = false) Integer month) {
         try {
-            // 如果未提供年月，使用当前年月
             LocalDate now = LocalDate.now();
             int targetYear = (year != null) ? year : now.getYear();
             int targetMonth = (month != null) ? month : now.getMonthValue();
 
-            // 调用服务层获取月度统计
             Map<String, Object> monthlyStats = oneBotService.getMonthlyStats(targetYear, targetMonth);
 
-            // 返回 JSON 格式的响应
             return ResponseEntity.ok(monthlyStats);
         } catch (Exception e) {
-            // 记录错误日志
             logger.error("Error fetching monthly stats: {}", e.getMessage(), e);
 
-            // 返回错误响应
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("status", "failed");
             errorResponse.put("error", e.getMessage());
@@ -184,20 +199,23 @@ public class OneBotController {
     }
 
     @GetMapping("/onebot/user-stats")
+    @Operation(
+            summary = "获取用户消息统计",
+            description = "获取指定用户的消息统计数据",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "获取成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "服务器内部错误")
+            }
+    )
     public ResponseEntity<Map<String, Object>> getUserMessageStats(
-            @RequestParam String search,
-            @RequestParam(defaultValue = "30") int days) {
+            @Parameter(description = "搜索关键词（用户名或QQ号）", required = true) @RequestParam String search,
+            @Parameter(description = "统计天数，默认30天") @RequestParam(defaultValue = "30") int days) {
         try {
-            // 调用服务层获取用户消息统计
             Map<String, Object> userStats = oneBotService.getUserMessageStats(search, days);
-
-            // 返回 JSON 格式的响应
             return ResponseEntity.ok(userStats);
         } catch (Exception e) {
-            // 记录错误日志
             logger.error("Error fetching user message stats: {}", e.getMessage(), e);
 
-            // 返回错误响应
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("status", "failed");
             errorResponse.put("error", e.getMessage());

@@ -1,5 +1,8 @@
 package com.phantoms.phantomsbackend.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.*;
@@ -26,13 +29,13 @@ import java.util.concurrent.TimeUnit;
 
 @Log4j2
 @RestController
+@Tag(name = "Image Proxy", description = "图片代理接口")
 public class ImageProxyController {
 
     private final OkHttpClient client;
 
     @Autowired
     public ImageProxyController() {
-        // 配置 OkHttpClient 使用连接池
         client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
@@ -40,11 +43,17 @@ public class ImageProxyController {
                 .build();
     }
 
-    /*
-    * 图片代理对内存消耗过大，不要在Rrnder上使用这个接口方法，会导致OOM
-    * */
     @GetMapping("/proxy/image")
-    public ResponseEntity<byte[]> proxyImage(@RequestParam String url) throws IOException {
+    @Operation(
+            summary = "图片代理",
+            description = "代理获取指定URL的图片资源。注意：此接口对内存消耗较大，不建议在生产环境频繁使用",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "图片获取成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "图片获取失败")
+            }
+    )
+    public ResponseEntity<byte[]> proxyImage(
+            @Parameter(description = "图片URL", required = true) @RequestParam String url) throws IOException {
         URL imageUrl = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) imageUrl.openConnection();
         connection.setRequestMethod("GET");
@@ -65,7 +74,16 @@ public class ImageProxyController {
     }
 
     @GetMapping("/proxy/qqemoji")
-    public ResponseEntity<StreamingResponseBody> proxyQQEmoji(@RequestParam String faceId) {
+    @Operation(
+            summary = "QQ表情代理",
+            description = "代理获取QQ表情图片",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "表情获取成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "表情获取失败")
+            }
+    )
+    public ResponseEntity<StreamingResponseBody> proxyQQEmoji(
+            @Parameter(description = "表情ID", required = true) @RequestParam String faceId) {
         String imageUrl = "https://q1.qlogo.cn/qqemoji/qq/" + faceId + ".gif";
         Request request = new Request.Builder()
                 .url(imageUrl)
@@ -78,9 +96,6 @@ public class ImageProxyController {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
                 long contentLength = response.body().contentLength();
-//                if (contentLength > 10 * 1024 * 1024) { // 限制图片大小为10MB
-//                    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(null);
-//                }
 
                 StreamingResponseBody stream = outputStream -> {
                     try (InputStream inputStream = response.body().byteStream()) {

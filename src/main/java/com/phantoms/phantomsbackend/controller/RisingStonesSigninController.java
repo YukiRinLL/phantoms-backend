@@ -3,6 +3,9 @@ package com.phantoms.phantomsbackend.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesSigninHelper;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/ffxiv/signin")
+@Tag(name = "Rising Stones Signin", description = "FFXI石之家签到相关接口")
 public class RisingStonesSigninController {
 
     @Autowired
@@ -20,11 +24,15 @@ public class RisingStonesSigninController {
     @Autowired
     private RisingStonesUtils risingStonesUtils;
 
-    /**
-     * 1. 获取登录二维码
-     * 用于获取叨鱼登录二维码内容
-     */
     @GetMapping("/login/qrcode")
+    @Operation(
+            summary = "获取登录二维码",
+            description = "获取叨鱼登录二维码内容",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "获取二维码成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "获取二维码失败")
+            }
+    )
     public ResponseEntity<?> getLoginQRCode() {
         try {
             String qrCodeContent = ffxivSigninHelper.getLoginQRCode();
@@ -41,17 +49,20 @@ public class RisingStonesSigninController {
         }
     }
 
-    /**
-     * 2. 轮询检查登录状态
-     * 用户扫描二维码后，前端需要轮询此接口检查登录状态
-     */
     @GetMapping("/login/status")
+    @Operation(
+            summary = "检查登录状态",
+            description = "用户扫描二维码后，轮询此接口检查登录状态",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "登录成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "检查登录状态失败")
+            }
+    )
     public ResponseEntity<?> checkLoginStatus() {
         try {
             JSONObject loginInfo = ffxivSigninHelper.getLoginInfo(RisingStonesSigninHelper.SSO_REDIRECT_URL);
             JSONObject data = loginInfo.getJSONObject("data");
             
-            // 检查是否有ticket（登录成功）
             if (data.containsKey("ticket")) {
                 return ResponseEntity.ok(Map.of(
                         "success", true,
@@ -63,7 +74,6 @@ public class RisingStonesSigninController {
                 ));
             }
             
-            // 检查二维码是否失效
             if (data.containsKey("mappedErrorCode") && data.getInteger("mappedErrorCode") == -10515801) {
                 return ResponseEntity.ok(Map.of(
                         "success", false,
@@ -74,7 +84,6 @@ public class RisingStonesSigninController {
                 ));
             }
             
-            // 二维码未扫描或正在处理
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", Map.of(
@@ -90,11 +99,16 @@ public class RisingStonesSigninController {
         }
     }
 
-    /**
-     * 3. 完成登录并获取Cookies
-     * 当用户扫描二维码成功后，调用此接口完成登录并获取Cookies
-     */
     @PostMapping("/login/finish")
+    @Operation(
+            summary = "完成登录",
+            description = "用户扫描二维码成功后，调用此接口完成登录并获取Cookies",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "登录完成"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "ticket不能为空"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "完成登录失败")
+            }
+    )
     public ResponseEntity<?> finishLogin(@RequestBody Map<String, String> request) {
         String ticket = request.get("ticket");
         if (ticket == null || ticket.isEmpty()) {
@@ -118,39 +132,15 @@ public class RisingStonesSigninController {
         }
     }
 
-//    /**
-//     * 4. 完整登录流程（测试用）
-//     * 一次性完成整个登录流程（不推荐生产环境使用，因为需要等待用户扫描二维码）
-//     */
-//    @GetMapping("/login/full")
-//    public ResponseEntity<?> fullLogin() {
-//        try {
-//            String cookies = ffxivSigninHelper.login();
-//            return ResponseEntity.ok(Map.of(
-//                    "success", true,
-//                    "data", Map.of(
-//                            "cookies", cookies
-//                    ),
-//                    "message", "完整登录流程完成"
-//            ));
-//        } catch (InterruptedException e) {
-//            Thread.currentThread().interrupt();
-//            return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(Map.of(
-//                    "success", false,
-//                    "message", "登录超时: " + e.getMessage()
-//            ));
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-//                    "success", false,
-//                    "message", "登录失败: " + e.getMessage()
-//            ));
-//        }
-//    }
-
-    /**
-     * 5. 检查登录状态（使用Cookies）
-     */
     @PostMapping("/check/login")
+    @Operation(
+            summary = "检查登录状态（使用Cookies）",
+            description = "使用已保存的Cookies检查登录状态",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "检查登录状态成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "检查登录状态失败")
+            }
+    )
     public ResponseEntity<?> checkLoginStatusWithCookies() {
         try {
             JSONObject result = ffxivSigninHelper.checkLoginStatus();
@@ -167,10 +157,15 @@ public class RisingStonesSigninController {
         }
     }
 
-    /**
-     * 6. 获取角色绑定信息
-     */
     @PostMapping("/character/bind")
+    @Operation(
+            summary = "获取角色绑定信息",
+            description = "获取当前登录用户的角色绑定信息",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "获取角色绑定信息成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "获取角色绑定信息失败")
+            }
+    )
     public ResponseEntity<?> getCharacterBindInfo() {
         try {
             JSONObject result = risingStonesUtils.getCharacterBindInfo();
@@ -187,10 +182,15 @@ public class RisingStonesSigninController {
         }
     }
 
-    /**
-     * 7. 执行签到
-     */
     @PostMapping("/sign/in")
+    @Operation(
+            summary = "执行签到",
+            description = "执行石之家每日签到",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "签到成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "签到失败")
+            }
+    )
     public ResponseEntity<?> doSignIn() {
         try {
             JSONObject result = risingStonesUtils.doSignIn();
@@ -207,10 +207,16 @@ public class RisingStonesSigninController {
         }
     }
 
-    /**
-     * 8. 获取签到日志
-     */
     @PostMapping("/sign/log")
+    @Operation(
+            summary = "获取签到日志",
+            description = "获取指定月份的签到日志",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "获取签到日志成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "month不能为空"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "获取签到日志失败")
+            }
+    )
     public ResponseEntity<?> getSignLog(@RequestBody Map<String, String> request) {
         String month = request.get("month");
         
@@ -236,10 +242,16 @@ public class RisingStonesSigninController {
         }
     }
 
-    /**
-     * 9. 获取签到奖励列表
-     */
     @PostMapping("/sign/reward/list")
+    @Operation(
+            summary = "获取签到奖励列表",
+            description = "获取指定月份的签到奖励列表",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "获取签到奖励列表成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "month不能为空"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "获取签到奖励列表失败")
+            }
+    )
     public ResponseEntity<?> getSignInRewardList(@RequestBody Map<String, String> request) {
         String month = request.get("month");
         
@@ -265,10 +277,16 @@ public class RisingStonesSigninController {
         }
     }
 
-    /**
-     * 10. 领取签到奖励
-     */
     @PostMapping("/sign/reward/get")
+    @Operation(
+            summary = "领取签到奖励",
+            description = "领取指定的签到奖励",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "领取签到奖励成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "参数错误"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "领取签到奖励失败")
+            }
+    )
     public ResponseEntity<?> getSignInReward(@RequestBody Map<String, Object> request) {
         Integer id = (Integer) request.get("id");
         String month = (String) request.get("month");
@@ -302,10 +320,16 @@ public class RisingStonesSigninController {
         }
     }
 
-    /**
-     * 11. 创建动态
-     */
     @PostMapping("/dynamic/create")
+    @Operation(
+            summary = "创建动态",
+            description = "在石之家创建一条新动态",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "创建动态成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "参数错误"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "创建动态失败")
+            }
+    )
     public ResponseEntity<?> createDynamic(@RequestBody Map<String, Object> request) {
         String content = (String) request.get("content");
         Integer scope = (Integer) request.get("scope");
@@ -340,10 +364,16 @@ public class RisingStonesSigninController {
         }
     }
 
-    /**
-     * 12. 创建动态评论
-     */
     @PostMapping("/post/comment")
+    @Operation(
+            summary = "创建动态评论",
+            description = "在石之家动态下创建评论",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "创建动态评论成功"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "参数错误"),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "创建动态评论失败")
+            }
+    )
     public ResponseEntity<?> createPostComment(@RequestBody Map<String, String> request) {
         String content = request.get("content");
         String posts_id = request.get("posts_id");
