@@ -7,12 +7,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add OneLiveWebhook func">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="rollback springframework version">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneLiveWebhookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneLiveWebhookController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneLiveWebhookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/OneLiveWebhookService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneLiveWebhookServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneLiveWebhookServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -299,22 +298,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00229" summary="fix bug RecruitmentRepository insertIgnore func">
-      <option name="closed" value="true" />
-      <created>1765363139973</created>
-      <option name="number" value="00229" />
-      <option name="presentableId" value="LOCAL-00229" />
-      <option name="project" value="LOCAL" />
-      <updated>1765363139973</updated>
-    </task>
-    <task id="LOCAL-00230" summary="turn off GuildMemberReminderScheduler">
-      <option name="closed" value="true" />
-      <created>1765526797397</created>
-      <option name="number" value="00230" />
-      <option name="presentableId" value="LOCAL-00230" />
-      <option name="project" value="LOCAL" />
-      <updated>1765526797397</updated>
     </task>
     <task id="LOCAL-00231" summary="update RisingStonesService add redis cache">
       <option name="closed" value="true" />
@@ -692,7 +675,23 @@
       <option name="project" value="LOCAL" />
       <updated>1774603690529</updated>
     </task>
-    <option name="localTasksCounter" value="278" />
+    <task id="LOCAL-00278" summary="fix OneLiveWebhook func">
+      <option name="closed" value="true" />
+      <created>1774605864061</created>
+      <option name="number" value="00278" />
+      <option name="presentableId" value="LOCAL-00278" />
+      <option name="project" value="LOCAL" />
+      <updated>1774605864061</updated>
+    </task>
+    <task id="LOCAL-00279" summary="rollback springframework version">
+      <option name="closed" value="true" />
+      <created>1774605902533</created>
+      <option name="number" value="00279" />
+      <option name="presentableId" value="LOCAL-00279" />
+      <option name="project" value="LOCAL" />
+      <updated>1774605902534</updated>
+    </task>
+    <option name="localTasksCounter" value="280" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -737,8 +736,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add RisingStonesLoginStatusMonitor" />
-    <MESSAGE value="update configuration" />
     <MESSAGE value="update NapCatQQUtil" />
     <MESSAGE value="update HousingSaleScheduler sending pic" />
     <MESSAGE value="add Sumemo functions" />
@@ -762,7 +759,9 @@
     <MESSAGE value="fix QQ14 news scheduler" />
     <MESSAGE value="add OneLiveWebhook func" />
     <MESSAGE value="add OneLiveWebhook func" />
-    <option name="LAST_COMMIT_MESSAGE" value="add OneLiveWebhook func" />
+    <MESSAGE value="fix OneLiveWebhook func" />
+    <MESSAGE value="rollback springframework version" />
+    <option name="LAST_COMMIT_MESSAGE" value="rollback springframework version" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

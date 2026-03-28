@@ -101,11 +101,11 @@ public class OneLiveWebhookServiceImpl implements OneLiveWebhookService {
      */
     private String buildMessage(String title, String content, String type) {
         StringBuilder message = new StringBuilder();
-        message.append("【一号直播通知】\n");
-        message.append("标题: " + title + "\n");
-        message.append("内容: " + content + "\n");
-        message.append("类型: " + getTypeDescription(type) + "\n");
-        message.append("时间: " + new java.util.Date());
+//        message.append("[直播通知](bestlive)\n");
+        message.append("title: " + title + "\n");
+        message.append("content: " + content + "\n");
+        message.append("type: " + getTypeDescription(type) + "\n");
+        message.append("timeStamp: " + new java.util.Date());
         return message.toString();
     }
 
