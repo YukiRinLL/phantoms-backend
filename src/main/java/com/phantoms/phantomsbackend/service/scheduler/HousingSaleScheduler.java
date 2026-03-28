@@ -718,7 +718,7 @@ public class HousingSaleScheduler {
         String serverName = SERVER_NAME_MAP.getOrDefault(server, server);
         
         // 定义表头和对应的数据获取函数
-        String[] headers = {"序号", "尺寸", "位置", "价格", "购买方式", "限制", "参与人数", "截止时间", "首次发现"};
+        String[] headers = {"序号", "尺寸", "位置", "价格", "购买方式", "限制", "参与人数", "截止时间", "首次出现"};
         int cols = headers.length;
         int rows = houses.size() + 2; // 表头 + 数据 + 标题
         
@@ -734,7 +734,7 @@ public class HousingSaleScheduler {
         BufferedImage tempImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         Graphics2D tempG2d = tempImage.createGraphics();
         tempG2d.setFont(titleFont);
-        String title = "🏠 " + serverName + " 服务器新房源信息";
+        String title = "[Server:" + serverName + "] New Housing Sale";
         FontMetrics titleMetrics = tempG2d.getFontMetrics();
         tempG2d.dispose();
         

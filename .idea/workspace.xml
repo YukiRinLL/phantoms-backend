@@ -7,11 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="rollback springframework version">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update OneLiveWebhook Message format">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneLiveWebhookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/OneLiveWebhookController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneLiveWebhookServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneLiveWebhookServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -298,14 +296,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00231" summary="update RisingStonesService add redis cache">
-      <option name="closed" value="true" />
-      <created>1765529093550</created>
-      <option name="number" value="00231" />
-      <option name="presentableId" value="LOCAL-00231" />
-      <option name="project" value="LOCAL" />
-      <updated>1765529093550</updated>
     </task>
     <task id="LOCAL-00232" summary="update RisingStonesService add redis cache">
       <option name="closed" value="true" />
@@ -691,7 +681,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774605902534</updated>
     </task>
-    <option name="localTasksCounter" value="280" />
+    <task id="LOCAL-00280" summary="update OneLiveWebhook Message format">
+      <option name="closed" value="true" />
+      <created>1774670976998</created>
+      <option name="number" value="00280" />
+      <option name="presentableId" value="LOCAL-00280" />
+      <option name="project" value="LOCAL" />
+      <updated>1774670976998</updated>
+    </task>
+    <option name="localTasksCounter" value="281" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -736,7 +734,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update NapCatQQUtil" />
     <MESSAGE value="update HousingSaleScheduler sending pic" />
     <MESSAGE value="add Sumemo functions" />
     <MESSAGE value="modify HousingSaleScheduler update font setting" />
@@ -761,7 +758,8 @@
     <MESSAGE value="add OneLiveWebhook func" />
     <MESSAGE value="fix OneLiveWebhook func" />
     <MESSAGE value="rollback springframework version" />
-    <option name="LAST_COMMIT_MESSAGE" value="rollback springframework version" />
+    <MESSAGE value="update OneLiveWebhook Message format" />
+    <option name="LAST_COMMIT_MESSAGE" value="update OneLiveWebhook Message format" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
