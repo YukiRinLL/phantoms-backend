@@ -22,6 +22,14 @@ public interface PrimaryChatRecordRepository extends JpaRepository<ChatRecord, L
     @Query(value = "SELECT * FROM onebot.chat_records cr WHERE cr.message LIKE '%type=text%' ORDER BY cr.created_at DESC LIMIT ?1", nativeQuery = true)
     List<ChatRecord> findTopByOrderByCreatedAtDescWithText(int limit);
 
+    // 根据群组ID列表查询最新的几条消息
+    @Query(value = "SELECT * FROM onebot.chat_records cr WHERE cr.qq_group_id IN (:groupIds) ORDER BY cr.created_at DESC LIMIT :limit", nativeQuery = true)
+    List<ChatRecord> findTopByGroupsOrderByCreatedAtDesc(@org.springframework.data.repository.query.Param("groupIds") List<Long> groupIds, @org.springframework.data.repository.query.Param("limit") int limit);
+
+    // 根据群组ID列表查询最新的几条文本消息
+    @Query(value = "SELECT * FROM onebot.chat_records cr WHERE cr.qq_group_id IN (:groupIds) AND cr.message LIKE '%type=text%' ORDER BY cr.created_at DESC LIMIT :limit", nativeQuery = true)
+    List<ChatRecord> findTopByGroupsOrderByCreatedAtDescWithText(@org.springframework.data.repository.query.Param("groupIds") List<Long> groupIds, @org.springframework.data.repository.query.Param("limit") int limit);
+
     // 查询最新的3条消息，按群组分组
     @Query(value = "SELECT * FROM onebot.chat_records cr WHERE cr.qq_group_id = ?1 ORDER BY cr.created_at DESC LIMIT 3", nativeQuery = true)
     List<ChatRecord> findTop3ByGroupIdOrderByCreatedAtDesc(Long groupId);

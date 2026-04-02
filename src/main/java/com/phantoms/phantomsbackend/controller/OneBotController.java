@@ -34,6 +34,12 @@ public class OneBotController {
     @Value("${napcat.default-group-id}")
     private String defaultGroupId;
 
+    @Value("${napcat.phantom-group-id}")
+    private String phantomGroupId;
+
+    @Value("${napcat.crystal-group-id}")
+    private String crystalGroupId;
+
     @Autowired
     private final OneBotService oneBotService;
     private final ObjectMapper objectMapper;
@@ -92,7 +98,7 @@ public class OneBotController {
     @GetMapping("/onebot/latest")
     @Operation(
             summary = "获取最新消息",
-            description = "获取最新的聊天消息记录",
+            description = "获取最新的聊天消息记录（只包含Phantom和Crystal群组）",
             responses = {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "获取成功"),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "服务器内部错误")
@@ -101,7 +107,7 @@ public class OneBotController {
     public ResponseEntity<List<ChatRecordDTO>> getLatestMessages(
             @Parameter(description = "返回消息数量限制，默认30条") @RequestParam(defaultValue = "30") int limit) {
         try {
-            List<ChatRecordDTO> latestMessages = oneBotService.getLatestMessages(limit);
+            List<ChatRecordDTO> latestMessages = oneBotService.getLatestMessagesByGroups(limit, List.of(phantomGroupId, crystalGroupId));
             return ResponseEntity.ok(latestMessages);
         } catch (Exception e) {
             logger.error("Error fetching latest messages: {}", e.getMessage(), e);
@@ -112,7 +118,7 @@ public class OneBotController {
     @GetMapping("/onebot/latest/text")
     @Operation(
             summary = "获取最新文本消息",
-            description = "获取最新的纯文本聊天消息记录",
+            description = "获取最新的纯文本聊天消息记录（只包含Phantom和Crystal群组）",
             responses = {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "获取成功"),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "服务器内部错误")
@@ -121,7 +127,7 @@ public class OneBotController {
     public ResponseEntity<List<ChatRecord>> getLatestTextMessages(
             @Parameter(description = "返回消息数量限制，默认30条") @RequestParam(defaultValue = "30") int limit) {
         try {
-            List<ChatRecord> latestMessages = oneBotService.getLatestTextMessages(limit);
+            List<ChatRecord> latestMessages = oneBotService.getLatestTextMessagesByGroups(limit, List.of(phantomGroupId, crystalGroupId));
             return ResponseEntity.ok(latestMessages);
         } catch (Exception e) {
             logger.error("Error fetching latest messages: {}", e.getMessage(), e);

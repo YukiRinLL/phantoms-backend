@@ -376,6 +376,67 @@ public class OneBotServiceImpl implements OneBotService {
         return chatRecordDTOs;
     }
 
+    @Override
+    public List<ChatRecordDTO> getLatestMessagesByGroups(int limit, List<String> groupIds) throws IOException {
+        List<Long> groupIdLongs = groupIds.stream().map(Long::parseLong).collect(Collectors.toList());
+        List<ChatRecord> chatRecords = chatRecordRepository.findTopByGroupsOrderByCreatedAtDesc(groupIdLongs, limit);
+        List<ChatRecordDTO> chatRecordDTOs = new ArrayList<>();
+
+        // 统计所有需要查询的群组ID
+        Set<Long> groups = chatRecords.stream()
+                .map(ChatRecord::getGroupId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        // 缓存每个群组的成员列表
+        Map<Long, Map<Long, String>> groupMemberMap = new HashMap<>();
+
+        for (Long groupId : groups) {
+            Map<Long, String> memberMap = getGroupMemberMap(groupId);
+            groupMemberMap.put(groupId, memberMap);
+        }
+
+        for (ChatRecord chatRecord : chatRecords) {
+            ChatRecordDTO chatRecordDTO = new ChatRecordDTO();
+            chatRecordDTO.setId(chatRecord.getId());
+            chatRecordDTO.setMessageType(chatRecord.getMessageType());
+            chatRecordDTO.setUserId(chatRecord.getUserId());
+            chatRecordDTO.setGroupId(chatRecord.getGroupId());
+            chatRecordDTO.setMessage(chatRecord.getMessage());
+            chatRecordDTO.setTimestamp(chatRecord.getTimestamp());
+            chatRecordDTO.setCreatedAt(chatRecord.getCreatedAt());
+            chatRecordDTO.setUpdatedAt(chatRecord.getUpdatedAt());
+
+            try {
+                Long groupId = chatRecord.getGroupId();
+                Map<Long, String> memberMap = groupMemberMap.get(groupId);
+
+                if (memberMap != null) {
+                    Long userId = chatRecord.getUserId();
+                    String nickname = getNicknameFromMemberMap(memberMap, userId);
+                    if (nickname == null) {
+                        nickname = "Unknown" + userId;
+                    }
+                    chatRecordDTO.setNickname(nickname);
+                } else {
+                    Long userId = chatRecord.getUserId();
+                    String nickname = "Unknown" + userId;
+                    chatRecordDTO.setNickname(nickname);
+                }
+
+            } catch (Exception e) {
+                logger.error("[ERROR] 设置昵称时发生错误: {}", e.getMessage(), e);
+                Long userId = chatRecord.getUserId();
+                String defaultNickname = "ErrorUnknown" + userId;
+                chatRecordDTO.setNickname(defaultNickname);
+            }
+
+            chatRecordDTOs.add(chatRecordDTO);
+        }
+
+        return chatRecordDTOs;
+    }
+
     /**
      * 从memberMap中获取昵称 - 修复了Key类型不匹配的问题
      */
@@ -412,6 +473,13 @@ public class OneBotServiceImpl implements OneBotService {
     public List<ChatRecord> getLatestTextMessages(int limit) {
         // 查询最新的几条消息，只返回 type=text 的消息
         return chatRecordRepository.findTopByOrderByCreatedAtDescWithText(limit);
+    }
+
+    @Override
+    public List<ChatRecord> getLatestTextMessagesByGroups(int limit, List<String> groupIds) {
+        List<Long> groupIdLongs = groupIds.stream().map(Long::parseLong).collect(Collectors.toList());
+        // 查询最新的几条文本消息，只返回指定群组的消息
+        return chatRecordRepository.findTopByGroupsOrderByCreatedAtDescWithText(groupIdLongs, limit);
     }
 
     @Override

@@ -14,7 +14,11 @@ public interface OneBotService {
 
     List<ChatRecordDTO> getLatestMessages(@RequestParam(defaultValue = "30") int limit) throws IOException;
 
+    List<ChatRecordDTO> getLatestMessagesByGroups(int limit, List<String> groupIds) throws IOException;
+
     List<ChatRecord> getLatestTextMessages(@RequestParam(defaultValue = "30") int limit);
+
+    List<ChatRecord> getLatestTextMessagesByGroups(int limit, List<String> groupIds);
 
     void sendGroupMessage(String message, String groupId) throws Exception;
 
