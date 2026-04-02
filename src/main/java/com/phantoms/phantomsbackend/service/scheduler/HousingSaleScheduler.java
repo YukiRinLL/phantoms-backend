@@ -422,7 +422,7 @@ public class HousingSaleScheduler {
                         .collect(Collectors.groupingBy(HousingSale::getServer));
 
                 for (Map.Entry<String, List<HousingSale>> entry : housesByServer.entrySet()) {
-                    sendHouseNotification(entry.getKey(), entry.getValue());
+//                    sendHouseNotification(entry.getKey(), entry.getValue()); // todo: turned off msg note func
                     sendBriefHouseNotification(entry.getKey(), entry.getValue());
                 }
 
