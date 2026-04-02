@@ -14,7 +14,7 @@ public class SchedulingConfig {
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(5); // 核心线程数5，避免单线程阻塞
+        scheduler.setPoolSize(10); // 核心线程数10，避免单线程阻塞
         scheduler.setThreadNamePrefix("FF14-Scheduler-");
         scheduler.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         scheduler.setWaitForTasksToCompleteOnShutdown(true);

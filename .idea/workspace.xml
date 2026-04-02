@@ -7,8 +7,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update onebot/latest &amp; /onebot/latest/text API to get phantomGroup &amp; crystalGroup msg only">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="turn off HousingSaleScheduler msg note func">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/SchedulingConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/SchedulingConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DataSyncScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DataSyncScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/RecruitmentScheduler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -295,14 +298,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00233" summary="add FfxivSigninHelper">
-      <option name="closed" value="true" />
-      <created>1766130440687</created>
-      <option name="number" value="00233" />
-      <option name="presentableId" value="LOCAL-00233" />
-      <option name="project" value="LOCAL" />
-      <updated>1766130440687</updated>
     </task>
     <task id="LOCAL-00234" summary="put cookies from frontend to backend">
       <option name="closed" value="true" />
@@ -688,7 +683,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775122431562</updated>
     </task>
-    <option name="localTasksCounter" value="282" />
+    <task id="LOCAL-00282" summary="turn off HousingSaleScheduler msg note func">
+      <option name="closed" value="true" />
+      <created>1775122559841</created>
+      <option name="number" value="00282" />
+      <option name="presentableId" value="LOCAL-00282" />
+      <option name="project" value="LOCAL" />
+      <updated>1775122559841</updated>
+    </task>
+    <option name="localTasksCounter" value="283" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -733,7 +736,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add Sumemo functions" />
     <MESSAGE value="modify HousingSaleScheduler update font setting" />
     <MESSAGE value="fix OneBotService setNickname error" />
     <MESSAGE value="update logger to use log4j2" />
@@ -758,7 +760,8 @@
     <MESSAGE value="rollback springframework version" />
     <MESSAGE value="update OneLiveWebhook Message format" />
     <MESSAGE value="update onebot/latest &amp; /onebot/latest/text API to get phantomGroup &amp; crystalGroup msg only" />
-    <option name="LAST_COMMIT_MESSAGE" value="update onebot/latest &amp; /onebot/latest/text API to get phantomGroup &amp; crystalGroup msg only" />
+    <MESSAGE value="turn off HousingSaleScheduler msg note func" />
+    <option name="LAST_COMMIT_MESSAGE" value="turn off HousingSaleScheduler msg note func" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

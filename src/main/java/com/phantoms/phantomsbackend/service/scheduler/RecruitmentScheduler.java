@@ -46,7 +46,7 @@ public class RecruitmentScheduler {
     private RedisUtil redisUtil;
 
     @Scheduled(fixedRate = 300000) // 每300秒执行一次
-    @Transactional
+    @Transactional(timeout = 60, readOnly = false)
     public void fetchAndFilterRecruitments() {
         try {
             List<RecruitmentResponse> allResponses = LittlenightmareClient.fetchAllRecruitmentListings(

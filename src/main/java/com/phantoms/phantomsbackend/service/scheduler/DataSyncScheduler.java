@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StopWatch;
 
 import java.time.LocalDateTime;
@@ -99,6 +100,7 @@ public class DataSyncScheduler {
     private com.phantoms.phantomsbackend.repository.secondary.SecondaryExpeditionaryTeamRepository secondaryExpeditionaryTeamRepository;
 
     @Scheduled(fixedRate = 600000) // 每10分钟执行一次
+    @Transactional(timeout = 300)
     public void syncData() {
         StopWatch totalStopWatch = new StopWatch("TotalSync");
         totalStopWatch.start("total-sync");
@@ -252,41 +254,29 @@ public class DataSyncScheduler {
     }
 
     /**
-     * 优化后的批量插入方法
+     * 优化后的批量插入方法 - 使用 Spring 事务管理
      */
+    @Transactional(timeout = 120) // 2分钟超时
     private void batchInsertOptimized(List<com.phantoms.phantomsbackend.pojo.entity.secondary.onebot.ChatRecord> records) {
         if (records.isEmpty()) {
             return;
         }
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-
         try {
-            transaction.begin();
-
+            // 使用 Spring Data JPA 的批量保存
             for (int i = 0; i < records.size(); i++) {
-                entityManager.persist(records.get(i));
+                secondaryChatRecordRepository.save(records.get(i));
 
                 // 分批刷新，避免内存溢出
                 if ((i + 1) % INSERT_BATCH_SIZE == 0) {
-                    entityManager.flush();
-                    entityManager.clear();
+                    secondaryChatRecordRepository.flush();
                 }
             }
-
-            entityManager.flush();
-            entityManager.clear();
-            transaction.commit();
+            secondaryChatRecordRepository.flush();
 
         } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
             logger.error("Batch insert failed for {} records", records.size(), e);
             throw e;
-        } finally {
-            entityManager.close();
         }
     }
 
