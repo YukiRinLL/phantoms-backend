@@ -408,6 +408,14 @@ public class HousingSaleScheduler {
         List<HousingSale> availableHouses = allHousingSales.stream()
                 .filter(sale -> sale.getPurchaseType() == PURCHASE_TYPE_FCFS || sale.getPurchaseType() == PURCHASE_TYPE_LOTTERY)
                 .filter(sale -> targetAreas.contains(sale.getArea()))
+                .filter(sale -> {
+                    // 计算推测的截止时间
+                    OffsetDateTime estimatedEndTime = calculateEstimatedEndTime(sale);
+                    // 获取当前时间
+                    OffsetDateTime now = OffsetDateTime.now();
+                    // 只保留截止时间在当前时间之后的房屋
+                    return estimatedEndTime.isAfter(now);
+                })
                 .collect(Collectors.toList());
 
         logger.info("找到 {} 套可购买房屋", availableHouses.size());
@@ -524,6 +532,17 @@ public class HousingSaleScheduler {
         try {
             // 获取服务器名称
             String serverName = SERVER_NAME_MAP.getOrDefault(server, server);
+            
+            // 对房屋列表进行排序，L房优先于M房
+            houses.sort((h1, h2) -> {
+                // L房(SIZE_L=2)排在M房(SIZE_M=1)前面
+                if (h1.getSize() == SIZE_L && h2.getSize() == SIZE_M) {
+                    return -1;
+                } else if (h1.getSize() == SIZE_M && h2.getSize() == SIZE_L) {
+                    return 1;
+                }
+                return 0;
+            });
             
             // 优先尝试发送表格图片
             try {
