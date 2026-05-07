@@ -1,6 +1,12 @@
 # 应用基础配置
 app:
   version: 1.0.0
+  llm:
+    openai:
+      api-url: ${OPENAI_BASE_URL}
+      api-key: ${OPENAI_API_KEY}
+      model-name: ${OPENAI_MODEL_NAME:gpt-3.5-turbo}
+      temperature: ${OPENAI_TEMP:0.1}
 
 server:
   port: 8080
