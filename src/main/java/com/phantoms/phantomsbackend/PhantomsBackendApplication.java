@@ -1,12 +1,15 @@
 package com.phantoms.phantomsbackend;
 
+import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {
+    MybatisAutoConfiguration.class  // 排除MyBatis自动配置，项目未使用Mapper
+})
 @EntityScan("com.phantoms.phantomsbackend.pojo.entity")
 @EnableScheduling
 //@ComponentScan(basePackages = "com.phantoms.phantomsbackend")

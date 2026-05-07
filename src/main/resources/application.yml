@@ -77,16 +77,17 @@ spring:
     hikari:
       idle-timeout: 30000
       max-lifetime: 1800000
-      connection-timeout: 30000
-      maximum-pool-size: 8                  # 减小连接池大小
-      minimum-idle: 2                       # 减少空闲连接
+      connection-timeout: 15000
+      maximum-pool-size: 4
+      minimum-idle: 1
       data-source-properties:
-        preparedStatementCacheQueries: 256
-        preparedStatementCacheSizeMiB: 16
+        preparedStatementCacheQueries: 64
+        preparedStatementCacheSizeMiB: 4
         prepareThreshold: 5
       leak-detection-threshold: 30000       # 泄漏检测阈值（毫秒）
       validation-timeout: 5000              # 验证超时（毫秒）
       connection-test-query: SELECT 1       # 连接验证查询
+      initialization-fail-timeout: 0        # 初始化失败时不等待
 
   jpa:
     properties:
@@ -96,16 +97,22 @@ spring:
         order_inserts: true
         order_updates: true
         jdbc:
-          batch_size: 50
+          batch_size: 20                      # 减少批量操作大小
           lob:
             non_contextual_creation: true
         bytecode:
           provider: bytebuddy
-        format_sql: true
+        format_sql: false                     # 关闭SQL格式化，减少内存和CPU消耗
+        show_sql: false                      # 关闭SQL输出
+        generate_statistics: false           # 关闭统计信息收集
+        cache:
+          use_second_level_cache: false      # 关闭二级缓存
+          use_query_cache: false             # 关闭查询缓存
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
     show-sql: false
+    open-in-view: false                      # 关闭Open Session in View模式
 
   # E-mail (QQ 邮箱配置)
   mail:
@@ -128,11 +135,13 @@ spring:
       url: ${REDIS_URL:rediss://red-d03imhre5dus73ab817g:OXtvQrLbJ1WXXdjXMEVknm1hPnW8XFAo@oregon-keyvalue.render.com:6379}
       timeout: 10000
       connect-timeout: 5000
+      repositories:
+        enabled: false  # 关闭Redis仓库自动扫描，减少内存消耗
       lettuce:
         pool:
-          max-active: 20
-          max-idle: 10
-          min-idle: 5
+          max-active: 10
+          max-idle: 5
+          min-idle: 2
           max-wait: 3000ms
         shutdown-timeout: 100ms
 
