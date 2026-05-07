@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class NapCatQQUtil {
@@ -25,7 +26,11 @@ public class NapCatQQUtil {
     private String accessToken;
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static final OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient client = new OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build();
 
     /**
      * 通用请求方法
@@ -42,17 +47,38 @@ public class NapCatQQUtil {
             .post(body)
             .build();
 
-        logger.debug("Sending request to NapCat: endpoint={}, params={}", endpoint, params);
+        long startTime = System.currentTimeMillis();
+        logger.info("开始调用 NapCat API: endpoint={}, url={}", endpoint, url);
+        
         try (Response response = client.newCall(request).execute()) {
+            long duration = System.currentTimeMillis() - startTime;
+            
             if (!response.isSuccessful()) {
-                logger.error("NapCat request failed: endpoint={}, code={}, message={}", endpoint, response.code(), response.message());
-                throw new IOException("Unexpected code " + response);
+                logger.error("NapCat请求失败: endpoint={}, code={}, message={}, duration={}ms", 
+                    endpoint, response.code(), response.message(), duration);
+                throw new IOException("NapCat API请求失败: " + response.code() + " - " + response.message());
             }
+            
             String responseBody = response.body().string();
-            logger.debug("NapCat request successful: endpoint={}, response={}", endpoint, responseBody);
+            logger.info("NapCat请求成功: endpoint={}, duration={}ms", endpoint, duration);
+            logger.debug("NapCat响应内容: {}", responseBody);
             return responseBody;
+            
+        } catch (java.net.SocketTimeoutException e) {
+            long duration = System.currentTimeMillis() - startTime;
+            logger.error("NapCat请求超时: endpoint={}, duration={}ms, error={}", endpoint, duration, e.getMessage());
+            throw new IOException("NapCat API请求超时", e);
+            
+        } catch (java.net.ConnectException e) {
+            long duration = System.currentTimeMillis() - startTime;
+            logger.error("NapCat连接失败: endpoint={}, url={}, duration={}ms, error={}", 
+                endpoint, url, duration, e.getMessage());
+            throw new IOException("无法连接到NapCat服务: " + url, e);
+            
         } catch (IOException e) {
-            logger.error("Error sending request to NapCat: endpoint={}, error={}", endpoint, e.getMessage(), e);
+            long duration = System.currentTimeMillis() - startTime;
+            logger.error("NapCat请求异常: endpoint={}, duration={}ms, error={}", 
+                endpoint, duration, e.getMessage(), e);
             throw e;
         }
     }

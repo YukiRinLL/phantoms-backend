@@ -303,7 +303,19 @@ public class RisingStonesUtils {
 
         try (Response response = tempClient.newCall(request).execute()) {
             logger.info("Response code for doSignIn: {}", response.code());
-            return JSONObject.parseObject(response.body().string());
+            if (!response.isSuccessful()) {
+                logger.error("doSignIn request failed: code={}, message={}", response.code(), response.message());
+                throw new IOException("RisingStones API请求失败: " + response.code());
+            }
+            String responseBody = response.body().string();
+            logger.debug("doSignIn response: {}", responseBody);
+            return JSONObject.parseObject(responseBody);
+        } catch (java.net.SocketTimeoutException e) {
+            logger.error("doSignIn请求超时: {}", e.getMessage());
+            throw new IOException("RisingStones API请求超时", e);
+        } catch (java.net.ConnectException e) {
+            logger.error("doSignIn连接失败: {}", e.getMessage());
+            throw new IOException("无法连接到RisingStones服务", e);
         }
     }
 

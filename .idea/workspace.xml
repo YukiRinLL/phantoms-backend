@@ -7,19 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add Embedding Similarity function">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/LLM/FF14Prompt.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/LLM/FF14Translator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/LLM/LLMClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/LLMProperties.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/FF14TranslatorController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/prompts/ff14-translator-prompt-backup.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/prompts/ff14-translator-prompt.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="add FF14Translator">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/NapCatQQUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/NapCatQQUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" afterDir="false" />
     </list>
     <list id="cc09743e-5b03-4657-8bba-22a55747451e" name="local" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
@@ -310,14 +301,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00236" summary="remove RisingStonesLoginTool &amp; update RisingStonesUtils to using RisingStonesSigninHelper">
-      <option name="closed" value="true" />
-      <created>1766370248774</created>
-      <option name="number" value="00236" />
-      <option name="presentableId" value="LOCAL-00236" />
-      <option name="project" value="LOCAL" />
-      <updated>1766370248774</updated>
     </task>
     <task id="LOCAL-00237" summary="update todo">
       <option name="closed" value="true" />
@@ -703,7 +686,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776913451424</updated>
     </task>
-    <option name="localTasksCounter" value="285" />
+    <task id="LOCAL-00285" summary="add FF14Translator">
+      <option name="closed" value="true" />
+      <created>1778129159514</created>
+      <option name="number" value="00285" />
+      <option name="presentableId" value="LOCAL-00285" />
+      <option name="project" value="LOCAL" />
+      <updated>1778129159514</updated>
+    </task>
+    <option name="localTasksCounter" value="286" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -748,7 +739,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update logger to use log4j2" />
     <MESSAGE value="update Dockerfile add font support" />
     <MESSAGE value="update napcat http-server-url" />
     <MESSAGE value="add news functions" />
@@ -773,7 +763,8 @@
     <MESSAGE value="turn off HousingSaleScheduler msg note func" />
     <MESSAGE value="update Transactional control" />
     <MESSAGE value="add Embedding Similarity function" />
-    <option name="LAST_COMMIT_MESSAGE" value="add Embedding Similarity function" />
+    <MESSAGE value="add FF14Translator" />
+    <option name="LAST_COMMIT_MESSAGE" value="add FF14Translator" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
