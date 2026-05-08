@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +41,6 @@ public class FF14CrystalNewsScheduler {
     @Value("${napcat.crystal-group-id}")
     private String crystalGroupId;
 
-    @PostConstruct
     public void initCache() {
         logger.info("初始化FF14水晶世界新闻缓存");
         try {

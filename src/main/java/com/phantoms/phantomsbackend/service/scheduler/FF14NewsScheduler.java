@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import javax.annotation.PostConstruct;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,6 @@ public class FF14NewsScheduler {
     @Value("${napcat.default-group-id}")
     private String defaultGroupId;
 
-    @PostConstruct
     public void initCache() {
         logger.info("初始化FF14新闻缓存");
         try {

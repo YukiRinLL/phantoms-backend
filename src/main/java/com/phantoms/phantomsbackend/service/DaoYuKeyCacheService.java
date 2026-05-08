@@ -50,7 +50,6 @@ public class DaoYuKeyCacheService {
     /**
      * 应用启动时预加载缓存
      */
-    @PostConstruct
     public void preloadCache() {
         logger.info("应用启动，预加载DaoYu Key缓存");
         getDaoYuKey(); // 触发缓存加载
