@@ -20,6 +20,15 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.phantoms.phantomsbackend.pojo.entity.secondary.AuthUser;
+import com.phantoms.phantomsbackend.pojo.entity.secondary.onebot.ChatRecord;
+import com.phantoms.phantomsbackend.pojo.entity.secondary.ExpeditionaryTeam;
+import com.phantoms.phantomsbackend.pojo.entity.secondary.Image;
+import com.phantoms.phantomsbackend.pojo.entity.secondary.Message;
+import com.phantoms.phantomsbackend.pojo.entity.secondary.Password;
+import com.phantoms.phantomsbackend.pojo.entity.secondary.User;
+import com.phantoms.phantomsbackend.pojo.entity.secondary.UserProfile;
+
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
@@ -96,12 +105,30 @@ public class SecondaryDataSourceConfig {
         // 为MySQL设置独立的JPA方言
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+        // 优化内存配置：关闭所有不必要的扫描和缓存
+        properties.put("hibernate.archive.autodetection", "none");  // 完全关闭归档自动检测
+        properties.put("hibernate.javax.persistence.validation.mode", "none");  // 关闭Bean Validation
+        properties.put("hibernate.cache.use_second_level_cache", "false");
+        properties.put("hibernate.cache.use_query_cache", "false");
+        properties.put("hibernate.generate_statistics", "false");
+        properties.put("hibernate.auto_quote_keyword", "false");
         
         return builder
                 .dataSource(dataSource)
                 .packages("com.phantoms.phantomsbackend.pojo.entity.secondary")
                 .persistenceUnit("secondary")
                 .properties(properties)
+                // 显式指定实体类，避免扫描整个JAR文件
+                .packages(
+                        AuthUser.class,
+                        ChatRecord.class,
+                        ExpeditionaryTeam.class,
+                        Image.class,
+                        Message.class,
+                        Password.class,
+                        User.class,
+                        UserProfile.class
+                )
                 .build();
     }
 

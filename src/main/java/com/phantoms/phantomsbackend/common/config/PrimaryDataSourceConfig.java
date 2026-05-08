@@ -17,7 +17,21 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.Map;
+
 import javax.sql.DataSource;
+
+import com.phantoms.phantomsbackend.pojo.entity.primary.AuthUser;
+import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.ChatRecord;
+import com.phantoms.phantomsbackend.pojo.entity.primary.ExpeditionaryTeam;
+import com.phantoms.phantomsbackend.pojo.entity.primary.Image;
+import com.phantoms.phantomsbackend.pojo.entity.primary.Message;
+import com.phantoms.phantomsbackend.pojo.entity.primary.Password;
+import com.phantoms.phantomsbackend.pojo.entity.primary.Recruitment;
+import com.phantoms.phantomsbackend.pojo.entity.primary.SystemConfig;
+import com.phantoms.phantomsbackend.pojo.entity.primary.User;
+import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.UserMessage;
+import com.phantoms.phantomsbackend.pojo.entity.primary.UserProfile;
 
 @Configuration
 @EnableTransactionManagement
@@ -94,10 +108,34 @@ public class PrimaryDataSourceConfig {
     @Bean(name = "primaryEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(
             EntityManagerFactoryBuilder builder, @Qualifier("primaryDataSource") DataSource dataSource) {
+        Map<String, Object> properties = new java.util.HashMap<>();
+        // 优化内存配置：关闭所有不必要的扫描和缓存
+        properties.put("hibernate.archive.autodetection", "none");  // 完全关闭归档自动检测
+        properties.put("hibernate.javax.persistence.validation.mode", "none");  // 关闭Bean Validation
+        properties.put("hibernate.cache.use_second_level_cache", "false");
+        properties.put("hibernate.cache.use_query_cache", "false");
+        properties.put("hibernate.generate_statistics", "false");
+        properties.put("hibernate.auto_quote_keyword", "false");
+        
         return builder
                 .dataSource(dataSource)
-                .packages("com.phantoms.phantomsbackend.pojo.entity.primary")
+                // .packages("com.phantoms.phantomsbackend.pojo.entity.primary")
                 .persistenceUnit("primary")
+                .properties(properties)
+                // 显式指定实体类，避免扫描整个JAR文件
+                .packages(
+                        AuthUser.class,
+                        ChatRecord.class,
+                        ExpeditionaryTeam.class,
+                        Image.class,
+                        Message.class,
+                        Password.class,
+                        Recruitment.class,
+                        SystemConfig.class,
+                        User.class,
+                        UserMessage.class,
+                        UserProfile.class
+                )
                 .build();
     }
 
