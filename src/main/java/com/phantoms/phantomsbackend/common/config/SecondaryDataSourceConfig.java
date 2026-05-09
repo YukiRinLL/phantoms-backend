@@ -101,7 +101,7 @@ public class SecondaryDataSourceConfig {
 
     @Bean(name = "secondaryEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean secondaryEntityManagerFactory(
-            EntityManagerFactoryBuilder builder, @Qualifier("secondaryDataSource") DataSource dataSource) {
+            @Qualifier("secondaryDataSource") DataSource dataSource) {
         // 为MySQL设置独立的JPA方言
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
@@ -112,24 +112,16 @@ public class SecondaryDataSourceConfig {
         properties.put("hibernate.cache.use_query_cache", "false");
         properties.put("hibernate.generate_statistics", "false");
         properties.put("hibernate.auto_quote_keyword", "false");
+        // 关键：禁用归档扫描器，避免ArchiveHelper.getBytesFromInputStream()加载整个JAR
+        properties.put("hibernate.archive.scanner", "org.hibernate.boot.archive.scan.internal.DisabledScanner");
+        properties.put("hibernate.ejb.resource_scanner", "org.hibernate.boot.archive.scan.internal.DisabledScanner");
         
-        return builder
-                .dataSource(dataSource)
-                .packages("com.phantoms.phantomsbackend.pojo.entity.secondary")
-                .persistenceUnit("secondary")
-                .properties(properties)
-                // 显式指定实体类，避免扫描整个JAR文件
-                .packages(
-                        AuthUser.class,
-                        ChatRecord.class,
-                        ExpeditionaryTeam.class,
-                        Image.class,
-                        Message.class,
-                        Password.class,
-                        User.class,
-                        UserProfile.class
-                )
-                .build();
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource);
+        em.setPersistenceUnitName("secondary");
+        em.setJpaPropertyMap(properties);
+        em.setPackagesToScan("com.phantoms.phantomsbackend.pojo.entity.secondary");
+        return em;
     }
 
     @Bean(name = "secondaryTransactionManager")

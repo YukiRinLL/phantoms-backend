@@ -107,7 +107,7 @@ public class PrimaryDataSourceConfig {
     @Primary
     @Bean(name = "primaryEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(
-            EntityManagerFactoryBuilder builder, @Qualifier("primaryDataSource") DataSource dataSource) {
+            @Qualifier("primaryDataSource") DataSource dataSource) {
         Map<String, Object> properties = new java.util.HashMap<>();
         // 优化内存配置：关闭所有不必要的扫描和缓存
         properties.put("hibernate.archive.autodetection", "none");  // 完全关闭归档自动检测
@@ -116,27 +116,18 @@ public class PrimaryDataSourceConfig {
         properties.put("hibernate.cache.use_query_cache", "false");
         properties.put("hibernate.generate_statistics", "false");
         properties.put("hibernate.auto_quote_keyword", "false");
+        // 关键：禁用归档扫描器，避免ArchiveHelper.getBytesFromInputStream()加载整个JAR
+        properties.put("hibernate.archive.scanner", "org.hibernate.boot.archive.scan.internal.DisabledScanner");
+        properties.put("hibernate.ejb.resource_scanner", "org.hibernate.boot.archive.scan.internal.DisabledScanner");
         
-        return builder
-                .dataSource(dataSource)
-                // .packages("com.phantoms.phantomsbackend.pojo.entity.primary")
-                .persistenceUnit("primary")
-                .properties(properties)
-                // 显式指定实体类，避免扫描整个JAR文件
-                .packages(
-                        AuthUser.class,
-                        ChatRecord.class,
-                        ExpeditionaryTeam.class,
-                        Image.class,
-                        Message.class,
-                        Password.class,
-                        Recruitment.class,
-                        SystemConfig.class,
-                        User.class,
-                        UserMessage.class,
-                        UserProfile.class
-                )
-                .build();
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource);
+        em.setPersistenceUnitName("primary");
+        em.setJpaPropertyMap(properties);
+        // 使用 setPackagesToScan 指定包路径，但 Hibernate 扫描已被禁用
+        // 实体类由 @EnableJpaRepositories 和 @EntityScan 注解处理
+        em.setPackagesToScan("com.phantoms.phantomsbackend.pojo.entity.primary");
+        return em;
     }
 
     @Primary
