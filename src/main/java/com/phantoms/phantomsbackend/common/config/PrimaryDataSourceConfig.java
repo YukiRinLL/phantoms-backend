@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -124,9 +125,14 @@ public class PrimaryDataSourceConfig {
         em.setDataSource(dataSource);
         em.setPersistenceUnitName("primary");
         em.setJpaPropertyMap(properties);
-        // 使用 setPackagesToScan 指定包路径，但 Hibernate 扫描已被禁用
-        // 实体类由 @EnableJpaRepositories 和 @EntityScan 注解处理
         em.setPackagesToScan("com.phantoms.phantomsbackend.pojo.entity.primary");
+        
+        // 必须设置 JpaVendorAdapter 指定持久化提供者
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect");
+        vendorAdapter.setShowSql(false);
+        em.setJpaVendorAdapter(vendorAdapter);
+        
         return em;
     }
 

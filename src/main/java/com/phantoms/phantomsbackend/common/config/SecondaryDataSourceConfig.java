@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -121,6 +122,13 @@ public class SecondaryDataSourceConfig {
         em.setPersistenceUnitName("secondary");
         em.setJpaPropertyMap(properties);
         em.setPackagesToScan("com.phantoms.phantomsbackend.pojo.entity.secondary");
+        
+        // 必须设置 JpaVendorAdapter 指定持久化提供者
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setDatabasePlatform("org.hibernate.dialect.MySQL8Dialect");
+        vendorAdapter.setShowSql(false);
+        em.setJpaVendorAdapter(vendorAdapter);
+        
         return em;
     }
 
