@@ -24,8 +24,7 @@ public class FF14Prompt {
                 if (SYSTEM_PROMPT == null) {
                     try {
                         ClassPathResource resource = new ClassPathResource("prompts/ff14-translator-prompt.md");
-                        Path path = Paths.get(resource.getURI());
-                        SYSTEM_PROMPT = Files.readString(path, StandardCharsets.UTF_8);
+                        SYSTEM_PROMPT = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
                         log.info("FF14翻译提示词加载成功，长度: {} 字符", SYSTEM_PROMPT.length());
                     } catch (IOException e) {
                         log.error("加载FF14翻译提示词失败", e);

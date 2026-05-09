@@ -7,10 +7,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="resolve memory overflow by delaying cache initialization">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="disable Hibernate archive scanning to resolve OOM">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/PrimaryDataSourceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/PrimaryDataSourceConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/SecondaryDataSourceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/SecondaryDataSourceConfig.java" afterDir="false" />
     </list>
     <list id="cc09743e-5b03-4657-8bba-22a55747451e" name="local" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
@@ -301,22 +299,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00241" summary="remove response.isSuccessful() judge">
-      <option name="closed" value="true" />
-      <created>1766461005413</created>
-      <option name="number" value="00241" />
-      <option name="presentableId" value="LOCAL-00241" />
-      <option name="project" value="LOCAL" />
-      <updated>1766461005413</updated>
-    </task>
-    <task id="LOCAL-00242" summary="move functions from RisingStonesSigninHelpe to RisingStonesUtils">
-      <option name="closed" value="true" />
-      <created>1766461355948</created>
-      <option name="number" value="00242" />
-      <option name="presentableId" value="LOCAL-00242" />
-      <option name="project" value="LOCAL" />
-      <updated>1766461355948</updated>
     </task>
     <task id="LOCAL-00243" summary="update note">
       <option name="closed" value="true" />
@@ -694,7 +676,23 @@
       <option name="project" value="LOCAL" />
       <updated>1778210137295</updated>
     </task>
-    <option name="localTasksCounter" value="290" />
+    <task id="LOCAL-00290" summary="disable Hibernate archive scanning to resolve OOM">
+      <option name="closed" value="true" />
+      <created>1778310961331</created>
+      <option name="number" value="00290" />
+      <option name="presentableId" value="LOCAL-00290" />
+      <option name="project" value="LOCAL" />
+      <updated>1778310961331</updated>
+    </task>
+    <task id="LOCAL-00291" summary="disable Hibernate archive scanning to resolve OOM">
+      <option name="closed" value="true" />
+      <created>1778311197813</created>
+      <option name="number" value="00291" />
+      <option name="presentableId" value="LOCAL-00291" />
+      <option name="project" value="LOCAL" />
+      <updated>1778311197813</updated>
+    </task>
+    <option name="localTasksCounter" value="292" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -739,7 +737,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="switch on news functions" />
     <MESSAGE value="turn on house checking and update activity notification" />
     <MESSAGE value="fix news bug" />
     <MESSAGE value="debug news func using defaultGroupId" />
@@ -764,7 +761,8 @@
     <MESSAGE value="improve API call stability and optimize memory usage" />
     <MESSAGE value="resolve memory overflow by lazy-loading FF14 prompt" />
     <MESSAGE value="resolve memory overflow by delaying cache initialization" />
-    <option name="LAST_COMMIT_MESSAGE" value="resolve memory overflow by delaying cache initialization" />
+    <MESSAGE value="disable Hibernate archive scanning to resolve OOM" />
+    <option name="LAST_COMMIT_MESSAGE" value="disable Hibernate archive scanning to resolve OOM" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
