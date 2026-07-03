@@ -1,5 +1,6 @@
 package com.phantoms.phantomsbackend.common.utils;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.phantoms.phantomsbackend.common.serializer.CustomOffsetDateTimeDeserializer;
@@ -413,6 +414,7 @@ public class LittlenightmareClient {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.registerModule(CustomOffsetDateTimeDeserializer.createModule());
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
     }
 
