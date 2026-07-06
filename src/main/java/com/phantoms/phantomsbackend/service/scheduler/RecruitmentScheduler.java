@@ -15,10 +15,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -46,34 +48,54 @@ public class RecruitmentScheduler {
     private RedisUtil redisUtil;
 
     @Scheduled(fixedRate = 300000) // 每300秒执行一次
-    @Transactional(timeout = 60, readOnly = false)
     public void fetchAndFilterRecruitments() {
         try {
-            List<RecruitmentResponse> allResponses = LittlenightmareClient.fetchAllRecruitmentListings(
-                100, // perPage
-                null, // category
-                null, // world
-                null, // search
-                null, // datacenter
-                null, // jobs
-                null  // duties
-            );
+            List<Recruitment> allRecruitments = fetchRecruitmentData();
 
-            // Flatten the list of responses into a single list of recruitments
-            List<Recruitment> allRecruitments = allResponses.stream()
-                .flatMap(response -> response.getData().stream())
-                .collect(Collectors.toList());
+            if (allRecruitments.isEmpty()) {
+                logger.info("No valid recruitment data to save");
+                return;
+            }
 
-            // 使用批量保存
-            int savedCount = batchSaveWithPostgreSQL(allRecruitments);
+            int savedCount = saveRecruitmentData(allRecruitments);
 
             logger.info("Successfully fetched {} recruitments, attempted to save {} recruitments",
-                allRecruitments.size(), allRecruitments.size());
+                allRecruitments.size(), savedCount);
 
 //            filterAndNotify(allRecruitments);
         } catch (Exception e) {
             logger.error("Failed to fetch and filter recruitments", e);
         }
+    }
+
+    private List<Recruitment> fetchRecruitmentData() throws IOException {
+        List<RecruitmentResponse> allResponses = LittlenightmareClient.fetchAllRecruitmentListings(
+            100, // perPage
+            null, // category
+            null, // world
+            null, // search
+            null, // datacenter
+            null, // jobs
+            null  // duties
+        );
+
+        if (allResponses == null || allResponses.isEmpty()) {
+            logger.info("No recruitment data fetched");
+            return Collections.emptyList();
+        }
+
+        return allResponses.stream()
+            .filter(response -> response != null && response.getData() != null)
+            .flatMap(response -> response.getData().stream())
+            .collect(Collectors.toList());
+    }
+
+    @Transactional(timeout = 60)
+    public int saveRecruitmentData(List<Recruitment> recruitments) {
+        if (recruitments.isEmpty()) {
+            return 0;
+        }
+        return batchSaveWithPostgreSQL(recruitments);
     }
 
     /**
