@@ -123,7 +123,10 @@ public class PingController {
         // LeanCloud 状态
         boolean isLeanCloudConnected = false;
         try {
-            isLeanCloudConnected = LeanCloudUtils.createObject("ConnectionTest", dataSource, "default");
+            Map<String, Object> testData = new HashMap<>();
+            testData.put("timestamp", LocalDateTime.now().toString());
+            testData.put("healthCheck", "ping");
+            isLeanCloudConnected = LeanCloudUtils.createObject("ConnectionTest", testData, "default");
         } catch (Exception e) {
             healthResponse.put("leancloudError", e.getMessage());
             e.printStackTrace();
