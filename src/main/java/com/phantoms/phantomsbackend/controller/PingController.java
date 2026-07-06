@@ -215,6 +215,31 @@ public class PingController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        if (properties.isEmpty()) {
+            String gitCommit = System.getenv("RENDER_GIT_COMMIT");
+            if (gitCommit == null) {
+                gitCommit = System.getenv("GIT_COMMIT");
+            }
+            String gitBranch = System.getenv("GIT_BRANCH");
+            String gitTag = System.getenv("GIT_TAG");
+
+            if (gitCommit != null) {
+                properties.setProperty("git.commit.id", gitCommit);
+                if (gitCommit.length() > 7) {
+                    properties.setProperty("git.commit.id.abbrev", gitCommit.substring(0, 7));
+                } else {
+                    properties.setProperty("git.commit.id.abbrev", gitCommit);
+                }
+            }
+            if (gitBranch != null) {
+                properties.setProperty("git.branch", gitBranch);
+            }
+            if (gitTag != null) {
+                properties.setProperty("git.tag", gitTag);
+            }
+        }
+
         return properties;
     }
 

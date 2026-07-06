@@ -1,11 +1,10 @@
 # 多阶段构建：第一阶段构建，第二阶段运行
 FROM maven:3.9.6-amazoncorretto-21 AS builder
 
-# 复制源码和 .git 目录（用于生成 git.properties）
+# 复制源码
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-COPY .git ./.git
 
 # 构建应用
 RUN mvn clean package -DskipTests
@@ -13,6 +12,10 @@ RUN mvn clean package -DskipTests
 # 第二阶段：运行环境
 #FROM openjdk:23-jdk-bookworm
 FROM amazoncorretto:21-alpine-jdk
+
+# 接收 Render 自动注入的 git commit 信息
+ARG RENDER_GIT_COMMIT=unknown
+ENV GIT_COMMIT=$RENDER_GIT_COMMIT
 
 # 安装字体和字体配置工具
 RUN apk --no-cache add \
