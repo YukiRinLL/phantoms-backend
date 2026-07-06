@@ -1,6 +1,7 @@
 package com.phantoms.phantomsbackend.common.utils;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.phantoms.phantomsbackend.common.serializer.CustomOffsetDateTimeDeserializer;
@@ -411,11 +412,39 @@ public class LittlenightmareClient {
      * 解析JSON响应的辅助方法
      */
     private static RecruitmentResponse parseJsonResponse(String jsonResponse) throws IOException {
+        if (jsonResponse == null || jsonResponse.trim().isEmpty()) {
+            throw new IOException("Empty JSON response");
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.registerModule(CustomOffsetDateTimeDeserializer.createModule());
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        return objectMapper.readValue(jsonResponse, RecruitmentResponse.class);
+
+        try {
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+
+            if (rootNode.has("success") && !rootNode.get("success").asBoolean(true)) {
+                String errorMsg = rootNode.has("error") ? rootNode.get("error").toString() : "ScrapeStack error";
+                throw new IOException("ScrapeStack API error: " + errorMsg);
+            }
+
+            if (rootNode.has("type") && rootNode.has("status")) {
+                int status = rootNode.get("status").asInt(0);
+                String title = rootNode.has("title") ? rootNode.get("title").asText() : "";
+                throw new IOException("Cloudflare error: " + title + " (status: " + status + ")");
+            }
+
+            RecruitmentResponse response = objectMapper.convertValue(rootNode, RecruitmentResponse.class);
+            if (response == null || response.getData() == null) {
+                throw new IOException("Parsed response has null data");
+            }
+            return response;
+        } catch (IOException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new IOException("Failed to parse JSON response: " + e.getMessage(), e);
+        }
     }
 
     public static List<RecruitmentResponse> fetchAllRecruitmentListings(
@@ -446,12 +475,23 @@ public class LittlenightmareClient {
                         duties
                 );
 
-                allResponses.add(response);
-                consecutiveFailures = 0; // 重置连续失败计数
+                if (response != null && response.getData() != null) {
+                    allResponses.add(response);
+                    consecutiveFailures = 0;
 
-                // Check if there are more pages
-                hasMorePages = response.getPagination().getPage() < response.getPagination().getTotalPages();
-                page++;
+                    if (response.getPagination() != null) {
+                        hasMorePages = response.getPagination().getPage() < response.getPagination().getTotalPages();
+                    } else {
+                        hasMorePages = false;
+                    }
+                    page++;
+                } else {
+                    consecutiveFailures++;
+                    logger.warn("Received null response or null data for page {}, consecutive failures: {}", page, consecutiveFailures);
+                    if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
+                        break;
+                    }
+                }
 
                 // 增加延迟时间，避免频率过高
                 try {
