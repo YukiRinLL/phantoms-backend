@@ -38,6 +38,16 @@ public class FF14GlobalNewsScheduler {
     @Value("${napcat.default-group-id}")
     private String defaultGroupId;
 
+    @Value("${ff14.global-news.group-ids:${napcat.phantom-group-id}}")
+    private String globalNewsGroupIds;
+
+    private List<String> getGlobalNewsGroupIds() {
+        return Arrays.stream(globalNewsGroupIds.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+    }
+
     public void initCache() {
         logger.info("初始化FF14国际服新闻缓存");
         try {
@@ -156,6 +166,12 @@ public class FF14GlobalNewsScheduler {
 
     private void sendNewsToGroup(List<FF14GlobalNewsUtils.NewsItem> newsList) {
         try {
+            List<String> groupIds = getGlobalNewsGroupIds();
+            if (groupIds.isEmpty()) {
+                logger.warn("未配置国际服新闻发送群，跳过发送");
+                return;
+            }
+
             for (FF14GlobalNewsUtils.NewsItem news : newsList) {
                 StringBuilder message = new StringBuilder();
                 message.append("【FF14国际服新闻】\n");
@@ -172,13 +188,16 @@ public class FF14GlobalNewsScheduler {
                     message.append(news.getLinkUrl());
                 }
 
-                napCatQQUtil.sendGroupMessage(phantomGroupId, message.toString());
-                logger.info("已发送FF14国际服新闻: {}", news.getTitle());
+                for (String groupId : groupIds) {
+                    napCatQQUtil.sendGroupMessage(groupId, message.toString());
+                    logger.info("已发送FF14国际服新闻到群 {}: {}", groupId, news.getTitle());
+                    Thread.sleep(500);
+                }
                 
                 Thread.sleep(1000);
             }
             
-            logger.info("成功发送 {} 条FF14国际服新闻到QQ群", newsList.size());
+            logger.info("成功发送 {} 条FF14国际服新闻到 {} 个QQ群", newsList.size(), groupIds.size());
 
         } catch (Exception e) {
             logger.error("发送FF14国际服新闻到QQ群失败", e);

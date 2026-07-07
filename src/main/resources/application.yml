@@ -146,12 +146,29 @@ spring:
         shutdown-timeout: 100ms
 
 
+# FF14新闻通知配置
+ff14:
+  news:
+    group-ids: "${FF14_NEWS_GROUP_IDS:787909466}"  # 国服新闻发送到的群ID，多个用逗号分隔
+  global-news:
+    group-ids: "${FF14_GLOBAL_NEWS_GROUP_IDS:787909466}"  # 国际服新闻发送到的群ID，多个用逗号分隔
+  crystal-news:
+    group-ids: "${FF14_CRYSTAL_NEWS_GROUP_IDS:936746977}"  # 水晶世界新闻发送到的群ID，多个用逗号分隔
+
 # 房屋销售监控配置
 housing:
   sale:
     notify:
-      servers: "1121"  # 要监控的服务器列表 1121拂晓之间 1081神意之地
-      areas: "0,1,2,3,4"    # 要监控的区域：0-海雾村,1-薰衣草苗圃,2-高脚孤丘,3-白银乡,4-穹顶皓天
+      targets:  # 每个target是一组完整的配置：服务器 + 区域 + 发送群
+        # server: 服务器ID，多个用逗号分隔（1121拂晓之间，1081神意之地）
+        # areas: 区域列表，0-海雾村,1-薰衣草苗圃,2-高脚孤丘,3-白银乡,4-穹顶皓天，多个用逗号分隔，默认全部
+        # group-ids: 发送到的群ID，多个用逗号分隔
+        - server: "1121"
+          areas: "0,1,2,3,4"
+          group-ids: "${HOUSING_TARGET_0_GROUP_IDS:787909466}"
+        - server: "1081"
+          areas: "0,1,2,3,4"
+          group-ids: "${HOUSING_TARGET_1_GROUP_IDS:787909466}"
 
 mybatis-plus:
   global-config:

@@ -39,6 +39,16 @@ public class FF14NewsScheduler {
     @Value("${napcat.default-group-id}")
     private String defaultGroupId;
 
+    @Value("${ff14.news.group-ids:${napcat.phantom-group-id}}")
+    private String newsGroupIds;
+
+    private List<String> getNewsGroupIds() {
+        return Arrays.stream(newsGroupIds.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+    }
+
     public void initCache() {
         logger.info("初始化FF14新闻缓存");
         try {
@@ -157,6 +167,12 @@ public class FF14NewsScheduler {
 
     private void sendNewsToGroup(List<FF14NewsUtils.NewsItem> newsList) {
         try {
+            List<String> groupIds = getNewsGroupIds();
+            if (groupIds.isEmpty()) {
+                logger.warn("未配置新闻发送群，跳过发送");
+                return;
+            }
+
             for (FF14NewsUtils.NewsItem news : newsList) {
                 StringBuilder message = new StringBuilder();
                 
@@ -172,13 +188,16 @@ public class FF14NewsScheduler {
                     message.append(news.getLinkUrl());
                 }
 
-                napCatQQUtil.sendGroupMessage(phantomGroupId, message.toString());
-                logger.info("已发送新闻: {}", news.getTitle());
+                for (String groupId : groupIds) {
+                    napCatQQUtil.sendGroupMessage(groupId, message.toString());
+                    logger.info("已发送新闻到群 {}: {}", groupId, news.getTitle());
+                    Thread.sleep(500);
+                }
                 
                 Thread.sleep(1000);
             }
             
-            logger.info("成功发送 {} 条FF14新闻到QQ群", newsList.size());
+            logger.info("成功发送 {} 条FF14新闻到 {} 个QQ群", newsList.size(), groupIds.size());
 
         } catch (Exception e) {
             logger.error("发送FF14新闻到QQ群失败", e);

@@ -41,6 +41,16 @@ public class FF14CrystalNewsScheduler {
     @Value("${napcat.crystal-group-id}")
     private String crystalGroupId;
 
+    @Value("${ff14.crystal-news.group-ids:${napcat.crystal-group-id}}")
+    private String crystalNewsGroupIds;
+
+    private List<String> getCrystalNewsGroupIds() {
+        return Arrays.stream(crystalNewsGroupIds.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+    }
+
     public void initCache() {
         logger.info("初始化FF14水晶世界新闻缓存");
         try {
@@ -152,6 +162,12 @@ public class FF14CrystalNewsScheduler {
 
     private void sendNewsToGroup(List<FF14CrystalNewsUtils.NewsItem> newsList) {
         try {
+            List<String> groupIds = getCrystalNewsGroupIds();
+            if (groupIds.isEmpty()) {
+                logger.warn("未配置水晶世界新闻发送群，跳过发送");
+                return;
+            }
+
             for (FF14CrystalNewsUtils.NewsItem news : newsList) {
                 StringBuilder message = new StringBuilder();
 //                message.append("【FF14水晶世界新闻】\n");
@@ -170,13 +186,16 @@ public class FF14CrystalNewsScheduler {
                     message.append("Detail: ").append(news.getLinkUrl()).append("\n");
                 }
 
-                napCatQQUtil.sendGroupMessage(crystalGroupId, message.toString());
-                logger.info("已发送FF14水晶世界新闻: {}", news.getTitle());
+                for (String groupId : groupIds) {
+                    napCatQQUtil.sendGroupMessage(groupId, message.toString());
+                    logger.info("已发送FF14水晶世界新闻到群 {}: {}", groupId, news.getTitle());
+                    Thread.sleep(500);
+                }
                 
                 Thread.sleep(1000);
             }
             
-            logger.info("成功发送 {} 条FF14水晶世界新闻到QQ群", newsList.size());
+            logger.info("成功发送 {} 条FF14水晶世界新闻到 {} 个QQ群", newsList.size(), groupIds.size());
 
         } catch (Exception e) {
             logger.error("发送FF14水晶世界新闻到QQ群失败", e);

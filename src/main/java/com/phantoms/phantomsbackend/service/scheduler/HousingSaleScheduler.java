@@ -29,6 +29,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 
+@lombok.Data
+@lombok.NoArgsConstructor
+@lombok.AllArgsConstructor
+class HousingNotifyTarget {
+    private String server;
+    private String groupIds;
+    private String areas;
+}
+
 @Component
 public class HousingSaleScheduler {
 
@@ -73,17 +82,59 @@ public class HousingSaleScheduler {
     @Autowired
     private TransactionTemplate transactionTemplate;
 
-    @Value("${housing.sale.notify.servers:1121,1081}")
-    private String notifyServers;
-
-    @Value("${housing.sale.notify.areas:0,1,2,3,4}")
-    private String notifyAreas;
-
     @Value("${napcat.default-group-id}")
     private String defaultGroupId;
 
     @Value("${napcat.phantom-group-id}")
     private String phantomGroupId;
+
+    @Autowired
+    private org.springframework.core.env.Environment environment;
+
+    private List<HousingNotifyTarget> getNotifyTargets() {
+        List<HousingNotifyTarget> targets = new ArrayList<>();
+        int index = 0;
+        while (true) {
+            String server = environment.getProperty("housing.sale.notify.targets[" + index + "].server");
+            String groupIds = environment.getProperty("housing.sale.notify.targets[" + index + "].group-ids");
+            String areas = environment.getProperty("housing.sale.notify.targets[" + index + "].areas", "0,1,2,3,4");
+            if (server == null || groupIds == null) {
+                break;
+            }
+            targets.add(new HousingNotifyTarget(server, groupIds, areas));
+            index++;
+        }
+        return targets;
+    }
+
+    private Set<String> getAllServers() {
+        Set<String> servers = new LinkedHashSet<>();
+        for (HousingNotifyTarget target : getNotifyTargets()) {
+            Arrays.stream(target.getServer().split(","))
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty() && !"default".equals(s))
+                    .forEach(servers::add);
+        }
+        return servers;
+    }
+
+    private Set<Integer> getAreasForTarget(HousingNotifyTarget target) {
+        if (target.getAreas() == null || target.getAreas().isEmpty()) {
+            return Set.of(0, 1, 2, 3, 4);
+        }
+        return Arrays.stream(target.getAreas().split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .map(Integer::parseInt)
+                .collect(Collectors.toSet());
+    }
+
+    private List<String> getGroupIdsForTarget(HousingNotifyTarget target) {
+        return Arrays.stream(target.getGroupIds().split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+    }
 
     // UTC+8每天23:05执行
     @Scheduled(cron = "0 5 15 * * ?")
@@ -92,13 +143,15 @@ public class HousingSaleScheduler {
         try {
             logger.info("开始获取房屋销售数据...");
 
-            List<String> servers = Arrays.asList(notifyServers.split(","));
+            Set<String> servers = getAllServers();
+            if (servers.isEmpty()) {
+                logger.warn("未配置任何监控服务器，跳过本次任务");
+                return;
+            }
+
             List<HousingSale> allHousingSales = new ArrayList<>();
 
             for (String server : servers) {
-                if ("default".equals(server.trim())) {
-                    continue;
-                }
                 try {
                     List<HousingSale> serverSales = CyouClient.fetchHousingSales(server.trim());
                     allHousingSales.addAll(serverSales);
@@ -401,19 +454,11 @@ public class HousingSaleScheduler {
      * 筛选并通知新房屋
      */
     private void filterAndNotifyNewHouses(List<HousingSale> allHousingSales) {
-        Set<Integer> targetAreas = Arrays.stream(notifyAreas.split(","))
-                .map(Integer::parseInt)
-                .collect(Collectors.toSet());
-
         List<HousingSale> availableHouses = allHousingSales.stream()
                 .filter(sale -> sale.getPurchaseType() == PURCHASE_TYPE_FCFS || sale.getPurchaseType() == PURCHASE_TYPE_LOTTERY)
-                .filter(sale -> targetAreas.contains(sale.getArea()))
                 .filter(sale -> {
-                    // 计算推测的截止时间
                     OffsetDateTime estimatedEndTime = calculateEstimatedEndTime(sale);
-                    // 获取当前时间
                     OffsetDateTime now = OffsetDateTime.now();
-                    // 只保留截止时间在当前时间之后的房屋
                     return estimatedEndTime.isAfter(now);
                 })
                 .collect(Collectors.toList());
@@ -424,14 +469,43 @@ public class HousingSaleScheduler {
             List<HousingSale> newHouses = filterNewHouses(availableHouses);
 
             if (!newHouses.isEmpty()) {
-                logger.info("发现 {} 套新房屋，发送通知", newHouses.size());
+                logger.info("发现 {} 套新房屋，按目标配置发送通知", newHouses.size());
 
-                Map<String, List<HousingSale>> housesByServer = newHouses.stream()
-                        .collect(Collectors.groupingBy(HousingSale::getServer));
+                List<HousingNotifyTarget> targets = getNotifyTargets();
+                Set<String> notifiedHouseKeys = new HashSet<>();
 
-                for (Map.Entry<String, List<HousingSale>> entry : housesByServer.entrySet()) {
-//                    sendHouseNotification(entry.getKey(), entry.getValue()); // todo: turned off msg note func
-                    sendBriefHouseNotification(entry.getKey(), entry.getValue());
+                for (HousingNotifyTarget target : targets) {
+                    Set<String> targetServers = Arrays.stream(target.getServer().split(","))
+                            .map(String::trim)
+                            .filter(s -> !s.isEmpty())
+                            .collect(Collectors.toSet());
+                    Set<Integer> targetAreas = getAreasForTarget(target);
+                    List<String> targetGroupIds = getGroupIdsForTarget(target);
+
+                    if (targetGroupIds.isEmpty()) {
+                        continue;
+                    }
+
+                    List<HousingSale> targetHouses = newHouses.stream()
+                            .filter(h -> targetServers.contains(h.getServer()))
+                            .filter(h -> targetAreas.contains(h.getArea()))
+                            .collect(Collectors.toList());
+
+                    if (!targetHouses.isEmpty()) {
+                        logger.info("目标配置 [server: {}, areas: {}] 匹配 {} 套房屋，发送到 {} 个群",
+                                target.getServer(), target.getAreas(), targetHouses.size(), targetGroupIds.size());
+
+                        for (HousingSale house : targetHouses) {
+                            notifiedHouseKeys.add(getHouseCacheKey(house));
+                        }
+
+                        Map<String, List<HousingSale>> housesByServer = targetHouses.stream()
+                                .collect(Collectors.groupingBy(HousingSale::getServer));
+
+                        for (Map.Entry<String, List<HousingSale>> entry : housesByServer.entrySet()) {
+                            sendBriefHouseNotificationForTarget(entry.getKey(), entry.getValue(), targetGroupIds);
+                        }
+                    }
                 }
 
                 cacheNewHouses(newHouses);
@@ -529,13 +603,19 @@ public class HousingSaleScheduler {
      * 发送房屋通知 - 单条消息包含所有房屋信息
      */
     private void sendBriefHouseNotification(String server, List<HousingSale> houses) {
+        sendBriefHouseNotificationForTarget(server, houses, Collections.singletonList(phantomGroupId));
+    }
+
+    private void sendBriefHouseNotificationForTarget(String server, List<HousingSale> houses, List<String> groupIds) {
         try {
-            // 获取服务器名称
+            if (groupIds.isEmpty()) {
+                logger.warn("服务器 {} 未配置发送群，跳过发送", server);
+                return;
+            }
+
             String serverName = SERVER_NAME_MAP.getOrDefault(server, server);
-            
-            // 对房屋列表进行排序，L房优先于M房
+
             houses.sort((h1, h2) -> {
-                // L房(SIZE_L=2)排在M房(SIZE_M=1)前面
                 if (h1.getSize() == SIZE_L && h2.getSize() == SIZE_M) {
                     return -1;
                 } else if (h1.getSize() == SIZE_M && h2.getSize() == SIZE_L) {
@@ -543,60 +623,55 @@ public class HousingSaleScheduler {
                 }
                 return 0;
             });
-            
-            // 优先尝试发送表格图片
+
+            String image = null;
             try {
-                // 生成表格图片
-                String image = generateHousingTableImage(server, houses);
-                
-                // 发送群图片
-                oneBotService.sendGroupImage(image, phantomGroupId);
-                
-                logger.info("已发送 {} 服务器 {} 套房屋表格图片通知", server, houses.size());
-                return;
+                image = generateHousingTableImage(server, houses);
             } catch (Exception e) {
-                logger.warn("发送表格图片失败，降级为文本消息: {}", e.getMessage());
+                logger.warn("生成表格图片失败，降级为文本消息: {}", e.getMessage());
             }
-            
-            // 如果图片发送失败，降级为文本消息
-            StringBuilder message = new StringBuilder();
-            
-            // 消息标题
-            message.append("🏠 发现 ").append(serverName).append(" 服务器 ").append(houses.size()).append(" 套新房源\n\n");
 
-            // 为每套房屋添加精简信息
-            for (int i = 0; i < houses.size(); i++) {
-                HousingSale house = houses.get(i);
-
-                // 生成精简描述
-                String areaName = getAreaName(house.getArea());
-                String sizeName = getSizeName(house.getSize());
-                String purchaseType = house.getPurchaseType() == PURCHASE_TYPE_LOTTERY ? "抽签" : "抢购";
-                String regionType = getRegionTypeName(house.getRegionType());
-
-                // 计算推测截止时间
-                OffsetDateTime estimatedEndTime = calculateEstimatedEndTime(house);
-
-                // 构建单行房屋信息
-                message.append(i + 1).append(". ")
-                        .append(sizeName).append(" | ")
-                        .append(areaName).append(house.getSlot() + 1).append("区").append(house.getId()).append("号 | ")
-                        .append(formatPrice(house.getPrice())).append(" | ")
-                        .append(regionType).append(" | ")
-                        .append(formatTime(estimatedEndTime)).append("截止");
-
-                // 如果是抽签类型，显示参与人数
-                if (house.getPurchaseType() == PURCHASE_TYPE_LOTTERY && house.getParticipate() != null) {
-                    message.append(" | ").append(house.getParticipate()).append("参与");
+            for (String groupId : groupIds) {
+                if (image != null) {
+                    try {
+                        oneBotService.sendGroupImage(image, groupId);
+                        logger.info("已发送服务器 {} 到群 {} 的 {} 套房屋表格图片通知", server, groupId, houses.size());
+                        continue;
+                    } catch (Exception e) {
+                        logger.warn("发送表格图片到群 {} 失败，降级为文本消息: {}", groupId, e.getMessage());
+                    }
                 }
 
-                message.append("\n");
+                StringBuilder message = new StringBuilder();
+                message.append("🏠 发现 ").append(serverName).append(" 服务器 ").append(houses.size()).append(" 套新房源\n\n");
+
+                for (int i = 0; i < houses.size(); i++) {
+                    HousingSale house = houses.get(i);
+                    String areaName = getAreaName(house.getArea());
+                    String sizeName = getSizeName(house.getSize());
+                    String purchaseType = house.getPurchaseType() == PURCHASE_TYPE_LOTTERY ? "抽签" : "抢购";
+                    String regionType = getRegionTypeName(house.getRegionType());
+                    OffsetDateTime estimatedEndTime = calculateEstimatedEndTime(house);
+
+                    message.append(i + 1).append(". ")
+                            .append(sizeName).append(" | ")
+                            .append(areaName).append(house.getSlot() + 1).append("区").append(house.getId()).append("号 | ")
+                            .append(formatPrice(house.getPrice())).append(" | ")
+                            .append(regionType).append(" | ")
+                            .append(formatTime(estimatedEndTime)).append("截止");
+
+                    if (house.getPurchaseType() == PURCHASE_TYPE_LOTTERY && house.getParticipate() != null) {
+                        message.append(" | ").append(house.getParticipate()).append("参与");
+                    }
+
+                    message.append("\n");
+                }
+
+                oneBotService.sendGroupMessage(message.toString(), groupId);
+                logger.info("已发送服务器 {} 到群 {} 的 {} 套房屋文本通知", server, groupId, houses.size());
+
+                Thread.sleep(500);
             }
-
-            // 发送单条合并文本消息
-            oneBotService.sendGroupMessage(message.toString(), phantomGroupId);
-
-            logger.info("已发送 {} 服务器 {} 套房屋文本通知", server, houses.size());
 
         } catch (Exception e) {
             logger.error("发送房屋通知失败", e);
@@ -607,21 +682,27 @@ public class HousingSaleScheduler {
      * 发送房屋通知
      */
     private void sendHouseNotification(String server, List<HousingSale> houses) {
+        sendHouseNotificationForTarget(server, houses, Collections.singletonList(phantomGroupId));
+    }
+
+    private void sendHouseNotificationForTarget(String server, List<HousingSale> houses, List<String> groupIds) {
         try {
-            // 获取服务器名称
+            if (groupIds.isEmpty()) {
+                logger.warn("服务器 {} 未配置发送群，跳过发送", server);
+                return;
+            }
+
             String serverName = SERVER_NAME_MAP.getOrDefault(server, server);
 
             for (HousingSale house : houses) {
                 StringBuilder message = new StringBuilder();
 
-                // 生成房屋描述
                 String description = generateHouseDescription(house);
                 String areaName = getAreaName(house.getArea());
                 String sizeName = getSizeName(house.getSize());
                 String purchaseTypeName = getPurchaseTypeName(house.getPurchaseType());
                 String regionTypeName = getRegionTypeName(house.getRegionType());
 
-                // 按照指定格式构建消息
                 message.append("🏠 ").append(description).append("\n");
                 message.append("📏 尺寸: ").append(sizeName).append("\n");
                 message.append("📍 ").append(areaName).append(" ").append(house.getSlot() + 1).append("区")
@@ -629,18 +710,14 @@ public class HousingSaleScheduler {
                 message.append("🎯 方式: ").append(purchaseTypeName).append("\n");
                 message.append("👤 限制: ").append(regionTypeName).append("\n");
 
-                // 参与人数（仅抽签类型显示）
                 if (house.getPurchaseType() == PURCHASE_TYPE_LOTTERY) {
                     message.append("👥 参与: ").append(house.getParticipate() != null ? house.getParticipate() : 0).append("人\n");
                 }
 
                 message.append("💰 价格: ").append(formatPrice(house.getPrice())).append("\n");
 
-                // 购买方式和截止时间（仅抽签类型显示）
                 if (house.getPurchaseType() == PURCHASE_TYPE_LOTTERY) {
                     message.append("🎫 购买方式: 抽签\n");
-
-                    // 计算并显示推测截止时间
                     OffsetDateTime estimatedEndTime = calculateEstimatedEndTime(house);
                     message.append("⏰ ").append(formatTime(estimatedEndTime)).append(" 截止\n");
                 } else {
@@ -649,13 +726,13 @@ public class HousingSaleScheduler {
 
                 message.append("\n🔥 现正火热预约中！\n");
 
-                // 发送单条房屋通知
-                oneBotService.sendGroupMessage(message.toString(), defaultGroupId);
+                for (String groupId : groupIds) {
+                    oneBotService.sendGroupMessage(message.toString(), groupId);
+                    logger.info("已发送 {} 的房屋通知到群 {}: {}-{}-{}-{}",
+                            serverName, groupId, areaName, house.getSlot() + 1, house.getId(), sizeName);
+                    Thread.sleep(500);
+                }
 
-                logger.info("已发送 {} 的房屋通知: {}-{}-{}-{}",
-                        serverName, areaName, house.getSlot() + 1, house.getId(), sizeName);
-
-                // 添加间隔，避免消息过于密集
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
