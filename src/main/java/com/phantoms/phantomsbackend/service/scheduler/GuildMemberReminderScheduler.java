@@ -112,7 +112,8 @@ public class GuildMemberReminderScheduler {
         }
     }
 
-    @Scheduled(cron = "0 0 16,12 ? * TUE,SAT")
+    @Scheduled(cron = "0 0 12 ? * SAT") // 每周六的 12:00（UTC时间）- 20:00（UTC+8时间）
+//    @Scheduled(cron = "0 0 16,12 ? * TUE,SAT") // 每周二和周六的 12:00 和 16:00（UTC时间）- 20:00 和 00:00次日（UTC+8时间）
 //    @Scheduled(fixedRate = 60000) // 每分钟执行一次
     public void sendWeeklyActivities() {
         try {
