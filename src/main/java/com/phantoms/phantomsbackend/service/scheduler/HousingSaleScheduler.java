@@ -65,10 +65,44 @@ public class HousingSaleScheduler {
     // 区域类型枚举
     private static final int REGION_TYPE_PERSONAL = 2;
 
-    private static final Map<String, String> SERVER_NAME_MAP = Map.of(
-            "1121", "拂晓之间",
-            "1081", "神意之地"
-    );
+    private static final Map<String, String> SERVER_NAME_MAP;
+
+    static {
+        Map<String, String> map = new HashMap<>();
+        // 陆行鸟
+        map.put("1167", "红玉海");
+        map.put("1081", "神意之地");
+        map.put("1042", "拉诺西亚");
+        map.put("1044", "幻影群岛");
+        map.put("1060", "萌芽池");
+        map.put("1173", "宇宙和音");
+        map.put("1174", "沃仙曦染");
+        map.put("1175", "晨曦王座");
+        // 莫古力
+        map.put("1172", "白银乡");
+        map.put("1076", "白金幻象");
+        map.put("1171", "神拳痕");
+        map.put("1170", "潮风亭");
+        map.put("1113", "旅人栈桥");
+        map.put("1121", "拂晓之间");
+        map.put("1166", "龙巢神殿");
+        map.put("1176", "梦羽宝境");
+        // 猫小胖
+        map.put("1043", "紫水栈桥");
+        map.put("1169", "延夏");
+        map.put("1106", "静语庄园");
+        map.put("1045", "摩杜纳");
+        map.put("1177", "海猫茶屋");
+        map.put("1178", "柔风海湾");
+        map.put("1179", "琥珀原");
+        // 豆豆柴
+        map.put("1192", "水晶塔");
+        map.put("1183", "银泪湖");
+        map.put("1180", "太阳海岸");
+        map.put("1186", "伊修加德");
+        map.put("1201", "红茶川");
+        SERVER_NAME_MAP = Collections.unmodifiableMap(map);
+    }
 
     @Autowired
     private OneBotService oneBotService;
@@ -472,7 +506,6 @@ public class HousingSaleScheduler {
                 logger.info("发现 {} 套新房屋，按目标配置发送通知", newHouses.size());
 
                 List<HousingNotifyTarget> targets = getNotifyTargets();
-                Set<String> notifiedHouseKeys = new HashSet<>();
 
                 for (HousingNotifyTarget target : targets) {
                     Set<String> targetServers = Arrays.stream(target.getServer().split(","))
@@ -494,10 +527,6 @@ public class HousingSaleScheduler {
                     if (!targetHouses.isEmpty()) {
                         logger.info("目标配置 [server: {}, areas: {}] 匹配 {} 套房屋，发送到 {} 个群",
                                 target.getServer(), target.getAreas(), targetHouses.size(), targetGroupIds.size());
-
-                        for (HousingSale house : targetHouses) {
-                            notifiedHouseKeys.add(getHouseCacheKey(house));
-                        }
 
                         Map<String, List<HousingSale>> housesByServer = targetHouses.stream()
                                 .collect(Collectors.groupingBy(HousingSale::getServer));
