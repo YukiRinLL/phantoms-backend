@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -24,6 +25,9 @@ public class FF14NewsUtils {
         .writeTimeout(10, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .build();
+
+    @Value("${ff14.news.category-codes:8324,8325,8326,8327,5309,5310,5311,5312,5313}")
+    private String categoryCodes;
 
     public static class NewsItem {
         private String title;
@@ -90,7 +94,7 @@ public class FF14NewsUtils {
     private JSONObject fetchPage(int pageIndex, int pageSize) throws IOException {
         HttpUrl url = HttpUrl.parse(NEWS_API_URL).newBuilder()
             .addQueryParameter("gameCode", "ff")
-            .addQueryParameter("CategoryCode", "8324,8325,8326,8327,5309,5310,5311,5312,5313")
+            .addQueryParameter("CategoryCode", categoryCodes)
             .addQueryParameter("pageIndex", String.valueOf(pageIndex))
             .addQueryParameter("pageSize", String.valueOf(pageSize))
             .build();

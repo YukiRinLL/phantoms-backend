@@ -3,6 +3,7 @@ package com.phantoms.phantomsbackend.common.utils;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -31,6 +32,12 @@ public class FF14GlobalNewsUtils {
         .writeTimeout(10, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .build();
+
+    @Value("${ff14.global-news.enable-news:true}")
+    private boolean enableNews;
+
+    @Value("${ff14.global-news.enable-topics:true}")
+    private boolean enableTopics;
 
     public static class NewsItem {
         private String title;
@@ -61,10 +68,12 @@ public class FF14GlobalNewsUtils {
         List<NewsItem> newsList = new ArrayList<>();
         
         try {
-            // 获取新闻RSS
-            newsList.addAll(fetchRSS(NEWS_RSS_URL));
-            // 获取活动RSS
-            newsList.addAll(fetchRSS(TOPICS_RSS_URL));
+            if (enableNews) {
+                newsList.addAll(fetchRSS(NEWS_RSS_URL));
+            }
+            if (enableTopics) {
+                newsList.addAll(fetchRSS(TOPICS_RSS_URL));
+            }
         } catch (Exception e) {
             logger.error("Error fetching global news", e);
         }

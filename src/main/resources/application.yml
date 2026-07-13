@@ -150,8 +150,11 @@ spring:
 ff14:
   news:
     group-ids: "${FF14_NEWS_GROUP_IDS:787909466}"  # 国服新闻发送到的群ID，多个用逗号分隔
+    category-codes: "${FF14_NEWS_CATEGORY_CODES:8324,8325,8327,5310,5311,5312,5313}"  # 国服新闻分类码，多个用逗号分隔 参考 phantoms-backend\cqnews types
   global-news:
     group-ids: "${FF14_GLOBAL_NEWS_GROUP_IDS:787909466}"  # 国际服新闻发送到的群ID，多个用逗号分隔
+    enable-news: "${FF14_GLOBAL_ENABLE_NEWS:true}"  # 是否启用新闻RSS
+    enable-topics: "${FF14_GLOBAL_ENABLE_TOPICS:true}"  # 是否启用活动RSS
   crystal-news:
     group-ids: "${FF14_CRYSTAL_NEWS_GROUP_IDS:936746977}"  # 水晶世界新闻发送到的群ID，多个用逗号分隔
 
