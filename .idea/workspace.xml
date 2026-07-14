@@ -7,10 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update napcat http-server-url">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="move news configuration to config yaml">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/Pagination.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/Pagination.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/RecruitmentResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/RecruitmentResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/primary/SystemConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/primary/SystemConfig.java" afterDir="false" />
     </list>
     <list id="cc09743e-5b03-4657-8bba-22a55747451e" name="local" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
@@ -104,7 +103,7 @@
     &quot;TestNG.NapCatQQTest.executor&quot;: &quot;Run&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/phantoms-backend/src/main/resources/prompts&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/JavaTeamCode/fco_uat&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -301,86 +300,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00246" summary="update datasource config">
-      <option name="closed" value="true" />
-      <created>1767150024322</created>
-      <option name="number" value="00246" />
-      <option name="presentableId" value="LOCAL-00246" />
-      <option name="project" value="LOCAL" />
-      <updated>1767150024322</updated>
-    </task>
-    <task id="LOCAL-00247" summary="add RisingStonesLoginStatusMonitor">
-      <option name="closed" value="true" />
-      <created>1768212966026</created>
-      <option name="number" value="00247" />
-      <option name="presentableId" value="LOCAL-00247" />
-      <option name="project" value="LOCAL" />
-      <updated>1768212966026</updated>
-    </task>
-    <task id="LOCAL-00248" summary="update configuration">
-      <option name="closed" value="true" />
-      <created>1768552023312</created>
-      <option name="number" value="00248" />
-      <option name="presentableId" value="LOCAL-00248" />
-      <option name="project" value="LOCAL" />
-      <updated>1768552023312</updated>
-    </task>
-    <task id="LOCAL-00249" summary="update NapCatQQUtil">
-      <option name="closed" value="true" />
-      <created>1768876378147</created>
-      <option name="number" value="00249" />
-      <option name="presentableId" value="LOCAL-00249" />
-      <option name="project" value="LOCAL" />
-      <updated>1768876378148</updated>
-    </task>
-    <task id="LOCAL-00250" summary="update HousingSaleScheduler sending pic">
-      <option name="closed" value="true" />
-      <created>1768876805665</created>
-      <option name="number" value="00250" />
-      <option name="presentableId" value="LOCAL-00250" />
-      <option name="project" value="LOCAL" />
-      <updated>1768876805665</updated>
-    </task>
-    <task id="LOCAL-00251" summary="update HousingSaleScheduler sending pic">
-      <option name="closed" value="true" />
-      <created>1768877758161</created>
-      <option name="number" value="00251" />
-      <option name="presentableId" value="LOCAL-00251" />
-      <option name="project" value="LOCAL" />
-      <updated>1768877758161</updated>
-    </task>
-    <task id="LOCAL-00252" summary="update HousingSaleScheduler sending pic">
-      <option name="closed" value="true" />
-      <created>1768879041887</created>
-      <option name="number" value="00252" />
-      <option name="presentableId" value="LOCAL-00252" />
-      <option name="project" value="LOCAL" />
-      <updated>1768879041887</updated>
-    </task>
-    <task id="LOCAL-00253" summary="add Sumemo functions">
-      <option name="closed" value="true" />
-      <created>1768903318081</created>
-      <option name="number" value="00253" />
-      <option name="presentableId" value="LOCAL-00253" />
-      <option name="project" value="LOCAL" />
-      <updated>1768903318081</updated>
-    </task>
-    <task id="LOCAL-00254" summary="modify HousingSaleScheduler update font setting">
-      <option name="closed" value="true" />
-      <created>1768965480835</created>
-      <option name="number" value="00254" />
-      <option name="presentableId" value="LOCAL-00254" />
-      <option name="project" value="LOCAL" />
-      <updated>1768965480836</updated>
-    </task>
-    <task id="LOCAL-00255" summary="fix OneBotService setNickname error">
-      <option name="closed" value="true" />
-      <created>1769397673256</created>
-      <option name="number" value="00255" />
-      <option name="presentableId" value="LOCAL-00255" />
-      <option name="project" value="LOCAL" />
-      <updated>1769397673256</updated>
     </task>
     <task id="LOCAL-00256" summary="update logger to use log4j2">
       <option name="closed" value="true" />
@@ -694,7 +613,87 @@
       <option name="project" value="LOCAL" />
       <updated>1779100620813</updated>
     </task>
-    <option name="localTasksCounter" value="295" />
+    <task id="LOCAL-00295" summary="add ignoreUnknown of Jackson to fix ScrapeStack error">
+      <option name="closed" value="true" />
+      <created>1783052570695</created>
+      <option name="number" value="00295" />
+      <option name="presentableId" value="LOCAL-00295" />
+      <option name="project" value="LOCAL" />
+      <updated>1783052570695</updated>
+    </task>
+    <task id="LOCAL-00296" summary="set FAIL_ON_UNKNOWN_PROPERTIES to ignore fetchAndFilterRecruitments failure">
+      <option name="closed" value="true" />
+      <created>1783059917166</created>
+      <option name="number" value="00296" />
+      <option name="presentableId" value="LOCAL-00296" />
+      <option name="project" value="LOCAL" />
+      <updated>1783059917168</updated>
+    </task>
+    <task id="LOCAL-00297" summary="update RecruitmentScheduler fetchAndFilterRecruitments func">
+      <option name="closed" value="true" />
+      <created>1783305633533</created>
+      <option name="number" value="00297" />
+      <option name="presentableId" value="LOCAL-00297" />
+      <option name="project" value="LOCAL" />
+      <updated>1783305633534</updated>
+    </task>
+    <task id="LOCAL-00298" summary="update LittlenightmareClient add ScrapeStack &amp; Cloudflare error format check">
+      <option name="closed" value="true" />
+      <created>1783305683073</created>
+      <option name="number" value="00298" />
+      <option name="presentableId" value="LOCAL-00298" />
+      <option name="project" value="LOCAL" />
+      <updated>1783305683073</updated>
+    </task>
+    <task id="LOCAL-00299" summary="update Ping func">
+      <option name="closed" value="true" />
+      <created>1783305702627</created>
+      <option name="number" value="00299" />
+      <option name="presentableId" value="LOCAL-00299" />
+      <option name="project" value="LOCAL" />
+      <updated>1783305702627</updated>
+    </task>
+    <task id="LOCAL-00300" summary="update scheduler config format">
+      <option name="closed" value="true" />
+      <created>1783405726579</created>
+      <option name="number" value="00300" />
+      <option name="presentableId" value="LOCAL-00300" />
+      <option name="project" value="LOCAL" />
+      <updated>1783405726580</updated>
+    </task>
+    <task id="LOCAL-00301" summary="fix java.util.Arrays import in code">
+      <option name="closed" value="true" />
+      <created>1783908062953</created>
+      <option name="number" value="00301" />
+      <option name="presentableId" value="LOCAL-00301" />
+      <option name="project" value="LOCAL" />
+      <updated>1783908062953</updated>
+    </task>
+    <task id="LOCAL-00302" summary="update Housing Server Map">
+      <option name="closed" value="true" />
+      <created>1783908100910</created>
+      <option name="number" value="00302" />
+      <option name="presentableId" value="LOCAL-00302" />
+      <option name="project" value="LOCAL" />
+      <updated>1783908100910</updated>
+    </task>
+    <task id="LOCAL-00303" summary="update sendWeeklyActivities scheduled time">
+      <option name="closed" value="true" />
+      <created>1783911383906</created>
+      <option name="number" value="00303" />
+      <option name="presentableId" value="LOCAL-00303" />
+      <option name="project" value="LOCAL" />
+      <updated>1783911383906</updated>
+    </task>
+    <task id="LOCAL-00304" summary="move news configuration to config yaml">
+      <option name="closed" value="true" />
+      <created>1783914843375</created>
+      <option name="number" value="00304" />
+      <option name="presentableId" value="LOCAL-00304" />
+      <option name="project" value="LOCAL" />
+      <updated>1783914843375</updated>
+    </task>
+    <option name="localTasksCounter" value="305" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -739,17 +738,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="debug news func using defaultGroupId" />
-    <MESSAGE value="add cqnews types note" />
-    <MESSAGE value="add news memory cache" />
-    <MESSAGE value="fix news cache lost bug" />
-    <MESSAGE value="fix news cache lost bug" />
-    <MESSAGE value="add FF14CrystalNews func" />
-    <MESSAGE value="fix news scheduler" />
-    <MESSAGE value="fix QQ14 news scheduler" />
-    <MESSAGE value="add OneLiveWebhook func" />
-    <MESSAGE value="add OneLiveWebhook func" />
-    <MESSAGE value="fix OneLiveWebhook func" />
     <MESSAGE value="rollback springframework version" />
     <MESSAGE value="update OneLiveWebhook Message format" />
     <MESSAGE value="update onebot/latest &amp; /onebot/latest/text API to get phantomGroup &amp; crystalGroup msg only" />
@@ -764,7 +752,18 @@
     <MESSAGE value="disable Hibernate archive scanning to resolve OOM" />
     <MESSAGE value="fix FF14Prompt resolve FileSystemNotFoundException when reading classpath resources in JAR" />
     <MESSAGE value="update napcat http-server-url" />
-    <option name="LAST_COMMIT_MESSAGE" value="update napcat http-server-url" />
+    <MESSAGE value="add ignoreUnknown of Jackson to fix ScrapeStack error" />
+    <MESSAGE value="set FAIL_ON_UNKNOWN_PROPERTIES to ignore fetchAndFilterRecruitments failure" />
+    <MESSAGE value="update RecruitmentScheduler fetchAndFilterRecruitments func" />
+    <MESSAGE value="update LittlenightmareClient add ScrapeStack &amp; Cloudflare error format check" />
+    <MESSAGE value="update Ping func" />
+    <MESSAGE value="update github workflow docker-build" />
+    <MESSAGE value="update scheduler config format" />
+    <MESSAGE value="fix java.util.Arrays import in code" />
+    <MESSAGE value="update Housing Server Map" />
+    <MESSAGE value="update sendWeeklyActivities scheduled time" />
+    <MESSAGE value="move news configuration to config yaml" />
+    <option name="LAST_COMMIT_MESSAGE" value="move news configuration to config yaml" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -788,11 +787,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java</url>
           <line>493</line>
           <option name="timeStamp" value="41" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/HousingSaleScheduler.java</url>
-          <line>433</line>
-          <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/impl/OneBotServiceImpl.java</url>

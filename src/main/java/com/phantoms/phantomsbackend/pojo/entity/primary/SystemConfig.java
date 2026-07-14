@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity(name = "SystemConfig")
-@Table(name = "system_config")
+@Table(name = "system_config", schema = "config")
 @Data
 public class SystemConfig {
 
