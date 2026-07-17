@@ -10,6 +10,7 @@ import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.UserMessage;
 import com.phantoms.phantomsbackend.repository.primary.onebot.PrimaryChatRecordRepository;
 import com.phantoms.phantomsbackend.repository.primary.onebot.UserMessageRepository;
 import com.phantoms.phantomsbackend.service.OneBotService;
+import com.phantoms.phantomsbackend.service.SystemConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,11 +47,16 @@ public class OneBotServiceImpl implements OneBotService {
     @Autowired
     private RedisUtil redisUtil;
 
-    @Value("${napcat.default-group-id}")
-    private String defaultGroupId;
+    @Autowired
+    private SystemConfigService systemConfigService;
 
-    @Value("${napcat.phantom-group-id}")
-    private String phantomGroupId;
+    private String getDefaultGroupId() {
+        return systemConfigService.getString("napcat.default-group-id", "");
+    }
+
+    private String getPhantomGroupId() {
+        return systemConfigService.getString("napcat.phantom-group-id", "");
+    }
 
     // Redis缓存相关配置
     private static final String GROUP_MEMBER_CACHE_PREFIX = "group:members:";
@@ -484,13 +490,13 @@ public class OneBotServiceImpl implements OneBotService {
 
     @Override
     public void sendGroupMessage(String message, String groupId) throws Exception {
-        String targetGroupId = groupId != null ? groupId : defaultGroupId;
+        String targetGroupId = groupId != null ? groupId : getDefaultGroupId();
         napCatQQUtil.sendGroupMessage(targetGroupId, message);
     }
 
     @Override
     public void sendGroupImage(String imageUrl, String groupId) throws Exception {
-        String targetGroupId = groupId != null ? groupId : defaultGroupId;
+        String targetGroupId = groupId != null ? groupId : getDefaultGroupId();
         napCatQQUtil.sendGroupImage(targetGroupId, imageUrl);
     }
 
@@ -597,7 +603,7 @@ public class OneBotServiceImpl implements OneBotService {
 
             // 收集所有需要查询的群组ID（假设统计的是默认群组的数据）
             Set<Long> groupIds = new HashSet<>();
-            groupIds.add(Long.parseLong(phantomGroupId));
+            groupIds.add(Long.parseLong(getPhantomGroupId()));
 
             // 缓存每个群组的成员列表
             Map<Long, Map<Long, String>> groupMemberMap = new HashMap<>();
@@ -608,7 +614,7 @@ public class OneBotServiceImpl implements OneBotService {
             }
 
             // 获取默认群组的成员映射
-            Map<Long, String> defaultGroupMemberMap = groupMemberMap.get(Long.parseLong(phantomGroupId));
+            Map<Long, String> defaultGroupMemberMap = groupMemberMap.get(Long.parseLong(getPhantomGroupId()));
             if (defaultGroupMemberMap == null) {
                 defaultGroupMemberMap = new HashMap<>();
             }
@@ -898,7 +904,7 @@ public class OneBotServiceImpl implements OneBotService {
 
             // 否则，从数据库中查找匹配昵称的用户
             // 这里需要根据实际的群组ID来查询，使用默认群组
-            Long groupId = Long.parseLong(phantomGroupId);
+            Long groupId = Long.parseLong(getPhantomGroupId());
             Map<Long, String> memberMap = getGroupMemberMap(groupId);
 
             for (Map.Entry<Long, String> entry : memberMap.entrySet()) {
@@ -926,7 +932,7 @@ public class OneBotServiceImpl implements OneBotService {
      */
     private String getUserNickname(Long userId) {
         try {
-            Long groupId = Long.parseLong(phantomGroupId);
+            Long groupId = Long.parseLong(getPhantomGroupId());
             Map<Long, String> memberMap = getGroupMemberMap(groupId);
             return getNicknameFromMemberMap(memberMap, userId);
         } catch (Exception e) {

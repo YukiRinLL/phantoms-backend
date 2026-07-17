@@ -2,6 +2,7 @@ package com.phantoms.phantomsbackend.service.impl;
 
 import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
 import com.phantoms.phantomsbackend.service.OneLiveWebhookService;
+import com.phantoms.phantomsbackend.service.SystemConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,20 @@ public class OneLiveWebhookServiceImpl implements OneLiveWebhookService {
     @Autowired
     private NapCatQQUtil napCatQQUtil;
 
-    @Value("${napcat.phantom-group-id}")
-    private String phantomGroupId;
+    @Autowired
+    private SystemConfigService systemConfigService;
 
-    @Value("${napcat.default-group-id}")
-    private String defaultGroupId;
+    private String getPhantomGroupId() {
+        return systemConfigService.getString("napcat.phantom-group-id", "");
+    }
 
-    @Value("${napcat.crystal-group-id}")
-    private String crystalGroupId;
+    private String getDefaultGroupId() {
+        return systemConfigService.getString("napcat.default-group-id", "");
+    }
+
+    private String getCrystalGroupId() {
+        return systemConfigService.getString("napcat.crystal-group-id", "");
+    }
 
     private static final String DEFAULT_QQ = "944989026";
 
@@ -88,10 +95,11 @@ public class OneLiveWebhookServiceImpl implements OneLiveWebhookService {
 
             // 发送到默认QQ群聊
             try {
+                String defaultGroupId = getDefaultGroupId();
                 napCatQQUtil.sendGroupMessage(defaultGroupId, message);
-                logger.info("发送消息到默认QQ群聊 {} 成功", defaultGroupId);
+                logger.info("发送消息到默认QQ群聊 {} 成功", groupId);
             } catch (IOException e) {
-                logger.error("发送消息到默认QQ群聊 {} 失败: {}", defaultGroupId, e.getMessage());
+                logger.error("发送消息到默认QQ群聊 {} 失败: {}", getDefaultGroupId(), e.getMessage());
             }
         }
     }

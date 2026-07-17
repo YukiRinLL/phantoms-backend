@@ -3,10 +3,10 @@ package com.phantoms.phantomsbackend.service.scheduler;
 import com.phantoms.phantomsbackend.common.utils.FF14GlobalNewsUtils;
 import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
 import com.phantoms.phantomsbackend.common.utils.RedisUtil;
+import com.phantoms.phantomsbackend.service.SystemConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
@@ -33,17 +33,15 @@ public class FF14GlobalNewsScheduler {
     @Autowired
     private RedisUtil redisUtil;
 
-    @Value("${napcat.phantom-group-id}")
-    private String phantomGroupId;
-
-    @Value("${napcat.default-group-id}")
-    private String defaultGroupId;
-
-    @Value("${ff14.global-news.group-ids:${napcat.phantom-group-id}}")
-    private String globalNewsGroupIds;
+    @Autowired
+    private SystemConfigService systemConfigService;
 
     private List<String> getGlobalNewsGroupIds() {
-        return Arrays.stream(globalNewsGroupIds.split(","))
+        String groupIds = systemConfigService.getString("ff14.global-news.group-ids", "");
+        if (groupIds.isEmpty()) {
+            return List.of();
+        }
+        return Arrays.stream(groupIds.split(","))
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .collect(Collectors.toList());

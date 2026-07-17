@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.phantoms.phantomsbackend.common.utils.EmailUtil;
 import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesSigninHelper;
+import com.phantoms.phantomsbackend.service.SystemConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,17 +33,24 @@ public class RisingStonesLoginStatusMonitor {
     @Autowired
     private NapCatQQUtil napCatQQUtil;
 
-    @Value("${monitor.notification.email:}")
-    private String notificationEmail;
+    @Autowired
+    private SystemConfigService systemConfigService;
 
-    @Value("${napcat.admin-qq:944989026}")
-    private String notificationQQ;
+    private String getNotificationEmail() {
+        return systemConfigService.getString("monitor.notification.email", "");
+    }
 
-    @Value("${monitor.check.enabled:true}")
-    private boolean monitorEnabled;
+    private String getNotificationQQ() {
+        return systemConfigService.getString("napcat.admin-qq", "944989026");
+    }
 
-    @Value("${monitor.notify-on-success:false}")
-    private boolean notifyOnSuccess;
+    private boolean isMonitorEnabled() {
+        return systemConfigService.getBoolean("monitor.check.enabled", true);
+    }
+
+    private boolean isNotifyOnSuccess() {
+        return systemConfigService.getBoolean("monitor.notification.notify-on-success", false);
+    }
 
     // 连续失败次数
     private int consecutiveFailures = 0;
@@ -58,7 +66,7 @@ public class RisingStonesLoginStatusMonitor {
      */
     @Scheduled(fixedRate = 2 * 60 * 60 * 1000) // 2小时
     public void checkLoginStatus() {
-        if (!monitorEnabled) {
+        if (!isMonitorEnabled()) {
             logger.info("登录状态监控已禁用");
             return;
         }
@@ -97,7 +105,7 @@ public class RisingStonesLoginStatusMonitor {
         }
 
         // 每次成功都发送通知（如果配置了）
-        if (notifyOnSuccess) {
+        if (isNotifyOnSuccess()) {
             sendSuccessNotification(wasFailure);
         }
 
@@ -185,9 +193,9 @@ public class RisingStonesLoginStatusMonitor {
     }
 
     private void sendEmailNotification(String subject, String content, String type) {
-        if (notificationEmail != null && !notificationEmail.isEmpty()) {
+        String email = getNotificationEmail();
+        if (email != null && !email.isEmpty()) {
             try {
-                // 根据类型设置不同的邮件内容
                 String recipientName = "尊敬的系统管理员：";
                 String messageBody = content.replace("\n", "<br>");
                 String footerText = getFooterTextByType(type);
@@ -196,7 +204,7 @@ public class RisingStonesLoginStatusMonitor {
                 String footerCopyright = "版权所有 © 2025 Phantoms系统监控平台";
 
                 emailUtil.sendDaoYuKeyNotificationEmail(
-                        notificationEmail,
+                        email,
                         subject,
                         recipientName,
                         messageBody,
@@ -205,7 +213,7 @@ public class RisingStonesLoginStatusMonitor {
                         buttonText,
                         footerCopyright
                 );
-                logger.info("登录状态 {}邮件已发送至: {}", type, notificationEmail);
+                logger.info("登录状态 {}邮件已发送至: {}", type, email);
             } catch (Exception e) {
                 logger.error("发送登录状态 {}邮件失败", type, e);
             }
@@ -241,10 +249,11 @@ public class RisingStonesLoginStatusMonitor {
     }
 
     private void sendQQNotification(String message) {
-        if (notificationQQ != null && !notificationQQ.isEmpty()) {
+        String qq = getNotificationQQ();
+        if (qq != null && !qq.isEmpty()) {
             try {
-                napCatQQUtil.sendPrivateMessage(notificationQQ, message);
-                logger.info("登录状态通知QQ消息已发送至: {}", notificationQQ);
+                napCatQQUtil.sendPrivateMessage(qq, message);
+                logger.info("登录状态通知QQ消息已发送至: {}", qq);
             } catch (IOException e) {
                 logger.error("发送登录状态通知QQ消息失败", e);
             }
@@ -266,14 +275,14 @@ public class RisingStonesLoginStatusMonitor {
      */
     public Map<String, Object> getMonitorStatus() {
         Map<String, Object> status = new HashMap<>();
-        status.put("monitorEnabled", monitorEnabled);
+        status.put("monitorEnabled", isMonitorEnabled());
         status.put("consecutiveFailures", consecutiveFailures);
         status.put("warningSent", warningSent);
         status.put("lastCheckSuccess", lastCheckSuccess);
-        status.put("notifyOnSuccess", notifyOnSuccess);
+        status.put("notifyOnSuccess", isNotifyOnSuccess());
         status.put("lastCheckTime", LocalDateTime.now().format(formatter));
-        status.put("notificationEmail", notificationEmail);
-        status.put("notificationQQ", notificationQQ);
+        status.put("notificationEmail", getNotificationEmail());
+        status.put("notificationQQ", getNotificationQQ());
         return status;
     }
 }

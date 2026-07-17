@@ -3,7 +3,7 @@ package com.phantoms.phantomsbackend.common.utils;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -33,11 +33,8 @@ public class FF14GlobalNewsUtils {
         .readTimeout(30, TimeUnit.SECONDS)
         .build();
 
-    @Value("${ff14.global-news.enable-news:true}")
-    private boolean enableNews;
-
-    @Value("${ff14.global-news.enable-topics:true}")
-    private boolean enableTopics;
+    @Autowired
+    private com.phantoms.phantomsbackend.service.SystemConfigService systemConfigService;
 
     public static class NewsItem {
         private String title;
@@ -68,6 +65,9 @@ public class FF14GlobalNewsUtils {
         List<NewsItem> newsList = new ArrayList<>();
         
         try {
+            boolean enableNews = systemConfigService.getBoolean("ff14.global-news.enable-news", true);
+            boolean enableTopics = systemConfigService.getBoolean("ff14.global-news.enable-topics", true);
+            
             if (enableNews) {
                 newsList.addAll(fetchRSS(NEWS_RSS_URL));
             }

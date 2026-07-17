@@ -4,6 +4,7 @@ import com.phantoms.phantomsbackend.common.utils.CyouClient;
 import com.phantoms.phantomsbackend.common.utils.RedisUtil;
 import com.phantoms.phantomsbackend.pojo.entity.HousingSale;
 import com.phantoms.phantomsbackend.service.OneBotService;
+import com.phantoms.phantomsbackend.service.SystemConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,27 +117,28 @@ public class HousingSaleScheduler {
     @Autowired
     private TransactionTemplate transactionTemplate;
 
-    @Value("${napcat.default-group-id}")
-    private String defaultGroupId;
-
-    @Value("${napcat.phantom-group-id}")
-    private String phantomGroupId;
-
     @Autowired
-    private org.springframework.core.env.Environment environment;
+    private SystemConfigService systemConfigService;
+
+    private String getPhantomGroupId() {
+        return systemConfigService.getString("napcat.phantom-group-id", "");
+    }
 
     private List<HousingNotifyTarget> getNotifyTargets() {
+        List<Map<String, String>> configTargets = systemConfigService.getJson(
+                "housing.sale.notify.targets",
+                new com.alibaba.fastjson.TypeReference<List<Map<String, String>>>() {},
+                List.of()
+        );
+        
         List<HousingNotifyTarget> targets = new ArrayList<>();
-        int index = 0;
-        while (true) {
-            String server = environment.getProperty("housing.sale.notify.targets[" + index + "].server");
-            String groupIds = environment.getProperty("housing.sale.notify.targets[" + index + "].group-ids");
-            String areas = environment.getProperty("housing.sale.notify.targets[" + index + "].areas", "0,1,2,3,4");
-            if (server == null || groupIds == null) {
-                break;
+        for (Map<String, String> config : configTargets) {
+            String server = config.get("server");
+            String groupIds = config.get("group-ids");
+            String areas = config.getOrDefault("areas", "0,1,2,3,4");
+            if (server != null && groupIds != null && !server.isEmpty() && !groupIds.isEmpty()) {
+                targets.add(new HousingNotifyTarget(server, groupIds, areas));
             }
-            targets.add(new HousingNotifyTarget(server, groupIds, areas));
-            index++;
         }
         return targets;
     }
@@ -632,7 +634,7 @@ public class HousingSaleScheduler {
      * 发送房屋通知 - 单条消息包含所有房屋信息
      */
     private void sendBriefHouseNotification(String server, List<HousingSale> houses) {
-        sendBriefHouseNotificationForTarget(server, houses, Collections.singletonList(phantomGroupId));
+        sendBriefHouseNotificationForTarget(server, houses, Collections.singletonList(getPhantomGroupId()));
     }
 
     private void sendBriefHouseNotificationForTarget(String server, List<HousingSale> houses, List<String> groupIds) {
@@ -711,7 +713,7 @@ public class HousingSaleScheduler {
      * 发送房屋通知
      */
     private void sendHouseNotification(String server, List<HousingSale> houses) {
-        sendHouseNotificationForTarget(server, houses, Collections.singletonList(phantomGroupId));
+        sendHouseNotificationForTarget(server, houses, Collections.singletonList(getPhantomGroupId()));
     }
 
     private void sendHouseNotificationForTarget(String server, List<HousingSale> houses, List<String> groupIds) {

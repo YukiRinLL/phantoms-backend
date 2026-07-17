@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesUtils;
+import com.phantoms.phantomsbackend.service.SystemConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,16 @@ public class DailySignInScheduler {
     @Autowired
     private NapCatQQUtil napCatQQUtil;
 
-    @Value("${napcat.admin-qq:944989026}")
-    private String adminQQ;
+    @Autowired
+    private SystemConfigService systemConfigService;
 
-    @Value("${scheduler.signin.enabled:true}")
-    private boolean signInEnabled;
+    private String getAdminQQ() {
+        return systemConfigService.getString("napcat.admin-qq", "944989026");
+    }
+
+    private boolean isSignInEnabled() {
+        return systemConfigService.getBoolean("scheduler.signin.enabled", true);
+    }
 
     /**
      * 每日签到任务 - UTC+8每天00:05执行
@@ -42,7 +48,7 @@ public class DailySignInScheduler {
     @Scheduled(cron = "0 5 0 * * ?") // 每天00:05执行
 //    @Scheduled(fixedRate = 60000)
     public void dailySignInTask() {
-        if (!signInEnabled) {
+        if (!isSignInEnabled()) {
             logger.info("每日签到任务已禁用");
             return;
         }
@@ -142,7 +148,8 @@ public class DailySignInScheduler {
      * 发送通知消息
      */
     private void sendNotification(String title, String content) {
-        if (adminQQ == null || adminQQ.isEmpty()) {
+        String qq = getAdminQQ();
+        if (qq == null || qq.isEmpty()) {
             logger.warn("未配置管理员QQ，跳过通知发送");
             return;
         }
@@ -151,7 +158,7 @@ public class DailySignInScheduler {
             String message = String.format("%s\n\n%s\n\n执行时间: %s", 
                 title, content, LocalDateTime.now().format(DATE_FORMATTER));
             
-            napCatQQUtil.sendPrivateMessage(adminQQ, message);
+            napCatQQUtil.sendPrivateMessage(qq, message);
             logger.info("已发送通知消息: {}", title);
         } catch (IOException e) {
             logger.error("发送通知消息失败", e);

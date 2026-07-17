@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.phantoms.phantomsbackend.pojo.dto.ChatRecordDTO;
 import com.phantoms.phantomsbackend.pojo.entity.primary.onebot.ChatRecord;
 import com.phantoms.phantomsbackend.service.OneBotService;
+import com.phantoms.phantomsbackend.service.SystemConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,22 +32,27 @@ public class OneBotController {
 
     private static final Logger logger = LoggerFactory.getLogger(OneBotController.class);
 
-    @Value("${napcat.default-group-id}")
-    private String defaultGroupId;
-
-    @Value("${napcat.phantom-group-id}")
-    private String phantomGroupId;
-
-    @Value("${napcat.crystal-group-id}")
-    private String crystalGroupId;
-
     @Autowired
     private final OneBotService oneBotService;
     private final ObjectMapper objectMapper;
+    private final SystemConfigService systemConfigService;
 
-    public OneBotController(OneBotService oneBotService, ObjectMapper objectMapper) {
+    public OneBotController(OneBotService oneBotService, ObjectMapper objectMapper, SystemConfigService systemConfigService) {
         this.oneBotService = oneBotService;
         this.objectMapper = objectMapper;
+        this.systemConfigService = systemConfigService;
+    }
+
+    private String getDefaultGroupId() {
+        return systemConfigService.getString("napcat.default-group-id", "");
+    }
+
+    private String getPhantomGroupId() {
+        return systemConfigService.getString("napcat.phantom-group-id", "");
+    }
+
+    private String getCrystalGroupId() {
+        return systemConfigService.getString("napcat.crystal-group-id", "");
     }
 
     @PostMapping("/onebot")
@@ -107,7 +113,7 @@ public class OneBotController {
     public ResponseEntity<List<ChatRecordDTO>> getLatestMessages(
             @Parameter(description = "返回消息数量限制，默认30条") @RequestParam(defaultValue = "30") int limit) {
         try {
-            List<ChatRecordDTO> latestMessages = oneBotService.getLatestMessagesByGroups(limit, List.of(phantomGroupId, crystalGroupId));
+            List<ChatRecordDTO> latestMessages = oneBotService.getLatestMessagesByGroups(limit, List.of(getPhantomGroupId(), getCrystalGroupId()));
             return ResponseEntity.ok(latestMessages);
         } catch (Exception e) {
             logger.error("Error fetching latest messages: {}", e.getMessage(), e);
@@ -127,7 +133,7 @@ public class OneBotController {
     public ResponseEntity<List<ChatRecord>> getLatestTextMessages(
             @Parameter(description = "返回消息数量限制，默认30条") @RequestParam(defaultValue = "30") int limit) {
         try {
-            List<ChatRecord> latestMessages = oneBotService.getLatestTextMessagesByGroups(limit, List.of(phantomGroupId, crystalGroupId));
+            List<ChatRecord> latestMessages = oneBotService.getLatestTextMessagesByGroups(limit, List.of(getPhantomGroupId(), getCrystalGroupId()));
             return ResponseEntity.ok(latestMessages);
         } catch (Exception e) {
             logger.error("Error fetching latest messages: {}", e.getMessage(), e);
@@ -149,7 +155,7 @@ public class OneBotController {
             @Parameter(description = "群组ID，不指定则使用默认群组") @RequestParam(required = false) String groupId) {
         try {
             if (StringUtils.isEmpty(groupId)) {
-                groupId = defaultGroupId;
+                groupId = getDefaultGroupId();
             }
 
             String message = (String) requestBody.get("message");

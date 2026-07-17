@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
 import com.phantoms.phantomsbackend.service.OneBotService;
 import com.phantoms.phantomsbackend.service.RisingStonesService;
+import com.phantoms.phantomsbackend.service.SystemConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,11 +33,12 @@ public class GuildMemberReminderScheduler {
     @Autowired
     private NapCatQQUtil napCatQQUtil;
 
-    @Value("${napcat.default-group-id}")
-    private String defaultGroupId;
+    @Autowired
+    private SystemConfigService systemConfigService;
 
-    @Value("${napcat.phantom-group-id}")
-    private String phantomGroupId;
+    private String getPhantomGroupId() {
+        return systemConfigService.getString("napcat.phantom-group-id", "");
+    }
 
     // UTC+8每天8:00执行
     @Scheduled(cron = "0 0 0 * * ?")
@@ -83,7 +85,7 @@ public class GuildMemberReminderScheduler {
                                                 String message = String.format("[系统提示]%s 已经%d天未登录，房屋信息：%s", member.getString("character_name"), daysBetween, houseInfo);
                                                 // 发送提醒信息到群聊
                                                 try {
-                                                    oneBotService.sendGroupMessage(message, phantomGroupId);
+                                                    oneBotService.sendGroupMessage(message, getPhantomGroupId());
                                                 } catch (Exception e) {
                                                     throw new RuntimeException(e);
                                                 }
@@ -139,12 +141,10 @@ public class GuildMemberReminderScheduler {
                 // 发送活动信息到群聊
                 if (!filteredActivities.isEmpty()) {
                     // 先发送一个标题消息
-                    oneBotService.sendGroupMessage("====== 当前FF14活动一览 ======", phantomGroupId);
+                    oneBotService.sendGroupMessage("====== 当前FF14活动一览 ======", getPhantomGroupId());
 
-                    // 添加短暂延迟避免消息发送过快
                     Thread.sleep(1000);
 
-                    // 遍历每个活动并发送详细信息
                     for (JSONObject activity : filteredActivities) {
                         String title = activity.getString("Title");
                         String summary = activity.getString("Summary");
@@ -152,7 +152,6 @@ public class GuildMemberReminderScheduler {
                         String link = activity.getString("OutLink");
                         String publishDate = activity.getString("PublishDate");
 
-                        // 发送活动详细信息
                         StringBuilder message = new StringBuilder();
                         if (imageUrl != null && !imageUrl.isEmpty()) {
                             message.append("[CQ:image,file=").append(imageUrl).append("]");
@@ -162,25 +161,22 @@ public class GuildMemberReminderScheduler {
                         message.append("📝").append(summary).append("\n");
                         message.append("🔗").append(link);
 
-                        // 发送活动信息
-                        oneBotService.sendGroupMessage(message.toString(), phantomGroupId);
+                        oneBotService.sendGroupMessage(message.toString(), getPhantomGroupId());
 
-                        // 添加短暂延迟避免消息发送过快
                         Thread.sleep(1000);
                     }
 
-                    // 发送结束消息
-//                    oneBotService.sendGroupMessageWithDefaultGroup("====== 活动信息发送完毕 ======", phantomGroupId);
+//                    oneBotService.sendGroupMessageWithDefaultGroup("====== 活动信息发送完毕 ======", getPhantomGroupId());
                 } else {
-                    oneBotService.sendGroupMessage("本周暂无FF14活动信息", phantomGroupId);
+                    oneBotService.sendGroupMessage("本周暂无FF14活动信息", getPhantomGroupId());
                 }
             } else {
-                oneBotService.sendGroupMessage("获取FF14活动信息失败，请稍后重试", phantomGroupId);
+                oneBotService.sendGroupMessage("获取FF14活动信息失败，请稍后重试", getPhantomGroupId());
             }
         } catch (Exception e) {
             e.printStackTrace();
             try {
-                oneBotService.sendGroupMessage("获取FF14活动信息时发生错误：" + e.getMessage(), phantomGroupId);
+                oneBotService.sendGroupMessage("获取FF14活动信息时发生错误：" + e.getMessage(), getPhantomGroupId());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

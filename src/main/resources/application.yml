@@ -146,33 +146,6 @@ spring:
         shutdown-timeout: 100ms
 
 
-# FF14新闻通知配置
-ff14:
-  news:
-    group-ids: "${FF14_NEWS_GROUP_IDS:787909466}"  # 国服新闻发送到的群ID，多个用逗号分隔
-    category-codes: "${FF14_NEWS_CATEGORY_CODES:8324,8325,8327,5310,5311,5312,5313}"  # 国服新闻分类码，多个用逗号分隔 参考 phantoms-backend\cqnews types
-  global-news:
-    group-ids: "${FF14_GLOBAL_NEWS_GROUP_IDS:787909466}"  # 国际服新闻发送到的群ID，多个用逗号分隔
-    enable-news: "${FF14_GLOBAL_ENABLE_NEWS:true}"  # 是否启用新闻RSS
-    enable-topics: "${FF14_GLOBAL_ENABLE_TOPICS:true}"  # 是否启用活动RSS
-  crystal-news:
-    group-ids: "${FF14_CRYSTAL_NEWS_GROUP_IDS:936746977}"  # 水晶世界新闻发送到的群ID，多个用逗号分隔
-
-# 房屋销售监控配置
-housing:
-  sale:
-    notify:
-      targets:  # 每个target是一组完整的配置：服务器 + 区域 + 发送群
-        # server: 服务器ID，多个用逗号分隔（1121拂晓之间，1081神意之地）
-        # areas: 区域列表，0-海雾村,1-薰衣草苗圃,2-高脚孤丘,3-白银乡,4-穹顶皓天，多个用逗号分隔，默认全部
-        # group-ids: 发送到的群ID，多个用逗号分隔
-        - server: "1121"
-          areas: "0,1,2,3,4"
-          group-ids: "${HOUSING_TARGET_0_GROUP_IDS:787909466}"
-        - server: "1081"
-          areas: "0,1,2,3,4"
-          group-ids: "${HOUSING_TARGET_1_GROUP_IDS:787909466}"
-
 mybatis-plus:
   global-config:
     db-config:
@@ -210,18 +183,6 @@ shiro:
 napcat:
   http-server-url: ${NAPCAT_HTTP_SERVER_URL:https://napcat-phantoms-server.zeabur.app}
   access-token: ${NAPCAT_ACCESS_TOKEN:7saligia}
-  default-group-id: ${NAPCAT_DEFAULT_GROUP_ID:595883141}
-  phantom-group-id: ${NAPCAT_PHANTOM_GROUP_ID:787909466}
-  crystal-group-id: ${NAPCAT_CRYSTAL_GROUP_ID:936746977}
-  admin-qq: "944989026"
-
-# DaoYu Key监控配置
-monitor:
-  check:
-    enabled: true
-  notification:
-    email: 944989026@qq.com  # 通知邮箱
-    notify-on-success: false  # 成功时也发送通知
 
 xivapi:
   base-url: "https://v2.xivapi.com/api"
