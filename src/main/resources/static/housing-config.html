@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>房屋监控配置管理</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #333;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 8px 16px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #1e7e34;
+        }
+        .btn-warning {
+            background-color: #ffc107;
+            color: #333;
+        }
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        table tr:hover {
+            background-color: #f8f9fa;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .form-group .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .form-group .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        .form-group .checkbox-item input {
+            width: auto;
+            margin-right: 5px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            position: relative;
+        }
+        .modal-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .modal-close:hover, .modal-close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .status {
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .badge-enabled {
+            background-color: #28a745;
+            color: white;
+        }
+        .badge-disabled {
+            background-color: #dc3545;
+            color: white;
+        }
+        .tag {
+            display: inline-block;
+            padding: 2px 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+        .tag-server {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        .tag-area {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .tag-group {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏠 房屋监控配置管理</h1>
+        <p>管理FF14房屋销售监控的通知目标配置</p>
+    </div>
+
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>配置列表</h2>
+            <button class="btn btn-primary" onclick="openCreateModal()">+ 新增配置</button>
+        </div>
+        
+        <div id="statusMessage" class="status" style="display: none;"></div>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="搜索配置名称..." onkeyup="filterTable()">
+            <button class="btn btn-primary btn-sm" onclick="loadTargets()">刷新</button>
+        </div>
+
+        <table id="targetTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>名称</th>
+                    <th>服务器</th>
+                    <th>住宅区</th>
+                    <th>QQ群</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="8" class="empty-state">加载中...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">新增配置</h2>
+            
+            <form id="targetForm" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="formId">
+                
+                <div class="form-group">
+                    <label for="formName">配置名称 *</label>
+                    <input type="text" id="formName" placeholder="例如：拂晓之间全区域监控" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="formDescription">描述</label>
+                    <textarea id="formDescription" placeholder="可选，描述这个配置的用途"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>监控服务器 *</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1167"><label>红玉海</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1081"><label>神意之地</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1042"><label>拉诺西亚</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1044"><label>幻影群岛</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1060"><label>萌芽池</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1173"><label>宇宙和音</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1174"><label>沃仙曦染</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1175"><label>晨曦王座</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1172"><label>白银乡</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1076"><label>白金幻象</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1171"><label>神拳痕</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1170"><label>潮风亭</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1113"><label>旅人栈桥</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1121"><label>拂晓之间</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1166"><label>龙巢神殿</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1176"><label>梦羽宝境</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1043"><label>紫水栈桥</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1169"><label>延夏</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1106"><label>静语庄园</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1045"><label>摩杜纳</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1177"><label>海猫茶屋</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1178"><label>柔风海湾</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1179"><label>琥珀原</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1192"><label>水晶塔</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1183"><label>银泪湖</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1180"><label>太阳海岸</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1186"><label>伊修加德</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="server" value="1201"><label>红茶川</label></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>监控住宅区</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" name="area" value="0" checked><label>海雾村</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="area" value="1" checked><label>薰衣草苗圃</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="area" value="2" checked><label>高脚孤丘</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="area" value="3" checked><label>白银乡</label></div>
+                        <div class="checkbox-item"><input type="checkbox" name="area" value="4" checked><label>穹顶皓天</label></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="formGroups">QQ群ID *</label>
+                    <input type="text" id="formGroups" placeholder="多个群ID用逗号分隔，如：787909466,595883141" required>
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" class="btn btn-warning" onclick="closeModal()">取消</button>
+                    <button type="submit" class="btn btn-success">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const SERVER_NAME_MAP = {
+            "1167": "红玉海", "1081": "神意之地", "1042": "拉诺西亚", "1044": "幻影群岛",
+            "1060": "萌芽池", "1173": "宇宙和音", "1174": "沃仙曦染", "1175": "晨曦王座",
+            "1172": "白银乡", "1076": "白金幻象", "1171": "神拳痕", "1170": "潮风亭",
+            "1113": "旅人栈桥", "1121": "拂晓之间", "1166": "龙巢神殿", "1176": "梦羽宝境",
+            "1043": "紫水栈桥", "1169": "延夏", "1106": "静语庄园", "1045": "摩杜纳",
+            "1177": "海猫茶屋", "1178": "柔风海湾", "1179": "琥珀原",
+            "1192": "水晶塔", "1183": "银泪湖", "1180": "太阳海岸", "1186": "伊修加德", "1201": "红茶川"
+        };
+
+        const AREA_NAME_MAP = {
+            "0": "海雾村", "1": "薰衣草苗圃", "2": "高脚孤丘", "3": "白银乡", "4": "穹顶皓天"
+        };
+
+        let targets = [];
+
+        function showStatus(message, type) {
+            const status = document.getElementById('statusMessage');
+            status.textContent = message;
+            status.className = 'status ' + type;
+            status.style.display = 'block';
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 3000);
+        }
+
+        async function loadTargets() {
+            try {
+                const response = await fetch('/api/housing/notify/targets');
+                if (!response.ok) {
+                    throw new Error('获取配置失败');
+                }
+                targets = await response.json();
+                renderTable();
+            } catch (error) {
+                showStatus('加载失败: ' + error.message, 'error');
+                document.getElementById('targetTable tbody').innerHTML = 
+                    '<tr><td colspan="8" class="empty-state">加载失败，请检查网络连接</td></tr>';
+            }
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('targetTable tbody');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            const filtered = targets.filter(t => 
+                t.name.toLowerCase().includes(searchTerm) ||
+                t.description?.toLowerCase().includes(searchTerm)
+            );
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">暂无配置，点击上方按钮添加</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(target => `
+                <tr>
+                    <td>${target.id}</td>
+                    <td><strong>${target.name}</strong></td>
+                    <td>${target.servers?.map(s => `<span class="tag tag-server">${SERVER_NAME_MAP[s] || s}</span>`).join('') || '-'}</td>
+                    <td>${target.areas?.map(a => `<span class="tag tag-area">${AREA_NAME_MAP[a] || a}</span>`).join('') || '-'}</td>
+                    <td>${target.groups?.map(g => `<span class="tag tag-group">${g}</span>`).join('') || '-'}</td>
+                    <td><span class="badge ${target.enabled ? 'badge-enabled' : 'badge-disabled'}">${target.enabled ? '启用' : '禁用'}</span></td>
+                    <td>${target.createdAt ? new Date(target.createdAt).toLocaleString('zh-CN') : '-'}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="editTarget(${target.id})">编辑</button>
+                        <button class="btn btn-warning btn-sm" onclick="toggleTarget(${target.id}, ${!target.enabled})">
+                            ${target.enabled ? '禁用' : '启用'}
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteTarget(${target.id})">删除</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterTable() {
+            renderTable();
+        }
+
+        function openCreateModal() {
+            document.getElementById('modalTitle').textContent = '新增配置';
+            document.getElementById('formId').value = '';
+            document.getElementById('formName').value = '';
+            document.getElementById('formDescription').value = '';
+            document.getElementById('formGroups').value = '';
+            
+            document.querySelectorAll('input[name="server"]').forEach(cb => cb.checked = false);
+            document.querySelectorAll('input[name="area"]').forEach(cb => cb.checked = true);
+            
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function editTarget(id) {
+            const target = targets.find(t => t.id === id);
+            if (!target) return;
+
+            document.getElementById('modalTitle').textContent = '编辑配置';
+            document.getElementById('formId').value = target.id;
+            document.getElementById('formName').value = target.name;
+            document.getElementById('formDescription').value = target.description || '';
+            document.getElementById('formGroups').value = target.groups?.join(',') || '';
+            
+            document.querySelectorAll('input[name="server"]').forEach(cb => {
+                cb.checked = target.servers?.includes(cb.value) || false;
+            });
+            document.querySelectorAll('input[name="area"]').forEach(cb => {
+                cb.checked = target.areas?.includes(parseInt(cb.value)) || false;
+            });
+            
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const id = document.getElementById('formId').value;
+            const name = document.getElementById('formName').value.trim();
+            const description = document.getElementById('formDescription').value.trim();
+            const groups = document.getElementById('formGroups').value.trim().split(',').map(g => g.trim()).filter(g => g);
+            
+            const servers = Array.from(document.querySelectorAll('input[name="server"]:checked')).map(cb => cb.value);
+            const areas = Array.from(document.querySelectorAll('input[name="area"]:checked')).map(cb => parseInt(cb.value));
+
+            if (!name) {
+                showStatus('请输入配置名称', 'error');
+                return;
+            }
+            if (servers.length === 0) {
+                showStatus('请选择至少一个服务器', 'error');
+                return;
+            }
+            if (groups.length === 0) {
+                showStatus('请输入至少一个QQ群ID', 'error');
+                return;
+            }
+
+            const data = { name, description, servers, areas, groups };
+            
+            try {
+                const url = id ? `/api/housing/notify/targets/${id}` : '/api/housing/notify/targets';
+                const method = id ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error(id ? '更新失败' : '创建失败');
+                }
+
+                showStatus(id ? '配置更新成功' : '配置创建成功', 'success');
+                closeModal();
+                loadTargets();
+            } catch (error) {
+                showStatus('操作失败: ' + error.message, 'error');
+            }
+        }
+
+        async function toggleTarget(id, enabled) {
+            try {
+                const response = await fetch(`/api/housing/notify/targets/${id}/toggle`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ enabled })
+                });
+
+                if (!response.ok) {
+                    throw new Error('操作失败');
+                }
+
+                showStatus(enabled ? '配置已启用' : '配置已禁用', 'success');
+                loadTargets();
+            } catch (error) {
+                showStatus('操作失败: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteTarget(id) {
+            if (!confirm('确定要删除这个配置吗？')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/housing/notify/targets/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    throw new Error('删除失败');
+                }
+
+                showStatus('配置删除成功', 'success');
+                loadTargets();
+            } catch (error) {
+                showStatus('删除失败: ' + error.message, 'error');
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', loadTargets);
+    </script>
+</body>
+</html>
