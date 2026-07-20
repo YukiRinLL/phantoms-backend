@@ -30,15 +30,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 
-@lombok.Data
-@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
-class HousingNotifyTarget {
-    private String server;
-    private String groupIds;
-    private String areas;
-}
-
 @Component
 public class HousingSaleScheduler {
 
@@ -120,53 +111,35 @@ public class HousingSaleScheduler {
     @Autowired
     private SystemConfigService systemConfigService;
 
+    @Autowired
+    private com.phantoms.phantomsbackend.service.HousingNotifyService housingNotifyService;
+
     private String getPhantomGroupId() {
         return systemConfigService.getString("napcat.phantom-group-id", "");
     }
 
-    private List<HousingNotifyTarget> getNotifyTargets() {
-        List<Map<String, String>> configTargets = systemConfigService.getJson(
-                "housing.sale.notify.targets",
-                new com.alibaba.fastjson.TypeReference<List<Map<String, String>>>() {},
-                List.of()
-        );
-        
-        List<HousingNotifyTarget> targets = new ArrayList<>();
-        for (Map<String, String> config : configTargets) {
-            String server = config.get("server");
-            String groupIds = config.get("group-ids");
-            String areas = config.getOrDefault("areas", "0,1,2,3,4");
-            if (server != null && groupIds != null && !server.isEmpty() && !groupIds.isEmpty()) {
-                targets.add(new HousingNotifyTarget(server, groupIds, areas));
-            }
-        }
-        return targets;
+    private List<com.phantoms.phantomsbackend.service.HousingNotifyService.TargetSummary> getNotifyTargets() {
+        return housingNotifyService.getTargetSummaries();
     }
 
     private Set<String> getAllServers() {
-        Set<String> servers = new LinkedHashSet<>();
-        for (HousingNotifyTarget target : getNotifyTargets()) {
-            Arrays.stream(target.getServer().split(","))
-                    .map(String::trim)
-                    .filter(s -> !s.isEmpty() && !"default".equals(s))
-                    .forEach(servers::add);
-        }
-        return servers;
+        return housingNotifyService.getAllServerIds();
     }
 
-    private Set<Integer> getAreasForTarget(HousingNotifyTarget target) {
-        if (target.getAreas() == null || target.getAreas().isEmpty()) {
+    private Set<Integer> getAreasForTarget(com.phantoms.phantomsbackend.service.HousingNotifyService.TargetSummary target) {
+        List<Integer> areas = target.getAreas();
+        if (areas == null || areas.isEmpty()) {
             return Set.of(0, 1, 2, 3, 4);
         }
-        return Arrays.stream(target.getAreas().split(","))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .map(Integer::parseInt)
-                .collect(Collectors.toSet());
+        return new LinkedHashSet<>(areas);
     }
 
-    private List<String> getGroupIdsForTarget(HousingNotifyTarget target) {
-        return Arrays.stream(target.getGroupIds().split(","))
+    private List<String> getGroupIdsForTarget(com.phantoms.phantomsbackend.service.HousingNotifyService.TargetSummary target) {
+        List<String> groups = target.getGroups();
+        if (groups == null || groups.isEmpty()) {
+            return List.of();
+        }
+        return groups.stream()
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .collect(Collectors.toList());
@@ -507,17 +480,14 @@ public class HousingSaleScheduler {
             if (!newHouses.isEmpty()) {
                 logger.info("发现 {} 套新房屋，按目标配置发送通知", newHouses.size());
 
-                List<HousingNotifyTarget> targets = getNotifyTargets();
+                List<com.phantoms.phantomsbackend.service.HousingNotifyService.TargetSummary> targets = getNotifyTargets();
 
-                for (HousingNotifyTarget target : targets) {
-                    Set<String> targetServers = Arrays.stream(target.getServer().split(","))
-                            .map(String::trim)
-                            .filter(s -> !s.isEmpty())
-                            .collect(Collectors.toSet());
+                for (com.phantoms.phantomsbackend.service.HousingNotifyService.TargetSummary target : targets) {
+                    Set<String> targetServers = target.getServers() != null ? new LinkedHashSet<>(target.getServers()) : Set.of();
                     Set<Integer> targetAreas = getAreasForTarget(target);
                     List<String> targetGroupIds = getGroupIdsForTarget(target);
 
-                    if (targetGroupIds.isEmpty()) {
+                    if (targetGroupIds.isEmpty() || targetServers.isEmpty()) {
                         continue;
                     }
 
@@ -527,8 +497,8 @@ public class HousingSaleScheduler {
                             .collect(Collectors.toList());
 
                     if (!targetHouses.isEmpty()) {
-                        logger.info("目标配置 [server: {}, areas: {}] 匹配 {} 套房屋，发送到 {} 个群",
-                                target.getServer(), target.getAreas(), targetHouses.size(), targetGroupIds.size());
+                        logger.info("目标配置 [name: {}, servers: {}, areas: {}] 匹配 {} 套房屋，发送到 {} 个群",
+                                target.getName(), targetServers, targetAreas, targetHouses.size(), targetGroupIds.size());
 
                         Map<String, List<HousingSale>> housesByServer = targetHouses.stream()
                                 .collect(Collectors.groupingBy(HousingSale::getServer));
