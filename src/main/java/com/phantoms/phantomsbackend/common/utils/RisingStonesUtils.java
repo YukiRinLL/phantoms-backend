@@ -278,42 +278,6 @@ public class RisingStonesUtils {
     }
 
     /**
-     * 绑定角色（使用指定的cookies）
-     */
-    public JSONObject bindCharacterWithCookies(String characterId, String cookies) throws IOException {
-        String tempsuid = UUID.randomUUID().toString();
-        HttpUrl url = HttpUrl.parse(BASE_URL + "groupAndRole/bindCharacter").newBuilder()
-                .addQueryParameter("platform", "1")
-                .addQueryParameter("tempsuid", tempsuid)
-                .build();
-
-        OkHttpClient tempClient = client.newBuilder()
-                .cookieJar(new CookieJar() {
-                    @Override
-                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {}
-                    @Override
-                    public List<Cookie> loadForRequest(HttpUrl url) { return Collections.emptyList(); }
-                })
-                .build();
-
-        RequestBody body = RequestBody.create("character_id=" + characterId, MediaType.parse("application/x-www-form-urlencoded"));
-
-        Request request = new Request.Builder()
-                .url(url)
-                .header("User-Agent", USER_AGENT)
-                .header("Cookie", cookies)
-                .header("Referer", REFERER)
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .post(body)
-                .build();
-
-        try (Response response = tempClient.newCall(request).execute()) {
-            logger.info("Response code for bindCharacter: {}", response.code());
-            return JSONObject.parseObject(response.body().string());
-        }
-    }
-
-    /**
      * 获取用户基本信息
      */
     public JSONObject getUserBasicInfo() throws IOException {
