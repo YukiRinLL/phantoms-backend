@@ -76,6 +76,18 @@ public class RisingStonesController {
         return risingStonesService.getGuildMemberDynamic(guildId, page, limit);
     }
 
+    @GetMapping("/character-bind-info")
+    @Operation(
+            summary = "获取角色绑定信息",
+            description = "获取当前登录账号的角色绑定状态和可用角色列表",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "获取角色绑定信息成功")
+            }
+    )
+    public JSONObject getCharacterBindInfo() throws IOException {
+        return risingStonesService.getCharacterBindInfo();
+    }
+
     @PostMapping("/update-daoyu-key")
     @Operation(
             summary = "更新叨鱼密钥",
