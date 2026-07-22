@@ -5,10 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesUtils;
 import com.phantoms.phantomsbackend.service.SystemConfigService;
+import com.phantoms.phantomsbackend.service.SystemConfigService.LoginAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Component
 public class DailySignInScheduler {
@@ -41,11 +42,7 @@ public class DailySignInScheduler {
         return systemConfigService.getBoolean("scheduler.signin.enabled", true);
     }
 
-    /**
-     * 每日签到任务 - UTC+8每天00:05执行
-     * 先执行签到，然后尝试领取可用奖励
-     */
-    @Scheduled(cron = "0 5 0 * * ?") // 每天00:05执行
+    @Scheduled(cron = "0 5 0 * * ?")
 //    @Scheduled(fixedRate = 60000)
     public void dailySignInTask() {
         if (!isSignInEnabled()) {
@@ -54,99 +51,119 @@ public class DailySignInScheduler {
         }
 
         logger.info("开始执行每日签到任务 - {}", LocalDateTime.now().format(DATE_FORMATTER));
+
+        List<LoginAccount> accounts = systemConfigService.getEnabledLoginAccounts();
         
-        try {
-            // 1. 执行每日签到
-            JSONObject signInResult = risingStonesUtils.doSignIn();
-            
-            if (signInResult != null && signInResult.getInteger("code") == 10001) {
-                logger.info("签到成功 - {}", signInResult.getString("message"));
-                
-                // 2. 尝试领取可用奖励
-                claimAvailableRewards();
-                
-                // 发送成功通知
-                sendNotification("✅ 每日签到任务执行成功", 
-                    "签到结果: " + signInResult.getString("message"));
-            } else {
-                String errorMsg = signInResult != null ? signInResult.getString("message") : "未知错误";
-                logger.error("签到失败: {}", errorMsg);
-                sendNotification("❌ 每日签到任务执行失败", 
-                    "签到失败: " + errorMsg);
-            }
-        } catch (IOException e) {
-            logger.error("每日签到任务执行异常", e);
-            sendNotification("❌ 每日签到任务执行异常", 
-                "异常信息: " + e.getMessage());
-        } catch (Exception e) {
-            logger.error("每日签到任务执行发生未知异常", e);
-            sendNotification("❌ 每日签到任务执行发生未知异常", 
-                "异常信息: " + e.getMessage());
+        if (accounts.isEmpty()) {
+            logger.warn("未找到任何启用的登录账号");
+            sendNotification("❌ 每日签到任务执行失败", "未找到任何启用的登录账号");
+            return;
         }
+
+        logger.info("共找到 {} 个启用的登录账号", accounts.size());
+
+        int successCount = 0;
+        int failCount = 0;
+        StringBuilder resultSummary = new StringBuilder();
+
+        for (LoginAccount account : accounts) {
+            logger.info("开始处理账号: {} ({})", account.getNickname(), account.getAccountId());
+            try {
+                JSONObject signInResult = risingStonesUtils.doSignInWithCookies(account.getCookies());
+
+                if (signInResult != null && signInResult.getInteger("code") == 10001) {
+                    successCount++;
+                    String message = signInResult.getString("message");
+                    logger.info("账号 {} 签到成功 - {}", account.getNickname(), message);
+                    
+                    systemConfigService.updateAccountSignInResult(account.getAccountId(), System.currentTimeMillis(), "成功: " + message);
+                    
+                    claimAvailableRewards(account);
+                    
+                    resultSummary.append("\n✅ ").append(account.getNickname()).append(": ").append(message);
+                } else {
+                    failCount++;
+                    String errorMsg = signInResult != null ? signInResult.getString("message") : "未知错误";
+                    logger.error("账号 {} 签到失败: {}", account.getNickname(), errorMsg);
+                    
+                    systemConfigService.updateAccountSignInResult(account.getAccountId(), System.currentTimeMillis(), "失败: " + errorMsg);
+                    
+                    resultSummary.append("\n❌ ").append(account.getNickname()).append(": ").append(errorMsg);
+                }
+            } catch (IOException e) {
+                failCount++;
+                logger.error("账号 {} 签到时发生异常", account.getNickname(), e);
+                
+                systemConfigService.updateAccountSignInResult(account.getAccountId(), System.currentTimeMillis(), "异常: " + e.getMessage());
+                
+                resultSummary.append("\n❌ ").append(account.getNickname()).append(": 异常 - ").append(e.getMessage());
+            } catch (Exception e) {
+                failCount++;
+                logger.error("账号 {} 签到时发生未知异常", account.getNickname(), e);
+                
+                systemConfigService.updateAccountSignInResult(account.getAccountId(), System.currentTimeMillis(), "未知异常: " + e.getMessage());
+                
+                resultSummary.append("\n❌ ").append(account.getNickname()).append(": 未知异常 - ").append(e.getMessage());
+            }
+        }
+
+        String title = failCount == 0 ? "✅ 每日签到任务执行成功" : (successCount > 0 ? "⚠️ 每日签到任务部分完成" : "❌ 每日签到任务全部失败");
+        String content = String.format("成功: %d / 失败: %d\n\n各账号签到结果:%s", 
+                successCount, failCount, resultSummary.toString());
+        
+        sendNotification(title, content);
     }
 
-    /**
-     * 领取可用的签到奖励
-     */
-    private void claimAvailableRewards() {
-        logger.info("开始尝试领取签到奖励");
+    private void claimAvailableRewards(LoginAccount account) {
+        logger.info("开始尝试为账号 {} 领取签到奖励", account.getNickname());
         
         try {
-            // 获取当前月份
             String currentMonth = LocalDate.now().format(MONTH_FORMATTER);
             
-            // 获取签到奖励列表
-            JSONObject rewardListResult = risingStonesUtils.getSignInRewardList(currentMonth);
+            JSONObject rewardListResult = risingStonesUtils.getSignInRewardListWithCookies(account.getCookies(), currentMonth);
             
             if (rewardListResult != null && rewardListResult.getInteger("code") == 10001) {
                 JSONArray rewardList = rewardListResult.getJSONObject("data").getJSONArray("list");
                 
                 if (rewardList != null && !rewardList.isEmpty()) {
-                    logger.info("获取到 {} 个签到奖励", rewardList.size());
+                    logger.info("账号 {} 获取到 {} 个签到奖励", account.getNickname(), rewardList.size());
                     
-                    // 遍历奖励列表，尝试领取可用奖励
                     for (int i = 0; i < rewardList.size(); i++) {
                         JSONObject reward = rewardList.getJSONObject(i);
                         
-                        // 检查奖励是否可领取
-                        // 状态说明: 0-未达成, 1-可领取, 2-已领取
                         Integer status = reward.getInteger("status");
                         if (status != null && status == 1) {
-                            // 领取奖励
                             Integer rewardId = reward.getInteger("id");
                             String rewardName = reward.getString("name");
                             
                             try {
-                                JSONObject claimResult = risingStonesUtils.getSignInReward(rewardId, currentMonth);
+                                JSONObject claimResult = risingStonesUtils.getSignInRewardWithCookies(account.getCookies(), rewardId, currentMonth);
                                 
                                 if (claimResult != null && claimResult.getInteger("code") == 10001) {
-                                    logger.info("成功领取奖励: {} (ID: {})", rewardName, rewardId);
+                                    logger.info("账号 {} 成功领取奖励: {} (ID: {})", account.getNickname(), rewardName, rewardId);
                                     sendNotification("✅ 领取签到奖励成功", 
-                                        "奖励名称: " + rewardName + "\n奖励ID: " + rewardId);
+                                        "账号: " + account.getNickname() + "\n奖励名称: " + rewardName + "\n奖励ID: " + rewardId);
                                 } else {
                                     String errorMsg = claimResult != null ? claimResult.getString("message") : "未知错误";
-                                    logger.error("领取奖励失败: {} (ID: {}), 错误信息: {}", rewardName, rewardId, errorMsg);
+                                    logger.error("账号 {} 领取奖励失败: {} (ID: {}), 错误信息: {}", account.getNickname(), rewardName, rewardId, errorMsg);
                                 }
                             } catch (IOException e) {
-                                logger.error("领取奖励时发生异常: {} (ID: {})", rewardName, rewardId, e);
+                                logger.error("账号 {} 领取奖励时发生异常: {} (ID: {})", account.getNickname(), rewardName, rewardId, e);
                             }
                         }
                     }
                 }
             } else {
                 String errorMsg = rewardListResult != null ? rewardListResult.getString("message") : "未知错误";
-                logger.error("获取签到奖励列表失败: {}", errorMsg);
+                logger.error("账号 {} 获取签到奖励列表失败: {}", account.getNickname(), errorMsg);
             }
         } catch (IOException e) {
-            logger.error("获取签到奖励列表时发生异常", e);
+            logger.error("账号 {} 获取签到奖励列表时发生异常", account.getNickname(), e);
         } catch (Exception e) {
-            logger.error("领取奖励过程中发生未知异常", e);
+            logger.error("账号 {} 领取奖励过程中发生未知异常", account.getNickname(), e);
         }
     }
 
-    /**
-     * 发送通知消息
-     */
     private void sendNotification(String title, String content) {
         String qq = getAdminQQ();
         if (qq == null || qq.isEmpty()) {
@@ -165,19 +182,16 @@ public class DailySignInScheduler {
         }
     }
 
-    /**
-     * 手动触发签到任务（用于测试）
-     */
     public void manualSignIn() {
         logger.info("手动触发每日签到任务");
         dailySignInTask();
     }
 
-    /**
-     * 手动触发奖励领取任务（用于测试）
-     */
     public void manualClaimRewards() {
         logger.info("手动触发奖励领取任务");
-        claimAvailableRewards();
+        List<LoginAccount> accounts = systemConfigService.getEnabledLoginAccounts();
+        for (LoginAccount account : accounts) {
+            claimAvailableRewards(account);
+        }
     }
 }

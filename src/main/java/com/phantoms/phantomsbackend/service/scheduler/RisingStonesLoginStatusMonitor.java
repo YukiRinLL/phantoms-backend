@@ -5,10 +5,10 @@ import com.phantoms.phantomsbackend.common.utils.EmailUtil;
 import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesSigninHelper;
 import com.phantoms.phantomsbackend.service.SystemConfigService;
+import com.phantoms.phantomsbackend.service.SystemConfigService.LoginAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class RisingStonesLoginStatusMonitor {
@@ -52,19 +54,12 @@ public class RisingStonesLoginStatusMonitor {
         return systemConfigService.getBoolean("monitor.notification.notify-on-success", false);
     }
 
-    // 连续失败次数
-    private int consecutiveFailures = 0;
-    // 最大允许连续失败次数
     private static final int MAX_CONSECUTIVE_FAILURES = 3;
-    // 是否已经发送过警告
-    private boolean warningSent = false;
-    // 上次检查状态
-    private boolean lastCheckSuccess = true;
+    private final Map<String, Integer> accountConsecutiveFailures = new ConcurrentHashMap<>();
+    private final Map<String, Boolean> accountWarningSent = new ConcurrentHashMap<>();
+    private final Map<String, Boolean> accountLastCheckSuccess = new ConcurrentHashMap<>();
 
-    /**
-     * 每30分钟检查一次登录状态（cookies有效性）
-     */
-    @Scheduled(fixedRate = 2 * 60 * 60 * 1000) // 2小时
+    @Scheduled(fixedRate = 2 * 60 * 60 * 1000)
     public void checkLoginStatus() {
         if (!isMonitorEnabled()) {
             logger.info("登录状态监控已禁用");
@@ -73,123 +68,135 @@ public class RisingStonesLoginStatusMonitor {
 
         logger.info("开始检查登录状态 - {}", LocalDateTime.now().format(formatter));
 
-        try {
-            // 使用当前cookies检查登录状态
-            JSONObject loginResult = risingStonesSigninHelper.checkLoginStatus();
+        List<LoginAccount> accounts = systemConfigService.getEnabledLoginAccounts();
+        
+        if (accounts.isEmpty()) {
+            logger.warn("未找到任何启用的登录账号");
+            return;
+        }
 
-            if (loginResult != null && loginResult.getInteger("code") == 10000) {
-                // 登录状态正常
-                handleSuccess();
-                logger.info("登录状态检查通过 - 状态: 正常");
-            } else {
-                // 登录状态异常
-                String errorMsg = loginResult != null ? 
-                    loginResult.getString("message") : "未知错误";
-                handleFailure("登录状态异常：" + errorMsg);
+        int successCount = 0;
+        int failCount = 0;
+        StringBuilder resultSummary = new StringBuilder();
+
+        for (LoginAccount account : accounts) {
+            logger.info("检查账号登录状态: {} ({})", account.getNickname(), account.getAccountId());
+            
+            try {
+                JSONObject loginResult = risingStonesSigninHelper.checkLoginStatusWithCookies(account.getCookies());
+
+                if (loginResult != null && loginResult.getInteger("code") == 10000) {
+                    successCount++;
+                    handleAccountSuccess(account.getAccountId(), account.getNickname());
+                    resultSummary.append("\n✅ ").append(account.getNickname()).append(": 正常");
+                } else {
+                    failCount++;
+                    String errorMsg = loginResult != null ? 
+                        loginResult.getString("message") : "未知错误";
+                    handleAccountFailure(account.getAccountId(), account.getNickname(), errorMsg);
+                    resultSummary.append("\n❌ ").append(account.getNickname()).append(": ").append(errorMsg);
+                }
+            } catch (Exception e) {
+                failCount++;
+                handleAccountFailure(account.getAccountId(), account.getNickname(), "异常: " + e.getMessage());
+                resultSummary.append("\n❌ ").append(account.getNickname()).append(": 异常 - ").append(e.getMessage());
+                logger.error("账号 {} 登录状态检查过程中发生异常", account.getNickname(), e);
             }
+        }
 
-        } catch (Exception e) {
-            handleFailure("登录状态检查异常: " + e.getMessage());
-            logger.error("登录状态检查过程中发生异常", e);
+        logger.info("登录状态检查完成 - 成功: {}, 失败: {}", successCount, failCount);
+        
+        if (failCount > 0) {
+            String subject = failCount == accounts.size() ? "【紧急警告】所有账号登录状态异常" : "【警告】部分账号登录状态异常";
+            String content = String.format("登录状态检查结果：\n\n成功: %d / 失败: %d\n\n各账号状态:%s\n\n检查时间: %s",
+                    successCount, failCount, resultSummary.toString(), LocalDateTime.now().format(formatter));
+            sendWarningNotification(subject, content);
+        } else if (isNotifyOnSuccess()) {
+            String subject = "【正常通知】所有账号登录状态检查通过";
+            String content = String.format("所有 %d 个账号登录状态检查通过！\n\n检查时间: %s", 
+                    successCount, LocalDateTime.now().format(formatter));
+            sendSuccessNotification(subject, content);
         }
     }
 
-    private void handleSuccess() {
-        boolean wasFailure = consecutiveFailures > 0;
-        consecutiveFailures = 0;
+    private void handleAccountSuccess(String accountId, String nickname) {
+        Integer failures = accountConsecutiveFailures.getOrDefault(accountId, 0);
+        boolean wasFailure = failures > 0;
+        accountConsecutiveFailures.put(accountId, 0);
 
-        // 状态从失败变为成功，发送恢复通知
-        if (wasFailure && warningSent) {
-            sendRecoveryNotification();
-            warningSent = false;
+        if (wasFailure && Boolean.TRUE.equals(accountWarningSent.get(accountId))) {
+            sendRecoveryNotification(nickname);
+            accountWarningSent.put(accountId, false);
         }
 
-        // 每次成功都发送通知（如果配置了）
-        if (isNotifyOnSuccess()) {
-            sendSuccessNotification(wasFailure);
+        if (isNotifyOnSuccess() && wasFailure) {
+            sendSuccessNotification("【恢复通知】账号 " + nickname + " 登录状态已恢复", 
+                "账号: " + nickname + "\n状态: 已恢复正常\n检查时间: " + LocalDateTime.now().format(formatter));
         }
 
-        lastCheckSuccess = true;
+        accountLastCheckSuccess.put(accountId, true);
+        logger.info("账号 {} 登录状态检查通过", nickname);
     }
 
-    private void handleFailure(String errorMessage) {
-        consecutiveFailures++;
-        logger.warn("登录状态检查失败，连续失败次数: {}", consecutiveFailures);
+    private void handleAccountFailure(String accountId, String nickname, String errorMessage) {
+        int failures = accountConsecutiveFailures.getOrDefault(accountId, 0) + 1;
+        accountConsecutiveFailures.put(accountId, failures);
+        
+        boolean previousSuccess = accountLastCheckSuccess.getOrDefault(accountId, true);
+        accountLastCheckSuccess.put(accountId, false);
 
-        boolean previousSuccess = lastCheckSuccess;
-        lastCheckSuccess = false;
+        logger.warn("账号 {} 登录状态检查失败，连续失败次数: {}", nickname, failures);
 
-        // 达到最大失败次数时发送警告
-        if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES && !warningSent) {
-            sendWarningNotification(errorMessage, previousSuccess);
-            warningSent = true;
+        if (failures >= MAX_CONSECUTIVE_FAILURES && !Boolean.TRUE.equals(accountWarningSent.get(accountId))) {
+            sendAccountWarningNotification(nickname, errorMessage, failures, previousSuccess);
+            accountWarningSent.put(accountId, true);
         }
     }
 
-    private void sendSuccessNotification(boolean wasRecovery) {
-        String currentTime = LocalDateTime.now().format(formatter);
-        String subject = wasRecovery ? "【恢复通知】登录状态已恢复正常" : "【正常通知】登录状态检查通过";
-
-        String content = String.format(
-                "登录状态检查通过！\n\n" +
-                        "检查时间: %s\n" +
-                        "状态: 有效\n" +
-                        "系统状态: %s\n\n" +
-                        "所有相关功能正常运行中。",
-                currentTime,
-                wasRecovery ? "已从异常状态恢复" : "持续正常"
-        );
-
-        // 发送邮件通知
+    private void sendSuccessNotification(String subject, String content) {
         sendEmailNotification(subject, content, "success");
-
-        // 发送QQ消息通知
         sendQQNotification("✅ " + subject + "\n" + content);
-
         logger.info("已发送登录状态检查通过通知");
     }
 
-    private void sendWarningNotification(String errorMessage, boolean previousSuccess) {
+    private void sendAccountWarningNotification(String nickname, String errorMessage, int failures, boolean previousSuccess) {
         String currentTime = LocalDateTime.now().format(formatter);
-        String subject = "【紧急警告】登录状态异常";
+        String subject = "【紧急警告】账号 " + nickname + " 登录状态异常";
         String content = String.format(
-                "登录状态检查失败！\n\n" +
+                "账号 [%s] 登录状态检查失败！\n\n" +
                         "失败时间: %s\n" +
                         "失败原因: %s\n" +
                         "连续失败次数: %d\n" +
                         "之前状态: %s\n\n" +
-                        "请及时处理，否则可能导致相关功能无法正常使用！",
-                currentTime, errorMessage, consecutiveFailures,
+                        "请及时处理，否则可能导致该账号无法正常签到！",
+                nickname, currentTime, errorMessage, failures,
                 previousSuccess ? "正常" : "已异常"
         );
 
-        // 发送邮件通知
         sendEmailNotification(subject, content, "warning");
-
-        // 发送QQ消息通知
         sendQQNotification("🚨 " + subject + "\n" + content);
+        logger.warn("已发送账号 {} 登录状态异常警告通知", nickname);
+    }
 
+    private void sendWarningNotification(String subject, String content) {
+        sendEmailNotification(subject, content, "warning");
+        sendQQNotification("🚨 " + subject + "\n" + content);
         logger.warn("已发送登录状态异常警告通知");
     }
 
-    private void sendRecoveryNotification() {
+    private void sendRecoveryNotification(String nickname) {
         String currentTime = LocalDateTime.now().format(formatter);
-        String subject = "【恢复通知】登录状态已恢复正常";
+        String subject = "【恢复通知】账号 " + nickname + " 登录状态已恢复";
         String content = String.format(
-                "登录状态已从异常状态恢复正常！\n\n" +
+                "账号 [%s] 登录状态已从异常状态恢复正常！\n\n" +
                         "恢复时间: %s\n" +
-                        "最大连续失败次数: %d\n" +
                         "系统功能现已恢复正常运行。",
-                currentTime, consecutiveFailures
+                nickname, currentTime
         );
 
-        // 发送邮件通知
         sendEmailNotification(subject, content, "recovery");
-
-        // 发送QQ消息通知
         sendQQNotification("✅ " + subject + "\n" + content);
-
-        logger.info("已发送登录状态恢复通知");
+        logger.info("已发送账号 {} 登录状态恢复通知", nickname);
     }
 
     private void sendEmailNotification(String subject, String content, String type) {
@@ -262,27 +269,21 @@ public class RisingStonesLoginStatusMonitor {
         }
     }
 
-    /**
-     * 手动触发检查（可用于测试）
-     */
     public void manualCheck() {
         logger.info("手动触发登录状态检查");
         checkLoginStatus();
     }
 
-    /**
-     * 获取当前监控状态
-     */
     public Map<String, Object> getMonitorStatus() {
         Map<String, Object> status = new HashMap<>();
         status.put("monitorEnabled", isMonitorEnabled());
-        status.put("consecutiveFailures", consecutiveFailures);
-        status.put("warningSent", warningSent);
-        status.put("lastCheckSuccess", lastCheckSuccess);
         status.put("notifyOnSuccess", isNotifyOnSuccess());
         status.put("lastCheckTime", LocalDateTime.now().format(formatter));
         status.put("notificationEmail", getNotificationEmail());
         status.put("notificationQQ", getNotificationQQ());
+        status.put("accountConsecutiveFailures", accountConsecutiveFailures);
+        status.put("accountWarningSent", accountWarningSent);
+        status.put("accountLastCheckSuccess", accountLastCheckSuccess);
         return status;
     }
 }
