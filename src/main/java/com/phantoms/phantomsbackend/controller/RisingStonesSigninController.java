@@ -193,46 +193,6 @@ public class RisingStonesSigninController {
         }
     }
 
-    @PostMapping("/character/bind")
-    @Operation(
-            summary = "绑定角色",
-            description = "绑定指定的FF14游戏角色",
-            responses = {
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "绑定角色成功"),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "绑定角色失败")
-            }
-    )
-    public ResponseEntity<?> bindCharacter(@RequestBody Map<String, String> request) {
-        String characterId = request.get("characterId");
-        if (characterId == null || characterId.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "characterId不能为空"
-            ));
-        }
-        
-        try {
-            String cookies = systemConfigService.getLoginCookies();
-            if (cookies == null || cookies.isEmpty()) {
-                return ResponseEntity.badRequest().body(Map.of(
-                        "success", false,
-                        "message", "未找到登录cookies，请先登录"
-                ));
-            }
-            JSONObject result = risingStonesUtils.bindCharacterWithCookies(characterId, cookies);
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "data", result,
-                    "message", "绑定角色成功"
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "success", false,
-                    "message", "绑定角色失败: " + e.getMessage()
-            ));
-        }
-    }
-
     @PostMapping("/sign/in")
     @Operation(
             summary = "执行签到",
@@ -734,52 +694,6 @@ public class RisingStonesSigninController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "success", false,
                     "message", "获取角色绑定信息失败: " + e.getMessage()
-            ));
-        }
-    }
-
-    @PostMapping("/character/bind/{accountId}")
-    @Operation(
-            summary = "为指定账号绑定角色",
-            description = "为指定账号绑定角色"
-    )
-    public ResponseEntity<?> bindCharacterForAccount(
-            @PathVariable String accountId,
-            @RequestBody Map<String, String> request) {
-        String characterId = request.get("characterId");
-        if (characterId == null || characterId.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "success", false,
-                    "message", "characterId不能为空"
-            ));
-        }
-        
-        try {
-            SystemConfigService.LoginAccount account = systemConfigService.getLoginAccount(accountId);
-            if (account == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
-                        "success", false,
-                        "message", "账号不存在"
-                ));
-            }
-            
-            JSONObject result = risingStonesUtils.bindCharacterWithCookies(characterId, account.getCookies());
-            
-            if (result != null && result.getInteger("code") == 10000) {
-                account.setCharacterName(characterId);
-                account.setUserInfoUpdateTime(System.currentTimeMillis());
-                systemConfigService.updateLoginAccount(accountId, null, account.isEnabled());
-            }
-            
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "data", result,
-                    "message", "绑定角色成功"
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "success", false,
-                    "message", "绑定角色失败: " + e.getMessage()
             ));
         }
     }
