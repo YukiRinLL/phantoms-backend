@@ -47,14 +47,16 @@ public class RisingStonesUtils {
             logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
         }
-        
+        return getUserInfoWithCookies(uuid, cookies);
+    }
+
+    public static JSONObject getUserInfoWithCookies(String uuid, String cookies) throws IOException {
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "userInfo/getUserInfo").newBuilder()
                 .addQueryParameter("uuid", uuid)
                 .addQueryParameter("tempsuid", tempsuid)
                 .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
             .cookieJar(new CookieJar() {
                 @Override
@@ -88,14 +90,16 @@ public class RisingStonesUtils {
             logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
         }
+        return getGuildInfoWithCookies(guildId, cookies);
+    }
 
+    public static JSONObject getGuildInfoWithCookies(String guildId, String cookies) throws IOException {
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "guild/getGuildInfo").newBuilder()
                 .addQueryParameter("guild_id", guildId)
                 .addQueryParameter("tempsuid", tempsuid)
                 .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
             .cookieJar(new CookieJar() {
                 @Override
@@ -129,14 +133,16 @@ public class RisingStonesUtils {
             logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
         }
+        return getGuildMemberWithCookies(guildId, cookies);
+    }
 
+    public static JSONObject getGuildMemberWithCookies(String guildId, String cookies) throws IOException {
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "guild/getGuildMember").newBuilder()
                 .addQueryParameter("guild_id", guildId)
                 .addQueryParameter("tempsuid", tempsuid)
                 .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
             .cookieJar(new CookieJar() {
                 @Override
@@ -182,7 +188,10 @@ public class RisingStonesUtils {
             logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
         }
+        return getGuildMemberDynamicWithCookies(guildId, page, limit, cookies);
+    }
 
+    public static JSONObject getGuildMemberDynamicWithCookies(String guildId, int page, int limit, String cookies) throws IOException {
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "guild/guildMemberDynamic").newBuilder()
             .addQueryParameter("guild_id", guildId)
@@ -191,7 +200,6 @@ public class RisingStonesUtils {
             .addQueryParameter("tempsuid", tempsuid)
             .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
             .cookieJar(new CookieJar() {
                 @Override
@@ -223,18 +231,23 @@ public class RisingStonesUtils {
      * 获取角色绑定信息
      */
     public JSONObject getCharacterBindInfo() throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
+        String cookies = getSystemConfigService().getLoginCookies();
         if (cookies == null || cookies.isEmpty()) {
             throw new IOException("未找到登录cookies，请先登录");
         }
+        return getCharacterBindInfoWithCookies(cookies);
+    }
 
+    /**
+     * 获取角色绑定信息（使用指定的cookies）
+     */
+    public JSONObject getCharacterBindInfoWithCookies(String cookies) throws IOException {
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "groupAndRole/getCharacterBindInfo").newBuilder()
                 .addQueryParameter("platform", "1")
                 .addQueryParameter("tempsuid", tempsuid)
                 .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
                 .cookieJar(new CookieJar() {
                     @Override
@@ -265,14 +278,89 @@ public class RisingStonesUtils {
     }
 
     /**
-     * 执行签到
+     * 绑定角色（使用指定的cookies）
      */
-    public JSONObject doSignIn() throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
+    public JSONObject bindCharacterWithCookies(String characterId, String cookies) throws IOException {
+        String tempsuid = UUID.randomUUID().toString();
+        HttpUrl url = HttpUrl.parse(BASE_URL + "groupAndRole/bindCharacter").newBuilder()
+                .addQueryParameter("platform", "1")
+                .addQueryParameter("tempsuid", tempsuid)
+                .build();
+
+        OkHttpClient tempClient = client.newBuilder()
+                .cookieJar(new CookieJar() {
+                    @Override
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {}
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl url) { return Collections.emptyList(); }
+                })
+                .build();
+
+        RequestBody body = RequestBody.create("character_id=" + characterId, MediaType.parse("application/x-www-form-urlencoded"));
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("User-Agent", USER_AGENT)
+                .header("Cookie", cookies)
+                .header("Referer", REFERER)
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .post(body)
+                .build();
+
+        try (Response response = tempClient.newCall(request).execute()) {
+            logger.info("Response code for bindCharacter: {}", response.code());
+            return JSONObject.parseObject(response.body().string());
+        }
+    }
+
+    /**
+     * 获取用户基本信息
+     */
+    public JSONObject getUserBasicInfo() throws IOException {
+        String cookies = getSystemConfigService().getLoginCookies();
         if (cookies == null || cookies.isEmpty()) {
             throw new IOException("未找到登录cookies，请先登录");
         }
+        return getUserBasicInfoWithCookies(cookies);
+    }
 
+    /**
+     * 获取用户基本信息（使用指定的cookies）
+     */
+    public JSONObject getUserBasicInfoWithCookies(String cookies) throws IOException {
+        String tempsuid = UUID.randomUUID().toString();
+        HttpUrl url = HttpUrl.parse(BASE_URL + "home/userInfo/getUserBasicInfo").newBuilder()
+                .addQueryParameter("platform", "1")
+                .addQueryParameter("tempsuid", tempsuid)
+                .build();
+
+        OkHttpClient tempClient = client.newBuilder()
+                .cookieJar(new CookieJar() {
+                    @Override
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {}
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl url) { return Collections.emptyList(); }
+                })
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("User-Agent", USER_AGENT)
+                .header("Cookie", cookies)
+                .header("Referer", REFERER)
+                .get()
+                .build();
+
+        try (Response response = tempClient.newCall(request).execute()) {
+            logger.info("Response code for getUserBasicInfo: {}", response.code());
+            return JSONObject.parseObject(response.body().string());
+        }
+    }
+
+    /**
+     * 执行签到（使用指定的cookies）
+     */
+    public JSONObject doSignInWithCookies(String cookies) throws IOException {
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "sign/signIn").newBuilder()
                 .addQueryParameter("tempsuid", tempsuid)
@@ -282,7 +370,6 @@ public class RisingStonesUtils {
                 .add("tempsuid", tempsuid)
                 .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
                 .cookieJar(new CookieJar() {
                     @Override
@@ -320,28 +407,15 @@ public class RisingStonesUtils {
     }
 
     /**
-     * 执行签到（兼容旧版接口，保留cookies参数但不使用）
+     * 获取签到日志（使用指定的cookies）
      */
-    public JSONObject doSignIn(String cookies) throws IOException {
-        return doSignIn();
-    }
-
-    /**
-     * 获取签到日志
-     */
-    public JSONObject getSignLog(String month) throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
-        if (cookies == null || cookies.isEmpty()) {
-            throw new IOException("未找到登录cookies，请先登录");
-        }
-
+    public JSONObject getSignLogWithCookies(String cookies, String month) throws IOException {
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "sign/mySignLog").newBuilder()
                 .addQueryParameter("month", month)
                 .addQueryParameter("tempsuid", tempsuid)
                 .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
                 .cookieJar(new CookieJar() {
                     @Override
@@ -365,28 +439,15 @@ public class RisingStonesUtils {
     }
 
     /**
-     * 获取签到日志（兼容旧版接口，保留cookies参数但不使用）
+     * 获取签到奖励列表（使用指定的cookies）
      */
-    public JSONObject getSignLog(String cookies, String month) throws IOException {
-        return getSignLog(month);
-    }
-
-    /**
-     * 获取签到奖励列表
-     */
-    public JSONObject getSignInRewardList(String month) throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
-        if (cookies == null || cookies.isEmpty()) {
-            throw new IOException("未找到登录cookies，请先登录");
-        }
-
+    public JSONObject getSignInRewardListWithCookies(String cookies, String month) throws IOException {
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "sign/signRewardList").newBuilder()
                 .addQueryParameter("month", month)
                 .addQueryParameter("tempsuid", tempsuid)
                 .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
                 .cookieJar(new CookieJar() {
                     @Override
@@ -410,21 +471,9 @@ public class RisingStonesUtils {
     }
 
     /**
-     * 获取签到奖励列表（兼容旧版接口，保留cookies参数但不使用）
+     * 领取签到奖励（使用指定的cookies）
      */
-    public JSONObject getSignInRewardList(String cookies, String month) throws IOException {
-        return getSignInRewardList(month);
-    }
-
-    /**
-     * 领取签到奖励
-     */
-    public JSONObject getSignInReward(int id, String month) throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
-        if (cookies == null || cookies.isEmpty()) {
-            throw new IOException("未找到登录cookies，请先登录");
-        }
-
+    public JSONObject getSignInRewardWithCookies(String cookies, int id, String month) throws IOException {
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "sign/getSignReward").newBuilder()
                 .addQueryParameter("tempsuid", tempsuid)
@@ -436,7 +485,6 @@ public class RisingStonesUtils {
                 .add("tempsuid", tempsuid)
                 .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
                 .cookieJar(new CookieJar() {
                     @Override
@@ -462,22 +510,10 @@ public class RisingStonesUtils {
     }
 
     /**
-     * 领取签到奖励（兼容旧版接口，保留cookies参数但不使用）
+     * 创建动态评论（使用指定的cookies）
      */
-    public JSONObject getSignInReward(String cookies, int id, String month) throws IOException {
-        return getSignInReward(id, month);
-    }
-
-    /**
-     * 创建动态评论
-     */
-    public JSONObject createPostComment(String content, String posts_id,
+    public JSONObject createPostCommentWithCookies(String cookies, String content, String posts_id,
                                         String parent_id, String root_parent, String comment_pic) throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
-        if (cookies == null || cookies.isEmpty()) {
-            throw new IOException("未找到登录cookies，请先登录");
-        }
-
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "posts/comment").newBuilder()
                 .addQueryParameter("tempsuid", tempsuid)
@@ -492,7 +528,6 @@ public class RisingStonesUtils {
                 .add("tempsuid", tempsuid)
                 .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
                 .cookieJar(new CookieJar() {
                     @Override
@@ -518,22 +553,9 @@ public class RisingStonesUtils {
     }
 
     /**
-     * 创建动态评论（兼容旧版接口，保留cookies参数但不使用）
+     * 创建动态（使用指定的cookies）
      */
-    public JSONObject createPostComment(String cookies, String content, String posts_id,
-                                        String parent_id, String root_parent, String comment_pic) throws IOException {
-        return createPostComment(content, posts_id, parent_id, root_parent, comment_pic);
-    }
-
-    /**
-     * 创建动态
-     */
-    public JSONObject createDynamic(String content, int scope, String pic_url) throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
-        if (cookies == null || cookies.isEmpty()) {
-            throw new IOException("未找到登录cookies，请先登录");
-        }
-
+    public JSONObject createDynamicWithCookies(String cookies, String content, int scope, String pic_url) throws IOException {
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "dynamic/create").newBuilder()
                 .addQueryParameter("tempsuid", tempsuid)
@@ -546,7 +568,6 @@ public class RisingStonesUtils {
                 .add("tempsuid", tempsuid)
                 .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
                 .cookieJar(new CookieJar() {
                     @Override
@@ -572,21 +593,9 @@ public class RisingStonesUtils {
     }
 
     /**
-     * 创建动态（兼容旧版接口，保留cookies参数但不使用）
+     * 删除动态（使用指定的cookies）
      */
-    public JSONObject createDynamic(String cookies, String content, int scope, String pic_url) throws IOException {
-        return createDynamic(content, scope, pic_url);
-    }
-
-    /**
-     * 删除动态
-     */
-    public JSONObject deleteDynamic(int dynamic_id) throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
-        if (cookies == null || cookies.isEmpty()) {
-            throw new IOException("未找到登录cookies，请先登录");
-        }
-
+    public JSONObject deleteDynamicWithCookies(String cookies, int dynamic_id) throws IOException {
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "dynamic/deleteDynamic").newBuilder()
                 .addQueryParameter("tempsuid", tempsuid)
@@ -613,13 +622,6 @@ public class RisingStonesUtils {
             logger.info("Response code for deleteDynamic: {}", response.code());
             return JSONObject.parseObject(response.body().string());
         }
-    }
-
-    /**
-     * 删除动态（兼容旧版接口，保留cookies参数但不使用）
-     */
-    public JSONObject deleteDynamic(String cookies, int dynamic_id) throws IOException {
-        return deleteDynamic(dynamic_id);
     }
 
     /**

@@ -48,6 +48,9 @@ public class RisingStonesSigninHelper {
     @Autowired
     private SystemConfigService systemConfigService;
 
+    @Autowired
+    private RisingStonesUtils risingStonesUtils;
+
     public RisingStonesSigninHelper() {
         this.cookieJar = new MyCookieJar();
         // 初始化必要的cookies
@@ -205,10 +208,9 @@ public class RisingStonesSigninHelper {
 //    }
 
     /**
-     * 完成登录流程
+     * 完成登录流程（添加新账号）
      */
-    public void finishLogin(String ticket) throws IOException {
-        // 使用与TypeScript代码完全相同的URL格式和协议
+    public String finishLogin(String ticket) throws IOException {
         HttpUrl url = HttpUrl.parse("http://apiff14risingstones.web.sdo.com/api/home/GHome/login").newBuilder()
             .addQueryParameter("ticket", ticket)
             .addQueryParameter("redirectUrl", APP_REDIRECT_URL)
@@ -222,10 +224,81 @@ public class RisingStonesSigninHelper {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response.code());
-            // 获取cookies并保存到数据库
             String cookies = getCookies();
-            systemConfigService.updateLoginCookies(cookies);
+            return saveAccountWithUserInfo(cookies, null);
         }
+    }
+
+    /**
+     * 完成登录流程（添加新账号并设置昵称）
+     */
+    public String finishLogin(String ticket, String nickname) throws IOException {
+        HttpUrl url = HttpUrl.parse("http://apiff14risingstones.web.sdo.com/api/home/GHome/login").newBuilder()
+            .addQueryParameter("ticket", ticket)
+            .addQueryParameter("redirectUrl", APP_REDIRECT_URL)
+            .build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .header("User-Agent", USER_AGENT)
+            .header("Referer", LOGIN_REFERER)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response.code());
+            String cookies = getCookies();
+            return saveAccountWithUserInfo(cookies, nickname);
+        }
+    }
+
+    /**
+     * 保存账号并获取用户信息
+     */
+    private String saveAccountWithUserInfo(String cookies, String nickname) {
+        String accountId = null;
+        try {
+            JSONObject userInfo = risingStonesUtils.getUserBasicInfoWithCookies(cookies);
+            
+            if (userInfo != null && userInfo.getInteger("code") == 10000) {
+                JSONObject data = userInfo.getJSONObject("data");
+                
+                SystemConfigService.LoginAccount account = new SystemConfigService.LoginAccount();
+                accountId = UUID.randomUUID().toString();
+                account.setAccountId(accountId);
+                account.setCookies(cookies);
+                account.setEnabled(true);
+                
+                if (nickname != null && !nickname.isEmpty()) {
+                    account.setNickname(nickname);
+                } else {
+                    account.setNickname(data.getString("character_name"));
+                }
+                
+                account.setUserId(data.getString("uuid"));
+                account.setCharacterName(data.getString("character_name"));
+                account.setServerName(data.getString("area_name"));
+                account.setGroupName(data.getString("group_name"));
+                account.setExperience(data.getString("experience"));
+                account.setAvatar(data.getString("avatar"));
+                account.setUserInfoUpdateTime(System.currentTimeMillis());
+                
+                systemConfigService.addLoginAccountObject(account);
+            } else {
+                if (nickname != null && !nickname.isEmpty()) {
+                    accountId = systemConfigService.addLoginAccountWithNickname(cookies, nickname);
+                } else {
+                    accountId = systemConfigService.addLoginAccount(cookies);
+                }
+            }
+        } catch (Exception e) {
+            logger.warn("Failed to get user info after login: {}", e.getMessage());
+            if (nickname != null && !nickname.isEmpty()) {
+                accountId = systemConfigService.addLoginAccountWithNickname(cookies, nickname);
+            } else {
+                accountId = systemConfigService.addLoginAccount(cookies);
+            }
+        }
+        return accountId;
     }
 
 //    /**
@@ -248,17 +321,22 @@ public class RisingStonesSigninHelper {
      * 检查登录状态
      */
     public JSONObject checkLoginStatus() throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
+        String cookies = systemConfigService.getAnyValidLoginCookies();
         if (cookies == null || cookies.isEmpty()) {
             throw new IOException("未找到登录cookies，请先登录");
         }
-        
+        return checkLoginStatusWithCookies(cookies);
+    }
+
+    /**
+     * 检查登录状态（使用指定的cookies）
+     */
+    public JSONObject checkLoginStatusWithCookies(String cookies) throws IOException {
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "GHome/isLogin").newBuilder()
             .addQueryParameter("tempsuid", tempsuid)
             .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
             .cookieJar(new CookieJar() {
                 @Override
