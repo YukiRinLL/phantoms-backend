@@ -13,4 +13,6 @@ public interface RisingStonesService {
     JSONObject getGuildMember(String guildId) throws IOException;
 
     JSONObject getGuildMemberDynamic(String guildId, int page, int limit) throws IOException;
+
+    JSONObject getCharacterBindInfo() throws IOException;
 }

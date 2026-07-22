@@ -29,6 +29,9 @@ public class RisingStonesServiceImpl implements RisingStonesService {
     @Autowired
     private SystemConfigService systemConfigService;
 
+    @Autowired
+    private com.phantoms.phantomsbackend.common.utils.RisingStonesUtils risingStonesUtils;
+
     // Redis缓存键前缀
     private static final String USER_INFO_CACHE_PREFIX = "user:info:";
     private static final String GUILD_INFO_CACHE_PREFIX = "guild:info:";
@@ -73,7 +76,7 @@ public class RisingStonesServiceImpl implements RisingStonesService {
         
         try {
             logger.debug("Getting user info for uuid: {}", uuid);
-            // 先尝试从叨鱼工具查询
+            // 先尝试从叨鱼工具查询 
 //            ensureTokenAndCookie();
             result = RisingStonesUtils.getUserInfo(uuid);
             
@@ -83,6 +86,18 @@ public class RisingStonesServiceImpl implements RisingStonesService {
                 asyncCacheResult(cacheKey, result);
             } else if (result != null) {
                 logger.warn("Got non-successful response for user info: {}, code: {}", uuid, result.getInteger("code"));
+            }
+        } catch (IOException e) {
+            logger.error("Failed to get user info from RisingStonesUtils, trying cache", e);
+            result = (JSONObject) redisUtil.get(cacheKey);
+            
+            if (result == null) {
+                logger.warn("No cached user info found for uuid: {}", uuid);
+                result = new JSONObject();
+                result.put("code", 500);
+                result.put("message", "Failed to get user info");
+            } else {
+                logger.info("Using cached user info for uuid: {}", uuid);
             }
         } catch (Exception e) {
             // 查询失败，从缓存获取
@@ -121,6 +136,18 @@ public class RisingStonesServiceImpl implements RisingStonesService {
             } else if (result != null) {
                 logger.warn("Got non-successful response for guild info: {}, code: {}", guildId, result.getInteger("code"));
             }
+        } catch (IOException e) {
+            logger.error("Failed to get guild info from RisingStonesUtils, trying cache", e);
+            result = (JSONObject) redisUtil.get(cacheKey);
+            
+            if (result == null) {
+                logger.warn("No cached guild info found for guildId: {}", guildId);
+                result = new JSONObject();
+                result.put("code", 500);
+                result.put("message", "Failed to get guild info");
+            } else {
+                logger.info("Using cached guild info for guildId: {}", guildId);
+            }
         } catch (Exception e) {
             // 查询失败，从缓存获取
             logger.error("Failed to get guild info from RisingStonesUtils, trying cache", e);
@@ -158,12 +185,22 @@ public class RisingStonesServiceImpl implements RisingStonesService {
             } else if (result != null) {
                 logger.warn("Got non-successful response for guild member: {}, code: {}", guildId, result.getInteger("code"));
             }
-        } catch (Exception e) {
-            // 查询失败，从缓存获取
+        } catch (IOException e) {
             logger.error("Failed to get guild member from RisingStonesUtils, trying cache", e);
             result = (JSONObject) redisUtil.get(cacheKey);
             
-            // 如果缓存也没有，返回空或错误
+            if (result == null) {
+                logger.warn("No cached guild member found for guildId: {}", guildId);
+                result = new JSONObject();
+                result.put("code", 500);
+                result.put("message", "Failed to get guild member info");
+            } else {
+                logger.info("Using cached guild member for guildId: {}", guildId);
+            }
+        } catch (Exception e) {
+            logger.error("Failed to get guild member from RisingStonesUtils, trying cache", e);
+            result = (JSONObject) redisUtil.get(cacheKey);
+            
             if (result == null) {
                 logger.warn("No cached guild member found for guildId: {}", guildId);
                 result = new JSONObject();
@@ -195,6 +232,18 @@ public class RisingStonesServiceImpl implements RisingStonesService {
             } else if (result != null) {
                 logger.warn("Got non-successful response for guild member dynamic: {}, code: {}", guildId, result.getInteger("code"));
             }
+        } catch (IOException e) {
+            logger.error("Failed to get guild member dynamic from RisingStonesUtils, trying cache", e);
+            result = (JSONObject) redisUtil.get(cacheKey);
+            
+            if (result == null) {
+                logger.warn("No cached guild member dynamic found for guildId: {}, page: {}, limit: {}", guildId, page, limit);
+                result = new JSONObject();
+                result.put("code", 500);
+                result.put("message", "Failed to get guild member dynamic info");
+            } else {
+                logger.info("Using cached guild member dynamic for guildId: {}, page: {}, limit: {}", guildId, page, limit);
+            }
         } catch (Exception e) {
             // 查询失败，从缓存获取
             logger.error("Failed to get guild member dynamic from RisingStonesUtils, trying cache", e);
@@ -212,5 +261,19 @@ public class RisingStonesServiceImpl implements RisingStonesService {
         }
         
         return result;
+    }
+
+    @Override
+    public JSONObject getCharacterBindInfo() throws IOException {
+        try {
+            logger.debug("Getting character bind info");
+            return risingStonesUtils.getCharacterBindInfo();
+        } catch (Exception e) {
+            logger.error("Failed to get character bind info", e);
+            JSONObject result = new JSONObject();
+            result.put("code", 500);
+            result.put("message", "获取角色绑定信息失败: " + e.getMessage());
+            return result;
+        }
     }
 }
