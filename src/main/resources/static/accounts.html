@@ -145,6 +145,15 @@
             border-left: 4px solid #dc3545;
             opacity: 0.7;
         }
+        .account-card.login-error {
+            border-left: 4px solid #dc3545;
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
         .account-card-header {
             display: flex;
             justify-content: space-between;
@@ -197,6 +206,113 @@
             border-radius: 4px;
             font-size: 13px;
             color: #6c757d;
+        }
+        .character-info {
+            margin-top: 10px;
+            padding: 12px;
+            background-color: #fff;
+            border-radius: 4px;
+            border-left: 3px solid #007bff;
+        }
+        .character-info.clickable {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .character-info.clickable:hover {
+            background-color: #f8f9fa;
+            border-color: #0056b3;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .character-info h5 {
+            margin: 0 0 10px 0;
+            color: #495057;
+            font-size: 14px;
+        }
+        .character-info .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .character-info .info-label {
+            color: #6c757d;
+        }
+        .character-info .info-value {
+            color: #495057;
+            font-weight: bold;
+        }
+        .character-detail-modal {
+            width: 600px;
+            max-width: 95%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .character-detail-modal .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .character-detail-modal .avatar-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+            border: 2px solid #007bff;
+        }
+        .character-detail-modal .character-title {
+            flex: 1;
+        }
+        .character-detail-modal .character-title h3 {
+            margin: 0;
+            color: #495057;
+        }
+        .character-detail-modal .character-title p {
+            margin: 5px 0 0 0;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .character-detail-modal .detail-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+        .character-detail-modal .detail-section h4 {
+            margin: 0 0 10px 0;
+            color: #495057;
+            font-size: 13px;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 5px;
+        }
+        .character-detail-modal .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .character-detail-modal .detail-row:last-child {
+            border-bottom: none;
+        }
+        .character-detail-modal .detail-label {
+            color: #6c757d;
+            font-size: 13px;
+        }
+        .character-detail-modal .detail-value {
+            color: #495057;
+            font-weight: bold;
+            font-size: 13px;
+            text-align: right;
+        }
+        .no-character {
+            margin-top: 10px;
+            padding: 12px;
+            background-color: #fff3cd;
+            border-radius: 4px;
+            border-left: 3px solid #ffc107;
+            font-size: 13px;
+            color: #856404;
         }
         .empty-state {
             padding: 60px 20px;
@@ -369,7 +485,8 @@
         <div class="quick-action-buttons">
             <button onclick="manualSignInAll()">全部签到</button>
             <button onclick="claimRewardsAll()">领取奖励</button>
-            <button onclick="migrateOldAccount()" class="secondary">迁移旧账号</button>
+            <button onclick="openBindModal()">绑定角色</button>
+            <button onclick="checkLoginStatus()" class="secondary">检查登录状态</button>
             <button onclick="refreshAccountList()">刷新列表</button>
         </div>
     </div>
@@ -412,9 +529,38 @@
     </div>
 </div>
 
+<div id="bindModal" class="modal-overlay">
+    <div class="modal">
+        <h3>绑定角色</h3>
+        <div id="bindLoading" style="display:none;">
+            <div class="loading"></div>
+            <p style="margin-left:5px;">正在获取角色列表...</p>
+        </div>
+        <div id="bindContent" style="display:none;">
+            <p id="bindHint">请选择要绑定的角色：</p>
+            <div id="characterList" style="max-height:200px; overflow-y:auto; margin-bottom:15px;">
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="secondary" onclick="closeBindModal()">取消</button>
+            <button id="bindBtn" onclick="confirmBind()" disabled>绑定角色</button>
+        </div>
+    </div>
+</div>
+
+<div id="characterDetailModal" class="modal-overlay">
+    <div class="modal character-detail-modal">
+        <h3>角色详情</h3>
+        <div id="characterDetailContent">
+        </div>
+        <div class="modal-actions">
+            <button class="secondary" onclick="closeCharacterDetailModal()">关闭</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    const baseUrl = 'https://phantoms-backend.onrender.com';
-    // const baseUrl = 'http://localhost:8080';
+    const baseUrl = '';
 
     document.addEventListener('DOMContentLoaded', function() {
         loadAccounts();
@@ -428,10 +574,13 @@
             const data = await response.json();
 
             if (data.success) {
-                const accounts = data.data;
-                renderAccounts(accounts);
-                updateStats(accounts);
-                showStatus(`已加载 ${accounts.length} 个账号`, 'success');
+                currentAccounts = data.data;
+                
+                await checkAllAccountStatus(currentAccounts);
+                
+                renderAccounts(currentAccounts);
+                updateStats(currentAccounts);
+                showStatus(`已加载 ${currentAccounts.length} 个账号`, 'success');
             } else {
                 showStatus(`加载账号列表失败: ${data.message}`, 'error');
                 document.getElementById('accountsGrid').innerHTML = '<div class="empty-state"><h3>加载失败</h3><p>' + data.message + '</p></div>';
@@ -439,6 +588,58 @@
         } catch (error) {
             showStatus(`加载账号列表错误: ${error.message}`, 'error');
             document.getElementById('accountsGrid').innerHTML = '<div class="empty-state"><h3>加载失败</h3><p>' + error.message + '</p></div>';
+        }
+    }
+
+    async function checkAllAccountStatus(accounts) {
+        for (const account of accounts) {
+            try {
+                const response = await fetch(`${baseUrl}/api/ffxiv/signin/character/bind-info/${account.accountId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const bindInfo = data.data;
+                    if (bindInfo.code === 10105) {
+                        account.loginError = bindInfo.msg;
+                    } else if (bindInfo.code === 10000) {
+                        const userData = bindInfo.data || {};
+                        account.characterName = userData.character_name || '';
+                        account.serverName = userData.area_name || '';
+                        account.groupName = userData.group_name || '';
+                        account.experience = userData.experience || '';
+                        account.avatar = userData.avatar || '';
+                        account.houseInfoPublish = userData.house_info_publish || 0;
+                        account.uuid = userData.uuid || '';
+                        account.qq = userData.qq || '';
+                        account.profile = userData.profile || '';
+                        account.lastLoginTime = userData.last_login_time || '';
+                        account.createdAt = userData.created_at || '';
+                        account.updatedAt = userData.updated_at || '';
+                        account.ipLocation = userData.ip_location || '';
+                        account.weekdayTime = userData.weekday_time || '';
+                        account.weekendTime = userData.weekend_time || '';
+                        
+                        if (userData.characterDetail) {
+                            account.guildName = userData.characterDetail.guild_name || '';
+                            account.guildTag = userData.characterDetail.guild_tag || '';
+                            account.playTime = userData.characterDetail.play_time || '';
+                            account.createTime = userData.characterDetail.create_time || '';
+                            account.gender = userData.characterDetail.gender || '';
+                            account.race = userData.characterDetail.race || '';
+                            account.tribe = userData.characterDetail.tribe || '';
+                        }
+                    }
+                }
+            } catch (error) {
+                console.warn(`检查账号 ${account.accountId} 状态失败:`, error);
+            }
         }
     }
 
@@ -450,23 +651,65 @@
                 <div class="empty-state">
                     <h3>暂无账号</h3>
                     <p>请前往 <a href="login.html">登录页面</a> 添加新账号</p>
-                    <button onclick="migrateOldAccount()" style="margin-top:20px;">迁移旧账号</button>
                 </div>
             `;
             return;
         }
 
         grid.innerHTML = accounts.map(account => `
-            <div class="account-card ${account.enabled ? 'enabled' : 'disabled'}">
+            <div class="account-card ${account.enabled ? 'enabled' : 'disabled'} ${account.loginError ? 'login-error' : ''}">
                 <div class="account-card-header">
                     <h4>${account.nickname || account.accountId}</h4>
-                    <span class="status-badge ${account.enabled ? 'enabled' : 'disabled'}">
-                        ${account.enabled ? '已启用' : '已禁用'}
-                    </span>
+                    <div style="display: flex; gap: 8px;">
+                        <span class="status-badge ${account.enabled ? 'enabled' : 'disabled'}">
+                            ${account.enabled ? '已启用' : '已禁用'}
+                        </span>
+                        ${account.defaultForApi ? `
+                            <span class="status-badge" style="background-color: #cce5ff; color: #004085;">
+                                默认API账号
+                            </span>
+                        ` : ''}
+                    </div>
                 </div>
                 <div class="account-info">
                     <p>账号ID: <span>${account.accountId}</span></p>
                 </div>
+                ${account.loginError ? `
+                    <div style="margin-top:10px; padding:12px; background-color:#f8d7da; border-radius:4px; border-left:3px solid #dc3545;">
+                        <p style="color:#721c24; font-weight:bold; margin:0;">⚠️ ${account.loginError}</p>
+                        <p style="color:#721c24; font-size:12px; margin-top:5px;">请重新登录该账号</p>
+                        <a href="login.html" style="display:inline-block; margin-top:10px; padding:6px 12px; background-color:#dc3545; color:white; text-decoration:none; border-radius:4px; font-size:14px;">重新登录</a>
+                    </div>
+                ` : account.characterName ? `
+                    <div class="character-info clickable" onclick="openCharacterDetail('${account.accountId}')">
+                        <h5>角色信息 <span style="font-size:12px; font-weight:normal; color:#007bff;">(点击查看详情)</span></h5>
+                        <div class="info-row">
+                            <span class="info-label">角色名</span>
+                            <span class="info-value">${account.characterName}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">服务器</span>
+                            <span class="info-value">${account.serverName || '未知'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">部队</span>
+                            <span class="info-value">${account.guildName || account.groupName || '无'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">部队标签</span>
+                            <span class="info-value">${account.guildTag || '-'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">房屋信息</span>
+                            <span class="info-value">${account.houseInfoPublish === 1 ? '已发布' : '未发布'}</span>
+                        </div>
+                    </div>
+                ` : `
+                    <div class="no-character">
+                        <p>⚠️ 未绑定角色</p>
+                        <p style="font-size:12px; margin-top:5px;">请在登录页面绑定角色，或点击下方"绑定角色"按钮</p>
+                    </div>
+                `}
                 ${account.lastSignInTime ? `
                     <div class="last-signin">
                         <p>上次签到: ${formatTime(account.lastSignInTime)}</p>
@@ -483,6 +726,12 @@
                     ` : `
                         <button class="success" onclick="toggleAccountStatus('${account.accountId}', true)">启用</button>
                         <button disabled>签到</button>
+                    `}
+                    <button onclick="openBindModalForAccount('${account.accountId}')">绑定角色</button>
+                    ${account.defaultForApi ? `
+                        <button disabled style="background-color:#6c757d;">已设为API账号</button>
+                    ` : `
+                        <button onclick="setDefaultApiAccount('${account.accountId}')">设为API账号</button>
                     `}
                     <button class="danger" onclick="confirmDeleteAccount('${account.accountId}', '${account.nickname || account.accountId}')">删除</button>
                 </div>
@@ -678,29 +927,397 @@
         }
     }
 
-    async function migrateOldAccount() {
-        showStatus('正在迁移旧账号...', 'info');
+    async function checkLoginStatus() {
+        showStatus('正在检查登录状态...', 'info');
         
         try {
-            const response = await fetch(`${baseUrl}/api/ffxiv/signin/accounts/migrate`, {
-                method: 'POST'
+            const response = await fetch(`${baseUrl}/api/ffxiv/signin/check/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
             });
 
             const data = await response.json();
 
             if (data.success) {
-                showStatus('迁移完成！', 'success');
-                loadAccounts();
+                const result = data.data;
+                const isLoggedIn = result.isLogin;
+
+                if (isLoggedIn) {
+                    showStatus(`登录状态：已登录，用户ID: ${result.userId || '未知'}，昵称: ${result.nickname || '未知'}`, 'success');
+                } else {
+                    showStatus('登录状态：未登录', 'warning');
+                }
             } else {
-                showStatus(`迁移失败: ${data.message}`, 'error');
+                showStatus(`检查登录状态失败: ${data.message}`, 'error');
             }
         } catch (error) {
-            showStatus(`迁移错误: ${error.message}`, 'error');
+            showStatus(`检查登录状态错误: ${error.message}`, 'error');
         }
     }
 
     function refreshAccountList() {
         loadAccounts();
+    }
+
+    let selectedCharacterId = null;
+    let currentBindAccountId = null;
+
+    async function openBindModalForAccount(accountId) {
+        currentBindAccountId = accountId;
+        document.getElementById('bindModal').classList.add('show');
+        document.getElementById('bindLoading').style.display = 'flex';
+        document.getElementById('bindContent').style.display = 'none';
+        document.getElementById('bindBtn').disabled = true;
+        selectedCharacterId = null;
+
+        try {
+            const response = await fetch(`${baseUrl}/api/ffxiv/signin/character/bind-info/${accountId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+
+            const data = await response.json();
+            await handleBindModalResponse(data);
+        } catch (error) {
+            document.getElementById('bindLoading').style.display = 'none';
+            document.getElementById('bindContent').style.display = 'block';
+            document.getElementById('bindContent').innerHTML = `<p style="color:#dc3545;">获取角色列表错误: ${error.message}</p>`;
+        }
+    }
+
+    async function openBindModal() {
+        currentBindAccountId = null;
+        document.getElementById('bindModal').classList.add('show');
+        document.getElementById('bindLoading').style.display = 'flex';
+        document.getElementById('bindContent').style.display = 'none';
+        document.getElementById('bindBtn').disabled = true;
+        selectedCharacterId = null;
+
+        try {
+            const response = await fetch(`${baseUrl}/api/ffxiv/signin/character/bind-info`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+
+            const data = await response.json();
+            await handleBindModalResponse(data);
+        } catch (error) {
+            document.getElementById('bindLoading').style.display = 'none';
+            document.getElementById('bindContent').style.display = 'block';
+            document.getElementById('bindContent').innerHTML = `<p style="color:#dc3545;">获取角色列表错误: ${error.message}</p>`;
+        }
+    }
+
+    async function handleBindModalResponse(data) {
+        if (data.success) {
+            const bindInfo = data.data;
+            document.getElementById('bindLoading').style.display = 'none';
+            document.getElementById('bindContent').style.display = 'block';
+            
+            if (bindInfo.code === 10105) {
+                document.getElementById('bindContent').innerHTML = `
+                    <div style="padding:20px; background-color:#f8d7da; border-radius:4px; border:1px solid #f5c6cb;">
+                        <p style="color:#721c24; font-weight:bold;">⚠️ ${bindInfo.msg}</p>
+                        <p style="color:#721c24; font-size:14px; margin-top:10px;">请重新登录该账号</p>
+                        <a href="login.html" style="display:inline-block; margin-top:15px; padding:8px 16px; background-color:#dc3545; color:white; text-decoration:none; border-radius:4px;">前往登录</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (bindInfo.code === 10000) {
+                const userData = bindInfo.data || {};
+                const characters = userData.characters || [];
+                const characterName = userData.character_name;
+                const serverName = userData.area_name;
+                const characterId = userData.character_id;
+
+                if (characterName) {
+                    document.getElementById('bindHint').textContent = `当前已绑定角色：${characterName}（${serverName || ''}）`;
+                    document.getElementById('bindBtn').textContent = '重新绑定';
+                } else {
+                    document.getElementById('bindHint').textContent = '请选择要绑定的角色：';
+                    document.getElementById('bindBtn').textContent = '绑定角色';
+                }
+
+                if (characters.length === 0) {
+                    document.getElementById('characterList').innerHTML = '<p style="color:#6c757d;">未找到可用角色，请先登录FF14游戏创建角色</p>';
+                } else {
+                    document.getElementById('characterList').innerHTML = characters.map(char => `
+                        <div style="padding:10px; border:1px solid #dee2e6; border-radius:4px; margin-bottom:8px; cursor:pointer; ${characterId === char.id ? 'background-color:#d4edda; border-color:#c3e6cb;' : ''}" 
+                             onclick="selectCharacter('${char.id}', '${char.name}', this)">
+                            <strong>${char.name}</strong>
+                            <span style="color:#6c757d; margin-left:10px;">${char.server}</span>
+                            ${characterId === char.id ? '<span style="color:#28a745; margin-left:10px;">(已绑定)</span>' : ''}
+                        </div>
+                    `).join('');
+                }
+            } else {
+                document.getElementById('bindContent').innerHTML = `<p style="color:#dc3545;">${bindInfo.msg || '获取角色列表失败'}</p>`;
+            }
+        } else {
+            document.getElementById('bindLoading').style.display = 'none';
+            document.getElementById('bindContent').style.display = 'block';
+            document.getElementById('bindContent').innerHTML = `<p style="color:#dc3545;">${data.message}</p>`;
+        }
+    }
+
+    function selectCharacter(characterId, characterName, element) {
+        selectedCharacterId = characterId;
+        document.getElementById('bindBtn').disabled = false;
+
+        const items = document.getElementById('characterList').children;
+        for (let item of items) {
+            item.style.backgroundColor = '';
+            item.style.borderColor = '#dee2e6';
+        }
+        element.style.backgroundColor = '#e3f2fd';
+        element.style.borderColor = '#90caf9';
+    }
+
+    async function confirmBind() {
+        if (!selectedCharacterId) {
+            showStatus('请选择要绑定的角色', 'warning');
+            return;
+        }
+
+        try {
+            let url = `${baseUrl}/api/ffxiv/signin/character/bind`;
+            if (currentBindAccountId) {
+                url = `${baseUrl}/api/ffxiv/signin/character/bind/${currentBindAccountId}`;
+            }
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ characterId: selectedCharacterId })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                const result = data.data;
+                if (result.code === 10000) {
+                    showStatus('角色绑定成功！', 'success');
+                    closeBindModal();
+                    loadAccounts();
+                } else {
+                    showStatus(`绑定失败: ${result.msg || '未知错误'}`, 'error');
+                }
+            } else {
+                showStatus(`绑定失败: ${data.message}`, 'error');
+            }
+        } catch (error) {
+            showStatus(`绑定错误: ${error.message}`, 'error');
+        }
+    }
+
+    function closeBindModal() {
+        document.getElementById('bindModal').classList.remove('show');
+        selectedCharacterId = null;
+    }
+
+    async function setDefaultApiAccount(accountId) {
+        try {
+            const response = await fetch(`${baseUrl}/api/ffxiv/signin/accounts/${accountId}/set-default-api`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showStatus('已将该账号设为默认API账号', 'success');
+                loadAccounts();
+            } else {
+                showStatus(`设置失败: ${data.message}`, 'error');
+            }
+        } catch (error) {
+            showStatus(`设置错误: ${error.message}`, 'error');
+        }
+    }
+
+    let currentAccounts = [];
+
+    function openCharacterDetail(accountId) {
+        const account = currentAccounts.find(a => a.accountId === accountId);
+        if (!account) return;
+
+        document.getElementById('characterDetailModal').classList.add('show');
+        renderCharacterDetail(account);
+    }
+
+    function closeCharacterDetailModal() {
+        document.getElementById('characterDetailModal').classList.remove('show');
+    }
+
+    function renderCharacterDetail(account) {
+        const content = `
+            <div class="modal-header">
+                ${account.avatar ? `<img src="${account.avatar}" class="avatar-img" alt="头像">` : ''}
+                <div class="character-title">
+                    <h3>${account.characterName}</h3>
+                    <p>${account.serverName || '未知服务器'}</p>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h4>基本信息</h4>
+                <div class="detail-row">
+                    <span class="detail-label">角色名</span>
+                    <span class="detail-value">${account.characterName || '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">服务器</span>
+                    <span class="detail-value">${account.serverName || '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">性别</span>
+                    <span class="detail-value">${account.gender === '1' ? '男' : account.gender === '2' ? '女' : '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">种族</span>
+                    <span class="detail-value">${getRaceName(account.race)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">部族</span>
+                    <span class="detail-value">${getTribeName(account.tribe)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">创建时间</span>
+                    <span class="detail-value">${account.createTime || '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">游戏时长</span>
+                    <span class="detail-value">${account.playTime || '-'}</span>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h4>部队信息</h4>
+                <div class="detail-row">
+                    <span class="detail-label">部队名称</span>
+                    <span class="detail-value">${account.guildName || account.groupName || '无'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">部队标签</span>
+                    <span class="detail-value">${account.guildTag || '-'}</span>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h4>账号信息</h4>
+                <div class="detail-row">
+                    <span class="detail-label">账号ID</span>
+                    <span class="detail-value">${account.accountId || '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">昵称</span>
+                    <span class="detail-value">${account.nickname || '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">UUID</span>
+                    <span class="detail-value">${account.uuid || '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">QQ</span>
+                    <span class="detail-value">${account.qq || '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">经验值</span>
+                    <span class="detail-value">${account.experience || '-'}</span>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h4>其他信息</h4>
+                <div class="detail-row">
+                    <span class="detail-label">个人简介</span>
+                    <span class="detail-value">${account.profile || '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">上次登录时间</span>
+                    <span class="detail-value">${account.lastLoginTime || '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">账号创建时间</span>
+                    <span class="detail-value">${account.createdAt || '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">最后更新时间</span>
+                    <span class="detail-value">${account.updatedAt || '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">IP位置</span>
+                    <span class="detail-value">${account.ipLocation || '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">房屋信息</span>
+                    <span class="detail-value">${account.houseInfoPublish === 1 ? '已发布' : '未发布'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">活跃时间(工作日)</span>
+                    <span class="detail-value">${account.weekdayTime || '-'}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">活跃时间(周末)</span>
+                    <span class="detail-value">${account.weekendTime || '-'}</span>
+                </div>
+            </div>
+        `;
+        document.getElementById('characterDetailContent').innerHTML = content;
+    }
+
+    function getRaceName(raceId) {
+        const races = {
+            '1': '人族',
+            '2': '精灵族',
+            '3': '拉拉菲尔族',
+            '4': '猫魅族',
+            '5': '鲁加族',
+            '6': '龙人族',
+            '7': '维埃拉族',
+            '8': '硌狮族'
+        };
+        return races[raceId] || raceId || '-';
+    }
+
+    function getTribeName(tribeId) {
+        const tribes = {
+            '1': '中原之民',
+            '2': '高地之民',
+            '3': '森林之民',
+            '4': '黑影之民',
+            '5': '平原之民',
+            '6': '沙漠之民',
+            '7': '逐日之民',
+            '8': '护月之民',
+            '9': '北洋之民',
+            '10': '红焰之民',
+            '11': '晨曦之民',
+            '12': '暮晖之民',
+            '13': '拉札罕',
+            '14': '青鳞族',
+            '15': '白鳞族',
+            '16': '密林之民',
+            '17': '山谷之民',
+            '18': '巨浪之民',
+            '19': '疾风之民'
+        };
+        return tribes[tribeId] || tribeId || '-';
     }
 </script>
 </body>
