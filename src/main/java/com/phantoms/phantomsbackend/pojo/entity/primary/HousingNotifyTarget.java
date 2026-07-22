@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "HousingNotifyTarget")
 @Table(name = "housing_notify_target", schema = "config")
@@ -32,13 +32,13 @@ public class HousingNotifyTarget {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HousingNotifyServer> servers = new ArrayList<>();
+    private Set<HousingNotifyServer> servers = new HashSet<>();
 
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HousingNotifyArea> areas = new ArrayList<>();
+    private Set<HousingNotifyArea> areas = new HashSet<>();
 
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HousingNotifyGroup> groups = new ArrayList<>();
+    private Set<HousingNotifyGroup> groups = new HashSet<>();
 
     @PreUpdate
     protected void onUpdate() {
@@ -73,5 +73,17 @@ public class HousingNotifyTarget {
         group.setTarget(this);
         group.setGroupId(groupId);
         groups.add(group);
+    }
+
+    public void clearServers() {
+        servers.clear();
+    }
+
+    public void clearAreas() {
+        areas.clear();
+    }
+
+    public void clearGroups() {
+        groups.clear();
     }
 }

@@ -2,12 +2,14 @@ package com.phantoms.phantomsbackend.pojo.entity.primary;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
 @Entity(name = "HousingNotifyGroup")
 @Table(name = "housing_notify_group", schema = "config")
 @Data
+@EqualsAndHashCode(exclude = "target")
 public class HousingNotifyGroup {
 
     @Id

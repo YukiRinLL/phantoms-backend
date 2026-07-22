@@ -13,6 +13,7 @@ import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -105,17 +106,17 @@ public class HousingNotifyService {
             target.setDescription(description);
         }
 
-        target.getServers().clear();
+        target.clearServers();
         for (String serverId : serverIds) {
             target.addServer(serverId);
         }
 
-        target.getAreas().clear();
+        target.clearAreas();
         for (Integer areaId : areaIds) {
             target.addArea(areaId);
         }
 
-        target.getGroups().clear();
+        target.clearGroups();
         for (String groupId : groupIds) {
             target.addGroup(groupId);
         }
