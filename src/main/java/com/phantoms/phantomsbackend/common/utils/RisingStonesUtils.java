@@ -47,6 +47,47 @@ public class RisingStonesUtils {
             logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
         }
+        return getUserInfoWithCookies(cookies, uuid);
+    }
+
+    public static JSONObject getUserBasicInfo(String cookies) throws IOException {
+        String tempsuid = UUID.randomUUID().toString();
+        HttpUrl url = HttpUrl.parse(BASE_URL + "userInfo/getUserInfo").newBuilder()
+                .addQueryParameter("tempsuid", tempsuid)
+                .build();
+
+        OkHttpClient tempClient = client.newBuilder()
+            .cookieJar(new CookieJar() {
+                @Override
+                public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {}
+                @Override
+                public List<Cookie> loadForRequest(HttpUrl url) { return Collections.emptyList(); }
+            })
+            .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("User-Agent", USER_AGENT)
+                .header("Cookie", cookies)
+                .header("Referer", REFERER)
+                .build();
+
+        try (Response response = tempClient.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                logger.error("Unexpected code {} for getting user info", response.code());
+                throw new IOException("Unexpected code " + response.code());
+            }
+            String responseBody = response.body().string();
+            logger.debug("User info response: {}", responseBody);
+            return JSONObject.parseObject(responseBody);
+        }
+    }
+
+    public static JSONObject getUserInfoWithCookies(String cookies, String uuid) throws IOException {
+        if (cookies == null || cookies.isEmpty()) {
+            logger.error("未找到登录cookies，请先登录");
+            throw new IOException("未找到登录cookies，请先登录");
+        }
         
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "userInfo/getUserInfo").newBuilder()
@@ -54,7 +95,6 @@ public class RisingStonesUtils {
                 .addQueryParameter("tempsuid", tempsuid)
                 .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
             .cookieJar(new CookieJar() {
                 @Override
@@ -257,11 +297,37 @@ public class RisingStonesUtils {
         }
     }
 
-    /**
-     * 获取角色绑定信息（兼容旧版接口，保留cookies参数但不使用）
-     */
     public JSONObject getCharacterBindInfo(String cookies) throws IOException {
-        return getCharacterBindInfo();
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+
+        String tempsuid = UUID.randomUUID().toString();
+        HttpUrl url = HttpUrl.parse(BASE_URL + "groupAndRole/getCharacterBindInfo").newBuilder()
+                .addQueryParameter("platform", "1")
+                .addQueryParameter("tempsuid", tempsuid)
+                .build();
+
+        OkHttpClient tempClient = client.newBuilder()
+                .cookieJar(new CookieJar() {
+                    @Override
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {}
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl url) { return Collections.emptyList(); }
+                })
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("User-Agent", USER_AGENT)
+                .header("Cookie", cookies)
+                .header("Referer", REFERER)
+                .build();
+
+        try (Response response = tempClient.newCall(request).execute()) {
+            logger.info("Response code for getCharacterBindInfo: {}", response.code());
+            return JSONObject.parseObject(response.body().string());
+        }
     }
 
     /**
@@ -319,11 +385,54 @@ public class RisingStonesUtils {
         }
     }
 
-    /**
-     * 执行签到（兼容旧版接口，保留cookies参数但不使用）
-     */
     public JSONObject doSignIn(String cookies) throws IOException {
-        return doSignIn();
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+
+        String tempsuid = UUID.randomUUID().toString();
+        HttpUrl url = HttpUrl.parse(BASE_URL + "sign/signIn").newBuilder()
+                .addQueryParameter("tempsuid", tempsuid)
+                .build();
+
+        RequestBody body = new FormBody.Builder()
+                .add("tempsuid", tempsuid)
+                .build();
+
+        OkHttpClient tempClient = client.newBuilder()
+                .cookieJar(new CookieJar() {
+                    @Override
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {}
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl url) { return Collections.emptyList(); }
+                })
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .header("User-Agent", USER_AGENT)
+                .header("Cookie", cookies)
+                .header("Referer", REFERER)
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+
+        try (Response response = tempClient.newCall(request).execute()) {
+            logger.info("Response code for doSignIn: {}", response.code());
+            if (!response.isSuccessful()) {
+                logger.error("doSignIn request failed: code={}, message={}", response.code(), response.message());
+                throw new IOException("RisingStones API请求失败: " + response.code());
+            }
+            String responseBody = response.body().string();
+            logger.debug("doSignIn response: {}", responseBody);
+            return JSONObject.parseObject(responseBody);
+        } catch (java.net.SocketTimeoutException e) {
+            logger.error("doSignIn请求超时: {}", e.getMessage());
+            throw new IOException("RisingStones API请求超时", e);
+        } catch (java.net.ConnectException e) {
+            logger.error("doSignIn连接失败: {}", e.getMessage());
+            throw new IOException("无法连接到RisingStones服务", e);
+        }
     }
 
     /**
@@ -364,11 +473,37 @@ public class RisingStonesUtils {
         }
     }
 
-    /**
-     * 获取签到日志（兼容旧版接口，保留cookies参数但不使用）
-     */
     public JSONObject getSignLog(String cookies, String month) throws IOException {
-        return getSignLog(month);
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+
+        String tempsuid = UUID.randomUUID().toString();
+        HttpUrl url = HttpUrl.parse(BASE_URL + "sign/mySignLog").newBuilder()
+                .addQueryParameter("month", month)
+                .addQueryParameter("tempsuid", tempsuid)
+                .build();
+
+        OkHttpClient tempClient = client.newBuilder()
+                .cookieJar(new CookieJar() {
+                    @Override
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {}
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl url) { return Collections.emptyList(); }
+                })
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("User-Agent", USER_AGENT)
+                .header("Cookie", cookies)
+                .header("Referer", REFERER)
+                .build();
+
+        try (Response response = tempClient.newCall(request).execute()) {
+            logger.info("Response code for getSignLog: {}", response.code());
+            return JSONObject.parseObject(response.body().string());
+        }
     }
 
     /**
@@ -409,11 +544,37 @@ public class RisingStonesUtils {
         }
     }
 
-    /**
-     * 获取签到奖励列表（兼容旧版接口，保留cookies参数但不使用）
-     */
     public JSONObject getSignInRewardList(String cookies, String month) throws IOException {
-        return getSignInRewardList(month);
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+
+        String tempsuid = UUID.randomUUID().toString();
+        HttpUrl url = HttpUrl.parse(BASE_URL + "sign/signRewardList").newBuilder()
+                .addQueryParameter("month", month)
+                .addQueryParameter("tempsuid", tempsuid)
+                .build();
+
+        OkHttpClient tempClient = client.newBuilder()
+                .cookieJar(new CookieJar() {
+                    @Override
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {}
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl url) { return Collections.emptyList(); }
+                })
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("User-Agent", USER_AGENT)
+                .header("Cookie", cookies)
+                .header("Referer", REFERER)
+                .build();
+
+        try (Response response = tempClient.newCall(request).execute()) {
+            logger.info("Response code for getSignInRewardList: {}", response.code());
+            return JSONObject.parseObject(response.body().string());
+        }
     }
 
     /**
@@ -461,11 +622,44 @@ public class RisingStonesUtils {
         }
     }
 
-    /**
-     * 领取签到奖励（兼容旧版接口，保留cookies参数但不使用）
-     */
     public JSONObject getSignInReward(String cookies, int id, String month) throws IOException {
-        return getSignInReward(id, month);
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+
+        String tempsuid = UUID.randomUUID().toString();
+        HttpUrl url = HttpUrl.parse(BASE_URL + "sign/getSignReward").newBuilder()
+                .addQueryParameter("tempsuid", tempsuid)
+                .build();
+
+        RequestBody body = new FormBody.Builder()
+                .add("id", String.valueOf(id))
+                .add("month", month)
+                .add("tempsuid", tempsuid)
+                .build();
+
+        OkHttpClient tempClient = client.newBuilder()
+                .cookieJar(new CookieJar() {
+                    @Override
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {}
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl url) { return Collections.emptyList(); }
+                })
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .header("User-Agent", USER_AGENT)
+                .header("Cookie", cookies)
+                .header("Referer", REFERER)
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+
+        try (Response response = tempClient.newCall(request).execute()) {
+            logger.info("Response code for getSignInReward: {}", response.code());
+            return JSONObject.parseObject(response.body().string());
+        }
     }
 
     /**
@@ -517,12 +711,48 @@ public class RisingStonesUtils {
         }
     }
 
-    /**
-     * 创建动态评论（兼容旧版接口，保留cookies参数但不使用）
-     */
     public JSONObject createPostComment(String cookies, String content, String posts_id,
                                         String parent_id, String root_parent, String comment_pic) throws IOException {
-        return createPostComment(content, posts_id, parent_id, root_parent, comment_pic);
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+
+        String tempsuid = UUID.randomUUID().toString();
+        HttpUrl url = HttpUrl.parse(BASE_URL + "posts/comment").newBuilder()
+                .addQueryParameter("tempsuid", tempsuid)
+                .build();
+
+        RequestBody body = new FormBody.Builder()
+                .add("content", content)
+                .add("posts_id", posts_id)
+                .add("parent_id", parent_id)
+                .add("root_parent", root_parent)
+                .add("comment_pic", comment_pic)
+                .add("tempsuid", tempsuid)
+                .build();
+
+        OkHttpClient tempClient = client.newBuilder()
+                .cookieJar(new CookieJar() {
+                    @Override
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {}
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl url) { return Collections.emptyList(); }
+                })
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .header("User-Agent", USER_AGENT)
+                .header("Cookie", cookies)
+                .header("Referer", REFERER)
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+
+        try (Response response = tempClient.newCall(request).execute()) {
+            logger.info("Response code for createPostComment: {}", response.code());
+            return JSONObject.parseObject(response.body().string());
+        }
     }
 
     /**
@@ -571,11 +801,45 @@ public class RisingStonesUtils {
         }
     }
 
-    /**
-     * 创建动态（兼容旧版接口，保留cookies参数但不使用）
-     */
     public JSONObject createDynamic(String cookies, String content, int scope, String pic_url) throws IOException {
-        return createDynamic(content, scope, pic_url);
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+
+        String tempsuid = UUID.randomUUID().toString();
+        HttpUrl url = HttpUrl.parse(BASE_URL + "dynamic/create").newBuilder()
+                .addQueryParameter("tempsuid", tempsuid)
+                .build();
+
+        RequestBody body = new FormBody.Builder()
+                .add("content", content)
+                .add("scope", String.valueOf(scope))
+                .add("pic_url", pic_url)
+                .add("tempsuid", tempsuid)
+                .build();
+
+        OkHttpClient tempClient = client.newBuilder()
+                .cookieJar(new CookieJar() {
+                    @Override
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {}
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl url) { return Collections.emptyList(); }
+                })
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .header("User-Agent", USER_AGENT)
+                .header("Cookie", cookies)
+                .header("Referer", REFERER)
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+
+        try (Response response = tempClient.newCall(request).execute()) {
+            logger.info("Response code for createDynamic: {}", response.code());
+            return JSONObject.parseObject(response.body().string());
+        }
     }
 
     /**
@@ -615,11 +879,37 @@ public class RisingStonesUtils {
         }
     }
 
-    /**
-     * 删除动态（兼容旧版接口，保留cookies参数但不使用）
-     */
     public JSONObject deleteDynamic(String cookies, int dynamic_id) throws IOException {
-        return deleteDynamic(dynamic_id);
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+
+        String tempsuid = UUID.randomUUID().toString();
+        HttpUrl url = HttpUrl.parse(BASE_URL + "dynamic/deleteDynamic").newBuilder()
+                .addQueryParameter("tempsuid", tempsuid)
+                .build();
+
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("dynamic_id", dynamic_id);
+
+        RequestBody body = RequestBody.create(
+                requestBody.toJSONString(),
+                MediaType.parse("application/json")
+        );
+
+        Request request = new Request.Builder()
+                .url(url)
+                .delete(body)
+                .header("User-Agent", USER_AGENT)
+                .header("Cookie", cookies)
+                .header("Referer", REFERER)
+                .header("Content-Type", "application/json")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            logger.info("Response code for deleteDynamic: {}", response.code());
+            return JSONObject.parseObject(response.body().string());
+        }
     }
 
     /**

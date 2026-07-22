@@ -3,6 +3,9 @@ package com.phantoms.phantomsbackend.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesSigninHelper;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesUtils;
+import com.phantoms.phantomsbackend.service.SystemConfigService;
+import com.phantoms.phantomsbackend.service.SystemConfigService.LoginAccount;
+import com.phantoms.phantomsbackend.service.scheduler.DailySignInScheduler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,6 +27,12 @@ public class RisingStonesSigninController {
 
     @Autowired
     private RisingStonesUtils risingStonesUtils;
+
+    @Autowired
+    private SystemConfigService systemConfigService;
+
+    @Autowired
+    private DailySignInScheduler dailySignInScheduler;
 
     @GetMapping("/login/qrcode")
     @Operation(
@@ -119,9 +129,10 @@ public class RisingStonesSigninController {
         }
         
         try {
-            ffxivSigninHelper.finishLogin(ticket);
+            String accountId = ffxivSigninHelper.finishLogin(ticket);
             return ResponseEntity.ok(Map.of(
                     "success", true,
+                    "data", Map.of("accountId", accountId),
                     "message", "登录完成"
             ));
         } catch (Exception e) {
@@ -412,6 +423,292 @@ public class RisingStonesSigninController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "success", false,
                     "message", "创建动态评论失败: " + e.getMessage()
+            ));
+        }
+    }
+
+    @GetMapping("/accounts")
+    @Operation(
+            summary = "获取所有登录账号",
+            description = "获取所有已保存的登录账号列表"
+    )
+    public ResponseEntity<?> getLoginAccounts() {
+        try {
+            List<LoginAccount> accounts = systemConfigService.getLoginAccounts();
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "data", accounts,
+                    "message", "获取账号列表成功"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", "获取账号列表失败: " + e.getMessage()
+            ));
+        }
+    }
+
+    @GetMapping("/accounts/enabled")
+    @Operation(
+            summary = "获取启用的登录账号",
+            description = "获取所有已启用的登录账号列表"
+    )
+    public ResponseEntity<?> getEnabledLoginAccounts() {
+        try {
+            List<LoginAccount> accounts = systemConfigService.getEnabledLoginAccounts();
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "data", accounts,
+                    "message", "获取启用账号列表成功"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", "获取启用账号列表失败: " + e.getMessage()
+            ));
+        }
+    }
+
+    @GetMapping("/accounts/{accountId}")
+    @Operation(
+            summary = "获取单个账号信息",
+            description = "根据accountId获取单个账号的详细信息"
+    )
+    public ResponseEntity<?> getLoginAccount(@PathVariable String accountId) {
+        try {
+            LoginAccount account = systemConfigService.getLoginAccount(accountId);
+            if (account == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                        "success", false,
+                        "message", "账号不存在"
+                ));
+            }
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "data", account,
+                    "message", "获取账号信息成功"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", "获取账号信息失败: " + e.getMessage()
+            ));
+        }
+    }
+
+    @PutMapping("/accounts/{accountId}")
+    @Operation(
+            summary = "更新账号信息",
+            description = "更新账号的昵称或启用状态"
+    )
+    public ResponseEntity<?> updateLoginAccount(
+            @PathVariable String accountId,
+            @RequestBody Map<String, Object> request) {
+        try {
+            String nickname = (String) request.get("nickname");
+            Boolean enabled = (Boolean) request.get("enabled");
+
+            boolean updated = systemConfigService.updateLoginAccount(accountId, nickname, enabled);
+            if (!updated) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                        "success", false,
+                        "message", "账号不存在"
+                ));
+            }
+
+            LoginAccount account = systemConfigService.getLoginAccount(accountId);
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "data", account,
+                    "message", "更新账号信息成功"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", "更新账号信息失败: " + e.getMessage()
+            ));
+        }
+    }
+
+    @DeleteMapping("/accounts/{accountId}")
+    @Operation(
+            summary = "删除账号",
+            description = "根据accountId删除指定的登录账号"
+    )
+    public ResponseEntity<?> deleteLoginAccount(@PathVariable String accountId) {
+        try {
+            boolean removed = systemConfigService.removeLoginAccount(accountId);
+            if (!removed) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                        "success", false,
+                        "message", "账号不存在"
+                ));
+            }
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "删除账号成功"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", "删除账号失败: " + e.getMessage()
+            ));
+        }
+    }
+
+    
+
+    @PostMapping("/manual-signin")
+    @Operation(
+            summary = "手动触发所有账号签到",
+            description = "手动触发所有启用账号的签到任务"
+    )
+    public ResponseEntity<?> manualSignIn() {
+        try {
+            dailySignInScheduler.manualSignIn();
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "已触发所有账号签到任务"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", "触发签到任务失败: " + e.getMessage()
+            ));
+        }
+    }
+
+    @PostMapping("/manual-signin/{accountId}")
+    @Operation(
+            summary = "手动触发单个账号签到",
+            description = "手动触发指定账号的签到任务"
+    )
+    public ResponseEntity<?> manualSignIn(@PathVariable String accountId) {
+        try {
+            dailySignInScheduler.manualSignIn(accountId);
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "已触发账号签到任务"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", "触发签到任务失败: " + e.getMessage()
+            ));
+        }
+    }
+
+    @PostMapping("/manual-claim-rewards")
+    @Operation(
+            summary = "手动触发所有账号领取奖励",
+            description = "手动触发所有启用账号的签到奖励领取任务"
+    )
+    public ResponseEntity<?> manualClaimRewards() {
+        try {
+            dailySignInScheduler.manualClaimRewards();
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "已触发所有账号奖励领取任务"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", "触发奖励领取任务失败: " + e.getMessage()
+            ));
+        }
+    }
+
+    @GetMapping("/accounts/{accountId}/user-info")
+    @Operation(
+            summary = "获取指定账号的用户信息",
+            description = "获取指定账号的用户信息（包含角色信息、服务器、部队等）"
+    )
+    public ResponseEntity<?> getUserInfoForAccount(@PathVariable String accountId) {
+        try {
+            LoginAccount account = systemConfigService.getLoginAccount(accountId);
+            if (account == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                        "success", false,
+                        "message", "账号不存在"
+                ));
+            }
+
+            JSONObject result = risingStonesUtils.getCharacterBindInfo(account.getCookies());
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "data", result,
+                    "message", "获取用户信息成功"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", "获取用户信息失败: " + e.getMessage()
+            ));
+        }
+    }
+
+    @PostMapping("/accounts/{accountId}/set-default-api")
+    @Operation(
+            summary = "设置默认API账号",
+            description = "将指定账号设置为API调用的默认账号，用于查询用户信息、部队信息等操作"
+    )
+    public ResponseEntity<?> setDefaultApiAccount(@PathVariable String accountId) {
+        try {
+            boolean success = systemConfigService.setDefaultApiAccount(accountId);
+            if (!success) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                        "success", false,
+                        "message", "账号不存在"
+                ));
+            }
+
+            LoginAccount account = systemConfigService.getLoginAccount(accountId);
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "data", account,
+                    "message", "已将账号设置为默认API账号"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", "设置默认API账号失败: " + e.getMessage()
+            ));
+        }
+    }
+
+    @PatchMapping("/accounts/{accountId}/toggle")
+    @Operation(
+            summary = "切换账号启用状态",
+            description = "启用或禁用指定账号"
+    )
+    public ResponseEntity<?> toggleAccountStatus(@PathVariable String accountId, @RequestBody Map<String, Boolean> request) {
+        try {
+            Boolean enabled = request.get("enabled");
+            if (enabled == null) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "success", false,
+                        "message", "enabled不能为空"
+                ));
+            }
+
+            boolean updated = systemConfigService.updateLoginAccount(accountId, null, enabled);
+            if (!updated) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                        "success", false,
+                        "message", "账号不存在"
+                ));
+            }
+
+            LoginAccount account = systemConfigService.getLoginAccount(accountId);
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "data", account,
+                    "message", enabled ? "账号已启用" : "账号已禁用"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", "操作失败: " + e.getMessage()
             ));
         }
     }

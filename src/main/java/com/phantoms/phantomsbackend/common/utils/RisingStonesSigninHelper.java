@@ -207,8 +207,7 @@ public class RisingStonesSigninHelper {
     /**
      * 完成登录流程
      */
-    public void finishLogin(String ticket) throws IOException {
-        // 使用与TypeScript代码完全相同的URL格式和协议
+    public String finishLogin(String ticket) throws IOException {
         HttpUrl url = HttpUrl.parse("http://apiff14risingstones.web.sdo.com/api/home/GHome/login").newBuilder()
             .addQueryParameter("ticket", ticket)
             .addQueryParameter("redirectUrl", APP_REDIRECT_URL)
@@ -222,9 +221,9 @@ public class RisingStonesSigninHelper {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response.code());
-            // 获取cookies并保存到数据库
             String cookies = getCookies();
-            systemConfigService.updateLoginCookies(cookies);
+            String accountId = systemConfigService.addLoginAccount(cookies);
+            return accountId;
         }
     }
 
@@ -281,11 +280,36 @@ public class RisingStonesSigninHelper {
         }
     }
     
-    /**
-     * 检查登录状态（兼容旧版接口，保留cookies参数但不使用）
-     */
     public JSONObject checkLoginStatus(String cookies) throws IOException {
-        return checkLoginStatus();
+        if (cookies == null || cookies.isEmpty()) {
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+        
+        String tempsuid = UUID.randomUUID().toString();
+        HttpUrl url = HttpUrl.parse(BASE_URL + "GHome/isLogin").newBuilder()
+            .addQueryParameter("tempsuid", tempsuid)
+            .build();
+
+        OkHttpClient tempClient = client.newBuilder()
+            .cookieJar(new CookieJar() {
+                @Override
+                public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {}
+                @Override
+                public List<Cookie> loadForRequest(HttpUrl url) { return Collections.emptyList(); }
+            })
+            .build();
+
+        Request request = new Request.Builder()
+            .url(url)
+            .header("User-Agent", USER_AGENT)
+            .header("Cookie", cookies)
+            .header("Referer", REFERER)
+            .build();
+
+        try (Response response = tempClient.newCall(request).execute()) {
+            logger.info("Response code for checkLoginStatus: {}", response.code());
+            return JSONObject.parseObject(response.body().string());
+        }
     }
 
     /**

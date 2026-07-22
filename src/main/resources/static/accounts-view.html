@@ -109,7 +109,7 @@
         
         .table-header {
             display: grid;
-            grid-template-columns: 30px 140px 120px 140px 100px 150px 130px 100px 80px;
+            grid-template-columns: 30px 140px 120px 140px 100px 80px 150px 130px 100px 80px;
             background-color: var(--bg);
             padding: 4px 12px;
             font-weight: 600;
@@ -120,7 +120,7 @@
         
         .table-row {
             display: grid;
-            grid-template-columns: 30px 140px 120px 140px 100px 150px 130px 100px 80px;
+            grid-template-columns: 30px 140px 120px 140px 100px 80px 150px 130px 100px 80px;
             padding: 4px 12px;
             border-bottom: 1px solid var(--border);
             align-items: center;
@@ -276,6 +276,8 @@
             border-radius: 8px;
             font-size: 14px;
             font-weight: 500;
+            position: relative;
+            z-index: 100;
         }
         
         .status.success {
@@ -344,9 +346,10 @@
                 <div>角色名</div>
                 <div>服务器/部队</div>
                 <div>房屋信息</div>
+                <div>登录状态</div>
                 <div>个性签名</div>
                 <div>上次登录</div>
-                <div>状态</div>
+                <div>账号状态</div>
                 <div>操作</div>
             </div>
             <div id="accountsTable">
@@ -397,6 +400,9 @@
                 const result = await response.json();
                 if (result.success) {
                     accounts = result.data || [];
+                    accounts = accounts.filter((account, index, self) => 
+                        index === self.findIndex(a => a.accountId === account.accountId)
+                    );
                     await loadAccountDetails();
                 } else {
                     showStatus('获取账号列表失败: ' + result.message, 'error');
@@ -411,42 +417,67 @@
         }
 
         async function loadAccountDetails() {
-            for (const account of accounts) {
+            accounts.forEach(account => {
                 account.characterName = '';
                 account.serverName = '';
                 account.groupName = '';
                 account.guildName = '';
                 account.houseInfoPublish = -1;
                 account.loginError = false;
-                account.profile = '';
-                account.lastLoginTime = 0;
-
-                if (!account.enabled) continue;
-
+            });
+            
+            const promises = accounts.filter(account => account.enabled).map(async (account) => {
                 try {
                     const response = await fetch(`/api/ffxiv/signin/accounts/${account.accountId}/user-info`);
                     const data = await response.json();
                     
                     if (data.success && data.data) {
-                        const userData = data.data;
-                        account.characterName = userData.character_name || '';
-                        account.serverName = userData.area_name || '';
-                        account.groupName = userData.group_name || '';
-                        account.profile = userData.profile || '';
-                        
-                        if (userData.characterDetail) {
-                            account.guildName = userData.characterDetail.guild_name || '';
-                            account.houseInfoPublish = userData.characterDetail.house_info_publish || -1;
+                        const apiResponse = data.data;
+                        if (apiResponse.code === 10000 && apiResponse.data) {
+                            const userData = apiResponse.data;
+                            account.characterName = userData.character_name || '';
+                            account.serverName = userData.group_name || '';
+                            account.groupName = userData.group_name || '';
+                            account.profile = userData.profile || '';
+                            account.houseInfoPublish = userData.house_info_publish !== undefined ? userData.house_info_publish : -1;
+                            
+                            if (userData.characterDetail) {
+                                if (Array.isArray(userData.characterDetail) && userData.characterDetail.length > 0) {
+                                    const detail = userData.characterDetail[0];
+                                    account.guildName = detail.guild_name || '';
+                                    account.guildTag = detail.guild_tag || '';
+                                    account.race = detail.race || '';
+                                    account.tribe = detail.tribe || '';
+                                    account.gender = detail.gender || '';
+                                    account.playTime = detail.play_time || '';
+                                    account.newrank = detail.newrank || '';
+                                    account.crystalRank = detail.crystal_rank || '';
+                                    account.createTime = detail.create_time || '';
+                                    account.lastLoginTime = detail.last_login_time || '';
+                                } else if (typeof userData.characterDetail === 'object') {
+                                    const detail = userData.characterDetail;
+                                    account.guildName = detail.guild_name || '';
+                                    account.guildTag = detail.guild_tag || '';
+                                    account.race = detail.race || '';
+                                    account.tribe = detail.tribe || '';
+                                    account.gender = detail.gender || '';
+                                    account.playTime = detail.play_time || '';
+                                    account.newrank = detail.newrank || '';
+                                    account.crystalRank = detail.crystal_rank || '';
+                                    account.createTime = detail.create_time || '';
+                                    account.lastLoginTime = detail.last_login_time || '';
+                                }
+                            }
+                        } else if (apiResponse.code === 10105) {
+                            account.loginError = true;
                         }
-                        
-                        account.lastLoginTime = userData.last_login_time || 0;
-                    } else if (data.code === 10105) {
-                        account.loginError = true;
                     }
                 } catch (error) {
                     console.log(`Failed to load details for account ${account.accountId}:`, error);
                 }
-            }
+            });
+            
+            await Promise.all(promises);
             renderTable();
         }
 
@@ -470,18 +501,19 @@
                     <div class="table-row" onclick="openCharacterDetail('${account.accountId}')">
                         <div data-label="#">${index + 1}</div>
                         <div data-label="账号信息">
-                            <div style="font-weight: 500; color: var(--text-primary); font-size: 13px;">${account.nickname || account.accountId}</div>
-                            <div style="font-size: 11px; color: var(--text-secondary);">${account.accountId}</div>
+                            <div style="font-size: 12px;">${account.nickname || account.accountId}</div>
                         </div>
                         <div data-label="角色名">
-                            ${account.loginError ? '<span style="font-size: 11px; color: var(--danger);">⚠️ 登录失效</span>' : account.characterName ? `<span style="font-weight: 500; font-size: 13px;">${account.characterName}</span>` : '<span style="color: var(--text-secondary); font-size: 11px;">未绑定</span>'}
+                            ${account.characterName ? `<span style="font-weight: 500; font-size: 13px;">${account.characterName}</span>` : '<span style="color: var(--text-secondary); font-size: 11px;">未绑定</span>'}
                         </div>
                         <div data-label="服务器/部队">
-                            <div style="font-size: 12px;">${account.serverName || '-'}</div>
-                            <div style="font-size: 11px; color: var(--text-secondary);">${account.guildName || account.groupName || '-'}</div>
+                            <div style="font-size: 12px;">${account.serverName || '-'} / ${account.guildName || account.groupName || '-'}</div>
                         </div>
                         <div data-label="房屋信息">
                             <span style="font-size: 11px;">${account.houseInfoPublish === 1 ? '已发布' : (account.houseInfoPublish === 0 ? '未发布' : '-')}</span>
+                        </div>
+                        <div data-label="登录状态">
+                            <span class="badge ${account.loginError ? 'disabled' : 'enabled'}">${account.loginError ? '登录失效' : '正常'}</span>
                         </div>
                         <div data-label="个性签名">
                             <span style="font-size: 11px; color: var(--text-secondary);">${account.profile || '-'}</span>
@@ -489,7 +521,7 @@
                         <div data-label="上次登录">
                             <span style="font-size: 11px;">${account.lastLoginTime ? formatTime(account.lastLoginTime) : '-'}</span>
                         </div>
-                        <div data-label="状态">
+                        <div data-label="账号状态">
                             <span class="badge ${account.enabled ? 'enabled' : 'disabled'}">${account.enabled ? '已启用' : '已禁用'}</span>
                         </div>
                         <div data-label="操作">
@@ -533,25 +565,48 @@
         function renderCharacterDetail(account) {
             const content = document.getElementById('characterDetailContent');
             
+            const raceMap = {
+                '1': '人族', '2': '精灵族', '3': '猫魅族', '4': '矮人族',
+                '5': '鲁加族', '6': '龙人族', '7': '维埃拉族', '8': '硌狮族'
+            };
+            const tribeMap = {
+                '1': '中原之民', '2': '高地之民', '3': '森林之民', '4': '黑影之民',
+                '5': '逐日之民', '6': '护月之民', '7': '山地之民', '8': '平原之民',
+                '9': '北洋之民', '10': '南洋之民', '11': '晨曦之民', '12': '暮晖之民',
+                '13': '拉札罕族', '14': '朵塔族', '15': '驯鹿族', '16': '牡鹿族'
+            };
+            const genderMap = {'1': '男', '2': '女'};
+            
             let html = `
                 <div class="detail-section">
                     <h3>基本信息</h3>
-                    <div class="detail-row"><label>账号昵称</label><value>${account.nickname || account.accountId}</value></div>
-                    <div class="detail-row"><label>账号ID</label><value>${account.accountId}</value></div>
                     <div class="detail-row"><label>角色名</label><value>${account.characterName || '-'}</value></div>
                     <div class="detail-row"><label>服务器</label><value>${account.serverName || '-'}</value></div>
+                    <div class="detail-row"><label>性别</label><value>${genderMap[account.gender] || account.gender || '-'}</value></div>
+                    <div class="detail-row"><label>种族</label><value>${raceMap[account.race] || account.race || '-'}</value></div>
+                    <div class="detail-row"><label>部族</label><value>${tribeMap[account.tribe] || account.tribe || '-'}</value></div>
+                    <div class="detail-row"><label>创建时间</label><value>${account.createTime || '-'}</value></div>
+                    <div class="detail-row"><label>水晶等级</label><value>${account.crystalRank || '-'}</value></div>
+                    <div class="detail-row"><label>军衔</label><value>${account.newrank || '-'}</value></div>
                 </div>
                 
                 <div class="detail-section">
                     <h3>部队信息</h3>
-                    <div class="detail-row"><label>部队名称</label><value>${account.guildName || account.groupName || '-'}</value></div>
+                    <div class="detail-row"><label>部队名称</label><value>${account.guildName || '-'}</value></div>
+                    <div class="detail-row"><label>部队标签</label><value>${account.guildTag || '-'}</value></div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3>账号信息</h3>
+                    <div class="detail-row"><label>账号昵称</label><value>${account.nickname || account.accountId}</value></div>
+                    <div class="detail-row"><label>账号ID</label><value>${account.accountId}</value></div>
                 </div>
                 
                 <div class="detail-section">
                     <h3>其他信息</h3>
                     <div class="detail-row"><label>个性签名</label><value>${account.profile || '-'}</value></div>
+                    <div class="detail-row"><label>上次登录</label><value>${account.lastLoginTime || '-'}</value></div>
                     <div class="detail-row"><label>房屋信息</label><value>${account.houseInfoPublish === 1 ? '已发布' : (account.houseInfoPublish === 0 ? '未发布' : '-')}</value></div>
-                    <div class="detail-row"><label>上次登录</label><value>${account.lastLoginTime ? new Date(account.lastLoginTime).toLocaleString('zh-CN') : '-'}</value></div>
                     <div class="detail-row"><label>账号状态</label><value>${account.enabled ? '已启用' : '已禁用'}</value></div>
                 </div>
             `;
