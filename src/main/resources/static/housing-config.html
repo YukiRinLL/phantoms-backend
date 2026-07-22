@@ -5,490 +5,273 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>房屋监控配置管理</title>
     <style>
-        :root {
-            --primary: #6B7B8A;
-            --primary-light: #8A9BA8;
-            --success: #7BAF7B;
-            --danger: #C47B7B;
-            --warning: #D4B87A;
-            --bg: #F5F6F7;
-            --card-bg: #FFFFFF;
-            --text-primary: #3D454D;
-            --text-secondary: #6B7B8A;
-            --border: #E8EAEB;
-            --shadow: 0 2px 8px rgba(107, 123, 138, 0.08);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text-primary);
-            line-height: 1.5;
-            min-height: 100vh;
-        }
-        
-        .header {
-            background-color: var(--card-bg);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow);
-        }
-        
-        .header h1 {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-primary);
-            letter-spacing: -0.5px;
-        }
-        
-        .container {
+            font-family: Arial, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 24px;
+            padding: 20px;
+            background-color: #f5f5f5;
         }
-        
-        .section {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            margin-bottom: 24px;
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
         }
-        
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .header h1 {
+            color: #333;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
-        
-        .section-header h2 {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        
         .btn {
-            padding: 10px 20px;
+            padding: 8px 16px;
+            margin: 5px;
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
+            transition: background-color 0.3s;
         }
-        
         .btn-primary {
-            background-color: var(--primary);
+            background-color: #007bff;
             color: white;
         }
-        
         .btn-primary:hover {
-            background-color: var(--primary-light);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(107, 123, 138, 0.2);
+            background-color: #0056b3;
         }
-        
         .btn-success {
-            background-color: var(--success);
+            background-color: #28a745;
             color: white;
         }
-        
         .btn-success:hover {
-            background-color: #6A9B6A;
+            background-color: #1e7e34;
         }
-        
         .btn-warning {
-            background-color: rgba(212, 184, 122, 0.1);
-            color: var(--warning);
+            background-color: #ffc107;
+            color: #333;
         }
-        
         .btn-warning:hover {
-            background-color: rgba(212, 184, 122, 0.2);
+            background-color: #e0a800;
         }
-        
         .btn-danger {
-            background-color: rgba(196, 123, 123, 0.1);
-            color: var(--danger);
+            background-color: #dc3545;
+            color: white;
         }
-        
         .btn-danger:hover {
-            background-color: rgba(196, 123, 123, 0.2);
+            background-color: #c82333;
         }
-        
         .btn-sm {
-            padding: 6px 12px;
+            padding: 4px 12px;
             font-size: 12px;
         }
-        
-        .search-bar {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
         }
-        
-        .search-bar input {
-            flex: 1;
-            padding: 10px 16px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        table tr:hover {
+            background-color: #f8f9fa;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
             font-size: 14px;
-            background-color: var(--bg);
-            color: var(--text-primary);
-            transition: border-color 0.2s ease;
+            box-sizing: border-box;
         }
-        
-        .search-bar input:focus {
-            outline: none;
-            border-color: var(--primary);
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
         }
-        
-        .accounts-table {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            border: 1px solid var(--border);
+        .form-group .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        
-        .table-header {
-            display: grid;
-            grid-template-columns: 60px 180px 180px 140px 140px 80px 120px 120px;
-            background-color: var(--bg);
-            padding: 14px 16px;
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .table-row {
-            display: grid;
-            grid-template-columns: 60px 180px 180px 140px 140px 80px 120px 120px;
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border);
+        .form-group .checkbox-item {
+            display: flex;
             align-items: center;
-            transition: background-color 0.2s ease;
+            margin-right: 15px;
         }
-        
-        .table-row:hover {
-            background-color: rgba(107, 123, 138, 0.03);
+        .form-group .checkbox-item input {
+            width: auto;
+            margin-right: 5px;
         }
-        
-        .table-row:last-child {
-            border-bottom: none;
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
         }
-        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            position: relative;
+        }
+        .modal-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .modal-close:hover, .modal-close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .status {
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
         .badge {
             display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
+            padding: 2px 8px;
+            border-radius: 4px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: bold;
         }
-        
-        .badge.enabled {
-            background-color: rgba(123, 175, 123, 0.15);
-            color: var(--success);
+        .badge-enabled {
+            background-color: #28a745;
+            color: white;
         }
-        
-        .badge.disabled {
-            background-color: rgba(196, 123, 123, 0.15);
-            color: var(--danger);
+        .badge-disabled {
+            background-color: #dc3545;
+            color: white;
         }
-        
         .tag {
             display: inline-block;
-            padding: 3px 8px;
-            border-radius: 6px;
+            padding: 2px 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
             font-size: 12px;
             margin-right: 4px;
             margin-bottom: 4px;
         }
-        
         .tag-server {
-            background-color: rgba(107, 123, 138, 0.1);
-            color: var(--text-secondary);
+            background-color: #cce5ff;
+            color: #004085;
         }
-        
         .tag-area {
-            background-color: rgba(123, 175, 123, 0.1);
-            color: var(--success);
+            background-color: #d4edda;
+            color: #155724;
         }
-        
         .tag-group {
-            background-color: rgba(212, 184, 122, 0.1);
-            color: var(--warning);
+            background-color: #fff3cd;
+            color: #856404;
         }
-        
         .empty-state {
-            padding: 60px 20px;
             text-align: center;
-            color: var(--text-secondary);
+            padding: 40px;
+            color: #6c757d;
         }
-        
-        .empty-state h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-        
-        .status {
-            margin: 15px 0;
-            padding: 14px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .status.success {
-            background-color: rgba(123, 175, 123, 0.1);
-            color: var(--success);
-            border: 1px solid rgba(123, 175, 123, 0.2);
-        }
-        
-        .status.error {
-            background-color: rgba(196, 123, 123, 0.1);
-            color: var(--danger);
-            border: 1px solid rgba(196, 123, 123, 0.2);
-        }
-        
-        .status.info {
-            background-color: rgba(107, 123, 138, 0.1);
-            color: var(--text-secondary);
-            border: 1px solid rgba(107, 123, 138, 0.2);
-        }
-        
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-        
-        .modal-overlay.show {
+        .search-box {
             display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
         }
-        
-        .modal {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 28px;
-            width: 100%;
-            max-width: 600px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            border: 1px solid var(--border);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .modal-header h2 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 0;
-        }
-        
-        .modal-close {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background-color: var(--bg);
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 20px;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-        
-        .modal-close:hover {
-            background-color: var(--border);
-            color: var(--text-primary);
-        }
-        
-        .form-group {
-            margin-bottom: 16px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-secondary);
-            font-weight: 500;
-            font-size: 14px;
-        }
-        
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 14px;
-            background-color: var(--bg);
-            color: var(--text-primary);
-            box-sizing: border-box;
-        }
-        
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        
-        .form-group .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        
-        .form-group .checkbox-item {
-            display: flex;
-            align-items: center;
-        }
-        
-        .form-group .checkbox-item input {
-            width: auto;
-            margin-right: 6px;
-        }
-        
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-top: 24px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border);
-        }
-        
-        .modal-actions button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-        
-        .modal-actions button.secondary {
-            background-color: var(--bg);
-            color: var(--text-secondary);
-        }
-        
-        .modal-actions button.secondary:hover {
-            background-color: var(--border);
-            color: var(--text-primary);
-        }
-        
-        @media (max-width: 768px) {
-            .table-header {
-                display: none;
-            }
-            
-            .table-row {
-                grid-template-columns: 1fr;
-                gap: 8px;
-                padding: 16px;
-                border-bottom: 1px solid var(--border);
-            }
-            
-            .table-row > div {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-            
-            .table-row > div::before {
-                content: attr(data-label);
-                font-weight: 500;
-                color: var(--text-secondary);
-                font-size: 12px;
-            }
-            
-            .section-header {
-                flex-direction: column;
-                gap: 12px;
-                align-items: flex-start;
-            }
+        .search-box input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>房屋监控配置管理</h1>
+        <h1>🏠 房屋监控配置管理</h1>
+        <p>管理FF14房屋销售监控的通知目标配置</p>
     </div>
 
     <div class="container">
-        <div class="section">
-            <div class="section-header">
-                <h2>配置列表</h2>
-                <button class="btn btn-primary" onclick="openCreateModal()">+ 新增配置</button>
-            </div>
-            
-            <div id="statusMessage" class="status" style="display: none;"></div>
-
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="搜索配置名称..." onkeyup="filterTable()">
-                <button class="btn btn-primary btn-sm" onclick="loadTargets()">刷新</button>
-            </div>
-
-            <div class="accounts-table">
-                <div class="table-header">
-                    <div>ID</div>
-                    <div>名称</div>
-                    <div>服务器</div>
-                    <div>住宅区</div>
-                    <div>QQ群</div>
-                    <div>状态</div>
-                    <div>创建时间</div>
-                    <div>操作</div>
-                </div>
-                <div id="targetTable">
-                    <div class="table-row">
-                        <div colspan="8" style="grid-column: 1 / -1; text-align: center; padding: 40px;">加载中...</div>
-                    </div>
-                </div>
-            </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>配置列表</h2>
+            <button class="btn btn-primary" onclick="openCreateModal()">+ 新增配置</button>
         </div>
+        
+        <div id="statusMessage" class="status" style="display: none;"></div>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="搜索配置名称..." onkeyup="filterTable()">
+            <button class="btn btn-primary btn-sm" onclick="loadTargets()">刷新</button>
+        </div>
+
+        <table id="targetTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>名称</th>
+                    <th>服务器</th>
+                    <th>住宅区</th>
+                    <th>QQ群</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="8" class="empty-state">加载中...</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-    <div id="modal" class="modal-overlay">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="modalTitle">新增配置</h2>
-                <button class="modal-close" onclick="closeModal()">×</button>
-            </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">新增配置</h2>
             
             <form id="targetForm" onsubmit="handleFormSubmit(event)">
                 <input type="hidden" id="formId">
@@ -553,8 +336,8 @@
                     <input type="text" id="formGroups" placeholder="多个群ID用逗号分隔，如：787909466,595883141" required>
                 </div>
                 
-                <div class="modal-actions">
-                    <button type="button" class="btn secondary" onclick="closeModal()">取消</button>
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" class="btn btn-warning" onclick="closeModal()">取消</button>
                     <button type="submit" class="btn btn-success">保存</button>
                 </div>
             </form>
@@ -598,13 +381,13 @@
                 renderTable();
             } catch (error) {
                 showStatus('加载失败: ' + error.message, 'error');
-                document.getElementById('targetTable').innerHTML = 
-                    '<div class="table-row"><div style="grid-column: 1 / -1; text-align: center; padding: 40px;">加载失败，请检查网络连接</div></div>';
+                document.getElementById('targetTable tbody').innerHTML = 
+                    '<tr><td colspan="8" class="empty-state">加载失败，请检查网络连接</td></tr>';
             }
         }
 
         function renderTable() {
-            const table = document.getElementById('targetTable');
+            const tbody = document.getElementById('targetTable tbody');
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             
             const filtered = targets.filter(t => 
@@ -613,27 +396,27 @@
             );
 
             if (filtered.length === 0) {
-                table.innerHTML = '<div class="table-row"><div style="grid-column: 1 / -1; text-align: center; padding: 40px;">暂无配置，点击上方按钮添加</div></div>';
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">暂无配置，点击上方按钮添加</td></tr>';
                 return;
             }
 
-            table.innerHTML = filtered.map(target => `
-                <div class="table-row">
-                    <div data-label="ID">${target.id}</div>
-                    <div data-label="名称"><strong>${target.name}</strong></div>
-                    <div data-label="服务器">${target.servers?.map(s => '<span class="tag tag-server">' + (SERVER_NAME_MAP[s] || s) + '</span>').join('') || '-'}</div>
-                    <div data-label="住宅区">${target.areas?.map(a => '<span class="tag tag-area">' + (AREA_NAME_MAP[a] || a) + '</span>').join('') || '-'}</div>
-                    <div data-label="QQ群">${target.groups?.map(g => '<span class="tag tag-group">' + g + '</span>').join('') || '-'}</div>
-                    <div data-label="状态"><span class="badge ${target.enabled ? 'enabled' : 'disabled'}">${target.enabled ? '启用' : '禁用'}</span></div>
-                    <div data-label="创建时间">${target.createdAt ? new Date(target.createdAt).toLocaleString('zh-CN') : '-'}</div>
-                    <div data-label="操作">
+            tbody.innerHTML = filtered.map(target => `
+                <tr>
+                    <td>${target.id}</td>
+                    <td><strong>${target.name}</strong></td>
+                    <td>${target.servers?.map(s => `<span class="tag tag-server">${SERVER_NAME_MAP[s] || s}</span>`).join('') || '-'}</td>
+                    <td>${target.areas?.map(a => `<span class="tag tag-area">${AREA_NAME_MAP[a] || a}</span>`).join('') || '-'}</td>
+                    <td>${target.groups?.map(g => `<span class="tag tag-group">${g}</span>`).join('') || '-'}</td>
+                    <td><span class="badge ${target.enabled ? 'badge-enabled' : 'badge-disabled'}">${target.enabled ? '启用' : '禁用'}</span></td>
+                    <td>${target.createdAt ? new Date(target.createdAt).toLocaleString('zh-CN') : '-'}</td>
+                    <td>
                         <button class="btn btn-primary btn-sm" onclick="editTarget(${target.id})">编辑</button>
                         <button class="btn btn-warning btn-sm" onclick="toggleTarget(${target.id}, ${!target.enabled})">
                             ${target.enabled ? '禁用' : '启用'}
                         </button>
                         <button class="btn btn-danger btn-sm" onclick="deleteTarget(${target.id})">删除</button>
-                    </div>
-                </div>
+                    </td>
+                </tr>
             `).join('');
         }
 
@@ -651,7 +434,7 @@
             document.querySelectorAll('input[name="server"]').forEach(cb => cb.checked = false);
             document.querySelectorAll('input[name="area"]').forEach(cb => cb.checked = true);
             
-            document.getElementById('modal').classList.add('show');
+            document.getElementById('modal').style.display = 'block';
         }
 
         function editTarget(id) {
@@ -671,11 +454,11 @@
                 cb.checked = target.areas?.includes(parseInt(cb.value)) || false;
             });
             
-            document.getElementById('modal').classList.add('show');
+            document.getElementById('modal').style.display = 'block';
         }
 
         function closeModal() {
-            document.getElementById('modal').classList.remove('show');
+            document.getElementById('modal').style.display = 'none';
         }
 
         async function handleFormSubmit(event) {
@@ -766,11 +549,12 @@
             }
         }
 
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('modal-overlay')) {
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
                 closeModal();
             }
-        });
+        };
 
         document.addEventListener('DOMContentLoaded', loadTargets);
     </script>

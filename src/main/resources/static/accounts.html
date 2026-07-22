@@ -5,348 +5,228 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FF14 Rising Stones 账号管理</title>
     <style>
-        :root {
-            --primary: #6B7B8A;
-            --primary-light: #8A9BA8;
-            --success: #7BAF7B;
-            --danger: #C47B7B;
-            --warning: #D4B87A;
-            --bg: #F5F6F7;
-            --card-bg: #FFFFFF;
-            --text-primary: #3D454D;
-            --text-secondary: #6B7B8A;
-            --border: #E8EAEB;
-            --shadow: 0 2px 8px rgba(107, 123, 138, 0.08);
-            --shadow-hover: 0 4px 16px rgba(107, 123, 138, 0.12);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text-primary);
-            line-height: 1.5;
-            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #f5f5f5;
         }
-        
-        .header {
-            background-color: var(--card-bg);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 24px;
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .nav-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #dee2e6;
         }
-        
-        .header h1 {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-primary);
-            letter-spacing: -0.5px;
+        .nav-bar h1 {
+            margin: 0;
+            color: #495057;
         }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 24px;
+        .nav-links {
+            display: flex;
+            gap: 15px;
         }
-        
+        .nav-links a {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .nav-links a:hover {
+            background-color: #0056b3;
+        }
+        .nav-links a.secondary {
+            background-color: #6c757d;
+        }
+        .nav-links a.secondary:hover {
+            background-color: #545b62;
+        }
         .status {
             margin: 20px 0;
-            padding: 14px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
         }
-        
-        .status.success {
-            background-color: rgba(123, 175, 123, 0.1);
-            color: var(--success);
-            border: 1px solid rgba(123, 175, 123, 0.2);
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
-        
-        .status.error {
-            background-color: rgba(196, 123, 123, 0.1);
-            color: var(--danger);
-            border: 1px solid rgba(196, 123, 123, 0.2);
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
-        
-        .status.info {
-            background-color: rgba(107, 123, 138, 0.1);
-            color: var(--text-secondary);
-            border: 1px solid rgba(107, 123, 138, 0.2);
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
         }
-        
-        .status.warning {
-            background-color: rgba(212, 184, 122, 0.1);
-            color: var(--warning);
-            border: 1px solid rgba(212, 184, 122, 0.2);
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
         }
-        
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        
-        .stat-card {
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-        
-        .stat-card .number {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--primary);
-            line-height: 1.2;
-        }
-        
-        .stat-card .label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 6px;
-        }
-        
-        .stat-card.success .number { color: var(--success); }
-        .stat-card.danger .number { color: var(--danger); }
-        
-        .quick-actions {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-        
-        .quick-actions h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 16px;
-        }
-        
-        .quick-action-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        
-        .quick-action-buttons button {
-            padding: 12px 20px;
-            background-color: var(--primary);
+        button {
+            padding: 8px 16px;
+            margin: 5px;
+            background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            min-width: 120px;
+            transition: background-color 0.3s;
         }
-        
-        .quick-action-buttons button:hover {
-            background-color: var(--primary-light);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(107, 123, 138, 0.2);
+        button:hover {
+            background-color: #0056b3;
         }
-        
-        .quick-action-buttons button.secondary {
-            background-color: var(--bg);
-            color: var(--text-secondary);
-        }
-        
-        .quick-action-buttons button.secondary:hover {
-            background-color: var(--border);
-            color: var(--text-primary);
-        }
-        
-        .search-bar {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .search-bar input {
-            flex: 1;
-            padding: 10px 16px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 14px;
-            background-color: var(--card-bg);
-            color: var(--text-primary);
-            transition: border-color 0.2s ease;
-        }
-        
-        .search-bar input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        
-        .accounts-table {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-        
-        .table-header {
-            display: grid;
-            grid-template-columns: 30px 140px 120px 140px 80px 80px 100px 260px;
-            background-color: var(--bg);
-            padding: 4px 12px;
-            font-weight: 600;
-            font-size: 11px;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .table-row {
-            display: grid;
-            grid-template-columns: 30px 140px 120px 140px 80px 80px 100px 260px;
-            padding: 4px 12px;
-            border-bottom: 1px solid var(--border);
-            align-items: center;
-            transition: background-color 0.2s ease;
-        }
-        
-        .table-row:hover {
-            background-color: rgba(107, 123, 138, 0.03);
-        }
-        
-        .table-row:last-child {
-            border-bottom: none;
-        }
-        
-        .table-row.disabled {
-            opacity: 0.6;
-        }
-        
-        .table-row.login-error {
-            background-color: rgba(196, 123, 123, 0.05);
-        }
-        
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin: 0 auto;
-        }
-        
-        .status-dot.enabled { background-color: var(--success); }
-        .status-dot.disabled { background-color: var(--danger); }
-        .status-dot.error { background-color: var(--warning); }
-        
-        .badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        .badge.enabled { background-color: rgba(123, 175, 123, 0.15); color: var(--success); }
-        .badge.disabled { background-color: rgba(196, 123, 123, 0.15); color: var(--danger); }
-        .badge.api { background-color: rgba(107, 123, 138, 0.15); color: var(--primary); }
-        
-        .action-buttons {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        
-        .action-buttons button {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            background-color: var(--bg);
-            color: var(--text-secondary);
-        }
-        
-        .action-buttons button:hover {
-            background-color: var(--border);
-            color: var(--text-primary);
-        }
-        
-        .action-buttons button.danger {
-            background-color: rgba(196, 123, 123, 0.1);
-            color: var(--danger);
-        }
-        
-        .action-buttons button.danger:hover {
-            background-color: rgba(196, 123, 123, 0.2);
-        }
-        
-        .action-buttons button.success {
-            background-color: rgba(123, 175, 123, 0.1);
-            color: var(--success);
-        }
-        
-        .action-buttons button.success:hover {
-            background-color: rgba(123, 175, 123, 0.2);
-        }
-        
-        .action-buttons button:disabled {
-            background-color: var(--border);
-            color: var(--text-secondary);
+        button:disabled {
+            background-color: #6c757d;
             cursor: not-allowed;
         }
-        
-        .action-buttons button.api-btn {
-            background-color: rgba(107, 123, 138, 0.15);
-            color: var(--primary);
-            cursor: default;
+        button.secondary {
+            background-color: #6c757d;
         }
-        
+        button.secondary:hover {
+            background-color: #545b62;
+        }
+        button.danger {
+            background-color: #dc3545;
+        }
+        button.danger:hover {
+            background-color: #c82333;
+        }
+        button.success {
+            background-color: #28a745;
+        }
+        button.success:hover {
+            background-color: #218838;
+        }
+        .section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+        }
+        .section h3 {
+            color: #495057;
+            margin-bottom: 15px;
+        }
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .account-card {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            text-align: left;
+            position: relative;
+        }
+        .account-card.enabled {
+            border-left: 4px solid #28a745;
+        }
+        .account-card.disabled {
+            border-left: 4px solid #dc3545;
+            opacity: 0.7;
+        }
+        .account-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .account-card-header h4 {
+            margin: 0;
+            color: #495057;
+        }
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-badge.enabled {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-badge.disabled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .account-info {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+        .account-info span {
+            color: #495057;
+            font-weight: bold;
+        }
+        .account-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #dee2e6;
+        }
+        .account-actions button {
+            flex: 1;
+            min-width: 80px;
+        }
+        .account-detail {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #6c757d;
+        }
         .empty-state {
             padding: 60px 20px;
             text-align: center;
-            color: var(--text-secondary);
+            color: #6c757d;
         }
-        
         .empty-state h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: var(--text-primary);
+            color: #495057;
         }
-        
-        .loading {
+        .action-bar {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        
-        .loading-spinner {
-            width: 24px;
-            height: 24px;
-            border: 2px solid var(--border);
-            border-top: 2px solid var(--primary);
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #007bff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            vertical-align: middle;
+            margin-left: 5px;
         }
-        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
         .modal-overlay {
             display: none;
             position: fixed;
@@ -354,813 +234,474 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            padding: 20px;
         }
-        
         .modal-overlay.show {
             display: flex;
         }
-        
         .modal {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 28px;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            border: 1px solid var(--border);
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
-        
         .modal h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
             margin-top: 0;
-            margin-bottom: 20px;
+            color: #495057;
         }
-        
         .modal label {
             display: block;
             margin-bottom: 8px;
-            color: var(--text-secondary);
-            font-weight: 500;
-            font-size: 14px;
+            color: #495057;
+            font-weight: bold;
         }
-        
-        .modal input, .modal select {
+        .modal input {
             width: 100%;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 14px;
-            background-color: var(--bg);
-            color: var(--text-primary);
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            margin-bottom: 15px;
             box-sizing: border-box;
-            margin-bottom: 16px;
         }
-        
-        .modal input:focus, .modal select:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        
         .modal-actions {
             display: flex;
             justify-content: flex-end;
-            gap: 12px;
-            margin-top: 24px;
+            gap: 10px;
+            margin-top: 20px;
         }
-        
-        .modal-actions button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
+        .success-text {
+            color: #28a745;
         }
-        
-        .modal-actions button.secondary {
-            background-color: var(--bg);
-            color: var(--text-secondary);
+        .danger-text {
+            color: #dc3545;
         }
-        
-        .modal-actions button.secondary:hover {
-            background-color: var(--border);
-            color: var(--text-primary);
+        .highlight {
+            color: #007bff;
+            font-weight: bold;
         }
-        
-        .modal-actions button.danger {
-            background-color: rgba(196, 123, 123, 0.1);
-            color: var(--danger);
-        }
-        
-        .modal-actions button.danger:hover {
-            background-color: rgba(196, 123, 123, 0.2);
-        }
-        
-        .character-detail-modal {
-            width: 600px;
-            max-width: 95%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        
-        .character-detail-modal .modal-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .character-detail-modal .avatar-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-right: 15px;
-            object-fit: cover;
-            border: 2px solid var(--primary);
-        }
-        
-        .character-detail-modal .character-title {
-            flex: 1;
-        }
-        
-        .character-detail-modal .character-title h3 {
-            margin: 0;
-            font-size: 18px;
-        }
-        
-        .character-detail-modal .character-title p {
-            margin: 5px 0 0 0;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-        
-        .character-detail-modal .detail-section {
-            margin-bottom: 20px;
-            padding: 16px;
-            background-color: var(--bg);
-            border-radius: 8px;
-        }
-        
-        .character-detail-modal .detail-section h4 {
-            margin: 0 0 12px 0;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 6px;
-        }
-        
-        .character-detail-modal .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(107, 123, 138, 0.05);
-        }
-        
-        .character-detail-modal .detail-row:last-child {
-            border-bottom: none;
-        }
-        
-        .character-detail-modal .detail-label {
-            color: var(--text-secondary);
-            font-size: 13px;
-        }
-        
-        .character-detail-modal .detail-value {
-            color: var(--text-primary);
-            font-weight: 500;
-            font-size: 13px;
-            text-align: right;
-        }
-        
-        .error-box {
-            background-color: rgba(196, 123, 123, 0.08);
-            border-left: 3px solid var(--danger);
-            padding: 12px;
-            margin-bottom: 16px;
-            border-radius: 0 6px 6px 0;
-        }
-        
-        .error-box p {
-            color: var(--danger);
-            font-size: 13px;
-            margin: 0;
-        }
-        
-        .error-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--danger);
+        .last-signin {
             font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
         }
-        
-        @media (max-width: 1024px) {
-            .table-header {
-                grid-template-columns: 40px 140px 120px 120px 80px 80px 120px 100px;
-            }
-            
-            .table-row {
-                grid-template-columns: 40px 140px 120px 120px 80px 80px 120px 100px;
-            }
+        .quick-actions {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            text-align: left;
         }
-        
-        @media (max-width: 768px) {
-            .table-header {
-                display: none;
-            }
-            
-            .table-row {
-                grid-template-columns: 1fr;
-                gap: 8px;
-                padding: 16px;
-                border-bottom: 1px solid var(--border);
-            }
-            
-            .table-row > div {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-            
-            .table-row > div::before {
-                content: attr(data-label);
-                font-weight: 500;
-                color: var(--text-secondary);
-                font-size: 12px;
-            }
-            
-            .stats-bar {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .action-buttons {
-                justify-content: flex-end;
-            }
+        .quick-actions h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .quick-action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .quick-action-buttons button {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px 20px;
+            font-size: 16px;
+        }
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-item .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .stat-item .label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="header">
+<div class="container">
+    <div class="nav-bar">
         <h1>FF14 Rising Stones 账号管理</h1>
-    </div>
-    
-    <div class="container">
-        <div id="status" class="status info" style="display:none;">
-            加载中...
-        </div>
-        
-        <div class="stats-bar" id="statsRow" style="display:none;">
-            <div class="stat-card">
-                <div class="number" id="totalCount">0</div>
-                <div class="label">总账号数</div>
-            </div>
-            <div class="stat-card success">
-                <div class="number" id="enabledCount">0</div>
-                <div class="label">已启用</div>
-            </div>
-            <div class="stat-card danger">
-                <div class="number" id="disabledCount">0</div>
-                <div class="label">已禁用</div>
-            </div>
-        </div>
-        
-        <div class="quick-actions">
-            <h3>批量操作</h3>
-            <div class="quick-action-buttons">
-                <button onclick="manualSignInAll()">全部签到</button>
-                <button onclick="claimRewardsAll()">领取奖励</button>
-                <button onclick="checkLoginStatus()" class="secondary">检查登录状态</button>
-                <button onclick="refreshAccountList()">刷新列表</button>
-            </div>
-        </div>
-        
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="搜索昵称、角色名、服务器..." oninput="filterAccounts()">
-        </div>
-        
-        <div class="section">
-            <div id="accountsTable" class="accounts-table">
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                </div>
-            </div>
+        <div class="nav-links">
+            <a href="login.html">前往登录</a>
+            <a href="index.html" class="secondary">返回首页</a>
         </div>
     </div>
-    
-    <div id="editModal" class="modal-overlay">
-        <div class="modal">
-            <h3>编辑账号</h3>
-            <input type="hidden" id="editAccountId">
-            <label for="editNickname">昵称</label>
-            <input type="text" id="editNickname" placeholder="请输入账号昵称">
-            <label for="editEnabled">启用状态</label>
-            <select id="editEnabled">
-                <option value="true">启用</option>
-                <option value="false">禁用</option>
-            </select>
-            <div class="modal-actions">
-                <button class="secondary" onclick="closeModal()">取消</button>
-                <button onclick="saveAccountEdit()">保存</button>
-            </div>
+
+    <div id="status" class="status info" style="display:none;">
+        加载中...
+    </div>
+
+    <div class="stats-row" id="statsRow" style="display:none;">
+        <div class="stat-item">
+            <div class="number" id="totalCount">0</div>
+            <div class="label">总账号数</div>
+        </div>
+        <div class="stat-item">
+            <div class="number success-text" id="enabledCount">0</div>
+            <div class="label">已启用</div>
+        </div>
+        <div class="stat-item">
+            <div class="number danger-text" id="disabledCount">0</div>
+            <div class="label">已禁用</div>
         </div>
     </div>
-    
-    <div id="deleteModal" class="modal-overlay">
-        <div class="modal">
-            <h3>确认删除</h3>
-            <input type="hidden" id="deleteAccountId">
-            <p id="deleteMessage">确定要删除该账号吗？此操作不可撤销。</p>
-            <div class="modal-actions">
-                <button class="secondary" onclick="closeDeleteModal()">取消</button>
-                <button class="danger" onclick="confirmDelete()">删除</button>
-            </div>
+
+    <div class="quick-actions">
+        <h3>批量操作</h3>
+        <div class="quick-action-buttons">
+            <button onclick="manualSignInAll()">全部签到</button>
+            <button onclick="claimRewardsAll()">领取奖励</button>
+            <button onclick="migrateOldAccount()" class="secondary">迁移旧账号</button>
+            <button onclick="refreshAccountList()">刷新列表</button>
         </div>
     </div>
-    
-    <div id="characterDetailModal" class="modal-overlay">
-        <div class="modal character-detail-modal">
-            <h3>角色详情</h3>
-            <div id="characterDetailContent">
-            </div>
-            <div class="modal-actions">
-                <button class="secondary" onclick="closeCharacterDetailModal()">关闭</button>
-            </div>
+
+    <div class="section">
+        <h3>账号列表</h3>
+        <div id="accountsGrid" class="accounts-grid">
+            <div class="loading" style="margin: 20px auto;"></div>
         </div>
     </div>
-    
-    <script>
-        const baseUrl = '';
-        let currentAccounts = [];
+</div>
+
+<div id="editModal" class="modal-overlay">
+    <div class="modal">
+        <h3>编辑账号</h3>
+        <input type="hidden" id="editAccountId">
+        <label for="editNickname">昵称</label>
+        <input type="text" id="editNickname" placeholder="请输入账号昵称">
+        <label for="editEnabled">启用状态</label>
+        <select id="editEnabled" style="width:100%; padding:10px; border-radius:4px; border:1px solid #dee2e6; margin-bottom:15px;">
+            <option value="true">启用</option>
+            <option value="false">禁用</option>
+        </select>
+        <div class="modal-actions">
+            <button class="secondary" onclick="closeModal()">取消</button>
+            <button onclick="saveAccountEdit()">保存</button>
+        </div>
+    </div>
+</div>
+
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal">
+        <h3>确认删除</h3>
+        <input type="hidden" id="deleteAccountId">
+        <p id="deleteMessage">确定要删除该账号吗？此操作不可撤销。</p>
+        <div class="modal-actions">
+            <button class="secondary" onclick="closeDeleteModal()">取消</button>
+            <button class="danger" onclick="confirmDelete()">删除</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const baseUrl = 'https://phantoms-backend.onrender.com';
+    // const baseUrl = 'http://localhost:8080';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadAccounts();
+    });
+
+    async function loadAccounts() {
+        showStatus('正在加载账号列表...', 'info');
         
-        document.addEventListener('DOMContentLoaded', function() {
-            loadAccounts();
-        });
-        
-        async function loadAccounts() {
-            showStatus('正在加载账号列表...', 'info');
-            
-            try {
-                const response = await fetch(`${baseUrl}/api/ffxiv/signin/accounts`);
-                const data = await response.json();
-                
-                if (data.success) {
-                    currentAccounts = data.data;
-                    await checkAllAccountStatus(currentAccounts);
-                    renderAccounts(currentAccounts);
-                    updateStats(currentAccounts);
-                    showStatus(`已加载 ${currentAccounts.length} 个账号`, 'success');
-                } else {
-                    showStatus(`加载账号列表失败: ${data.message}`, 'error');
-                    document.getElementById('accountsTable').innerHTML = `<div class="empty-state"><h3>加载失败</h3><p>${data.message}</p></div>`;
-                }
-            } catch (error) {
-                showStatus(`加载账号列表错误: ${error.message}`, 'error');
-                document.getElementById('accountsTable').innerHTML = `<div class="empty-state"><h3>加载失败</h3><p>${error.message}</p></div>`;
+        try {
+            const response = await fetch(`${baseUrl}/api/ffxiv/signin/accounts`);
+            const data = await response.json();
+
+            if (data.success) {
+                const accounts = data.data;
+                renderAccounts(accounts);
+                updateStats(accounts);
+                showStatus(`已加载 ${accounts.length} 个账号`, 'success');
+            } else {
+                showStatus(`加载账号列表失败: ${data.message}`, 'error');
+                document.getElementById('accountsGrid').innerHTML = '<div class="empty-state"><h3>加载失败</h3><p>' + data.message + '</p></div>';
             }
+        } catch (error) {
+            showStatus(`加载账号列表错误: ${error.message}`, 'error');
+            document.getElementById('accountsGrid').innerHTML = '<div class="empty-state"><h3>加载失败</h3><p>' + error.message + '</p></div>';
         }
+    }
+
+    function renderAccounts(accounts) {
+        const grid = document.getElementById('accountsGrid');
         
-        async function checkAllAccountStatus(accounts) {
-            for (const account of accounts) {
-                try {
-                    const response = await fetch(`${baseUrl}/api/ffxiv/signin/character/bind-info/${account.accountId}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({})
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        const bindInfo = data.data;
-                        if (bindInfo.code === 10105) {
-                            account.loginError = bindInfo.msg;
-                        } else if (bindInfo.code === 10000) {
-                            const userData = bindInfo.data || {};
-                            account.characterName = userData.character_name || '';
-                            account.serverName = userData.area_name || '';
-                            account.groupName = userData.group_name || '';
-                            account.avatar = userData.avatar || '';
-                            account.houseInfoPublish = userData.house_info_publish || 0;
-                            account.uuid = userData.uuid || '';
-                            account.lastLoginTime = userData.last_login_time || '';
-                            
-                            if (userData.characterDetail) {
-                                account.guildName = userData.characterDetail.guild_name || '';
-                                account.guildTag = userData.characterDetail.guild_tag || '';
-                                account.playTime = userData.characterDetail.play_time || '';
-                                account.createTime = userData.characterDetail.create_time || '';
-                                account.gender = userData.characterDetail.gender || '';
-                                account.race = userData.characterDetail.race || '';
-                                account.tribe = userData.characterDetail.tribe || '';
-                            }
-                        }
-                    }
-                } catch (error) {
-                    console.warn(`检查账号 ${account.accountId} 状态失败:`, error);
-                }
-            }
-        }
-        
-        function renderAccounts(accounts) {
-            const table = document.getElementById('accountsTable');
-            
-            if (!accounts || accounts.length === 0) {
-                table.innerHTML = `
-                    <div class="empty-state">
-                        <h3>暂无账号</h3>
-                        <p>请在登录页面添加新账号</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = '<div class="table-header">';
-            html += '<div></div>';
-            html += '<div>账号信息</div>';
-            html += '<div>角色名</div>';
-            html += '<div>服务器 / 部队</div>';
-            html += '<div>房屋信息</div>';
-            html += '<div>状态</div>';
-            html += '<div>签到信息</div>';
-            html += '<div>操作</div>';
-            html += '</div>';
-            
-            html += accounts.map(account => `
-                <div class="table-row ${account.enabled ? '' : 'disabled'} ${account.loginError ? 'login-error' : ''}">
-                    <div data-label="状态"><div class="status-dot ${account.loginError ? 'error' : account.enabled ? 'enabled' : 'disabled'}"></div></div>
-                    <div data-label="账号信息">
-                        <div style="font-weight: 500; color: var(--text-primary); font-size: 13px;">${account.nickname || account.accountId}</div>
-                        <div style="font-size: 11px; color: var(--text-secondary);">${account.accountId}</div>
-                    </div>
-                    <div data-label="角色名">
-                        ${account.loginError ? '<span style="font-size: 11px; color: var(--danger);">⚠️ 登录失效</span>' : account.characterName ? `<span style="font-weight: 500; font-size: 13px;">${account.characterName}</span>` : '<span style="color: var(--text-secondary); font-size: 11px;">未绑定</span>'}
-                    </div>
-                    <div data-label="服务器/部队">
-                        <div style="font-size: 12px;">${account.serverName || '-'}</div>
-                        <div style="font-size: 11px; color: var(--text-secondary);">${account.guildName || account.groupName || '-'}</div>
-                    </div>
-                    <div data-label="房屋信息">
-                        <span style="font-size: 11px;">${account.houseInfoPublish === 1 ? '已发布' : (account.houseInfoPublish === 0 ? '未发布' : '-')}</span>
-                    </div>
-                    <div data-label="状态">
-                        <span class="badge ${account.enabled ? 'enabled' : 'disabled'}">${account.enabled ? '已启用' : '已禁用'}</span>
-                        ${account.defaultForApi ? '<span class="badge api" style="margin-left:4px;">默认API</span>' : ''}
-                    </div>
-                    <div data-label="签到信息">
-                        <div style="font-size: 11px;">${account.lastSignInTime ? formatTime(account.lastSignInTime) : '从未'}</div>
-                        <div style="font-size: 10px; color: var(--text-secondary);">${account.lastSignInResult || '-'}</div>
-                    </div>
-                    <div data-label="操作">
-                        <div class="action-buttons">
-                            <button onclick="editAccount('${account.accountId}', '${account.nickname || account.accountId}', ${account.enabled})">编辑</button>
-                            ${account.enabled ? `
-                                <button onclick="toggleAccountStatus('${account.accountId}', false)">禁用</button>
-                                <button class="success" onclick="manualSignIn('${account.accountId}')">签到</button>
-                            ` : `
-                                <button class="success" onclick="toggleAccountStatus('${account.accountId}', true)">启用</button>
-                                <button disabled>签到</button>
-                            `}
-                            ${account.defaultForApi ? `
-                                <button class="api-btn" disabled>默认API</button>
-                            ` : `
-                                <button onclick="setDefaultApiAccount('${account.accountId}')">设为API</button>
-                            `}
-                            <button class="danger" onclick="confirmDeleteAccount('${account.accountId}', '${account.nickname || account.accountId}')">删除</button>
-                            ${account.characterName ? `<button onclick="openCharacterDetail('${account.accountId}')">详情</button>` : ''}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
-            table.innerHTML = html;
-        }
-        
-        function filterAccounts() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = currentAccounts.filter(account => {
-                return (account.nickname && account.nickname.toLowerCase().includes(searchTerm)) ||
-                       (account.characterName && account.characterName.toLowerCase().includes(searchTerm)) ||
-                       (account.serverName && account.serverName.toLowerCase().includes(searchTerm)) ||
-                       (account.guildName && account.guildName.toLowerCase().includes(searchTerm));
-            });
-            renderAccounts(filtered);
-        }
-        
-        function updateStats(accounts) {
-            const total = accounts.length;
-            const enabled = accounts.filter(a => a.enabled).length;
-            const disabled = total - enabled;
-            
-            document.getElementById('totalCount').textContent = total;
-            document.getElementById('enabledCount').textContent = enabled;
-            document.getElementById('disabledCount').textContent = disabled;
-            document.getElementById('statsRow').style.display = 'grid';
-        }
-        
-        function showStatus(message, type) {
-            const statusDiv = document.getElementById('status');
-            statusDiv.textContent = message;
-            statusDiv.className = `status ${type}`;
-            statusDiv.style.display = 'block';
-            setTimeout(() => {
-                statusDiv.style.display = 'none';
-            }, 3000);
-        }
-        
-        function formatTime(timestamp) {
-            if (!timestamp) return '从未';
-            const date = new Date(timestamp);
-            return date.toLocaleString('zh-CN', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
-        
-        function editAccount(accountId, nickname, enabled) {
-            showStatus('正在打开编辑对话框...', 'info');
-            document.getElementById('editAccountId').value = accountId;
-            document.getElementById('editNickname').value = nickname;
-            document.getElementById('editEnabled').value = enabled;
-            document.getElementById('editModal').classList.add('show');
-        }
-        
-        function closeModal() {
-            document.getElementById('editModal').classList.remove('show');
-            showStatus('已取消编辑', 'info');
-        }
-        
-        async function saveAccountEdit() {
-            const accountId = document.getElementById('editAccountId').value;
-            const nickname = document.getElementById('editNickname').value;
-            const enabled = document.getElementById('editEnabled').value === 'true';
-            
-            try {
-                const response = await fetch(`${baseUrl}/api/ffxiv/signin/accounts/${accountId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nickname, enabled })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showStatus('账号信息更新成功', 'success');
-                    closeModal();
-                    loadAccounts();
-                } else {
-                    showStatus(`更新失败: ${data.message}`, 'error');
-                }
-            } catch (error) {
-                showStatus(`更新错误: ${error.message}`, 'error');
-            }
-        }
-        
-        async function toggleAccountStatus(accountId, enabled) {
-            try {
-                const response = await fetch(`${baseUrl}/api/ffxiv/signin/accounts/${accountId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ enabled })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showStatus(`账号已${enabled ? '启用' : '禁用'}`, 'success');
-                    loadAccounts();
-                } else {
-                    showStatus(`操作失败: ${data.message}`, 'error');
-                }
-            } catch (error) {
-                showStatus(`操作错误: ${error.message}`, 'error');
-            }
-        }
-        
-        function confirmDeleteAccount(accountId, nickname) {
-            showStatus('请确认删除操作...', 'warning');
-            document.getElementById('deleteAccountId').value = accountId;
-            document.getElementById('deleteMessage').textContent = `确定要删除账号 "${nickname}" 吗？此操作不可撤销。`;
-            document.getElementById('deleteModal').classList.add('show');
-        }
-        
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('show');
-            showStatus('已取消删除', 'info');
-        }
-        
-        async function confirmDelete() {
-            const accountId = document.getElementById('deleteAccountId').value;
-            
-            try {
-                const response = await fetch(`${baseUrl}/api/ffxiv/signin/accounts/${accountId}`, {
-                    method: 'DELETE'
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showStatus('账号删除成功', 'success');
-                    closeDeleteModal();
-                    loadAccounts();
-                } else {
-                    showStatus(`删除失败: ${data.message}`, 'error');
-                }
-            } catch (error) {
-                showStatus(`删除错误: ${error.message}`, 'error');
-            }
-        }
-        
-        async function manualSignIn(accountId) {
-            try {
-                const response = await fetch(`${baseUrl}/api/ffxiv/signin/sign/in`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({})
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showStatus('签到成功！', 'success');
-                    loadAccounts();
-                } else {
-                    showStatus(`签到失败: ${data.message}`, 'error');
-                }
-            } catch (error) {
-                showStatus(`签到错误: ${error.message}`, 'error');
-            }
-        }
-        
-        async function manualSignInAll() {
-            showStatus('正在为所有账号执行签到...', 'info');
-            
-            try {
-                const response = await fetch(`${baseUrl}/api/ffxiv/signin/manual-signin`, {
-                    method: 'POST'
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showStatus('批量签到完成！', 'success');
-                    loadAccounts();
-                } else {
-                    showStatus(`批量签到失败: ${data.message}`, 'error');
-                }
-            } catch (error) {
-                showStatus(`批量签到错误: ${error.message}`, 'error');
-            }
-        }
-        
-        async function claimRewardsAll() {
-            showStatus('正在领取所有账号的奖励...', 'info');
-            
-            try {
-                const response = await fetch(`${baseUrl}/api/ffxiv/signin/manual-claim-rewards`, {
-                    method: 'POST'
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showStatus('奖励领取完成！', 'success');
-                } else {
-                    showStatus(`领取奖励失败: ${data.message}`, 'error');
-                }
-            } catch (error) {
-                showStatus(`领取奖励错误: ${error.message}`, 'error');
-            }
-        }
-        
-        async function checkLoginStatus() {
-            showStatus('正在检查登录状态...', 'info');
-            
-            try {
-                const response = await fetch(`${baseUrl}/api/ffxiv/signin/check/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({})
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    const result = data.data;
-                    const isLoggedIn = result.isLogin;
-                    
-                    if (isLoggedIn) {
-                        showStatus(`登录状态：已登录，用户ID: ${result.userId || '未知'}，昵称: ${result.nickname || '未知'}`, 'success');
-                    } else {
-                        showStatus('登录状态：未登录', 'warning');
-                    }
-                } else {
-                    showStatus(`检查登录状态失败: ${data.message}`, 'error');
-                }
-            } catch (error) {
-                showStatus(`检查登录状态错误: ${error.message}`, 'error');
-            }
-        }
-        
-        function refreshAccountList() {
-            loadAccounts();
-        }
-        
-        async function setDefaultApiAccount(accountId) {
-            try {
-                const response = await fetch(`${baseUrl}/api/ffxiv/signin/accounts/${accountId}/set-default-api`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showStatus('已将该账号设为默认API账号', 'success');
-                    loadAccounts();
-                } else {
-                    showStatus(`设置失败: ${data.message}`, 'error');
-                }
-            } catch (error) {
-                showStatus(`设置错误: ${error.message}`, 'error');
-            }
-        }
-        
-        function openCharacterDetail(accountId) {
-            showStatus('正在加载角色详情...', 'info');
-            const account = currentAccounts.find(a => a.accountId === accountId);
-            if (!account) {
-                showStatus('未找到该账号信息', 'error');
-                return;
-            }
-            
-            document.getElementById('characterDetailModal').classList.add('show');
-            renderCharacterDetail(account);
-        }
-        
-        function closeCharacterDetailModal() {
-            document.getElementById('characterDetailModal').classList.remove('show');
-            showStatus('已关闭角色详情', 'info');
-        }
-        
-        function renderCharacterDetail(account) {
-            const content = `
-                <div class="modal-header">
-                    ${account.avatar ? `<img src="${account.avatar}" class="avatar-img" alt="头像">` : ''}
-                    <div class="character-title">
-                        <h3>${account.characterName}</h3>
-                        <p>${account.serverName || '未知服务器'}</p>
-                    </div>
-                </div>
-                
-                <div class="detail-section">
-                    <h4>基本信息</h4>
-                    <div class="detail-row"><span class="detail-label">角色名</span><span class="detail-value">${account.characterName || '-'}</span></div>
-                    <div class="detail-row"><span class="detail-label">服务器</span><span class="detail-value">${account.serverName || '-'}</span></div>
-                    <div class="detail-row"><span class="detail-label">性别</span><span class="detail-value">${account.gender === '1' ? '男' : account.gender === '2' ? '女' : '-'}</span></div>
-                    <div class="detail-row"><span class="detail-label">种族</span><span class="detail-value">${getRaceName(account.race)}</span></div>
-                    <div class="detail-row"><span class="detail-label">部族</span><span class="detail-value">${getTribeName(account.tribe)}</span></div>
-                    <div class="detail-row"><span class="detail-label">创建时间</span><span class="detail-value">${account.createTime || '-'}</span></div>
-                </div>
-                
-                <div class="detail-section">
-                    <h4>部队信息</h4>
-                    <div class="detail-row"><span class="detail-label">部队名称</span><span class="detail-value">${account.guildName || account.groupName || '无'}</span></div>
-                    <div class="detail-row"><span class="detail-label">部队标签</span><span class="detail-value">${account.guildTag || '-'}</span></div>
-                </div>
-                
-                <div class="detail-section">
-                    <h4>账号信息</h4>
-                    <div class="detail-row"><span class="detail-label">账号ID</span><span class="detail-value">${account.accountId || '-'}</span></div>
-                    <div class="detail-row"><span class="detail-label">昵称</span><span class="detail-value">${account.nickname || '-'}</span></div>
-                    <div class="detail-row"><span class="detail-label">UUID</span><span class="detail-value">${account.uuid || '-'}</span></div>
-                </div>
-                
-                <div class="detail-section">
-                    <h4>其他信息</h4>
-                    <div class="detail-row"><span class="detail-label">上次登录</span><span class="detail-value">${account.lastLoginTime || '-'}</span></div>
-                    <div class="detail-row"><span class="detail-label">房屋信息</span><span class="detail-value">${account.houseInfoPublish === 1 ? '已发布' : '未发布'}</span></div>
+        if (!accounts || accounts.length === 0) {
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <h3>暂无账号</h3>
+                    <p>请前往 <a href="login.html">登录页面</a> 添加新账号</p>
+                    <button onclick="migrateOldAccount()" style="margin-top:20px;">迁移旧账号</button>
                 </div>
             `;
-            document.getElementById('characterDetailContent').innerHTML = content;
+            return;
         }
-        
-        function getRaceName(raceId) {
-            const races = {
-                '1': '人族', '2': '精灵族', '3': '拉拉菲尔族', '4': '猫魅族',
-                '5': '鲁加族', '6': '龙人族', '7': '维埃拉族', '8': '硌狮族'
-            };
-            return races[raceId] || raceId || '-';
-        }
-        
-        function getTribeName(tribeId) {
-            const tribes = {
-                '1': '中原之民', '2': '高地之民', '3': '森林之民', '4': '黑影之民',
-                '5': '平原之民', '6': '沙漠之民', '7': '逐日之民', '8': '护月之民',
-                '9': '北洋之民', '10': '红焰之民', '11': '晨曦之民', '12': '暮晖之民',
-                '13': '拉札罕', '14': '青鳞族', '15': '白鳞族', '16': '密林之民',
-                '17': '山谷之民', '18': '巨浪之民', '19': '疾风之民'
-            };
-            return tribes[tribeId] || tribeId || '-';
-        }
-        
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('modal-overlay')) {
-                e.target.classList.remove('show');
-            }
+
+        grid.innerHTML = accounts.map(account => `
+            <div class="account-card ${account.enabled ? 'enabled' : 'disabled'}">
+                <div class="account-card-header">
+                    <h4>${account.nickname || account.accountId}</h4>
+                    <span class="status-badge ${account.enabled ? 'enabled' : 'disabled'}">
+                        ${account.enabled ? '已启用' : '已禁用'}
+                    </span>
+                </div>
+                <div class="account-info">
+                    <p>账号ID: <span>${account.accountId}</span></p>
+                </div>
+                ${account.lastSignInTime ? `
+                    <div class="last-signin">
+                        <p>上次签到: ${formatTime(account.lastSignInTime)}</p>
+                        <p>签到结果: ${account.lastSignInResult || '未知'}</p>
+                    </div>
+                ` : ''}
+                <div class="account-actions">
+                    <button onclick="editAccount('${account.accountId}', '${account.nickname || account.accountId}', ${account.enabled})">
+                        编辑
+                    </button>
+                    ${account.enabled ? `
+                        <button onclick="toggleAccountStatus('${account.accountId}', false)">禁用</button>
+                        <button class="success" onclick="manualSignIn('${account.accountId}')">签到</button>
+                    ` : `
+                        <button class="success" onclick="toggleAccountStatus('${account.accountId}', true)">启用</button>
+                        <button disabled>签到</button>
+                    `}
+                    <button class="danger" onclick="confirmDeleteAccount('${account.accountId}', '${account.nickname || account.accountId}')">删除</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function updateStats(accounts) {
+        const total = accounts.length;
+        const enabled = accounts.filter(a => a.enabled).length;
+        const disabled = total - enabled;
+
+        document.getElementById('totalCount').textContent = total;
+        document.getElementById('enabledCount').textContent = enabled;
+        document.getElementById('disabledCount').textContent = disabled;
+        document.getElementById('statsRow').style.display = 'flex';
+    }
+
+    function showStatus(message, type) {
+        const statusDiv = document.getElementById('status');
+        statusDiv.textContent = message;
+        statusDiv.className = `status ${type}`;
+        statusDiv.style.display = 'block';
+    }
+
+    function formatTime(timestamp) {
+        if (!timestamp) return '从未';
+        const date = new Date(timestamp);
+        return date.toLocaleString('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
         });
-    </script>
+    }
+
+    function editAccount(accountId, nickname, enabled) {
+        document.getElementById('editAccountId').value = accountId;
+        document.getElementById('editNickname').value = nickname;
+        document.getElementById('editEnabled').value = enabled;
+        document.getElementById('editModal').classList.add('show');
+    }
+
+    function closeModal() {
+        document.getElementById('editModal').classList.remove('show');
+    }
+
+    async function saveAccountEdit() {
+        const accountId = document.getElementById('editAccountId').value;
+        const nickname = document.getElementById('editNickname').value;
+        const enabled = document.getElementById('editEnabled').value === 'true';
+
+        try {
+            const response = await fetch(`${baseUrl}/api/ffxiv/signin/accounts/${accountId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nickname, enabled })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showStatus('账号信息更新成功', 'success');
+                closeModal();
+                loadAccounts();
+            } else {
+                showStatus(`更新失败: ${data.message}`, 'error');
+            }
+        } catch (error) {
+            showStatus(`更新错误: ${error.message}`, 'error');
+        }
+    }
+
+    async function toggleAccountStatus(accountId, enabled) {
+        try {
+            const response = await fetch(`${baseUrl}/api/ffxiv/signin/accounts/${accountId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ enabled })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showStatus(`账号已${enabled ? '启用' : '禁用'}`, 'success');
+                loadAccounts();
+            } else {
+                showStatus(`操作失败: ${data.message}`, 'error');
+            }
+        } catch (error) {
+            showStatus(`操作错误: ${error.message}`, 'error');
+        }
+    }
+
+    function confirmDeleteAccount(accountId, nickname) {
+        document.getElementById('deleteAccountId').value = accountId;
+        document.getElementById('deleteMessage').textContent = `确定要删除账号 "${nickname}" 吗？此操作不可撤销。`;
+        document.getElementById('deleteModal').classList.add('show');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('show');
+    }
+
+    async function confirmDelete() {
+        const accountId = document.getElementById('deleteAccountId').value;
+
+        try {
+            const response = await fetch(`${baseUrl}/api/ffxiv/signin/accounts/${accountId}`, {
+                method: 'DELETE'
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showStatus('账号删除成功', 'success');
+                closeDeleteModal();
+                loadAccounts();
+            } else {
+                showStatus(`删除失败: ${data.message}`, 'error');
+            }
+        } catch (error) {
+            showStatus(`删除错误: ${error.message}`, 'error');
+        }
+    }
+
+    async function manualSignIn(accountId) {
+        try {
+            const response = await fetch(`${baseUrl}/api/ffxiv/signin/sign/in`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showStatus('签到成功！', 'success');
+                loadAccounts();
+            } else {
+                showStatus(`签到失败: ${data.message}`, 'error');
+            }
+        } catch (error) {
+            showStatus(`签到错误: ${error.message}`, 'error');
+        }
+    }
+
+    async function manualSignInAll() {
+        showStatus('正在为所有账号执行签到...', 'info');
+        
+        try {
+            const response = await fetch(`${baseUrl}/api/ffxiv/signin/manual-signin`, {
+                method: 'POST'
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showStatus('批量签到完成！', 'success');
+                loadAccounts();
+            } else {
+                showStatus(`批量签到失败: ${data.message}`, 'error');
+            }
+        } catch (error) {
+            showStatus(`批量签到错误: ${error.message}`, 'error');
+        }
+    }
+
+    async function claimRewardsAll() {
+        showStatus('正在领取所有账号的奖励...', 'info');
+        
+        try {
+            const response = await fetch(`${baseUrl}/api/ffxiv/signin/manual-claim-rewards`, {
+                method: 'POST'
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showStatus('奖励领取完成！', 'success');
+            } else {
+                showStatus(`领取奖励失败: ${data.message}`, 'error');
+            }
+        } catch (error) {
+            showStatus(`领取奖励错误: ${error.message}`, 'error');
+        }
+    }
+
+    async function migrateOldAccount() {
+        showStatus('正在迁移旧账号...', 'info');
+        
+        try {
+            const response = await fetch(`${baseUrl}/api/ffxiv/signin/accounts/migrate`, {
+                method: 'POST'
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showStatus('迁移完成！', 'success');
+                loadAccounts();
+            } else {
+                showStatus(`迁移失败: ${data.message}`, 'error');
+            }
+        } catch (error) {
+            showStatus(`迁移错误: ${error.message}`, 'error');
+        }
+    }
+
+    function refreshAccountList() {
+        loadAccounts();
+    }
+</script>
 </body>
 </html>
