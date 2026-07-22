@@ -71,3 +71,6 @@ Thumbs.db
 *.tmp
 *.swp
 *.bak
+
+# 日志目录
+logs/
