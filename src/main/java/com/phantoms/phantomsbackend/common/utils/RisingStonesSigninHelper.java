@@ -19,6 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.phantoms.phantomsbackend.pojo.entity.primary.RisingStonesAccount;
+import com.phantoms.phantomsbackend.service.RisingStonesAccountService;
 import com.phantoms.phantomsbackend.service.SystemConfigService;
 
 // 二维码解析和生成相关依赖（需要引入ZXing库）
@@ -47,6 +49,9 @@ public class RisingStonesSigninHelper {
 
     @Autowired
     private SystemConfigService systemConfigService;
+
+    @Autowired
+    private RisingStonesAccountService risingStonesAccountService;
 
     public RisingStonesSigninHelper() {
         this.cookieJar = new MyCookieJar();
@@ -222,7 +227,17 @@ public class RisingStonesSigninHelper {
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response.code());
             String cookies = getCookies();
-            String accountId = systemConfigService.addLoginAccount(cookies);
+            String accountId = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+            
+            RisingStonesAccount account = new RisingStonesAccount();
+            account.setAccountId(accountId);
+            account.setCookies(cookies);
+            account.setNickname(accountId);
+            account.setEnabled(true);
+            account.setDefaultForApi(false);
+            risingStonesAccountService.saveAccount(account);
+            
+            logger.info("已添加新账号: {}", accountId);
             return accountId;
         }
     }
@@ -247,7 +262,8 @@ public class RisingStonesSigninHelper {
      * 检查登录状态
      */
     public JSONObject checkLoginStatus() throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
+        RisingStonesAccount defaultAccount = risingStonesAccountService.getDefaultApiAccount();
+        String cookies = defaultAccount != null ? defaultAccount.getCookies() : null;
         if (cookies == null || cookies.isEmpty()) {
             throw new IOException("未找到登录cookies，请先登录");
         }

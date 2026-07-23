@@ -2,6 +2,8 @@ package com.phantoms.phantomsbackend.common.utils;
 
 import okhttp3.*;
 import com.alibaba.fastjson.JSONObject;
+import com.phantoms.phantomsbackend.pojo.entity.primary.RisingStonesAccount;
+import com.phantoms.phantomsbackend.service.RisingStonesAccountService;
 import com.phantoms.phantomsbackend.service.SystemConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +43,24 @@ public class RisingStonesUtils {
         return SpringContextHolder.getBean(SystemConfigService.class);
     }
 
+    /**
+     * 获取默认API账号的cookies
+     */
+    private static String getDefaultApiCookies() {
+        try {
+            RisingStonesAccountService accountService = SpringContextHolder.getBean(RisingStonesAccountService.class);
+            RisingStonesAccount account = accountService.getDefaultApiAccount();
+            if (account != null) {
+                return account.getCookies();
+            }
+        } catch (Exception e) {
+            logger.warn("获取默认API账号cookies失败，尝试从配置获取", e);
+        }
+        return getDefaultApiCookies();
+    }
+
     public static JSONObject getUserInfo(String uuid) throws IOException {
-        String cookies = getSystemConfigService().getLoginCookies();
+        String cookies = getDefaultApiCookies();
         if (cookies == null || cookies.isEmpty()) {
             logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
@@ -123,7 +141,7 @@ public class RisingStonesUtils {
     }
 
     public static JSONObject getGuildInfo(String guildId) throws IOException {
-        String cookies = getSystemConfigService().getLoginCookies();
+        String cookies = getDefaultApiCookies();
         if (cookies == null || cookies.isEmpty()) {
             logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
@@ -164,7 +182,7 @@ public class RisingStonesUtils {
     }
 
     public static JSONObject getGuildMember(String guildId) throws IOException {
-        String cookies = getSystemConfigService().getLoginCookies();
+        String cookies = getDefaultApiCookies();
         if (cookies == null || cookies.isEmpty()) {
             logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
@@ -217,7 +235,7 @@ public class RisingStonesUtils {
     }
 
     public static JSONObject getGuildMemberDynamic(String guildId, int page, int limit) throws IOException {
-        String cookies = getSystemConfigService().getLoginCookies();
+        String cookies = getDefaultApiCookies();
         if (cookies == null || cookies.isEmpty()) {
             logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
@@ -263,7 +281,7 @@ public class RisingStonesUtils {
      * 获取角色绑定信息
      */
     public JSONObject getCharacterBindInfo() throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
+        String cookies = getDefaultApiCookies();
         if (cookies == null || cookies.isEmpty()) {
             throw new IOException("未找到登录cookies，请先登录");
         }
@@ -334,7 +352,7 @@ public class RisingStonesUtils {
      * 执行签到
      */
     public JSONObject doSignIn() throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
+        String cookies = getDefaultApiCookies();
         if (cookies == null || cookies.isEmpty()) {
             throw new IOException("未找到登录cookies，请先登录");
         }
@@ -439,7 +457,7 @@ public class RisingStonesUtils {
      * 获取签到日志
      */
     public JSONObject getSignLog(String month) throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
+        String cookies = getDefaultApiCookies();
         if (cookies == null || cookies.isEmpty()) {
             throw new IOException("未找到登录cookies，请先登录");
         }
@@ -510,7 +528,7 @@ public class RisingStonesUtils {
      * 获取签到奖励列表
      */
     public JSONObject getSignInRewardList(String month) throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
+        String cookies = getDefaultApiCookies();
         if (cookies == null || cookies.isEmpty()) {
             throw new IOException("未找到登录cookies，请先登录");
         }
@@ -581,7 +599,7 @@ public class RisingStonesUtils {
      * 领取签到奖励
      */
     public JSONObject getSignInReward(int id, String month) throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
+        String cookies = getDefaultApiCookies();
         if (cookies == null || cookies.isEmpty()) {
             throw new IOException("未找到登录cookies，请先登录");
         }
@@ -667,7 +685,7 @@ public class RisingStonesUtils {
      */
     public JSONObject createPostComment(String content, String posts_id,
                                         String parent_id, String root_parent, String comment_pic) throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
+        String cookies = getDefaultApiCookies();
         if (cookies == null || cookies.isEmpty()) {
             throw new IOException("未找到登录cookies，请先登录");
         }
@@ -759,7 +777,7 @@ public class RisingStonesUtils {
      * 创建动态
      */
     public JSONObject createDynamic(String content, int scope, String pic_url) throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
+        String cookies = getDefaultApiCookies();
         if (cookies == null || cookies.isEmpty()) {
             throw new IOException("未找到登录cookies，请先登录");
         }
@@ -846,7 +864,7 @@ public class RisingStonesUtils {
      * 删除动态
      */
     public JSONObject deleteDynamic(int dynamic_id) throws IOException {
-        String cookies = systemConfigService.getLoginCookies();
+        String cookies = getDefaultApiCookies();
         if (cookies == null || cookies.isEmpty()) {
             throw new IOException("未找到登录cookies，请先登录");
         }

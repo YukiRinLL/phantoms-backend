@@ -3,8 +3,9 @@ package com.phantoms.phantomsbackend.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesSigninHelper;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesUtils;
+import com.phantoms.phantomsbackend.pojo.entity.primary.RisingStonesAccount;
+import com.phantoms.phantomsbackend.service.RisingStonesAccountService;
 import com.phantoms.phantomsbackend.service.SystemConfigService;
-import com.phantoms.phantomsbackend.service.SystemConfigService.LoginAccount;
 import com.phantoms.phantomsbackend.service.scheduler.DailySignInScheduler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,6 +34,9 @@ public class RisingStonesSigninController {
 
     @Autowired
     private DailySignInScheduler dailySignInScheduler;
+
+    @Autowired
+    private RisingStonesAccountService risingStonesAccountService;
 
     @GetMapping("/login/qrcode")
     @Operation(
@@ -434,7 +438,7 @@ public class RisingStonesSigninController {
     )
     public ResponseEntity<?> getLoginAccounts() {
         try {
-            List<LoginAccount> accounts = systemConfigService.getLoginAccounts();
+            List<RisingStonesAccount> accounts = risingStonesAccountService.getAllAccounts();
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", accounts,
@@ -455,7 +459,7 @@ public class RisingStonesSigninController {
     )
     public ResponseEntity<?> getEnabledLoginAccounts() {
         try {
-            List<LoginAccount> accounts = systemConfigService.getEnabledLoginAccounts();
+            List<RisingStonesAccount> accounts = risingStonesAccountService.getEnabledAccounts();
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "data", accounts,
@@ -476,7 +480,7 @@ public class RisingStonesSigninController {
     )
     public ResponseEntity<?> getLoginAccount(@PathVariable String accountId) {
         try {
-            LoginAccount account = systemConfigService.getLoginAccount(accountId);
+            RisingStonesAccount account = risingStonesAccountService.getAccount(accountId);
             if (account == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                         "success", false,
@@ -505,21 +509,28 @@ public class RisingStonesSigninController {
             @PathVariable String accountId,
             @RequestBody Map<String, Object> request) {
         try {
-            String nickname = (String) request.get("nickname");
-            Boolean enabled = (Boolean) request.get("enabled");
-
-            boolean updated = systemConfigService.updateLoginAccount(accountId, nickname, enabled);
-            if (!updated) {
+            RisingStonesAccount account = risingStonesAccountService.getAccount(accountId);
+            if (account == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                         "success", false,
                         "message", "账号不存在"
                 ));
             }
 
-            LoginAccount account = systemConfigService.getLoginAccount(accountId);
+            String nickname = (String) request.get("nickname");
+            Boolean enabled = (Boolean) request.get("enabled");
+
+            if (nickname != null && !nickname.isEmpty()) {
+                account.setNickname(nickname);
+            }
+            if (enabled != null) {
+                account.setEnabled(enabled);
+            }
+
+            RisingStonesAccount updatedAccount = risingStonesAccountService.saveAccount(account);
             return ResponseEntity.ok(Map.of(
                     "success", true,
-                    "data", account,
+                    "data", updatedAccount,
                     "message", "更新账号信息成功"
             ));
         } catch (Exception e) {
@@ -537,13 +548,14 @@ public class RisingStonesSigninController {
     )
     public ResponseEntity<?> deleteLoginAccount(@PathVariable String accountId) {
         try {
-            boolean removed = systemConfigService.removeLoginAccount(accountId);
-            if (!removed) {
+            RisingStonesAccount account = risingStonesAccountService.getAccount(accountId);
+            if (account == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                         "success", false,
                         "message", "账号不存在"
                 ));
             }
+            risingStonesAccountService.deleteAccount(accountId);
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "删除账号成功"
@@ -555,8 +567,6 @@ public class RisingStonesSigninController {
             ));
         }
     }
-
-    
 
     @PostMapping("/manual-signin")
     @Operation(
@@ -625,7 +635,7 @@ public class RisingStonesSigninController {
     )
     public ResponseEntity<?> manualClaimRewards(@PathVariable String accountId) {
         try {
-            LoginAccount account = systemConfigService.getLoginAccount(accountId);
+            RisingStonesAccount account = risingStonesAccountService.getAccount(accountId);
             if (account == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                         "success", false,
@@ -653,7 +663,7 @@ public class RisingStonesSigninController {
     )
     public ResponseEntity<?> getUserInfoForAccount(@PathVariable String accountId) {
         try {
-            LoginAccount account = systemConfigService.getLoginAccount(accountId);
+            RisingStonesAccount account = risingStonesAccountService.getAccount(accountId);
             if (account == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                         "success", false,
@@ -682,18 +692,20 @@ public class RisingStonesSigninController {
     )
     public ResponseEntity<?> setDefaultApiAccount(@PathVariable String accountId) {
         try {
-            boolean success = systemConfigService.setDefaultApiAccount(accountId);
-            if (!success) {
+            RisingStonesAccount account = risingStonesAccountService.getAccount(accountId);
+            if (account == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                         "success", false,
                         "message", "账号不存在"
                 ));
             }
 
-            LoginAccount account = systemConfigService.getLoginAccount(accountId);
+            risingStonesAccountService.setDefaultApiAccount(accountId);
+            RisingStonesAccount updatedAccount = risingStonesAccountService.getAccount(accountId);
+            
             return ResponseEntity.ok(Map.of(
                     "success", true,
-                    "data", account,
+                    "data", updatedAccount,
                     "message", "已将账号设置为默认API账号"
             ));
         } catch (Exception e) {
@@ -719,18 +731,20 @@ public class RisingStonesSigninController {
                 ));
             }
 
-            boolean updated = systemConfigService.updateLoginAccount(accountId, null, enabled);
-            if (!updated) {
+            RisingStonesAccount account = risingStonesAccountService.getAccount(accountId);
+            if (account == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
                         "success", false,
                         "message", "账号不存在"
                 ));
             }
 
-            LoginAccount account = systemConfigService.getLoginAccount(accountId);
+            risingStonesAccountService.toggleAccountEnabled(accountId, enabled);
+            RisingStonesAccount updatedAccount = risingStonesAccountService.getAccount(accountId);
+            
             return ResponseEntity.ok(Map.of(
                     "success", true,
-                    "data", account,
+                    "data", updatedAccount,
                     "message", enabled ? "账号已启用" : "账号已禁用"
             ));
         } catch (Exception e) {

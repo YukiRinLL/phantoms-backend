@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
 import com.phantoms.phantomsbackend.common.utils.RisingStonesUtils;
+import com.phantoms.phantomsbackend.pojo.entity.primary.RisingStonesAccount;
+import com.phantoms.phantomsbackend.service.RisingStonesAccountService;
 import com.phantoms.phantomsbackend.service.SystemConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Component
 public class DailySignInScheduler {
@@ -32,6 +35,9 @@ public class DailySignInScheduler {
 
     @Autowired
     private SystemConfigService systemConfigService;
+
+    @Autowired
+    private RisingStonesAccountService risingStonesAccountService;
 
     private String getAdminQQ() {
         return systemConfigService.getString("napcat.admin-qq", "944989026");
@@ -55,14 +61,14 @@ public class DailySignInScheduler {
         logger.info("开始执行每日签到任务 - {}", LocalDateTime.now().format(DATE_FORMATTER));
         
         try {
-            java.util.List<SystemConfigService.LoginAccount> enabledAccounts = systemConfigService.getEnabledLoginAccounts();
+            List<RisingStonesAccount> enabledAccounts = risingStonesAccountService.getEnabledAccounts();
             
             if (enabledAccounts.isEmpty()) {
                 logger.warn("没有启用的账号，跳过签到任务");
                 return;
             }
 
-            for (SystemConfigService.LoginAccount account : enabledAccounts) {
+            for (RisingStonesAccount account : enabledAccounts) {
                 try {
                     logger.info("开始为账号 {} 执行签到", account.getAccountId());
                     
@@ -70,7 +76,7 @@ public class DailySignInScheduler {
                     
                     if (signInResult != null && signInResult.getInteger("code") == 10001) {
                         logger.info("账号 {} 签到成功 - {}", account.getAccountId(), signInResult.getString("message"));
-                        systemConfigService.updateAccountSignInResult(account.getAccountId(), System.currentTimeMillis(), "签到成功");
+                        risingStonesAccountService.updateAccountSignInResult(account.getAccountId(), System.currentTimeMillis(), "签到成功");
                         
                         claimAvailableRewards(account.getCookies(), account.getAccountId());
                         
@@ -79,13 +85,13 @@ public class DailySignInScheduler {
                     } else {
                         String errorMsg = signInResult != null ? signInResult.getString("message") : "未知错误";
                         logger.error("账号 {} 签到失败: {}", account.getAccountId(), errorMsg);
-                        systemConfigService.updateAccountSignInResult(account.getAccountId(), System.currentTimeMillis(), "签到失败: " + errorMsg);
+                        risingStonesAccountService.updateAccountSignInResult(account.getAccountId(), System.currentTimeMillis(), "签到失败: " + errorMsg);
                         sendNotification("❌ 每日签到任务执行失败", 
                             "账号: " + account.getNickname() + "\n签到失败: " + errorMsg);
                     }
                 } catch (IOException e) {
                     logger.error("账号 {} 签到异常", account.getAccountId(), e);
-                    systemConfigService.updateAccountSignInResult(account.getAccountId(), System.currentTimeMillis(), "签到异常");
+                    risingStonesAccountService.updateAccountSignInResult(account.getAccountId(), System.currentTimeMillis(), "签到异常");
                     sendNotification("❌ 每日签到任务执行异常", 
                         "账号: " + account.getNickname() + "\n异常信息: " + e.getMessage());
                 }
@@ -186,13 +192,13 @@ public class DailySignInScheduler {
         logger.info("手动触发账号 {} 的签到任务", accountId);
         
         try {
-            SystemConfigService.LoginAccount account = systemConfigService.getLoginAccount(accountId);
+            RisingStonesAccount account = risingStonesAccountService.getAccount(accountId);
             if (account == null) {
                 logger.error("账号 {} 不存在", accountId);
                 return;
             }
 
-            if (!account.isEnabled()) {
+            if (!account.getEnabled()) {
                 logger.warn("账号 {} 已被禁用", accountId);
                 return;
             }
@@ -201,7 +207,7 @@ public class DailySignInScheduler {
             
             if (signInResult != null && signInResult.getInteger("code") == 10001) {
                 logger.info("账号 {} 签到成功 - {}", accountId, signInResult.getString("message"));
-                systemConfigService.updateAccountSignInResult(accountId, System.currentTimeMillis(), "签到成功");
+                risingStonesAccountService.updateAccountSignInResult(accountId, System.currentTimeMillis(), "签到成功");
                 
                 claimAvailableRewards(account.getCookies(), accountId);
                 
@@ -210,13 +216,13 @@ public class DailySignInScheduler {
             } else {
                 String errorMsg = signInResult != null ? signInResult.getString("message") : "未知错误";
                 logger.error("账号 {} 签到失败: {}", accountId, errorMsg);
-                systemConfigService.updateAccountSignInResult(accountId, System.currentTimeMillis(), "签到失败: " + errorMsg);
+                risingStonesAccountService.updateAccountSignInResult(accountId, System.currentTimeMillis(), "签到失败: " + errorMsg);
                 sendNotification("❌ 手动签到失败", 
                     "账号: " + account.getNickname() + "\n签到失败: " + errorMsg);
             }
         } catch (IOException e) {
             logger.error("账号 {} 签到异常", accountId, e);
-            systemConfigService.updateAccountSignInResult(accountId, System.currentTimeMillis(), "签到异常");
+            risingStonesAccountService.updateAccountSignInResult(accountId, System.currentTimeMillis(), "签到异常");
             sendNotification("❌ 手动签到异常", 
                 "账号: " + accountId + "\n异常信息: " + e.getMessage());
         } catch (Exception e) {
@@ -233,9 +239,9 @@ public class DailySignInScheduler {
         logger.info("手动触发奖励领取任务");
         
         try {
-            java.util.List<SystemConfigService.LoginAccount> enabledAccounts = systemConfigService.getEnabledLoginAccounts();
+            List<RisingStonesAccount> enabledAccounts = risingStonesAccountService.getEnabledAccounts();
             
-            for (SystemConfigService.LoginAccount account : enabledAccounts) {
+            for (RisingStonesAccount account : enabledAccounts) {
                 claimAvailableRewards(account.getCookies(), account.getAccountId());
             }
         } catch (Exception e) {

@@ -7,13 +7,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix login.html qrcode">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update manual-claim-rewards related func">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesSigninHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesSigninHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RisingStonesSigninController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/RisingStonesSigninController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/SystemConfigService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/SystemConfigService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DailySignInScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DailySignInScheduler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/accounts-view.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/accounts-view.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/accounts.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/accounts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/login.html" afterDir="false" />
     </list>
     <list id="cc09743e-5b03-4657-8bba-22a55747451e" name="local" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -302,14 +304,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00259" summary="update Dockerfile add font support">
-      <option name="closed" value="true" />
-      <created>1770779333083</created>
-      <option name="number" value="00259" />
-      <option name="presentableId" value="LOCAL-00259" />
-      <option name="project" value="LOCAL" />
-      <updated>1770779333084</updated>
     </task>
     <task id="LOCAL-00260" summary="update Dockerfile add font support">
       <option name="closed" value="true" />
@@ -695,7 +689,15 @@
       <option name="project" value="LOCAL" />
       <updated>1784775938603</updated>
     </task>
-    <option name="localTasksCounter" value="308" />
+    <task id="LOCAL-00308" summary="update manual-claim-rewards related func">
+      <option name="closed" value="true" />
+      <created>1784777536941</created>
+      <option name="number" value="00308" />
+      <option name="presentableId" value="LOCAL-00308" />
+      <option name="project" value="LOCAL" />
+      <updated>1784777536941</updated>
+    </task>
+    <option name="localTasksCounter" value="309" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -740,7 +742,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="turn off HousingSaleScheduler msg note func" />
     <MESSAGE value="update Transactional control" />
     <MESSAGE value="add Embedding Similarity function" />
     <MESSAGE value="add FF14Translator" />
@@ -765,24 +766,25 @@
     <MESSAGE value="move system_config table to config" />
     <MESSAGE value="fix bug" />
     <MESSAGE value="fix login.html qrcode" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix login.html qrcode" />
+    <MESSAGE value="update manual-claim-rewards related func" />
+    <option name="LAST_COMMIT_MESSAGE" value="update manual-claim-rewards related func" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java</url>
-          <line>40</line>
+          <line>42</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DailySignInScheduler.java</url>
-          <line>59</line>
+          <line>65</line>
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DailySignInScheduler.java</url>
-          <line>110</line>
+          <line>116</line>
           <option name="timeStamp" value="29" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
