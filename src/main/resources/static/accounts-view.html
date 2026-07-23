@@ -271,13 +271,18 @@
         }
         
         .status {
-            margin: 15px 0;
-            padding: 14px 16px;
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 14px 24px;
             border-radius: 8px;
             font-size: 14px;
             font-weight: 500;
-            position: relative;
-            z-index: 100;
+            z-index: 1000;
+            min-width: 280px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .status.success {
@@ -517,12 +522,6 @@
                         <div data-label="登录状态">
                             <span class="badge ${account.loginError ? 'disabled' : 'enabled'}">${account.loginError ? '登录失效' : '正常'}</span>
                         </div>
-                        <div data-label="个性签名">
-                            <span style="font-size: 11px; color: var(--text-secondary);">${account.profile || '-'}</span>
-                        </div>
-                        <div data-label="上次登录">
-                            <span style="font-size: 11px;">${account.lastLoginTime ? formatTime(account.lastLoginTime) : '-'}</span>
-                        </div>
                         <div data-label="账号状态">
                             <span class="badge ${account.enabled ? 'enabled' : 'disabled'}">${account.enabled ? '已启用' : '已禁用'}</span>
                         </div>
@@ -531,6 +530,12 @@
                         </div>
                         <div data-label="奖励状态">
                             ${getRewardStatus(account)}
+                        </div>
+                        <div data-label="个性签名">
+                            <span style="font-size: 11px; color: var(--text-secondary);">${account.profile || '-'}</span>
+                        </div>
+                        <div data-label="上次登录">
+                            <span style="font-size: 11px;">${account.lastLoginTime ? formatTime(account.lastLoginTime) : '-'}</span>
                         </div>
                         <div data-label="操作">
                             <button class="btn btn-primary" style="padding: 4px 10px; font-size: 11px;">详情</button>

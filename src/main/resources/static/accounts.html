@@ -275,13 +275,18 @@
         }
         
         .status {
-            margin: 15px 0;
-            padding: 14px 16px;
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 14px 24px;
             border-radius: 8px;
             font-size: 14px;
             font-weight: 500;
-            position: relative;
-            z-index: 100;
+            z-index: 1000;
+            min-width: 280px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .status.success {
@@ -954,79 +959,91 @@
         }
 
         async function manualSignIn(accountId) {
+            const account = currentAccounts.find(a => a.accountId === accountId);
+            if (!account) return;
+            
+            showStatus(`正在为 ${account.nickname || account.accountId} 执行签到...`, 'info');
+            
             try {
-                showStatus('正在执行签到...', 'info');
                 const response = await fetch(`/api/ffxiv/signin/manual-signin/${accountId}`, {
                     method: 'POST'
                 });
                 const result = await response.json();
                 if (result.success) {
-                    showStatus(result.message || '签到成功', 'success');
+                    showStatus(result.message || `${account.nickname || account.accountId} 签到成功`, 'success');
                     loadAccounts();
                 } else {
-                    showStatus('签到失败: ' + result.message, 'error');
+                    showStatus(`${account.nickname || account.accountId} 签到失败: ` + result.message, 'error');
                 }
             } catch (error) {
-                showStatus('签到失败: ' + error.message, 'error');
+                showStatus(`${account.nickname || account.accountId} 签到失败: ` + error.message, 'error');
             }
         }
 
         async function manualClaimReward(accountId) {
+            const account = currentAccounts.find(a => a.accountId === accountId);
+            if (!account) return;
+            
+            showStatus(`正在为 ${account.nickname || account.accountId} 领取奖励...`, 'info');
+            
             try {
-                showStatus('正在领取奖励...', 'info');
                 const response = await fetch(`/api/ffxiv/signin/manual-claim-rewards/${accountId}`, {
                     method: 'POST'
                 });
                 const result = await response.json();
                 if (result.success) {
-                    showStatus(result.message || '奖励领取成功', 'success');
+                    showStatus(result.message || `${account.nickname || account.accountId} 奖励领取成功`, 'success');
                     loadAccounts();
                 } else {
-                    showStatus('领取失败: ' + result.message, 'error');
+                    showStatus(`${account.nickname || account.accountId} 奖励领取失败: ` + result.message, 'error');
                 }
             } catch (error) {
-                showStatus('领取失败: ' + error.message, 'error');
+                showStatus(`${account.nickname || account.accountId} 奖励领取失败: ` + error.message, 'error');
             }
         }
 
         async function manualSignInAll() {
+            const enabledCount = currentAccounts.filter(a => a.enabled).length;
+            showStatus(`正在执行全部签到，请稍候（共 ${enabledCount} 个账号）...`, 'info');
+            
             try {
-                showStatus('正在执行全部签到...', 'info');
                 const response = await fetch('/api/ffxiv/signin/manual-signin', {
                     method: 'POST'
                 });
                 const result = await response.json();
                 if (result.success) {
-                    showStatus(result.message || '全部签到完成', 'success');
+                    showStatus(result.message || `全部签到完成（${enabledCount} 个账号）`, 'success');
                     loadAccounts();
                 } else {
-                    showStatus('签到失败: ' + result.message, 'error');
+                    showStatus('全部签到失败: ' + result.message, 'error');
                 }
             } catch (error) {
-                showStatus('签到失败: ' + error.message, 'error');
+                showStatus('全部签到失败: ' + error.message, 'error');
             }
         }
 
         async function manualClaimRewards() {
+            const enabledCount = currentAccounts.filter(a => a.enabled).length;
+            showStatus(`正在领取奖励，请稍候（共 ${enabledCount} 个账号）...`, 'info');
+            
             try {
-                showStatus('正在领取奖励...', 'info');
                 const response = await fetch('/api/ffxiv/signin/manual-claim-rewards', {
                     method: 'POST'
                 });
                 const result = await response.json();
                 if (result.success) {
-                    showStatus(result.message || '奖励领取完成', 'success');
+                    showStatus(result.message || `奖励领取完成（${enabledCount} 个账号）`, 'success');
                     loadAccounts();
                 } else {
-                    showStatus('领取失败: ' + result.message, 'error');
+                    showStatus('奖励领取失败: ' + result.message, 'error');
                 }
             } catch (error) {
-                showStatus('领取失败: ' + error.message, 'error');
+                showStatus('奖励领取失败: ' + error.message, 'error');
             }
         }
 
         async function checkAllLoginStatus() {
-            showStatus('正在检查登录状态...', 'info');
+            showStatus('正在检查登录状态，请稍候...', 'info');
             await loadAccounts(false);
             showStatus('登录状态检查完成', 'success');
         }

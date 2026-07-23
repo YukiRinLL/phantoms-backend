@@ -257,7 +257,7 @@
 
         <div id="resultSection" class="hidden">
             <div class="status success" id="loginResult">登录成功！</div>
-            <button class="btn btn-primary" onclick="finishLogin()">完成登录</button>
+            <button class="btn btn-success" onclick="goToAccounts()">前往账号列表</button>
         </div>
     </div>
 
@@ -373,7 +373,7 @@
                     if (status === 'LOGIN_SUCCESS') {
                         stopPolling();
                         currentTicket = result.data.ticket;
-                        showStatus('登录成功！', 'success');
+                        document.getElementById('statusMessage').style.display = 'none';
                         document.getElementById('loginSection').classList.add('hidden');
                         document.getElementById('resultSection').classList.remove('hidden');
                     } else if (status === 'WAITING_FOR_SCAN') {
@@ -390,14 +390,16 @@
             }
         }
 
-        async function finishLogin() {
+        async function goToAccounts() {
             try {
                 if (!currentTicket) {
                     showStatus('未获取到ticket，请重新登录', 'error');
                     return;
                 }
                 
-                showStatus('正在完成登录...', 'info');
+                const loginResultEl = document.getElementById('loginResult');
+                loginResultEl.textContent = '正在完成登录...';
+                loginResultEl.className = 'status info';
                 
                 const response = await fetch('/api/ffxiv/signin/login/finish', {
                     method: 'POST',
@@ -410,15 +412,19 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    showStatus('登录完成，正在跳转到账号列表...', 'success');
+                    loginResultEl.textContent = '登录完成！';
+                    loginResultEl.className = 'status success';
                     setTimeout(() => {
                         window.location.href = 'accounts-view.html';
-                    }, 1500);
+                    }, 1000);
                 } else {
-                    showStatus('登录完成失败: ' + result.message, 'error');
+                    loginResultEl.textContent = '登录完成失败: ' + result.message;
+                    loginResultEl.className = 'status error';
                 }
             } catch (error) {
-                showStatus('登录完成失败: ' + error.message, 'error');
+                const loginResultEl = document.getElementById('loginResult');
+                loginResultEl.textContent = '登录完成失败: ' + error.message;
+                loginResultEl.className = 'status error';
             }
         }
 
