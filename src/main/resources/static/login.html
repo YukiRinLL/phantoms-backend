@@ -87,6 +87,15 @@
             border: 1px solid var(--border);
             border-radius: 8px;
             padding: 10px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #qrcode canvas, #qrcode img {
+            max-width: 100%;
+            max-height: 100%;
         }
         
         .qr-info {
@@ -263,20 +272,21 @@
             try {
                 showStatus('正在生成二维码...', 'info');
                 
-                const response = await fetch('/api/ffxiv/signin/login/start', {
-                    method: 'POST'
-                });
+                const response = await fetch('/api/ffxiv/signin/login/qrcode');
                 
                 const result = await response.json();
                 
                 if (result.success) {
-                    const loginUrl = result.data.login_url;
+                    const loginUrl = result.data;
+                    const qrcodeContainer = document.getElementById('qrcode');
                     
                     if (qrcode) {
                         qrcode.clear();
                     }
                     
-                    qrcode = new QRCode(document.getElementById('qrcode'), {
+                    qrcodeContainer.innerHTML = '';
+                    
+                    qrcode = new QRCode(qrcodeContainer, {
                         text: loginUrl,
                         width: 230,
                         height: 230,
@@ -312,22 +322,25 @@
             }
         }
 
+        let currentTicket = null;
+
         async function checkLoginStatus() {
             try {
                 const response = await fetch('/api/ffxiv/signin/login/status');
                 const result = await response.json();
                 
-                if (result.success && result.data) {
+                if (result.data) {
                     const status = result.data.status;
                     
                     if (status === 'LOGIN_SUCCESS') {
                         stopPolling();
+                        currentTicket = result.data.ticket;
                         showStatus('登录成功！', 'success');
                         document.getElementById('loginSection').classList.add('hidden');
                         document.getElementById('resultSection').classList.remove('hidden');
                     } else if (status === 'WAITING_FOR_SCAN') {
                         showStatus('等待用户扫描二维码...', 'info');
-                    } else if (status === 'EXPIRED') {
+                    } else if (status === 'QRCODE_EXPIRED' || status === 'EXPIRED') {
                         stopPolling();
                         showStatus('二维码已过期，请重新生成', 'warning');
                     }
@@ -341,10 +354,19 @@
 
         async function finishLogin() {
             try {
+                if (!currentTicket) {
+                    showStatus('未获取到ticket，请重新登录', 'error');
+                    return;
+                }
+                
                 showStatus('正在完成登录...', 'info');
                 
                 const response = await fetch('/api/ffxiv/signin/login/finish', {
-                    method: 'POST'
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ ticket: currentTicket })
                 });
                 
                 const result = await response.json();
