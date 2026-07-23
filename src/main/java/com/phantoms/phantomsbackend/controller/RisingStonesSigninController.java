@@ -618,6 +618,34 @@ public class RisingStonesSigninController {
         }
     }
 
+    @PostMapping("/manual-claim-rewards/{accountId}")
+    @Operation(
+            summary = "手动触发单个账号领取奖励",
+            description = "手动触发指定账号的签到奖励领取任务"
+    )
+    public ResponseEntity<?> manualClaimRewards(@PathVariable String accountId) {
+        try {
+            LoginAccount account = systemConfigService.getLoginAccount(accountId);
+            if (account == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                        "success", false,
+                        "message", "账号不存在"
+                ));
+            }
+            
+            dailySignInScheduler.claimAvailableRewards(account.getCookies(), accountId);
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "已触发账号奖励领取任务"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "success", false,
+                    "message", "触发奖励领取任务失败: " + e.getMessage()
+            ));
+        }
+    }
+
     @GetMapping("/accounts/{accountId}/user-info")
     @Operation(
             summary = "获取指定账号的用户信息",

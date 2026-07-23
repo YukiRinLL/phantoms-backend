@@ -100,7 +100,7 @@ public class DailySignInScheduler {
     /**
      * 领取可用的签到奖励
      */
-    private void claimAvailableRewards(String cookies, String accountId) {
+    public void claimAvailableRewards(String cookies, String accountId) {
         logger.info("开始尝试领取签到奖励，账号: {}", accountId);
         
         try {
