@@ -111,6 +111,10 @@ public class RisingStonesSigninHelper {
             }
             return sb.toString();
         }
+        
+        public void clear() {
+            cookieStore.clear();
+        }
     }
 
     /**
@@ -226,8 +230,11 @@ public class RisingStonesSigninHelper {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response.code());
+            
             String cookies = getCookies();
             String accountId = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+            
+            logger.info("finishLogin - creating new account: {}, cookies length: {}", accountId, cookies != null ? cookies.length() : 0);
             
             RisingStonesAccount account = new RisingStonesAccount();
             account.setAccountId(accountId);
@@ -236,6 +243,9 @@ public class RisingStonesSigninHelper {
             account.setEnabled(true);
             account.setDefaultForApi(false);
             risingStonesAccountService.saveAccount(account);
+            
+            cookieJar.clear();
+            logger.info("finishLogin - cookieJar cleared after saving account");
             
             logger.info("已添加新账号: {}", accountId);
             return accountId;

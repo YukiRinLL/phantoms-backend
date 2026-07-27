@@ -56,7 +56,7 @@ public class RisingStonesUtils {
         } catch (Exception e) {
             logger.warn("获取默认API账号cookies失败，尝试从配置获取", e);
         }
-        return getDefaultApiCookies();
+        return null;
     }
 
     public static JSONObject getUserInfo(String uuid) throws IOException {
