@@ -408,6 +408,20 @@ public class RisingStonesUtils {
             throw new IOException("未找到登录cookies，请先登录");
         }
 
+        logger.info("doSignIn - cookies length: {}, contains ff14risingstones: {}, contains userinfo: {}",
+            cookies.length(),
+            cookies.contains("ff14risingstones"),
+            cookies.contains("userinfo"));
+        
+        // 提取 userid 用于日志
+        String userId = "unknown";
+        int userInfoIdx = cookies.indexOf("userid=");
+        if (userInfoIdx >= 0) {
+            int endIdx = cookies.indexOf("&", userInfoIdx);
+            userId = cookies.substring(userInfoIdx + 7, endIdx > 0 ? endIdx : userInfoIdx + 30);
+        }
+        logger.info("doSignIn - userid: {}", userId);
+
         String tempsuid = UUID.randomUUID().toString();
         HttpUrl url = HttpUrl.parse(BASE_URL + "sign/signIn").newBuilder()
                 .addQueryParameter("tempsuid", tempsuid)
@@ -435,6 +449,7 @@ public class RisingStonesUtils {
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .build();
 
+        logger.info("doSignIn - sending request to: {}", url);
         try (Response response = tempClient.newCall(request).execute()) {
             logger.info("Response code for doSignIn: {}", response.code());
             if (!response.isSuccessful()) {
@@ -442,7 +457,7 @@ public class RisingStonesUtils {
                 throw new IOException("RisingStones API请求失败: " + response.code());
             }
             String responseBody = response.body().string();
-            logger.debug("doSignIn response: {}", responseBody);
+            logger.info("doSignIn - response for userid {}: {}", userId, responseBody);
             return JSONObject.parseObject(responseBody);
         } catch (java.net.SocketTimeoutException e) {
             logger.error("doSignIn请求超时: {}", e.getMessage());

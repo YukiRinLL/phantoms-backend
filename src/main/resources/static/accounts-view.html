@@ -303,6 +303,66 @@
             border: 1px solid rgba(107, 123, 138, 0.2);
         }
         
+        .status-detail {
+            font-size: 11px;
+            line-height: 1.3;
+        }
+        
+        .status-detail .status-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .status-detail .status-badge.success {
+            background-color: rgba(123, 175, 123, 0.15);
+            color: var(--success);
+        }
+        
+        .status-detail .status-badge.failed {
+            background-color: rgba(196, 123, 123, 0.15);
+            color: var(--danger);
+        }
+        
+        .status-detail .status-badge.error {
+            background-color: rgba(212, 184, 122, 0.15);
+            color: var(--warning);
+        }
+        
+        .status-detail .status-badge.partial {
+            background-color: rgba(107, 123, 138, 0.15);
+            color: var(--primary);
+        }
+        
+        .status-detail .status-badge.no-reward {
+            background-color: rgba(107, 123, 138, 0.1);
+            color: var(--text-secondary);
+        }
+        
+        .status-detail .status-badge.pending {
+            background-color: rgba(212, 184, 122, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-detail .status-time {
+            color: var(--text-secondary);
+            font-size: 10px;
+        }
+        
+        .status-detail .status-msg {
+            color: var(--text-primary);
+            font-size: 10px;
+            margin-top: 2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
         @media (max-width: 768px) {
             .table-header {
                 display: none;
@@ -563,54 +623,86 @@
 
         function getSignInStatus(account) {
             if (!account.enabled) {
-                return '<span class="badge disabled" style="font-size: 11px;">已禁用</span>';
+                return '<div class="status-detail"><span class="status-badge disabled">已禁用</span></div>';
             }
             
-            if (!account.lastSignInTime) {
-                return '<span class="badge" style="font-size: 11px; background-color: rgba(212, 184, 122, 0.15); color: var(--warning);">未签到</span>';
+            const status = account.lastSignInStatus;
+            const time = account.lastSignInTime;
+            const detail = account.lastSignInDetail;
+            
+            if (!time) {
+                return '<div class="status-detail"><span class="status-badge pending">未签到</span></div>';
             }
             
-            const now = new Date();
-            const lastSignIn = new Date(account.lastSignInTime);
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const lastSignInDate = new Date(lastSignIn.getFullYear(), lastSignIn.getMonth(), lastSignIn.getDate());
+            let badgeClass = 'pending';
+            let badgeText = '未知';
             
-            const diffDays = Math.floor((today - lastSignInDate) / (1000 * 60 * 60 * 24));
-            
-            if (diffDays === 0) {
-                if (account.lastSignInResult && account.lastSignInResult.includes('成功')) {
-                    return '<span class="badge" style="font-size: 11px; background-color: rgba(123, 175, 123, 0.15); color: var(--success);">今日已签</span>';
-                } else {
-                    return '<span class="badge" style="font-size: 11px; background-color: rgba(196, 123, 123, 0.15); color: var(--danger);">签到失败</span>';
-                }
-            } else if (diffDays === 1) {
-                return '<span class="badge" style="font-size: 11px; background-color: rgba(212, 184, 122, 0.15); color: var(--warning);">昨日已签</span>';
-            } else {
-                return '<span class="badge" style="font-size: 11px; background-color: rgba(212, 184, 122, 0.15); color: var(--warning);">已过期</span>';
+            if (status === 'SUCCESS') {
+                badgeClass = 'success';
+                badgeText = '签到成功';
+            } else if (status === 'FAILED') {
+                badgeClass = 'failed';
+                badgeText = '签到失败';
+            } else if (status === 'ERROR') {
+                badgeClass = 'error';
+                badgeText = '签到异常';
+            } else if (status) {
+                badgeText = status;
             }
+            
+            let html = '<div class="status-detail">';
+            html += `<span class="status-badge ${badgeClass}">${badgeText}</span>`;
+            html += `<div class="status-time">${formatTime(time)}</div>`;
+            if (detail) {
+                html += `<div class="status-msg" title="${detail}">${detail}</div>`;
+            }
+            html += '</div>';
+            return html;
         }
 
         function getRewardStatus(account) {
             if (!account.enabled) {
-                return '<span class="badge disabled" style="font-size: 11px;">已禁用</span>';
+                return '<div class="status-detail"><span class="status-badge disabled">已禁用</span></div>';
             }
             
-            if (!account.lastSignInTime) {
-                return '<span class="badge" style="font-size: 11px; color: var(--text-secondary);">-</span>';
+            const status = account.lastRewardStatus;
+            const time = account.lastRewardTime;
+            const detail = account.lastRewardDetail;
+            
+            if (!time) {
+                return '<div class="status-detail"><span class="status-badge pending">未领取</span></div>';
             }
             
-            const now = new Date();
-            const lastSignIn = new Date(account.lastSignInTime);
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const lastSignInDate = new Date(lastSignIn.getFullYear(), lastSignIn.getMonth(), lastSignIn.getDate());
+            let badgeClass = 'pending';
+            let badgeText = '未知';
             
-            const diffDays = Math.floor((today - lastSignInDate) / (1000 * 60 * 60 * 24));
-            
-            if (diffDays > 0) {
-                return '<span class="badge" style="font-size: 11px; background-color: rgba(107, 123, 138, 0.15); color: var(--primary);">可领取</span>';
+            if (status === 'SUCCESS') {
+                badgeClass = 'success';
+                badgeText = '领取成功';
+            } else if (status === 'PARTIAL') {
+                badgeClass = 'partial';
+                badgeText = '部分成功';
+            } else if (status === 'FAILED') {
+                badgeClass = 'failed';
+                badgeText = '领取失败';
+            } else if (status === 'ERROR') {
+                badgeClass = 'error';
+                badgeText = '领取异常';
+            } else if (status === 'NO_REWARD') {
+                badgeClass = 'no-reward';
+                badgeText = '无奖励';
+            } else if (status) {
+                badgeText = status;
             }
             
-            return '<span class="badge" style="font-size: 11px; color: var(--text-secondary);">今日已领</span>';
+            let html = '<div class="status-detail">';
+            html += `<span class="status-badge ${badgeClass}">${badgeText}</span>`;
+            html += `<div class="status-time">${formatTime(time)}</div>`;
+            if (detail) {
+                html += `<div class="status-msg" title="${detail}">${detail}</div>`;
+            }
+            html += '</div>';
+            return html;
         }
 
         function openCharacterDetail(accountId) {
@@ -646,6 +738,11 @@
             };
             const genderMap = {'1': '女', '2': '男'};
             
+            const formatDetail = (detail) => {
+                if (!detail) return '-';
+                return detail.length > 50 ? detail.substring(0, 50) + '...' : detail;
+            };
+            
             let html = `
                 <div class="detail-section">
                     <h3>基本信息</h3>
@@ -669,6 +766,22 @@
                     <h3>账号信息</h3>
                     <div class="detail-row"><label>账号昵称</label><value>${account.nickname || account.accountId}</value></div>
                     <div class="detail-row"><label>账号ID</label><value>${account.accountId}</value></div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3>签到状态</h3>
+                    <div class="detail-row"><label>签到状态</label><value>${account.lastSignInStatus || '未知'}</value></div>
+                    <div class="detail-row"><label>签到时间</label><value>${account.lastSignInTime ? new Date(account.lastSignInTime).toLocaleString('zh-CN') : '-'}</value></div>
+                    <div class="detail-row"><label>签到详情</label><value title="${account.lastSignInDetail || ''}">${formatDetail(account.lastSignInDetail)}</value></div>
+                    ${account.lastSignInRawResponse ? '<div class="detail-row"><label>原始响应</label><value style="max-height:100px;overflow:auto;white-space:pre-wrap;font-size:11px;" title="' + account.lastSignInRawResponse + '">' + account.lastSignInRawResponse.substring(0, Math.min(300, account.lastSignInRawResponse.length())) + (account.lastSignInRawResponse.length() > 300 ? '...' : '') + '</value></div>' : ''}
+                </div>
+                
+                <div class="detail-section">
+                    <h3>奖励状态</h3>
+                    <div class="detail-row"><label>奖励状态</label><value>${account.lastRewardStatus || '未知'}</value></div>
+                    <div class="detail-row"><label>领取时间</label><value>${account.lastRewardTime ? new Date(account.lastRewardTime).toLocaleString('zh-CN') : '-'}</value></div>
+                    <div class="detail-row"><label>奖励详情</label><value title="${account.lastRewardDetail || ''}">${formatDetail(account.lastRewardDetail)}</value></div>
+                    ${account.lastRewardRawResponse ? '<div class="detail-row"><label>原始响应</label><value style="max-height:100px;overflow:auto;white-space:pre-wrap;font-size:11px;" title="' + account.lastRewardRawResponse + '">' + account.lastRewardRawResponse.substring(0, Math.min(300, account.lastRewardRawResponse.length())) + (account.lastRewardRawResponse.length() > 300 ? '...' : '') + '</value></div>' : ''}
                 </div>
                 
                 <div class="detail-section">

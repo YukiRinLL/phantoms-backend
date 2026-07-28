@@ -47,8 +47,26 @@ public class RisingStonesAccount {
     @Column(name = "last_sign_in_time")
     private Long lastSignInTime;
 
-    @Column(name = "last_sign_in_result", length = 200)
-    private String lastSignInResult;
+    @Column(name = "last_sign_in_status", length = 50)
+    private String lastSignInStatus;
+
+    @Column(name = "last_sign_in_detail", length = 500)
+    private String lastSignInDetail;
+
+    @Column(name = "last_sign_in_raw_response", columnDefinition = "TEXT")
+    private String lastSignInRawResponse;
+
+    @Column(name = "last_reward_time")
+    private Long lastRewardTime;
+
+    @Column(name = "last_reward_status", length = 50)
+    private String lastRewardStatus;
+
+    @Column(name = "last_reward_detail", length = 500)
+    private String lastRewardDetail;
+
+    @Column(name = "last_reward_raw_response", columnDefinition = "TEXT")
+    private String lastRewardRawResponse;
 
     @Column(name = "user_info_update_time")
     private Long userInfoUpdateTime;

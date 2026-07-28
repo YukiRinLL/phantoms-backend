@@ -112,6 +112,33 @@ public class RisingStonesSigninHelper {
             return sb.toString();
         }
         
+        /**
+         * 获取所有域名下的cookies，合并为一个字符串
+         */
+        public String getAllCookieString() {
+            Map<String, Cookie> allCookies = new HashMap<>();
+            
+            // 收集所有域名下的cookies，同名cookie以后保存的为准
+            for (List<Cookie> cookies : cookieStore.values()) {
+                for (Cookie cookie : cookies) {
+                    allCookies.put(cookie.name(), cookie);
+                }
+            }
+            
+            if (allCookies.isEmpty()) return "";
+            
+            StringBuilder sb = new StringBuilder();
+            for (Cookie cookie : allCookies.values()) {
+                if (sb.length() > 0) sb.append("; ");
+                sb.append(cookie.name()).append("=").append(cookie.value());
+            }
+            return sb.toString();
+        }
+        
+        public Map<String, List<Cookie>> getCookieStore() {
+            return cookieStore;
+        }
+        
         public void clear() {
             cookieStore.clear();
         }
@@ -231,6 +258,15 @@ public class RisingStonesSigninHelper {
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response.code());
             
+            // 打印cookieStore中的所有域名和cookies
+            Map<String, List<Cookie>> cookieStore = cookieJar.getCookieStore();
+            for (Map.Entry<String, List<Cookie>> entry : cookieStore.entrySet()) {
+                logger.info("finishLogin - domain: {}, cookies count: {}, cookie names: {}", 
+                    entry.getKey(), 
+                    entry.getValue().size(),
+                    entry.getValue().stream().map(Cookie::name).toList());
+            }
+            
             String cookies = getCookies();
             String accountId = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
             
@@ -262,10 +298,14 @@ public class RisingStonesSigninHelper {
 //    }
 
     /**
-     * 获取当前的cookies
+     * 获取当前的cookies（所有域名合并）
      */
     public String getCookies() {
-        return cookieJar.getCookieString("https://apiff14risingstones.web.sdo.com/");
+        String cookies = cookieJar.getAllCookieString();
+        logger.info("getCookies - cookieStore domains: {}, cookies: {}", 
+            cookieJar.getCookieStore().keySet(), 
+            cookies.length() > 100 ? cookies.substring(0, 100) + "..." : cookies);
+        return cookies;
     }
 
     /**
