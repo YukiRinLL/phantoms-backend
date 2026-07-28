@@ -7,18 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="fix RisingStonesSigninHelper finishLogin bugs">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesSigninHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesSigninHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/utils/RisingStonesUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/primary/RisingStonesAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/primary/RisingStonesAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/RisingStonesAccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/RisingStonesAccountService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DailySignInScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DailySignInScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/OpenApiConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/common/config/OpenApiConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/accounts-view.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/accounts-view.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/accounts.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/accounts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/housing-config.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/housing-config.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/login.html" afterDir="false" />
     </list>
     <list id="cc09743e-5b03-4657-8bba-22a55747451e" name="local" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -307,14 +299,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00264" summary="add news functions">
-      <option name="closed" value="true" />
-      <created>1772610664530</created>
-      <option name="number" value="00264" />
-      <option name="presentableId" value="LOCAL-00264" />
-      <option name="project" value="LOCAL" />
-      <updated>1772610664530</updated>
     </task>
     <task id="LOCAL-00265" summary="update news functions">
       <option name="closed" value="true" />
@@ -700,7 +684,15 @@
       <option name="project" value="LOCAL" />
       <updated>1785142769728</updated>
     </task>
-    <option name="localTasksCounter" value="313" />
+    <task id="LOCAL-00313" summary="changes">
+      <option name="closed" value="true" />
+      <created>1785226621497</created>
+      <option name="number" value="00313" />
+      <option name="presentableId" value="LOCAL-00313" />
+      <option name="project" value="LOCAL" />
+      <updated>1785226621497</updated>
+    </task>
+    <option name="localTasksCounter" value="314" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -745,7 +737,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="improve API call stability and optimize memory usage" />
     <MESSAGE value="resolve memory overflow by lazy-loading FF14 prompt" />
     <MESSAGE value="resolve memory overflow by delaying cache initialization" />
     <MESSAGE value="disable Hibernate archive scanning to resolve OOM" />
@@ -770,7 +761,8 @@
     <MESSAGE value="remove init-housing-notify.sql" />
     <MESSAGE value="update page design" />
     <MESSAGE value="fix RisingStonesSigninHelper finishLogin bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix RisingStonesSigninHelper finishLogin bugs" />
+    <MESSAGE value="changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

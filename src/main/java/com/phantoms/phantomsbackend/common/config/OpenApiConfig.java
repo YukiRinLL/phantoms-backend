@@ -30,7 +30,7 @@ public class OpenApiConfig {
                                 .name("MIT License")
                                 .url("https://opensource.org/licenses/MIT")))
                 .servers(List.of(
-                        new Server().url("http://localhost:8080").description("本地开发环境"),
+                        new Server().url("http://localhost:8081").description("本地开发环境"),
                         new Server().url("https://api.phantoms.com").description("生产环境")
                 ))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
