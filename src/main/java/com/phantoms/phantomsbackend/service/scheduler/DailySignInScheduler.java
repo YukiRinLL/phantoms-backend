@@ -81,7 +81,10 @@ public class DailySignInScheduler {
                     logger.info("账号 {} 签到响应: {}", account.getAccountId(), 
                         rawResponse.length() > 200 ? rawResponse.substring(0, 200) + "..." : rawResponse);
                     
-                    if (signInResult != null && signInResult.getInteger("code") == 10001) {
+                    Integer signInCode = signInResult != null ? signInResult.getInteger("code") : null;
+                    boolean isSignInSuccess = signInCode != null && (signInCode == 10000 || signInCode == 10001);
+                    
+                    if (isSignInSuccess) {
                         String message = getApiMessage(signInResult);
                         logger.info("账号 {} 签到成功 - {}", account.getAccountId(), message);
                         risingStonesAccountService.updateAccountSignInStatus(
@@ -285,7 +288,10 @@ public class DailySignInScheduler {
             JSONObject signInResult = risingStonesUtils.doSignIn(account.getCookies());
             String rawResponse = signInResult != null ? signInResult.toJSONString() : "null";
             
-            if (signInResult != null && signInResult.getInteger("code") == 10001) {
+            Integer signInCode = signInResult != null ? signInResult.getInteger("code") : null;
+            boolean isSignInSuccess = signInCode != null && (signInCode == 10000 || signInCode == 10001);
+            
+            if (isSignInSuccess) {
                 String message = getApiMessage(signInResult);
                 logger.info("账号 {} 签到成功 - {}", accountId, message);
                 risingStonesAccountService.updateAccountSignInStatus(
