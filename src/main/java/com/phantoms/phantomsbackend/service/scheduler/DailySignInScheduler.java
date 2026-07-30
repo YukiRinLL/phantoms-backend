@@ -82,7 +82,7 @@ public class DailySignInScheduler {
                         rawResponse.length() > 200 ? rawResponse.substring(0, 200) + "..." : rawResponse);
                     
                     if (signInResult != null && signInResult.getInteger("code") == 10001) {
-                        String message = signInResult.getString("message");
+                        String message = getApiMessage(signInResult);
                         logger.info("账号 {} 签到成功 - {}", account.getAccountId(), message);
                         risingStonesAccountService.updateAccountSignInStatus(
                             account.getAccountId(), "SUCCESS", message, rawResponse);
@@ -92,9 +92,9 @@ public class DailySignInScheduler {
                         sendNotification("✅ 每日签到任务执行成功", 
                             "账号: " + account.getNickname() + "\n签到结果: " + message);
                     } else {
-                        String errorMsg = signInResult != null ? signInResult.getString("message") : "未知错误";
+                        String errorMsg = getApiMessage(signInResult);
                         logger.error("账号 {} 签到失败: {}", account.getAccountId(), errorMsg);
-                        String statusDetail = "签到失败: " + errorMsg;
+                        String statusDetail = "签到失败: " + errorMsg + " (code: " + (signInResult != null ? signInResult.getInteger("code") : "null") + ")";
                         risingStonesAccountService.updateAccountSignInStatus(
                             account.getAccountId(), "FAILED", statusDetail, rawResponse);
                         sendNotification("❌ 每日签到任务执行失败", 
@@ -133,6 +133,10 @@ public class DailySignInScheduler {
             JSONObject rewardListResult = risingStonesUtils.getSignInRewardList(cookies, currentMonth);
             String rewardListRaw = rewardListResult != null ? rewardListResult.toJSONString() : "null";
             
+            StringBuilder allRawResponses = new StringBuilder();
+            allRawResponses.append("=== 奖励列表 ===\n");
+            allRawResponses.append(rewardListRaw).append("\n\n");
+            
             logger.info("账号 {} getSignInRewardList 返回: {}", accountId, 
                 rewardListRaw.length() > 300 ? rewardListRaw.substring(0, 300) + "..." : rewardListRaw);
             
@@ -145,28 +149,31 @@ public class DailySignInScheduler {
                     StringBuilder rewardSummary = new StringBuilder();
                     int successCount = 0;
                     int failCount = 0;
+                    int availableCount = 0;
+                    int notAvailableCount = 0;
                     
                     for (int i = 0; i < rewardList.size(); i++) {
                         JSONObject reward = rewardList.getJSONObject(i);
                         
-                        Integer status = reward.getInteger("status");
-                        if (status != null && status == 1) {
+                        Integer isGet = reward.getInteger("is_get");
+                        if (isGet != null && isGet == 0) {
+                            availableCount++;
                             Integer rewardId = reward.getInteger("id");
-                            String rewardName = reward.getString("name");
+                            String rewardName = reward.getString("item_name");
+                            
+                            allRawResponses.append("=== 领取奖励: ").append(rewardName).append(" (ID: ").append(rewardId).append(") ===\n");
                             
                             try {
                                 JSONObject claimResult = risingStonesUtils.getSignInReward(cookies, rewardId, currentMonth);
                                 String claimRaw = claimResult != null ? claimResult.toJSONString() : "null";
+                                allRawResponses.append(claimRaw).append("\n\n");
                                 
                                 if (claimResult != null && claimResult.getInteger("code") != null && claimResult.getInteger("code") == 10000) {
                                     logger.info("账号 {} 成功领取奖励: {} (ID: {})", accountId, rewardName, rewardId);
                                     rewardSummary.append("✅").append(rewardName).append(" ");
                                     successCount++;
                                 } else {
-                                    String errorMsg = claimResult != null ? 
-                                        (claimResult.getString("msg") != null ? claimResult.getString("msg") : 
-                                         (claimResult.getString("message") != null ? claimResult.getString("message") : "未知错误")) 
-                                        : "未知错误";
+                                    String errorMsg = getApiMessage(claimResult);
                                     logger.error("账号 {} 领取奖励失败: {} (ID: {}), 错误信息: {}", accountId, rewardName, rewardId, errorMsg);
                                     rewardSummary.append("❌").append(rewardName).append("(").append(errorMsg).append(") ");
                                     failCount++;
@@ -175,7 +182,10 @@ public class DailySignInScheduler {
                                 logger.error("账号 {} 领取奖励时发生异常: {} (ID: {})", accountId, rewardName, rewardId, e);
                                 rewardSummary.append("❌").append(rewardName).append("(异常) ");
                                 failCount++;
+                                allRawResponses.append("异常: ").append(e.getMessage()).append("\n\n");
                             }
+                        } else {
+                            notAvailableCount++;
                         }
                     }
                     
@@ -184,33 +194,35 @@ public class DailySignInScheduler {
                         rewardStatus = "SUCCESS";
                     } else if (successCount > 0 && failCount > 0) {
                         rewardStatus = "PARTIAL";
+                    } else if (availableCount == 0 && notAvailableCount > 0) {
+                        rewardStatus = "NO_REWARD";
                     } else {
                         rewardStatus = "FAILED";
                     }
-                    String rewardDetail = "领取 " + successCount + " 个成功, " + failCount + " 个失败";
+                    String rewardDetail = String.format("共 %d 个奖励, 可领取 %d 个, 已领取 %d 个成功, %d 个失败", 
+                        rewardList.size(), availableCount, successCount, failCount);
+                    if (availableCount == 0 && notAvailableCount > 0) {
+                        rewardDetail += " (未达成签到天数)";
+                    }
                     if (rewardSummary.length() > 500) {
                         rewardDetail += " | " + rewardSummary.toString().substring(0, 450) + "...";
-                    } else {
+                    } else if (rewardSummary.length() > 0) {
                         rewardDetail += " | " + rewardSummary.toString();
                     }
                     
                     risingStonesAccountService.updateAccountRewardStatus(
-                        accountId, rewardStatus, rewardDetail, rewardListRaw);
+                        accountId, rewardStatus, rewardDetail, allRawResponses.toString());
                 } else {
                     logger.info("账号 {} 没有可领取的签到奖励", accountId);
                     risingStonesAccountService.updateAccountRewardStatus(
-                        accountId, "NO_REWARD", "无可用奖励", rewardListRaw);
+                        accountId, "NO_REWARD", "奖励列表为空 (共 0 个奖励)", allRawResponses.toString());
                 }
             } else {
-                String errorMsg = "未知错误";
-                if (rewardListResult != null) {
-                    errorMsg = rewardListResult.getString("msg") != null ? rewardListResult.getString("msg") : 
-                               (rewardListResult.getString("message") != null ? rewardListResult.getString("message") : 
-                               "code=" + rewardListResult.getInteger("code"));
-                }
+                String errorMsg = getApiMessage(rewardListResult);
                 logger.error("账号 {} 获取签到奖励列表失败: {}", accountId, errorMsg);
+                String failDetail = "获取奖励列表失败: " + errorMsg + " (code: " + (rewardListResult != null ? rewardListResult.getInteger("code") : "null") + ")";
                 risingStonesAccountService.updateAccountRewardStatus(
-                    accountId, "FAILED", "获取奖励列表失败: " + errorMsg, rewardListRaw);
+                    accountId, "FAILED", failDetail, allRawResponses.toString());
             }
         } catch (IOException e) {
             logger.error("账号 {} 获取签到奖励列表时发生异常", accountId, e);
@@ -274,7 +286,7 @@ public class DailySignInScheduler {
             String rawResponse = signInResult != null ? signInResult.toJSONString() : "null";
             
             if (signInResult != null && signInResult.getInteger("code") == 10001) {
-                String message = signInResult.getString("message");
+                String message = getApiMessage(signInResult);
                 logger.info("账号 {} 签到成功 - {}", accountId, message);
                 risingStonesAccountService.updateAccountSignInStatus(
                     accountId, "SUCCESS", message, rawResponse);
@@ -284,10 +296,11 @@ public class DailySignInScheduler {
                 sendNotification("✅ 手动签到成功", 
                     "账号: " + account.getNickname() + "\n签到结果: " + message);
             } else {
-                String errorMsg = signInResult != null ? signInResult.getString("message") : "未知错误";
+                String errorMsg = getApiMessage(signInResult);
                 logger.error("账号 {} 签到失败: {}", accountId, errorMsg);
+                String statusDetail = "签到失败: " + errorMsg + " (code: " + (signInResult != null ? signInResult.getInteger("code") : "null") + ")";
                 risingStonesAccountService.updateAccountSignInStatus(
-                    accountId, "FAILED", "签到失败: " + errorMsg, rawResponse);
+                    accountId, "FAILED", statusDetail, rawResponse);
                 sendNotification("❌ 手动签到失败", 
                     "账号: " + account.getNickname() + "\n签到失败: " + errorMsg);
             }
@@ -321,5 +334,27 @@ public class DailySignInScheduler {
             sendNotification("❌ 手动领取奖励任务执行发生未知异常", 
                 "异常信息: " + e.getMessage());
         }
+    }
+
+    /**
+     * 从API响应中获取消息，优先使用msg字段，其次使用message字段
+     */
+    private String getApiMessage(JSONObject response) {
+        if (response == null) {
+            return "未知错误";
+        }
+        String msg = response.getString("msg");
+        if (msg != null && !msg.isEmpty()) {
+            return msg;
+        }
+        String message = response.getString("message");
+        if (message != null && !message.isEmpty()) {
+            return message;
+        }
+        Integer code = response.getInteger("code");
+        if (code != null) {
+            return "错误码: " + code;
+        }
+        return "未知错误";
     }
 }

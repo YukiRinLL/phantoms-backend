@@ -7,27 +7,45 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
-            --primary: #6B7B8A;
-            --primary-light: #8A9BA8;
-            --success: #7BAF7B;
-            --danger: #C47B7B;
-            --warning: #D4B87A;
-            --bg: #F5F6F7;
+            --primary: #4A6FA5;
+            --primary-light: #6B8CB8;
+            --primary-dark: #3A5A85;
+            --success: #3A8A5C;
+            --success-bg: rgba(58, 138, 92, 0.1);
+            --danger: #B84A4A;
+            --danger-bg: rgba(184, 74, 74, 0.1);
+            --warning: #B88A3A;
+            --warning-bg: rgba(184, 138, 58, 0.1);
+            --bg: #F4F5F7;
             --card-bg: #FFFFFF;
-            --text-primary: #3D454D;
-            --text-secondary: #6B7B8A;
-            --border: #E8EAEB;
-            --shadow: 0 2px 8px rgba(107, 123, 138, 0.08);
+            --text-primary: #2C3440;
+            --text-secondary: #6B7280;
+            --text-muted: #9CA3AF;
+            --border: #E5E7EB;
+            --step-pending-bg: #FFFFFF;
+            --step-pending-border: #D1D5DB;
+            --step-active-bg: #4A6FA5;
+            --step-active-border: #4A6FA5;
+            --step-active-text: #FFFFFF;
+            --step-active-ring: rgba(74, 111, 165, 0.25);
+            --step-success-bg: #3A8A5C;
+            --step-success-border: #3A8A5C;
+            --step-success-text: #FFFFFF;
+            --step-error-bg: #B84A4A;
+            --step-error-border: #B84A4A;
+            --step-error-text: #FFFFFF;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
             background-color: var(--bg);
             color: var(--text-primary);
             line-height: 1.5;
@@ -35,191 +53,398 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 24px;
+            -webkit-font-smoothing: antialiased;
         }
-        
+
         .container {
             background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: var(--shadow);
+            border-radius: 10px;
+            padding: 36px 40px;
+            box-shadow: var(--shadow-md);
             border: 1px solid var(--border);
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
         }
-        
+
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 28px;
         }
-        
+
         .header h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
         }
-        
+
         .header p {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-secondary);
         }
-        
-        .login-container {
-            margin: 20px 0;
-            padding: 24px;
-            border: 2px solid var(--primary);
-            border-radius: 12px;
-            background-color: rgba(107, 123, 138, 0.03);
+
+        .status-toast {
+            margin: 16px 0;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid transparent;
+            display: none;
         }
-        
-        #qrCodeContainer {
-            margin: 20px auto;
+
+        .status-toast.success {
+            background-color: var(--success-bg);
+            color: var(--success);
+            border-color: rgba(58, 138, 92, 0.25);
+            display: block;
+        }
+
+        .status-toast.error {
+            background-color: var(--danger-bg);
+            color: var(--danger);
+            border-color: rgba(184, 74, 74, 0.25);
+            display: block;
+        }
+
+        .status-toast.info {
+            background-color: rgba(74, 111, 165, 0.08);
+            color: var(--primary);
+            border-color: rgba(74, 111, 165, 0.2);
+            display: block;
+        }
+
+        .status-toast.warning {
+            background-color: var(--warning-bg);
+            color: var(--warning);
+            border-color: rgba(184, 138, 58, 0.25);
+            display: block;
+        }
+
+        .login-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+        @media (max-width: 480px) {
+            .login-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .qr-panel {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
         }
-        
-        #qrcode {
-            width: 250px;
-            height: 250px;
-            background-color: white;
+
+        .qr-box {
+            width: 220px;
+            height: 220px;
+            background-color: #FFFFFF;
             border: 1px solid var(--border);
             border-radius: 8px;
             padding: 10px;
-            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-bottom: 12px;
         }
-        
-        #qrcode canvas, #qrcode img {
+
+        .qr-box canvas,
+        .qr-box img {
             max-width: 100%;
             max-height: 100%;
         }
-        
-        .qr-info {
-            margin: 15px 0;
-            padding: 14px;
-            background-color: rgba(107, 123, 138, 0.05);
-            border-radius: 8px;
-            font-size: 14px;
+
+        .qr-box.empty::before {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 1px;
+            background-color: var(--text-muted);
+        }
+
+        .qr-caption {
+            font-size: 12px;
             color: var(--text-secondary);
             text-align: center;
+            max-width: 220px;
+            line-height: 1.5;
         }
-        
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
+
+        .qr-timer {
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
         }
-        
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-            width: 100%;
+
+        .steps-panel {
+            display: flex;
+            flex-direction: column;
         }
-        
-        .btn-primary:hover {
-            background-color: var(--primary-light);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(107, 123, 138, 0.2);
+
+        .steps-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
         }
-        
-        .btn-primary:disabled {
+
+        .steps-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .step {
+            display: flex;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .step:last-child {
+            padding-bottom: 0;
+        }
+
+        .step-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 28px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .step-indicator::after {
+            content: '';
+            width: 2px;
+            flex: 1;
+            min-height: 16px;
             background-color: var(--border);
-            color: var(--text-secondary);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+            margin-top: 6px;
+            transition: background-color 0.3s ease;
         }
-        
-        .btn-success {
-            background-color: var(--success);
-            color: white;
-            width: 100%;
-        }
-        
-        .btn-success:hover {
-            background-color: #6A9B6A;
-        }
-        
-        .status {
-            margin: 15px 0;
-            padding: 14px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .status.success {
-            background-color: rgba(123, 175, 123, 0.1);
-            color: var(--success);
-            border: 1px solid rgba(123, 175, 123, 0.2);
-        }
-        
-        .status.error {
-            background-color: rgba(196, 123, 123, 0.1);
-            color: var(--danger);
-            border: 1px solid rgba(196, 123, 123, 0.2);
-        }
-        
-        .status.info {
-            background-color: rgba(107, 123, 138, 0.1);
-            color: var(--text-secondary);
-            border: 1px solid rgba(107, 123, 138, 0.2);
-        }
-        
-        .status.warning {
-            background-color: rgba(212, 184, 122, 0.1);
-            color: var(--warning);
-            border: 1px solid rgba(212, 184, 122, 0.2);
-        }
-        
-        .hidden {
+
+        .step:last-child .step-indicator::after {
             display: none;
         }
-        
-        .form-group {
-            margin-bottom: 16px;
+
+        .step.success .step-indicator::after {
+            background-color: var(--step-success-bg);
         }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
+
+        .step.active .step-indicator::after {
+            background-color: var(--step-active-bg);
+            opacity: 0.4;
+        }
+
+        .step-circle {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--step-pending-border);
+            background-color: var(--step-pending-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .step-circle svg {
+            width: 12px;
+            height: 12px;
+            stroke: var(--step-pending-border);
+            stroke-width: 2.5;
+            fill: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .step.pending .step-circle {
+            background-color: var(--step-pending-bg);
+            border-color: var(--step-pending-border);
+        }
+
+        .step.pending .step-number {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .step.active .step-circle {
+            background-color: var(--step-active-bg);
+            border-color: var(--step-active-border);
+            box-shadow: 0 0 0 4px var(--step-active-ring);
+            animation: stepPulse 1.6s ease-in-out infinite;
+        }
+
+        .step.active .step-circle::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #FFFFFF;
+            animation: stepDot 1.6s ease-in-out infinite;
+        }
+
+        .step.active .step-number {
+            display: none;
+        }
+
+        .step.active .step-circle svg {
+            display: none;
+        }
+
+        @keyframes stepPulse {
+            0%, 100% { box-shadow: 0 0 0 4px var(--step-active-ring); }
+            50% { box-shadow: 0 0 0 8px rgba(74, 111, 165, 0.1); }
+        }
+
+        @keyframes stepDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.8); }
+        }
+
+        .step.success .step-circle {
+            background-color: var(--step-success-bg);
+            border-color: var(--step-success-border);
+        }
+
+        .step.success .step-circle svg {
+            stroke: var(--step-success-text);
+            opacity: 1;
+        }
+
+        .step.success .step-number {
+            display: none;
+        }
+
+        .step.error .step-circle {
+            background-color: var(--step-error-bg);
+            border-color: var(--step-error-border);
+        }
+
+        .step.error .step-circle svg {
+            stroke: var(--step-error-text);
+            opacity: 1;
+        }
+
+        .step.error .step-number {
+            display: none;
+        }
+
+        .step-content {
+            flex: 1;
+            padding-left: 12px;
+            padding-top: 1px;
+        }
+
+        .step-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .step.pending .step-name {
+            color: var(--text-muted);
+        }
+
+        .step-desc {
+            font-size: 12px;
             color: var(--text-secondary);
-            font-weight: 500;
-            font-size: 14px;
+            line-height: 1.4;
         }
-        
-        .form-group input {
+
+        .step.error .step-name {
+            color: var(--danger);
+        }
+
+        .step.success .step-name {
+            color: var(--success);
+        }
+
+        .step.active .step-name {
+            color: var(--primary);
+        }
+
+        .actions {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 11px 20px;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #FFFFFF;
             width: 100%;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 14px;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-primary:disabled {
+            background-color: var(--border);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background-color: var(--card-bg);
+            color: var(--text-secondary);
+            border-color: var(--border);
+            width: 100%;
+        }
+
+        .btn-secondary:hover {
             background-color: var(--bg);
             color: var(--text-primary);
-            box-sizing: border-box;
         }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary);
+
+        .result-panel {
+            text-align: center;
+            padding: 20px 0 8px;
         }
-        
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
+
+        .result-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--success);
+            margin-bottom: 6px;
         }
-        
-        .action-buttons .btn {
-            flex: 1;
+
+        .result-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
@@ -230,34 +455,84 @@
             <p>请扫描二维码登录</p>
         </div>
 
-        <div id="statusMessage" class="status" style="display: none;"></div>
+        <div id="statusToast" class="status-toast" style="display: none;"></div>
 
-        <div id="loginSection">
-            <div class="login-container">
-                <div id="qrCodeContainer">
-                    <div id="qrcode"></div>
+        <div id="mainSection">
+            <div class="login-layout">
+                <div class="qr-panel">
+                    <div id="qrcode" class="qr-box empty"></div>
+                    <div class="qr-caption" id="qrCaption">
+                        使用 FF14 Rising Stones 手机客户端扫描二维码登录
+                    </div>
+                    <div class="qr-timer" id="qrTimer"></div>
                 </div>
-                <div class="qr-info">
-                    使用 FF14 Rising Stones 手机客户端扫描二维码登录
+
+                <div class="steps-panel">
+                    <div class="steps-title">登录流程</div>
+                    <ul class="steps-list" id="stepsList">
+                        <li class="step pending" data-step="0">
+                            <div class="step-indicator">
+                                <div class="step-circle">
+                                    <span class="step-number">1</span>
+                                    <svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg>
+                                </div>
+                            </div>
+                            <div class="step-content">
+                                <div class="step-name">生成二维码</div>
+                                <div class="step-desc">向服务器请求登录二维码</div>
+                            </div>
+                        </li>
+                        <li class="step pending" data-step="1">
+                            <div class="step-indicator">
+                                <div class="step-circle">
+                                    <span class="step-number">2</span>
+                                    <svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg>
+                                </div>
+                            </div>
+                            <div class="step-content">
+                                <div class="step-name">等待扫描二维码</div>
+                                <div class="step-desc">请使用手机客户端扫描二维码</div>
+                            </div>
+                        </li>
+                        <li class="step pending" data-step="2">
+                            <div class="step-indicator">
+                                <div class="step-circle">
+                                    <span class="step-number">3</span>
+                                    <svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg>
+                                </div>
+                            </div>
+                            <div class="step-content">
+                                <div class="step-name">完成登录</div>
+                                <div class="step-desc">使用 ticket 换取登录凭证</div>
+                            </div>
+                        </li>
+                        <li class="step pending" data-step="3">
+                            <div class="step-indicator">
+                                <div class="step-circle">
+                                    <span class="step-number">4</span>
+                                    <svg viewBox="0 0 24 24"><polyline points="4,12 10,18 20,6"/></svg>
+                                </div>
+                            </div>
+                            <div class="step-content">
+                                <div class="step-name">准备跳转</div>
+                                <div class="step-desc">即将前往账号列表</div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
-            <div class="action-buttons">
-                <button class="btn btn-primary" onclick="startLogin()">生成二维码</button>
-            </div>
-
-            <div style="margin-top: 15px; text-align: center;">
-                <span id="qrTimeout" style="font-size: 12px; color: var(--text-secondary);">二维码有效期: 60秒</span>
-            </div>
-
-            <div class="action-buttons" style="margin-top: 20px;">
-                <button class="btn" onclick="window.location.href='accounts-view.html'" style="background-color: var(--bg); color: var(--text-secondary);">查看账号列表</button>
+            <div class="actions">
+                <button class="btn btn-primary" id="actionBtn" onclick="startLogin()">生成二维码</button>
+                <button class="btn btn-secondary" onclick="window.location.href='accounts-view.html'">查看账号列表</button>
             </div>
         </div>
 
         <div id="resultSection" class="hidden">
-            <div class="status success" id="loginResult">登录成功！</div>
-            <button class="btn btn-success" onclick="goToAccounts()">前往账号列表</button>
+            <div class="result-panel">
+                <div class="result-title">登录成功</div>
+                <div class="result-desc">正在跳转到账号列表...</div>
+            </div>
         </div>
     </div>
 
@@ -266,49 +541,87 @@
         let loginStatusInterval = null;
         let qrTimeoutInterval = null;
         let qrTimeoutSeconds = 60;
+        let currentTicket = null;
+        let flowStarted = false;
+
+        const STEPS = {
+            GENERATE: 0,
+            WAIT_SCAN: 1,
+            FINISH_LOGIN: 2,
+            PREPARE_REDIRECT: 3
+        };
 
         function showStatus(message, type) {
-            const status = document.getElementById('statusMessage');
-            status.textContent = message;
-            status.className = 'status ' + type;
-            status.style.display = 'block';
+            const toast = document.getElementById('statusToast');
+            toast.textContent = message;
+            toast.className = 'status-toast ' + type;
+        }
+
+        function updateStep(stepIndex, status) {
+            const stepEl = document.querySelector(`.step[data-step="${stepIndex}"]`);
+            if (!stepEl) return;
+
+            stepEl.classList.remove('pending', 'active', 'success', 'error');
+            stepEl.classList.add(status);
+        }
+
+        function resetSteps() {
+            for (let i = 0; i < 4; i++) {
+                updateStep(i, 'pending');
+            }
+        }
+
+        function setActionButton(text, disabled) {
+            const btn = document.getElementById('actionBtn');
+            btn.textContent = text;
+            btn.disabled = !!disabled;
         }
 
         async function startLogin() {
+            resetSteps();
+            flowStarted = true;
+            updateStep(STEPS.GENERATE, 'active');
+            setActionButton('登录中...', true);
+            showStatus('正在生成二维码...', 'info');
+
             try {
-                showStatus('正在生成二维码...', 'info');
-                
                 const response = await fetch('/api/ffxiv/signin/login/qrcode');
-                
                 const result = await response.json();
-                
+
                 if (result.success) {
                     const loginUrl = result.data;
                     const qrcodeContainer = document.getElementById('qrcode');
-                    
+
                     if (qrcode) {
                         qrcode.clear();
                     }
-                    
+
                     qrcodeContainer.innerHTML = '';
-                    
+                    qrcodeContainer.classList.remove('empty');
+
                     qrcode = new QRCode(qrcodeContainer, {
                         text: loginUrl,
-                        width: 230,
-                        height: 230,
-                        colorDark : "#3D454D",
-                        colorLight : "#ffffff",
-                        correctLevel : QRCode.CorrectLevel.H
+                        width: 220,
+                        height: 220,
+                        colorDark: '#2C3440',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
                     });
-                    
+
+                    updateStep(STEPS.GENERATE, 'success');
+                    updateStep(STEPS.WAIT_SCAN, 'active');
                     showStatus('请扫描二维码进行登录', 'info');
                     startPolling();
                     startQrTimeout();
                 } else {
+                    updateStep(STEPS.GENERATE, 'error');
                     showStatus('生成二维码失败: ' + result.message, 'error');
+                    setActionButton('重新生成二维码', false);
                 }
             } catch (error) {
+                updateStep(STEPS.GENERATE, 'error');
                 showStatus('生成二维码失败: ' + error.message, 'error');
+                setActionButton('重新生成二维码', false);
             }
         }
 
@@ -316,7 +629,7 @@
             if (loginStatusInterval) {
                 clearInterval(loginStatusInterval);
             }
-            
+
             loginStatusInterval = setInterval(() => {
                 checkLoginStatus();
             }, 3000);
@@ -334,14 +647,16 @@
             stopQrTimeout();
             qrTimeoutSeconds = 60;
             updateQrTimeoutDisplay();
-            
+
             qrTimeoutInterval = setInterval(() => {
                 qrTimeoutSeconds--;
                 updateQrTimeoutDisplay();
-                
+
                 if (qrTimeoutSeconds <= 0) {
                     stopQrTimeout();
-                    showStatus('二维码已过期，请重新生成', 'warning');
+                    showStatus('二维码已过期，请点击重新生成', 'warning');
+                    updateStep(STEPS.WAIT_SCAN, 'error');
+                    setActionButton('重新生成二维码', false);
                 }
             }, 1000);
         }
@@ -354,33 +669,38 @@
         }
 
         function updateQrTimeoutDisplay() {
-            const timeoutEl = document.getElementById('qrTimeout');
-            if (timeoutEl) {
-                timeoutEl.textContent = `二维码有效期: ${qrTimeoutSeconds}秒`;
+            const el = document.getElementById('qrTimer');
+            if (el) {
+                if (qrTimeoutSeconds > 0 && flowStarted) {
+                    el.textContent = `二维码有效期: ${qrTimeoutSeconds} 秒`;
+                } else {
+                    el.textContent = '';
+                }
             }
         }
-
-        let currentTicket = null;
 
         async function checkLoginStatus() {
             try {
                 const response = await fetch('/api/ffxiv/signin/login/status');
                 const result = await response.json();
-                
+
                 if (result.data) {
                     const status = result.data.status;
-                    
+
                     if (status === 'LOGIN_SUCCESS') {
                         stopPolling();
                         currentTicket = result.data.ticket;
-                        document.getElementById('statusMessage').style.display = 'none';
-                        document.getElementById('loginSection').classList.add('hidden');
-                        document.getElementById('resultSection').classList.remove('hidden');
+                        updateStep(STEPS.WAIT_SCAN, 'success');
+                        await finishLogin();
                     } else if (status === 'WAITING_FOR_SCAN') {
-                        showStatus('等待用户扫描二维码...', 'info');
+                        if (qrTimeoutSeconds > 0) {
+                            showStatus('等待用户扫描二维码...', 'info');
+                        }
                     } else if (status === 'QRCODE_EXPIRED' || status === 'EXPIRED') {
                         stopPolling();
-                        showStatus('二维码已过期，请重新生成', 'warning');
+                        updateStep(STEPS.WAIT_SCAN, 'error');
+                        showStatus('二维码已过期，请点击重新生成', 'warning');
+                        setActionButton('重新生成二维码', false);
                     }
                 } else {
                     showStatus('检查登录状态失败: ' + result.message, 'error');
@@ -390,41 +710,41 @@
             }
         }
 
-        async function goToAccounts() {
+        async function finishLogin() {
+            updateStep(STEPS.FINISH_LOGIN, 'active');
+            showStatus('正在完成登录...', 'info');
+
             try {
-                if (!currentTicket) {
-                    showStatus('未获取到ticket，请重新登录', 'error');
-                    return;
-                }
-                
-                const loginResultEl = document.getElementById('loginResult');
-                loginResultEl.textContent = '正在完成登录...';
-                loginResultEl.className = 'status info';
-                
                 const response = await fetch('/api/ffxiv/signin/login/finish', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ ticket: currentTicket })
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (result.success) {
-                    loginResultEl.textContent = '登录完成！';
-                    loginResultEl.className = 'status success';
+                    updateStep(STEPS.FINISH_LOGIN, 'success');
+                    updateStep(STEPS.PREPARE_REDIRECT, 'active');
+                    showStatus('登录成功，正在跳转...', 'success');
+
                     setTimeout(() => {
-                        window.location.href = 'accounts-view.html';
-                    }, 1000);
+                        updateStep(STEPS.PREPARE_REDIRECT, 'success');
+                        document.getElementById('mainSection').classList.add('hidden');
+                        document.getElementById('resultSection').classList.remove('hidden');
+                        setTimeout(() => {
+                            window.location.href = 'accounts-view.html';
+                        }, 800);
+                    }, 500);
                 } else {
-                    loginResultEl.textContent = '登录完成失败: ' + result.message;
-                    loginResultEl.className = 'status error';
+                    updateStep(STEPS.FINISH_LOGIN, 'error');
+                    showStatus('登录完成失败: ' + result.message, 'error');
+                    setActionButton('重新生成二维码', false);
                 }
             } catch (error) {
-                const loginResultEl = document.getElementById('loginResult');
-                loginResultEl.textContent = '登录完成失败: ' + error.message;
-                loginResultEl.className = 'status error';
+                updateStep(STEPS.FINISH_LOGIN, 'error');
+                showStatus('登录完成失败: ' + error.message, 'error');
+                setActionButton('重新生成二维码', false);
             }
         }
 

@@ -6,166 +6,524 @@
     <title>账号列表</title>
     <style>
         :root {
-            --primary: #6B7B8A;
-            --primary-light: #8A9BA8;
-            --success: #7BAF7B;
-            --danger: #C47B7B;
-            --warning: #D4B87A;
-            --bg: #F5F6F7;
+            --primary: #5B6F82;
+            --primary-hover: #4A5F72;
+            --primary-light: #7A8E9F;
+            --primary-bg: rgba(91, 111, 130, 0.08);
+            --success: #22A06B;
+            --success-bg: rgba(34, 160, 107, 0.1);
+            --danger: #C45A5A;
+            --danger-bg: rgba(196, 90, 90, 0.1);
+            --warning: #C89B4A;
+            --warning-bg: rgba(200, 155, 74, 0.1);
+            --info-bg: rgba(91, 111, 130, 0.1);
+            --bg: #F4F5F7;
             --card-bg: #FFFFFF;
-            --text-primary: #3D454D;
-            --text-secondary: #6B7B8A;
-            --border: #E8EAEB;
-            --shadow: 0 2px 8px rgba(107, 123, 138, 0.08);
+            --text-primary: #2B323B;
+            --text-secondary: #606A75;
+            --text-muted: #909AA5;
+            --border: #E2E5E9;
+            --border-hover: #C8CDD3;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 6px 20px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --radius-sm: 6px;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Roboto, sans-serif;
             background-color: var(--bg);
             color: var(--text-primary);
             line-height: 1.5;
             min-height: 100vh;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
         }
-        
+
         .header {
             background-color: var(--card-bg);
             border-bottom: 1px solid var(--border);
-            padding: 16px 24px;
+            padding: 14px 28px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: var(--shadow);
         }
-        
+
         .header h1 {
-            font-size: 20px;
+            font-size: 17px;
             font-weight: 600;
             color: var(--text-primary);
-            letter-spacing: -0.5px;
+            letter-spacing: -0.2px;
         }
-        
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--primary-light);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(107, 123, 138, 0.2);
-        }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 24px;
         }
-        
-        .search-bar {
+
+        .toolbar {
             display: flex;
-            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
+            gap: 16px;
+            flex-wrap: wrap;
         }
-        
-        .search-bar input {
-            flex: 1;
-            padding: 10px 16px;
+
+        .toolbar-left {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 9px 14px;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: var(--radius);
             font-size: 14px;
-            background-color: var(--bg);
+            background-color: var(--card-bg);
             color: var(--text-primary);
-            transition: border-color 0.2s ease;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+            width: 240px;
         }
-        
-        .search-bar input:focus {
+
+        .search-input:focus {
             outline: none;
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-bg);
         }
-        
-        .accounts-table {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .btn {
+            padding: 8px 16px;
             border: 1px solid var(--border);
-        }
-        
-        .table-header {
-            display: grid;
-            grid-template-columns: 30px 140px 120px 140px 100px 80px 100px 80px 80px 150px 130px 80px;
-            background-color: var(--bg);
-            padding: 4px 12px;
-            font-weight: 600;
-            font-size: 11px;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .table-row {
-            display: grid;
-            grid-template-columns: 30px 140px 120px 140px 100px 80px 100px 80px 80px 150px 130px 80px;
-            padding: 4px 12px;
-            border-bottom: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            display: inline-flex;
             align-items: center;
-            transition: background-color 0.2s ease;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .btn:hover:not(:disabled) {
+            background-color: var(--bg);
+            border-color: var(--border-hover);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+
+        .stats {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 16px;
+        }
+
+        .account-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
             cursor: pointer;
         }
-        
-        .table-row:hover {
-            background-color: rgba(107, 123, 138, 0.03);
+
+        .account-card:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: var(--border-hover);
         }
-        
-        .table-row:last-child {
-            border-bottom: none;
+
+        .card-header {
+            padding: 14px 16px 12px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
         }
-        
-        .badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
+
+        .card-header-left {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-title-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card-subtitle {
             font-size: 12px;
-            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap;
         }
-        
-        .badge.enabled {
-            background-color: rgba(123, 175, 123, 0.15);
+
+        .card-subtitle .sep {
+            color: var(--text-muted);
+        }
+
+        .card-header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 1.4;
+            white-space: nowrap;
+        }
+
+        .badge-enabled {
+            background-color: var(--success-bg);
             color: var(--success);
         }
-        
-        .badge.disabled {
-            background-color: rgba(196, 123, 123, 0.15);
+
+        .badge-disabled {
+            background-color: var(--danger-bg);
             color: var(--danger);
         }
-        
-        .empty-state {
-            padding: 60px 20px;
-            text-align: center;
+
+        .badge-login-ok {
+            background-color: var(--success-bg);
+            color: var(--success);
+        }
+
+        .badge-login-err {
+            background-color: var(--danger-bg);
+            color: var(--danger);
+        }
+
+        .card-body {
+            padding: 12px 16px;
+        }
+
+        .status-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .status-block {
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+        }
+
+        .status-block-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .status-block-head {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 1px 7px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status-badge.success {
+            background-color: var(--success-bg);
+            color: var(--success);
+        }
+
+        .status-badge.failed {
+            background-color: var(--danger-bg);
+            color: var(--danger);
+        }
+
+        .status-badge.error {
+            background-color: var(--warning-bg);
+            color: var(--warning);
+        }
+
+        .status-badge.partial {
+            background-color: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .status-badge.no-reward {
+            background-color: rgba(91, 111, 130, 0.06);
             color: var(--text-secondary);
         }
-        
-        .empty-state h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: var(--text-primary);
+
+        .status-badge.pending {
+            background-color: var(--warning-bg);
+            color: var(--warning);
         }
-        
+
+        .status-badge.disabled {
+            background-color: var(--danger-bg);
+            color: var(--danger);
+        }
+
+        .status-time {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .status-detail-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            line-height: 1.4;
+            word-break: break-all;
+        }
+
+        .status-raw-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 11px;
+            color: var(--primary);
+            cursor: pointer;
+            margin-top: 6px;
+            user-select: none;
+            transition: color 0.15s ease;
+        }
+
+        .status-raw-toggle:hover {
+            color: var(--primary-hover);
+        }
+
+        .status-raw-toggle .arrow {
+            display: inline-block;
+            transition: transform 0.2s ease;
+            font-size: 9px;
+        }
+
+        .status-raw-toggle.expanded .arrow {
+            transform: rotate(90deg);
+        }
+
+        .status-raw-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.25s ease;
+            margin-top: 0;
+        }
+
+        .status-raw-content-inner {
+            margin-top: 6px;
+            padding: 8px 10px;
+            background-color: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.5;
+            color: var(--text-primary);
+            max-height: 180px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .card-footer {
+            padding: 10px 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            background-color: #FAFBFC;
+        }
+
+        .card-footer-info {
+            display: flex;
+            gap: 14px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .card-footer-info span {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .card-footer-info .label {
+            color: var(--text-muted);
+        }
+
+        .card-footer-info .value {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .card-footer-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 5px;
+            border: 1px solid var(--border);
+            background-color: var(--card-bg);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .action-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+            background-color: var(--primary-bg);
+        }
+
+        .action-btn.primary {
+            background-color: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .action-btn.primary:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--text-muted);
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .empty-state h3 {
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            font-size: 13px;
+        }
+
+        .status-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            padding: 12px 22px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 2000;
+            min-width: 240px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid transparent;
+        }
+
+        .status-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .status-toast.success {
+            background-color: var(--card-bg);
+            color: var(--success);
+            border-color: var(--success);
+        }
+
+        .status-toast.error {
+            background-color: var(--card-bg);
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .status-toast.info {
+            background-color: var(--card-bg);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .status-toast.warning {
+            background-color: var(--card-bg);
+            color: var(--warning);
+            border-color: var(--warning);
+        }
+
         .modal-overlay {
             display: none;
             position: fixed;
@@ -173,219 +531,177 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: rgba(30, 40, 50, 0.45);
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 1500;
             padding: 20px;
+            backdrop-filter: blur(2px);
         }
-        
+
         .modal-overlay.show {
             display: flex;
         }
-        
+
         .modal {
             background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 28px;
+            border-radius: var(--radius);
             width: 100%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            max-width: 580px;
+            box-shadow: var(--shadow-lg);
             border: 1px solid var(--border);
+            animation: modalIn 0.2s ease;
         }
-        
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 15px;
+            padding: 18px 24px;
             border-bottom: 1px solid var(--border);
         }
-        
+
         .modal-header h2 {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: var(--text-primary);
-            margin: 0;
         }
-        
+
         .modal-close {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border: none;
-            background-color: var(--bg);
-            border-radius: 8px;
+            background-color: transparent;
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            font-size: 20px;
-            color: var(--text-secondary);
+            font-size: 18px;
+            color: var(--text-muted);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
         }
-        
+
         .modal-close:hover {
-            background-color: var(--border);
+            background-color: var(--bg);
             color: var(--text-primary);
         }
-        
+
+        .modal-body {
+            padding: 20px 24px;
+            max-height: 65vh;
+            overflow-y: auto;
+        }
+
         .detail-section {
             margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border);
         }
-        
+
         .detail-section:last-child {
-            border-bottom: none;
             margin-bottom: 0;
-            padding-bottom: 0;
         }
-        
-        .detail-section h3 {
-            font-size: 14px;
+
+        .detail-section-title {
+            font-size: 13px;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 12px;
-            padding-left: 8px;
+            margin-bottom: 10px;
+            padding-left: 10px;
             border-left: 3px solid var(--primary);
         }
-        
+
         .detail-row {
             display: flex;
             justify-content: space-between;
-            padding: 6px 0;
+            padding: 5px 0;
             font-size: 13px;
+            border-bottom: 1px solid var(--bg);
         }
-        
-        .detail-row label {
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-row-label {
             color: var(--text-secondary);
             font-weight: 500;
+            flex-shrink: 0;
         }
-        
-        .detail-row value {
+
+        .detail-row-value {
             color: var(--text-primary);
-            font-weight: 400;
+            text-align: right;
+            word-break: break-all;
+            margin-left: 12px;
         }
-        
-        .status {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 14px 24px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            z-index: 1000;
-            min-width: 280px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .status.success {
-            background-color: rgba(123, 175, 123, 0.1);
-            color: var(--success);
-            border: 1px solid rgba(123, 175, 123, 0.2);
-        }
-        
-        .status.error {
-            background-color: rgba(196, 123, 123, 0.1);
-            color: var(--danger);
-            border: 1px solid rgba(196, 123, 123, 0.2);
-        }
-        
-        .status.info {
-            background-color: rgba(107, 123, 138, 0.1);
-            color: var(--text-secondary);
-            border: 1px solid rgba(107, 123, 138, 0.2);
-        }
-        
-        .status-detail {
-            font-size: 11px;
-            line-height: 1.3;
-        }
-        
-        .status-detail .status-badge {
+
+        .loading-spinner {
             display: inline-block;
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-size: 10px;
-            font-weight: 500;
-            margin-bottom: 4px;
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
         }
-        
-        .status-detail .status-badge.success {
-            background-color: rgba(123, 175, 123, 0.15);
-            color: var(--success);
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        
-        .status-detail .status-badge.failed {
-            background-color: rgba(196, 123, 123, 0.15);
-            color: var(--danger);
-        }
-        
-        .status-detail .status-badge.error {
-            background-color: rgba(212, 184, 122, 0.15);
-            color: var(--warning);
-        }
-        
-        .status-detail .status-badge.partial {
-            background-color: rgba(107, 123, 138, 0.15);
-            color: var(--primary);
-        }
-        
-        .status-detail .status-badge.no-reward {
-            background-color: rgba(107, 123, 138, 0.1);
-            color: var(--text-secondary);
-        }
-        
-        .status-detail .status-badge.pending {
-            background-color: rgba(212, 184, 122, 0.1);
-            color: var(--warning);
-        }
-        
-        .status-detail .status-time {
-            color: var(--text-secondary);
-            font-size: 10px;
-        }
-        
-        .status-detail .status-msg {
-            color: var(--text-primary);
-            font-size: 10px;
-            margin-top: 2px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-        
-        @media (max-width: 768px) {
-            .table-header {
-                display: none;
-            }
-            
-            .table-row {
+
+        @media (max-width: 860px) {
+            .cards-grid {
                 grid-template-columns: 1fr;
-                gap: 6px;
-                padding: 12px;
-                border-bottom: 1px solid var(--border);
             }
-            
-            .table-row > div {
-                display: flex;
-                justify-content: space-between;
+
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .toolbar-left {
+                justify-content: flex-start;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .status-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 12px 16px;
+            }
+
+            .container {
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+
+            .card-header {
+                flex-direction: column;
+            }
+
+            .card-header-right {
+                flex-direction: row;
                 align-items: center;
             }
-            
-            .table-row > div::before {
-                content: attr(data-label);
-                font-weight: 500;
-                color: var(--text-secondary);
-                font-size: 11px;
+
+            .card-footer {
+                flex-direction: column;
+                align-items: stretch;
             }
         }
     </style>
@@ -397,32 +713,22 @@
     </div>
 
     <div class="container">
-        <div id="statusMessage" class="status" style="display: none;"></div>
+        <div id="statusMessage" class="status-toast" style="display: none;"></div>
 
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="搜索账号或角色名..." onkeyup="filterTable()">
-            <button class="btn btn-primary" onclick="loadAccounts()">刷新</button>
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <button class="btn" onclick="loadAccounts()">刷新</button>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span class="stats" id="statsInfo"></span>
+                <input type="text" class="search-input" id="searchInput" placeholder="搜索账号或角色名..." onkeyup="filterTable()">
+            </div>
         </div>
 
-        <div class="accounts-table">
-            <div class="table-header">
-                <div>#</div>
-                <div>账号信息</div>
-                <div>角色名</div>
-                <div>服务器/部队</div>
-                <div>房屋信息</div>
-                <div>登录状态</div>
-                <div>账号状态</div>
-                <div>签到状态</div>
-                <div>奖励状态</div>
-                <div>个性签名</div>
-                <div>上次登录</div>
-                <div>操作</div>
-            </div>
-            <div id="accountsTable">
-                <div class="table-row">
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">加载中...</div>
-                </div>
+        <div class="cards-grid" id="accountsGrid">
+            <div class="empty-state" style="grid-column: 1 / -1;">
+                <h3>加载中</h3>
+                <p>正在获取账号列表...</p>
             </div>
         </div>
     </div>
@@ -431,11 +737,13 @@
         <div class="modal">
             <div class="modal-header">
                 <h2 id="modalTitle">角色详情</h2>
-                <button class="modal-close" onclick="closeCharacterDetailModal()">×</button>
+                <button class="modal-close" onclick="closeCharacterDetailModal()">&times;</button>
             </div>
-            <div id="characterDetailContent">
+            <div class="modal-body" id="characterDetailContent">
                 <div class="empty-state">
-                    <h3>加载中...</h3>
+                    <div class="loading-spinner" style="margin-bottom: 10px;"></div>
+                    <h3>加载中</h3>
+                    <p>正在获取角色信息...</p>
                 </div>
             </div>
         </div>
@@ -443,15 +751,23 @@
 
     <script>
         let accounts = [];
+        let statusTimer = null;
 
         function showStatus(message, type) {
             const status = document.getElementById('statusMessage');
             status.textContent = message;
-            status.className = 'status ' + type;
+            status.className = 'status-toast ' + (type || 'info');
             status.style.display = 'block';
-            setTimeout(() => {
-                status.style.display = 'none';
-            }, 3000);
+            requestAnimationFrame(function() {
+                status.classList.add('show');
+            });
+            if (statusTimer) clearTimeout(statusTimer);
+            statusTimer = setTimeout(function() {
+                status.classList.remove('show');
+                setTimeout(function() {
+                    status.style.display = 'none';
+                }, 250);
+            }, 2800);
         }
 
         function goBack() {
@@ -459,6 +775,7 @@
         }
 
         async function loadAccounts() {
+            showStatus('正在加载账号列表...', 'info');
             try {
                 const response = await fetch('/api/ffxiv/signin/accounts');
                 if (!response.ok) {
@@ -467,24 +784,31 @@
                 const result = await response.json();
                 if (result.success) {
                     accounts = result.data || [];
-                    accounts = accounts.filter((account, index, self) => 
-                        index === self.findIndex(a => a.accountId === account.accountId)
-                    );
+                    accounts = accounts.filter(function(account, index, self) {
+                        return index === self.findIndex(function(a) { return a.accountId === account.accountId; });
+                    });
+                    updateStats();
                     await loadAccountDetails();
                 } else {
                     showStatus('获取账号列表失败: ' + result.message, 'error');
-                    document.getElementById('accountsTable').innerHTML = 
-                        '<div class="table-row"><div style="grid-column: 1 / -1; text-align: center; padding: 40px;">加载失败</div></div>';
+                    document.getElementById('accountsGrid').innerHTML =
+                        '<div class="empty-state"><h3>加载失败</h3><p>请稍后重试</p></div>';
                 }
             } catch (error) {
                 showStatus('加载失败: ' + error.message, 'error');
-                document.getElementById('accountsTable').innerHTML = 
-                    '<div class="table-row"><div style="grid-column: 1 / -1; text-align: center; padding: 40px;">加载失败，请检查网络连接</div></div>';
+                document.getElementById('accountsGrid').innerHTML =
+                    '<div class="empty-state"><h3>加载失败</h3><p>请检查网络连接</p></div>';
             }
         }
 
+        function updateStats() {
+            const total = accounts.length;
+            const enabled = accounts.filter(function(a) { return a.enabled; }).length;
+            document.getElementById('statsInfo').textContent = '共 ' + total + ' 个账号 · 已启用 ' + enabled;
+        }
+
         async function loadAccountDetails() {
-            accounts.forEach(account => {
+            accounts.forEach(function(account) {
                 account.characterName = '';
                 account.serverName = '';
                 account.groupName = '';
@@ -492,12 +816,12 @@
                 account.houseInfoPublish = -1;
                 account.loginError = false;
             });
-            
-            const promises = accounts.filter(account => account.enabled).map(async (account) => {
+
+            const promises = accounts.filter(function(account) { return account.enabled; }).map(async function(account) {
                 try {
-                    const response = await fetch(`/api/ffxiv/signin/accounts/${account.accountId}/user-info`);
+                    const response = await fetch('/api/ffxiv/signin/accounts/' + account.accountId + '/user-info');
                     const data = await response.json();
-                    
+
                     if (data.success && data.data) {
                         const apiResponse = data.data;
                         if (apiResponse.code === 10000 && apiResponse.data) {
@@ -507,7 +831,7 @@
                             account.groupName = userData.group_name || '';
                             account.profile = userData.profile || '';
                             account.houseInfoPublish = userData.house_info_publish !== undefined ? userData.house_info_publish : -1;
-                            
+
                             if (userData.characterDetail) {
                                 if (Array.isArray(userData.characterDetail) && userData.characterDetail.length > 0) {
                                     const detail = userData.characterDetail[0];
@@ -540,70 +864,169 @@
                         }
                     }
                 } catch (error) {
-                    console.log(`Failed to load details for account ${account.accountId}:`, error);
+                    console.log('Failed to load details for account ' + account.accountId + ':', error);
                 }
             });
-            
+
             await Promise.all(promises);
             renderTable();
         }
 
         function renderTable() {
-            const table = document.getElementById('accountsTable');
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            
-            const filtered = accounts.filter(a => 
-                (a.nickname || a.accountId).toLowerCase().includes(searchTerm) ||
-                a.characterName.toLowerCase().includes(searchTerm)
-            );
+            const grid = document.getElementById('accountsGrid');
+            const searchTerm = (document.getElementById('searchInput').value || '').toLowerCase();
+
+            const filtered = accounts.filter(function(a) {
+                return (a.nickname || a.accountId || '').toLowerCase().includes(searchTerm) ||
+                    (a.characterName || '').toLowerCase().includes(searchTerm);
+            });
 
             if (filtered.length === 0) {
-                table.innerHTML = '<div class="table-row"><div style="grid-column: 1 / -1; text-align: center; padding: 40px;">暂无数据</div></div>';
+                const msg = searchTerm ? '未找到匹配的账号' : '暂无账号';
+                grid.innerHTML =
+                    '<div class="empty-state"><h3>' + msg + '</h3><p>' + (searchTerm ? '尝试其他搜索词' : '请先添加账号') + '</p></div>';
                 return;
             }
 
             let html = '';
-            filtered.forEach((account, index) => {
-                html += `
-                    <div class="table-row" onclick="openCharacterDetail('${account.accountId}')">
-                        <div data-label="#">${index + 1}</div>
-                        <div data-label="账号信息">
-                            <div style="font-size: 12px;">${account.nickname || account.accountId}</div>
-                        </div>
-                        <div data-label="角色名">
-                            ${account.characterName ? `<span style="font-weight: 500; font-size: 13px;">${account.characterName}</span>` : '<span style="color: var(--text-secondary); font-size: 11px;">未绑定</span>'}
-                        </div>
-                        <div data-label="服务器/部队">
-                            <div style="font-size: 12px;">${account.serverName || '-'} / ${account.guildName || account.groupName || '-'}</div>
-                        </div>
-                        <div data-label="房屋信息">
-                            <span style="font-size: 11px;">${account.houseInfoPublish === 1 ? '已发布' : (account.houseInfoPublish === 0 ? '未发布' : '-')}</span>
-                        </div>
-                        <div data-label="登录状态">
-                            <span class="badge ${account.loginError ? 'disabled' : 'enabled'}">${account.loginError ? '登录失效' : '正常'}</span>
-                        </div>
-                        <div data-label="账号状态">
-                            <span class="badge ${account.enabled ? 'enabled' : 'disabled'}">${account.enabled ? '已启用' : '已禁用'}</span>
-                        </div>
-                        <div data-label="签到状态">
-                            ${getSignInStatus(account)}
-                        </div>
-                        <div data-label="奖励状态">
-                            ${getRewardStatus(account)}
-                        </div>
-                        <div data-label="个性签名">
-                            <span style="font-size: 11px; color: var(--text-secondary);">${account.profile || '-'}</span>
-                        </div>
-                        <div data-label="上次登录">
-                            <span style="font-size: 11px;">${account.lastLoginTime ? formatTime(account.lastLoginTime) : '-'}</span>
-                        </div>
-                        <div data-label="操作">
-                            <button class="btn btn-primary" style="padding: 4px 10px; font-size: 11px;">详情</button>
-                        </div>
-                    </div>
-                `;
+            filtered.forEach(function(account) {
+                html += renderAccountCard(account);
             });
-            table.innerHTML = html;
+            grid.innerHTML = html;
+        }
+
+        function renderAccountCard(account) {
+            const nickname = account.nickname || account.accountId;
+            const characterName = account.characterName || '未绑定';
+            const serverGuild = (account.serverName || '-') + ' / ' + (account.guildName || account.groupName || '-');
+            const isEnabled = account.enabled;
+            const loginOk = !account.loginError;
+
+            let badgesHtml = '';
+            badgesHtml += '<span class="badge ' + (isEnabled ? 'badge-enabled' : 'badge-disabled') + '">' + (isEnabled ? '已启用' : '已禁用') + '</span>';
+            badgesHtml += '<span class="badge ' + (loginOk ? 'badge-login-ok' : 'badge-login-err') + '">' + (loginOk ? '登录正常' : '登录失效') + '</span>';
+
+            const signInHtml = renderStatusBlock(account, 'signin');
+            const rewardHtml = renderStatusBlock(account, 'reward');
+
+            const houseInfo = account.houseInfoPublish === 1 ? '已发布' : (account.houseInfoPublish === 0 ? '未发布' : '-');
+            const lastLogin = account.lastLoginTime ? formatTime(account.lastLoginTime) : '-';
+
+            return '' +
+                '<div class="account-card" onclick="openCharacterDetail(\'' + account.accountId + '\')">' +
+                    '<div class="card-header">' +
+                        '<div class="card-header-left">' +
+                            '<div class="card-title-row">' +
+                                '<span class="card-title">' + escapeHtml(nickname) + '</span>' +
+                            '</div>' +
+                            '<div class="card-subtitle">' +
+                                '<span>' + escapeHtml(characterName) + '</span>' +
+                                '<span class="sep">·</span>' +
+                                '<span>' + escapeHtml(serverGuild) + '</span>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="card-header-right">' + badgesHtml + '</div>' +
+                    '</div>' +
+                    '<div class="card-body">' +
+                        '<div class="status-row">' + signInHtml + rewardHtml + '</div>' +
+                    '</div>' +
+                    '<div class="card-footer">' +
+                        '<div class="card-footer-info">' +
+                            '<span><span class="label">房屋</span> <span class="value">' + houseInfo + '</span></span>' +
+                            '<span><span class="label">上次登录</span> <span class="value">' + lastLogin + '</span></span>' +
+                        '</div>' +
+                        '<div class="card-footer-actions">' +
+                            '<button class="action-btn primary" onclick="event.stopPropagation(); openCharacterDetail(\'' + account.accountId + '\')">详情</button>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+        }
+
+        function renderStatusBlock(account, type) {
+            if (!account.enabled) {
+                return '<div class="status-block">' +
+                    '<div class="status-block-title">' + (type === 'signin' ? '签到' : '奖励') + '</div>' +
+                    '<div class="status-block-head"><span class="status-badge disabled">已禁用</span></div>' +
+                '</div>';
+            }
+
+            if (type === 'signin') {
+                const status = account.lastSignInStatus;
+                const time = account.lastSignInTime;
+                const detail = account.lastSignInDetail;
+                const rawResponse = account.lastSignInRawResponse;
+                return buildStatusBlock('签到', status, time, detail, rawResponse);
+            } else {
+                const status = account.lastRewardStatus;
+                const time = account.lastRewardTime;
+                const detail = account.lastRewardDetail;
+                const rawResponse = account.lastRewardRawResponse;
+                return buildStatusBlock('奖励', status, time, detail, rawResponse);
+            }
+        }
+
+        function buildStatusBlock(label, status, time, detail, rawResponse) {
+            if (!time) {
+                const pendingText = label === '签到' ? '未签到' : '未领取';
+                return '<div class="status-block">' +
+                    '<div class="status-block-title">' + label + '</div>' +
+                    '<div class="status-block-head"><span class="status-badge pending">' + pendingText + '</span></div>' +
+                '</div>';
+            }
+
+            let badgeClass = 'pending';
+            let badgeText = '未知';
+
+            if (label === '签到') {
+                if (status === 'SUCCESS') { badgeClass = 'success'; badgeText = '签到成功'; }
+                else if (status === 'FAILED') { badgeClass = 'failed'; badgeText = '签到失败'; }
+                else if (status === 'ERROR') { badgeClass = 'error'; badgeText = '签到异常'; }
+                else if (status) { badgeText = status; }
+            } else {
+                if (status === 'SUCCESS') { badgeClass = 'success'; badgeText = '领取成功'; }
+                else if (status === 'PARTIAL') { badgeClass = 'partial'; badgeText = '部分成功'; }
+                else if (status === 'FAILED') { badgeClass = 'failed'; badgeText = '领取失败'; }
+                else if (status === 'ERROR') { badgeClass = 'error'; badgeText = '领取异常'; }
+                else if (status === 'NO_REWARD') { badgeClass = 'no-reward'; badgeText = '无奖励'; }
+                else if (status) { badgeText = status; }
+            }
+
+            let html = '<div class="status-block">' +
+                '<div class="status-block-title">' + label + '</div>' +
+                '<div class="status-block-head">' +
+                    '<span class="status-badge ' + badgeClass + '">' + badgeText + '</span>' +
+                    '<span class="status-time">' + formatTime(time) + '</span>' +
+                '</div>';
+            if (detail) {
+                html += '<div class="status-detail-text" title="' + escapeHtml(detail) + '">' + escapeHtml(detail) + '</div>';
+            }
+            if (rawResponse) {
+                const toggleId = 'raw-' + Math.random().toString(36).substr(2, 9);
+                html += '<div class="status-raw-toggle" onclick="event.stopPropagation(); toggleRawResponse(this, \'' + toggleId + '\')">' +
+                    '<span class="arrow">▸</span> 查看原始响应</div>' +
+                    '<div class="status-raw-content" id="' + toggleId + '">' +
+                        '<div class="status-raw-content-inner">' + escapeHtml(rawResponse) + '</div>' +
+                    '</div>';
+            }
+            html += '</div>';
+            return html;
+        }
+
+        function toggleRawResponse(element, contentId) {
+            const content = document.getElementById(contentId);
+            if (!content) return;
+            const isExpanded = content.classList.contains('show');
+            if (isExpanded) {
+                content.style.maxHeight = '0';
+                content.classList.remove('show');
+                element.classList.remove('expanded');
+                element.innerHTML = '<span class="arrow">▸</span> 查看原始响应';
+            } else {
+                content.classList.add('show');
+                content.style.maxHeight = '300px';
+                element.classList.add('expanded');
+                element.innerHTML = '<span class="arrow">▾</span> 收起原始响应';
+            }
         }
 
         function filterTable() {
@@ -613,6 +1036,15 @@
         function formatTime(timestamp) {
             if (!timestamp) return '-';
             const date = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMin = Math.floor(diffMs / 60000);
+            const diffHour = Math.floor(diffMs / 3600000);
+            const diffDay = Math.floor(diffMs / 86400000);
+            if (diffMin < 1) return '刚刚';
+            if (diffMin < 60) return diffMin + ' 分钟前';
+            if (diffHour < 24) return diffHour + ' 小时前';
+            if (diffDay < 7) return diffDay + ' 天前';
             return date.toLocaleString('zh-CN', {
                 month: '2-digit',
                 day: '2-digit',
@@ -621,179 +1053,163 @@
             });
         }
 
-        function getSignInStatus(account) {
-            if (!account.enabled) {
-                return '<div class="status-detail"><span class="status-badge disabled">已禁用</span></div>';
-            }
-            
-            const status = account.lastSignInStatus;
-            const time = account.lastSignInTime;
-            const detail = account.lastSignInDetail;
-            
-            if (!time) {
-                return '<div class="status-detail"><span class="status-badge pending">未签到</span></div>';
-            }
-            
-            let badgeClass = 'pending';
-            let badgeText = '未知';
-            
-            if (status === 'SUCCESS') {
-                badgeClass = 'success';
-                badgeText = '签到成功';
-            } else if (status === 'FAILED') {
-                badgeClass = 'failed';
-                badgeText = '签到失败';
-            } else if (status === 'ERROR') {
-                badgeClass = 'error';
-                badgeText = '签到异常';
-            } else if (status) {
-                badgeText = status;
-            }
-            
-            let html = '<div class="status-detail">';
-            html += `<span class="status-badge ${badgeClass}">${badgeText}</span>`;
-            html += `<div class="status-time">${formatTime(time)}</div>`;
-            if (detail) {
-                html += `<div class="status-msg" title="${detail}">${detail}</div>`;
-            }
-            html += '</div>';
-            return html;
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
-        function getRewardStatus(account) {
-            if (!account.enabled) {
-                return '<div class="status-detail"><span class="status-badge disabled">已禁用</span></div>';
-            }
-            
-            const status = account.lastRewardStatus;
-            const time = account.lastRewardTime;
-            const detail = account.lastRewardDetail;
-            
-            if (!time) {
-                return '<div class="status-detail"><span class="status-badge pending">未领取</span></div>';
-            }
-            
-            let badgeClass = 'pending';
-            let badgeText = '未知';
-            
-            if (status === 'SUCCESS') {
-                badgeClass = 'success';
-                badgeText = '领取成功';
-            } else if (status === 'PARTIAL') {
-                badgeClass = 'partial';
-                badgeText = '部分成功';
-            } else if (status === 'FAILED') {
-                badgeClass = 'failed';
-                badgeText = '领取失败';
-            } else if (status === 'ERROR') {
-                badgeClass = 'error';
-                badgeText = '领取异常';
-            } else if (status === 'NO_REWARD') {
-                badgeClass = 'no-reward';
-                badgeText = '无奖励';
-            } else if (status) {
-                badgeText = status;
-            }
-            
-            let html = '<div class="status-detail">';
-            html += `<span class="status-badge ${badgeClass}">${badgeText}</span>`;
-            html += `<div class="status-time">${formatTime(time)}</div>`;
-            if (detail) {
-                html += `<div class="status-msg" title="${detail}">${detail}</div>`;
-            }
-            html += '</div>';
-            return html;
-        }
-
-        function openCharacterDetail(accountId) {
+        async function openCharacterDetail(accountId) {
             showStatus('正在加载角色详情...', 'info');
-            const account = accounts.find(a => a.accountId === accountId);
+            const account = accounts.find(function(a) { return a.accountId === accountId; });
             if (!account) return;
-            
+
             document.getElementById('characterDetailModal').classList.add('show');
-            renderCharacterDetail(account);
+            renderCharacterDetail(account, true);
+
+            try {
+                const response = await fetch('/api/ffxiv/signin/accounts/' + accountId + '/user-info');
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    const userData = result.data.data || result.data;
+
+                    account.characterName = userData.character_name || account.characterName;
+                    account.serverName = userData.group_name || account.serverName;
+                    account.groupName = userData.group_name || account.groupName;
+                    account.houseInfoPublish = userData.house_info_publish !== undefined ? userData.house_info_publish : account.houseInfoPublish;
+                    account.profile = userData.profile || account.profile;
+
+                    if (userData.characterDetail) {
+                        let detail = userData.characterDetail;
+                        if (typeof detail === 'string') {
+                            try {
+                                detail = JSON.parse(detail);
+                            } catch (e) {
+                                console.log('无法解析characterDetail:', detail);
+                                detail = null;
+                            }
+                        }
+                        if (detail && Array.isArray(detail)) {
+                            detail = detail[0];
+                        }
+                        if (detail && typeof detail === 'object') {
+                            account.guildName = detail.guild_name || account.guildName;
+                            account.guildTag = detail.guild_tag || account.guildTag;
+                            account.race = detail.race || account.race;
+                            account.tribe = detail.tribe || account.tribe;
+                            account.gender = detail.gender || account.gender;
+                            account.playTime = detail.play_time || account.playTime;
+                            account.newrank = detail.newrank || account.newrank;
+                            account.crystalRank = detail.crystal_rank || account.crystalRank;
+                            account.createTime = detail.create_time || account.create_time;
+                            account.lastLoginTime = detail.last_login_time || account.lastLoginTime;
+                        }
+                    }
+
+                    renderCharacterDetail(account, false);
+                    showStatus('角色详情已更新', 'success');
+                } else {
+                    showStatus('获取角色详情失败: ' + (result.message || '未知错误'), 'error');
+                }
+            } catch (error) {
+                showStatus('获取角色详情失败: ' + error.message, 'error');
+            }
         }
 
         function closeCharacterDetailModal() {
             document.getElementById('characterDetailModal').classList.remove('show');
-            showStatus('已关闭角色详情', 'info');
         }
 
-        function renderCharacterDetail(account) {
+        function renderCharacterDetail(account, isLoading) {
             const content = document.getElementById('characterDetailContent');
-            
+
+            if (isLoading) {
+                content.innerHTML = '<div class="empty-state"><div class="loading-spinner" style="margin-bottom: 10px;"></div><h3>加载中</h3><p>正在获取角色信息...</p></div>';
+                return;
+            }
+
             const raceMap = {
                 '1': '人族', '2': '精灵族', '3': '猫魅族', '4': '拉拉菲尔族',
                 '5': '鲁加族', '6': '敖龙族', '7': '维埃拉族', '8': '硌狮族'
             };
             const tribeMap = {
-                '1': '中原之民','2': '高地之民', // 人族
-                '3': '森林之民','4': '黑影之民', // 精灵族
-                '5': '逐日之民','6': '护月之民', // 猫魅族
-                '7': '平原之民','8': '沙漠之民', // 拉拉菲尔族
-                '9': '北洋之民','10': '红焰之民', // 鲁加族
-                '11': '晨曦之民','12': '暮晖之民', // 敖龙族
-                '13': '掠日之民','14': '迷踪之民', // 硌狮族
-                '15': '密林之民','16': '山林之民' // 维埃拉族
+                '1': '中原之民','2': '高地之民',
+                '3': '森林之民','4': '黑影之民',
+                '5': '逐日之民','6': '护月之民',
+                '7': '平原之民','8': '沙漠之民',
+                '9': '北洋之民','10': '红焰之民',
+                '11': '晨曦之民','12': '暮晖之民',
+                '13': '掠日之民','14': '迷踪之民',
+                '15': '密林之民','16': '山林之民'
             };
-            const genderMap = {'1': '女', '2': '男'};
-            
-            const formatDetail = (detail) => {
+            const genderMap = { '1': '女', '2': '男' };
+
+            const formatDetailText = function(detail) {
                 if (!detail) return '-';
                 return detail.length > 50 ? detail.substring(0, 50) + '...' : detail;
             };
-            
-            let html = `
-                <div class="detail-section">
-                    <h3>基本信息</h3>
-                    <div class="detail-row"><label>角色名</label><value>${account.characterName || '-'}</value></div>
-                    <div class="detail-row"><label>服务器</label><value>${account.serverName || '-'}</value></div>
-                    <div class="detail-row"><label>性别</label><value>${genderMap[account.gender] || account.gender || '-'}</value></div>
-                    <div class="detail-row"><label>种族</label><value>${raceMap[account.race] || account.race || '-'}</value></div>
-                    <div class="detail-row"><label>部族</label><value>${tribeMap[account.tribe] || account.tribe || '-'}</value></div>
-                    <div class="detail-row"><label>创建时间</label><value>${account.createTime || '-'}</value></div>
-                    <div class="detail-row"><label>水晶等级</label><value>${account.crystalRank || '-'}</value></div>
-                    <div class="detail-row"><label>军衔</label><value>${account.newrank || '-'}</value></div>
-                </div>
-                
-                <div class="detail-section">
-                    <h3>部队信息</h3>
-                    <div class="detail-row"><label>部队名称</label><value>${account.guildName || '-'}</value></div>
-                    <div class="detail-row"><label>部队标签</label><value>${account.guildTag || '-'}</value></div>
-                </div>
-                
-                <div class="detail-section">
-                    <h3>账号信息</h3>
-                    <div class="detail-row"><label>账号昵称</label><value>${account.nickname || account.accountId}</value></div>
-                    <div class="detail-row"><label>账号ID</label><value>${account.accountId}</value></div>
-                </div>
-                
-                <div class="detail-section">
-                    <h3>签到状态</h3>
-                    <div class="detail-row"><label>签到状态</label><value>${account.lastSignInStatus || '未知'}</value></div>
-                    <div class="detail-row"><label>签到时间</label><value>${account.lastSignInTime ? new Date(account.lastSignInTime).toLocaleString('zh-CN') : '-'}</value></div>
-                    <div class="detail-row"><label>签到详情</label><value title="${account.lastSignInDetail || ''}">${formatDetail(account.lastSignInDetail)}</value></div>
-                    ${account.lastSignInRawResponse ? '<div class="detail-row"><label>原始响应</label><value style="max-height:100px;overflow:auto;white-space:pre-wrap;font-size:11px;" title="' + account.lastSignInRawResponse + '">' + account.lastSignInRawResponse.substring(0, Math.min(300, account.lastSignInRawResponse.length())) + (account.lastSignInRawResponse.length() > 300 ? '...' : '') + '</value></div>' : ''}
-                </div>
-                
-                <div class="detail-section">
-                    <h3>奖励状态</h3>
-                    <div class="detail-row"><label>奖励状态</label><value>${account.lastRewardStatus || '未知'}</value></div>
-                    <div class="detail-row"><label>领取时间</label><value>${account.lastRewardTime ? new Date(account.lastRewardTime).toLocaleString('zh-CN') : '-'}</value></div>
-                    <div class="detail-row"><label>奖励详情</label><value title="${account.lastRewardDetail || ''}">${formatDetail(account.lastRewardDetail)}</value></div>
-                    ${account.lastRewardRawResponse ? '<div class="detail-row"><label>原始响应</label><value style="max-height:100px;overflow:auto;white-space:pre-wrap;font-size:11px;" title="' + account.lastRewardRawResponse + '">' + account.lastRewardRawResponse.substring(0, Math.min(300, account.lastRewardRawResponse.length())) + (account.lastRewardRawResponse.length() > 300 ? '...' : '') + '</value></div>' : ''}
-                </div>
-                
-                <div class="detail-section">
-                    <h3>其他信息</h3>
-                    <div class="detail-row"><label>个性签名</label><value>${account.profile || '-'}</value></div>
-                    <div class="detail-row"><label>上次登录</label><value>${account.lastLoginTime || '-'}</value></div>
-                    <div class="detail-row"><label>房屋信息</label><value>${account.houseInfoPublish === 1 ? '已发布' : (account.houseInfoPublish === 0 ? '未发布' : '-')}</value></div>
-                    <div class="detail-row"><label>账号状态</label><value>${account.enabled ? '已启用' : '已禁用'}</value></div>
-                </div>
-            `;
-            
+
+            let html = '';
+
+            html += '<div class="detail-section">';
+            html += '<div class="detail-section-title">基本信息</div>';
+            html += detailRow('角色名', account.characterName || '-');
+            html += detailRow('服务器', account.serverName || '-');
+            html += detailRow('性别', genderMap[account.gender] || account.gender || '-');
+            html += detailRow('种族', raceMap[account.race] || account.race || '-');
+            html += detailRow('部族', tribeMap[account.tribe] || account.tribe || '-');
+            html += detailRow('创建时间', account.createTime || '-');
+            html += detailRow('水晶等级', account.crystalRank || '-');
+            html += detailRow('军衔', account.newrank || '-');
+            html += '</div>';
+
+            html += '<div class="detail-section">';
+            html += '<div class="detail-section-title">部队信息</div>';
+            html += detailRow('部队名称', account.guildName || '-');
+            html += detailRow('部队标签', account.guildTag || '-');
+            html += '</div>';
+
+            html += '<div class="detail-section">';
+            html += '<div class="detail-section-title">账号信息</div>';
+            html += detailRow('账号昵称', account.nickname || account.accountId);
+            html += detailRow('账号ID', account.accountId);
+            html += '</div>';
+
+            html += '<div class="detail-section">';
+            html += '<div class="detail-section-title">签到状态</div>';
+            html += detailRow('签到状态', account.lastSignInStatus || '未知');
+            html += detailRow('签到时间', account.lastSignInTime ? new Date(account.lastSignInTime).toLocaleString('zh-CN') : '-');
+            html += detailRow('签到详情', formatDetailText(account.lastSignInDetail));
+            if (account.lastSignInRawResponse) {
+                html += '<div class="detail-row"><span class="detail-row-label">原始响应</span><span class="detail-row-value" style="max-height:120px;overflow:auto;white-space:pre-wrap;font-size:11px;max-width:60%;" title="' + escapeHtml(account.lastSignInRawResponse) + '">' + escapeHtml(account.lastSignInRawResponse.substring(0, Math.min(300, account.lastSignInRawResponse.length))) + (account.lastSignInRawResponse.length > 300 ? '...' : '') + '</span></div>';
+            }
+            html += '</div>';
+
+            html += '<div class="detail-section">';
+            html += '<div class="detail-section-title">奖励状态</div>';
+            html += detailRow('奖励状态', account.lastRewardStatus || '未知');
+            html += detailRow('领取时间', account.lastRewardTime ? new Date(account.lastRewardTime).toLocaleString('zh-CN') : '-');
+            html += detailRow('奖励详情', formatDetailText(account.lastRewardDetail));
+            if (account.lastRewardRawResponse) {
+                html += '<div class="detail-row"><span class="detail-row-label">原始响应</span><span class="detail-row-value" style="max-height:120px;overflow:auto;white-space:pre-wrap;font-size:11px;max-width:60%;" title="' + escapeHtml(account.lastRewardRawResponse) + '">' + escapeHtml(account.lastRewardRawResponse.substring(0, Math.min(300, account.lastRewardRawResponse.length))) + (account.lastRewardRawResponse.length > 300 ? '...' : '') + '</span></div>';
+            }
+            html += '</div>';
+
+            html += '<div class="detail-section">';
+            html += '<div class="detail-section-title">其他信息</div>';
+            html += detailRow('个性签名', account.profile || '-');
+            html += detailRow('上次登录', account.lastLoginTime || '-');
+            html += detailRow('房屋信息', account.houseInfoPublish === 1 ? '已发布' : (account.houseInfoPublish === 0 ? '未发布' : '-'));
+            html += detailRow('账号状态', account.enabled ? '已启用' : '已禁用');
+            html += '</div>';
+
             content.innerHTML = html;
+        }
+
+        function detailRow(label, value) {
+            return '<div class="detail-row"><span class="detail-row-label">' + label + '</span><span class="detail-row-value">' + escapeHtml(value) + '</span></div>';
         }
 
         document.addEventListener('click', function(e) {
@@ -802,7 +1218,9 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', loadAccounts);
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAccounts();
+        });
     </script>
 </body>
 </html>
