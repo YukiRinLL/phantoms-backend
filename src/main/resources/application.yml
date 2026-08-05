@@ -41,6 +41,12 @@ spring:
   # 激活的环境配置文件[citation:1]
   profiles:
     active: dev
+  # Jackson序列化配置
+  jackson:
+    date-format: yyyy-MM-dd'T'HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
 
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration

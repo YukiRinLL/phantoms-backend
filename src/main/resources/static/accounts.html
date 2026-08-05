@@ -47,6 +47,23 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        .navbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 0 28px;
+            display: flex;
+            align-items: center;
+            height: 48px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .navbar-brand { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-right: 32px; white-space: nowrap; }
+        .navbar-nav { display: flex; gap: 4px; list-style: none; flex: 1; }
+        .navbar-nav li a { display: inline-flex; align-items: center; padding: 6px 14px; border-radius: var(--radius-sm); text-decoration: none; color: var(--text-secondary); font-size: 13px; font-weight: 500; transition: all 0.15s ease; }
+        .navbar-nav li a:hover { background-color: var(--primary-bg); color: var(--primary); }
+        .navbar-nav li a.active { background-color: var(--primary); color: #fff; }
+
         .header {
             background-color: var(--card-bg);
             border-bottom: 1px solid var(--border);
@@ -885,6 +902,15 @@
     </style>
 </head>
 <body>
+    <nav class="navbar">
+        <div class="navbar-brand">Phantoms Backend</div>
+        <ul class="navbar-nav">
+            <li><a href="/accounts.html" class="active">账号管理</a></li>
+            <li><a href="/accounts-view.html">账号列表</a></li>
+            <li><a href="/housing-config.html">房屋监控</a></li>
+            <li><a href="/system-config.html">系统配置</a></li>
+        </ul>
+    </nav>
     <div class="header">
         <h1>FF14 Rising Stones 账号管理</h1>
         <span class="subtitle" id="headerSubtitle"></span>

@@ -7,12 +7,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="change port from 8080 to 8081">
+    <list default="true" id="597713ef-2ce6-43e7-aefd-636e6c8ae038" name="更改" comment="update login and signin features">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DailySignInScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DailySignInScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/ConfigController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/controller/ConfigController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/primary/SystemConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/pojo/entity/primary/SystemConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/SystemConfigService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/SystemConfigService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/accounts-view.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/accounts-view.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/accounts.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/accounts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/housing-config.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/housing-config.html" afterDir="false" />
     </list>
     <list id="cc09743e-5b03-4657-8bba-22a55747451e" name="local" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -301,22 +304,6 @@
       <workItem from="1760581459485" duration="4893000" />
       <workItem from="1761024798805" duration="11478000" />
       <workItem from="1761360693760" duration="1718000" />
-    </task>
-    <task id="LOCAL-00266" summary="switch on news functions">
-      <option name="closed" value="true" />
-      <created>1772615013642</created>
-      <option name="number" value="00266" />
-      <option name="presentableId" value="LOCAL-00266" />
-      <option name="project" value="LOCAL" />
-      <updated>1772615013642</updated>
-    </task>
-    <task id="LOCAL-00267" summary="turn on house checking and update activity notification">
-      <option name="closed" value="true" />
-      <created>1772619106573</created>
-      <option name="number" value="00267" />
-      <option name="presentableId" value="LOCAL-00267" />
-      <option name="project" value="LOCAL" />
-      <updated>1772619106573</updated>
     </task>
     <task id="LOCAL-00268" summary="fix news bug">
       <option name="closed" value="true" />
@@ -694,7 +681,23 @@
       <option name="project" value="LOCAL" />
       <updated>1785228431320</updated>
     </task>
-    <option name="localTasksCounter" value="315" />
+    <task id="LOCAL-00315" summary="update login and signin features">
+      <option name="closed" value="true" />
+      <created>1785399408185</created>
+      <option name="number" value="00315" />
+      <option name="presentableId" value="LOCAL-00315" />
+      <option name="project" value="LOCAL" />
+      <updated>1785399408185</updated>
+    </task>
+    <task id="LOCAL-00316" summary="update login and signin features">
+      <option name="closed" value="true" />
+      <created>1785405362199</created>
+      <option name="number" value="00316" />
+      <option name="presentableId" value="LOCAL-00316" />
+      <option name="project" value="LOCAL" />
+      <updated>1785405362201</updated>
+    </task>
+    <option name="localTasksCounter" value="317" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -739,7 +742,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="resolve memory overflow by delaying cache initialization" />
     <MESSAGE value="disable Hibernate archive scanning to resolve OOM" />
     <MESSAGE value="fix FF14Prompt resolve FileSystemNotFoundException when reading classpath resources in JAR" />
     <MESSAGE value="update napcat http-server-url" />
@@ -764,7 +766,8 @@
     <MESSAGE value="fix RisingStonesSigninHelper finishLogin bugs" />
     <MESSAGE value="changes" />
     <MESSAGE value="change port from 8080 to 8081" />
-    <option name="LAST_COMMIT_MESSAGE" value="change port from 8080 to 8081" />
+    <MESSAGE value="update login and signin features" />
+    <option name="LAST_COMMIT_MESSAGE" value="update login and signin features" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -781,7 +784,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/phantoms/phantomsbackend/service/scheduler/DailySignInScheduler.java</url>
-          <line>140</line>
+          <line>143</line>
           <option name="timeStamp" value="29" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">

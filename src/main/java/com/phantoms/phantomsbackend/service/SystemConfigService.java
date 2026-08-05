@@ -152,6 +152,14 @@ public class SystemConfigService {
         return new ConcurrentHashMap<>(configCache);
     }
 
+    public List<SystemConfig> getAllConfigEntities() {
+        return systemConfigRepository.findAll();
+    }
+
+    public SystemConfig getConfigEntity(String key) {
+        return systemConfigRepository.findByKey(key).orElse(null);
+    }
+
     public boolean hasConfig(String key) {
         return configCache.containsKey(key) && !configCache.get(key).isEmpty();
     }
