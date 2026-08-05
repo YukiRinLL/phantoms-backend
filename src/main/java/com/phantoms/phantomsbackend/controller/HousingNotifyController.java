@@ -39,6 +39,7 @@ public class HousingNotifyController {
         List<String> servers = (List<String>) body.get("servers");
         List<Integer> areas = (List<Integer>) body.get("areas");
         List<String> groups = (List<String>) body.get("groups");
+        List<Integer> sizes = (List<Integer>) body.get("sizes");
 
         if (name == null || name.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -52,8 +53,11 @@ public class HousingNotifyController {
         if (areas == null || areas.isEmpty()) {
             areas = List.of(0, 1, 2, 3, 4);
         }
+        if (sizes == null || sizes.isEmpty()) {
+            sizes = List.of(1, 2); // 默认 M 和 L
+        }
 
-        housingNotifyService.createTarget(name, description, servers, areas, groups);
+        housingNotifyService.createTarget(name, description, servers, areas, groups, sizes);
         
         HousingNotifyService.TargetSummary created = housingNotifyService.getTargetSummaries().stream()
                 .filter(t -> t.getName().equals(name))
@@ -72,6 +76,7 @@ public class HousingNotifyController {
         List<String> servers = (List<String>) body.get("servers");
         List<Integer> areas = (List<Integer>) body.get("areas");
         List<String> groups = (List<String>) body.get("groups");
+        List<Integer> sizes = (List<Integer>) body.get("sizes");
 
         if (servers == null || servers.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -82,8 +87,11 @@ public class HousingNotifyController {
         if (areas == null || areas.isEmpty()) {
             areas = List.of(0, 1, 2, 3, 4);
         }
+        if (sizes == null || sizes.isEmpty()) {
+            sizes = List.of(1, 2); // 默认 M 和 L
+        }
 
-        housingNotifyService.updateTarget(id, name, description, servers, areas, groups);
+        housingNotifyService.updateTarget(id, name, description, servers, areas, groups, sizes);
         
         HousingNotifyService.TargetSummary updated = housingNotifyService.getTargetSummaries().stream()
                 .filter(t -> t.getId().equals(id))

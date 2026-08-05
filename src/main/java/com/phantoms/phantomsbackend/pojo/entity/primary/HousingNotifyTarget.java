@@ -40,6 +40,9 @@ public class HousingNotifyTarget {
     @OneToMany(mappedBy = "target", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<HousingNotifyGroup> groups = new HashSet<>();
 
+    @OneToMany(mappedBy = "target", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<HousingNotifySize> sizes = new HashSet<>();
+
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
@@ -85,5 +88,16 @@ public class HousingNotifyTarget {
 
     public void clearGroups() {
         groups.clear();
+    }
+
+    public void addSize(Integer sizeId) {
+        HousingNotifySize size = new HousingNotifySize();
+        size.setTarget(this);
+        size.setSizeId(sizeId);
+        sizes.add(size);
+    }
+
+    public void clearSizes() {
+        sizes.clear();
     }
 }

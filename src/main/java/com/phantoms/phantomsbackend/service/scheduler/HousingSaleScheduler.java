@@ -485,6 +485,7 @@ public class HousingSaleScheduler {
                 for (com.phantoms.phantomsbackend.service.HousingNotifyService.TargetSummary target : targets) {
                     Set<String> targetServers = target.getServers() != null ? new LinkedHashSet<>(target.getServers()) : Set.of();
                     Set<Integer> targetAreas = getAreasForTarget(target);
+                    Set<Integer> targetSizes = target.getSizes() != null ? new LinkedHashSet<>(target.getSizes()) : Set.of(SIZE_M, SIZE_L);
                     List<String> targetGroupIds = getGroupIdsForTarget(target);
 
                     if (targetGroupIds.isEmpty() || targetServers.isEmpty()) {
@@ -494,11 +495,12 @@ public class HousingSaleScheduler {
                     List<HousingSale> targetHouses = newHouses.stream()
                             .filter(h -> targetServers.contains(h.getServer()))
                             .filter(h -> targetAreas.contains(h.getArea()))
+                            .filter(h -> targetSizes.contains(h.getSize()))
                             .collect(Collectors.toList());
 
                     if (!targetHouses.isEmpty()) {
-                        logger.info("目标配置 [name: {}, servers: {}, areas: {}] 匹配 {} 套房屋，发送到 {} 个群",
-                                target.getName(), targetServers, targetAreas, targetHouses.size(), targetGroupIds.size());
+                        logger.info("目标配置 [name: {}, servers: {}, areas: {}, sizes: {}] 匹配 {} 套房屋，发送到 {} 个群",
+                                target.getName(), targetServers, targetAreas, targetSizes, targetHouses.size(), targetGroupIds.size());
 
                         Map<String, List<HousingSale>> housesByServer = targetHouses.stream()
                                 .collect(Collectors.groupingBy(HousingSale::getServer));
@@ -517,7 +519,7 @@ public class HousingSaleScheduler {
     }
 
     /**
-     * 批量检查房屋是否为新房 - 包含M和L尺寸过滤
+     * 批量检查房屋是否为新房（仅过滤已通知过的房屋）
      */
     private List<HousingSale> filterNewHouses(List<HousingSale> houses) {
         if (houses.isEmpty()) {
@@ -531,23 +533,21 @@ public class HousingSaleScheduler {
 
             Map<String, Boolean> cacheResults = redisUtil.hasKeys(cacheKeys);
 
-            // 过滤出新房屋并且只保留M和L尺寸的房子
+            // 仅过滤出新房屋
             List<HousingSale> newHouses = houses.stream()
                     .filter(house -> {
                         String cacheKey = getHouseCacheKey(house);
                         return !cacheResults.getOrDefault(cacheKey, false);
                     })
-                    .filter(house -> house.getSize() == SIZE_M || house.getSize() == SIZE_L) // 只保留M和L尺寸的房子
                     .collect(Collectors.toList());
 
-            logger.info("批量缓存检查: 输入 {} 套，新房 {} 套 (仅M和L尺寸)", houses.size(), newHouses.size());
+            logger.info("批量缓存检查: 输入 {} 套，新房 {} 套", houses.size(), newHouses.size());
             return newHouses;
 
         } catch (Exception e) {
             logger.warn("批量缓存检查失败，降级为逐条检查: {}", e.getMessage());
             return houses.stream()
                     .filter(house -> !redisUtil.hasKey(getHouseCacheKey(house)))
-                    .filter(house -> house.getSize() == SIZE_M || house.getSize() == SIZE_L) // 只保留M和L尺寸的房子
                     .collect(Collectors.toList());
         }
     }

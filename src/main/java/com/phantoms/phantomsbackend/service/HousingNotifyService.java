@@ -34,7 +34,18 @@ public class HousingNotifyService {
     @Scheduled(fixedRate = 5 * 60 * 1000)
     public void refreshCache() {
         logger.debug("刷新房屋监控配置缓存");
-        cachedTargets = targetRepository.findAllEnabledWithDetails();
+        try {
+            cachedTargets = targetRepository.findAllEnabledWithDetails();
+        } catch (Exception e) {
+            logger.warn("加载带 sizes 的配置失败，尝试不带 sizes: {}", e.getMessage());
+            try {
+                cachedTargets = targetRepository.findAllWithBasicDetails();
+            } catch (Exception e2) {
+                logger.error("加载房屋监控配置失败: {}", e2.getMessage());
+                cachedTargets = new ArrayList<>();
+                return;
+            }
+        }
         logger.debug("房屋监控配置缓存刷新完成，共 {} 条", cachedTargets.size());
     }
 
@@ -69,7 +80,8 @@ public class HousingNotifyService {
     public HousingNotifyTarget createTarget(String name, String description,
                                             List<String> serverIds,
                                             List<Integer> areaIds,
-                                            List<String> groupIds) {
+                                            List<String> groupIds,
+                                            List<Integer> sizeIds) {
         HousingNotifyTarget target = new HousingNotifyTarget();
         target.setName(name);
         target.setDescription(description);
@@ -84,6 +96,11 @@ public class HousingNotifyService {
         for (String groupId : groupIds) {
             target.addGroup(groupId);
         }
+        // 默认添加 M 和 L 尺寸
+        List<Integer> sizes = (sizeIds != null && !sizeIds.isEmpty()) ? sizeIds : List.of(1, 2);
+        for (Integer sizeId : sizes) {
+            target.addSize(sizeId);
+        }
 
         HousingNotifyTarget saved = targetRepository.save(target);
         refreshCache();
@@ -95,7 +112,8 @@ public class HousingNotifyService {
     public HousingNotifyTarget updateTarget(Long id, String name, String description,
                                             List<String> serverIds,
                                             List<Integer> areaIds,
-                                            List<String> groupIds) {
+                                            List<String> groupIds,
+                                            List<Integer> sizeIds) {
         HousingNotifyTarget target = targetRepository.findByIdWithDetails(id)
                 .orElseThrow(() -> new IllegalArgumentException("配置不存在: " + id));
 
@@ -119,6 +137,11 @@ public class HousingNotifyService {
         target.clearGroups();
         for (String groupId : groupIds) {
             target.addGroup(groupId);
+        }
+
+        target.clearSizes();
+        for (Integer sizeId : sizeIds) {
+            target.addSize(sizeId);
         }
 
         HousingNotifyTarget saved = targetRepository.save(target);
@@ -160,6 +183,9 @@ public class HousingNotifyService {
         summary.setGroups(target.getGroups().stream()
                 .map(g -> g.getGroupId())
                 .collect(Collectors.toList()));
+        summary.setSizes(target.getSizes().stream()
+                .map(s -> s.getSizeId())
+                .collect(Collectors.toList()));
         summary.setCreatedAt(target.getCreatedAt());
         summary.setUpdatedAt(target.getUpdatedAt());
         return summary;
@@ -173,6 +199,7 @@ public class HousingNotifyService {
         private List<String> servers;
         private List<Integer> areas;
         private List<String> groups;
+        private List<Integer> sizes;
         private java.time.LocalDateTime createdAt;
         private java.time.LocalDateTime updatedAt;
 
@@ -190,6 +217,8 @@ public class HousingNotifyService {
         public void setAreas(List<Integer> areas) { this.areas = areas; }
         public List<String> getGroups() { return groups; }
         public void setGroups(List<String> groups) { this.groups = groups; }
+        public List<Integer> getSizes() { return sizes; }
+        public void setSizes(List<Integer> sizes) { this.sizes = sizes; }
         public java.time.LocalDateTime getCreatedAt() { return createdAt; }
         public void setCreatedAt(java.time.LocalDateTime createdAt) { this.createdAt = createdAt; }
         public java.time.LocalDateTime getUpdatedAt() { return updatedAt; }

@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统配置管理</title>
+    <style>
+        :root {
+            --primary: #5B6F82;
+            --primary-hover: #4A5F72;
+            --primary-light: #7A8E9F;
+            --primary-bg: rgba(91, 111, 130, 0.08);
+            --success: #22A06B;
+            --success-bg: rgba(34, 160, 107, 0.1);
+            --danger: #C45A5A;
+            --danger-bg: rgba(196, 90, 90, 0.1);
+            --warning: #C89B4A;
+            --warning-bg: rgba(200, 155, 74, 0.1);
+            --bg: #F4F5F7;
+            --card-bg: #FFFFFF;
+            --text-primary: #2B323B;
+            --text-secondary: #606A75;
+            --text-muted: #909AA5;
+            --border: #E2E5E9;
+            --border-hover: #C8CDD3;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 6px 20px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --radius-sm: 6px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 0 28px;
+            display: flex;
+            align-items: center;
+            height: 48px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-brand {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-right: 32px;
+            white-space: nowrap;
+        }
+
+        .navbar-nav {
+            display: flex;
+            gap: 4px;
+            list-style: none;
+            flex: 1;
+        }
+
+        .navbar-nav li a {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .navbar-nav li a:hover {
+            background-color: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .navbar-nav li a.active {
+            background-color: var(--primary);
+            color: #fff;
+        }
+
+        /* 页面头部 */
+        .header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.2px;
+        }
+
+        .header .subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-left: 12px;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-left {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .toolbar-right {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 9px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+            width: 260px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-bg);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .btn:hover:not(:disabled) {
+            background-color: var(--bg);
+            border-color: var(--border-hover);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+
+        .btn-danger {
+            background-color: var(--card-bg);
+            color: var(--danger);
+            border-color: var(--border);
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background-color: var(--danger-bg);
+            border-color: var(--danger);
+        }
+
+        .btn-sm {
+            padding: 3px 10px;
+            font-size: 12px;
+            border-radius: 5px;
+            height: 24px;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stats {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* 配置列表 - 紧凑两栏布局 */
+        .config-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .config-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: border-color 0.15s ease, background-color 0.15s ease;
+        }
+
+        .config-card:hover {
+            border-color: var(--border-hover);
+            background-color: var(--bg);
+        }
+
+        .config-left {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .config-key-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .config-key {
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .config-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.3;
+        }
+
+        .config-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            line-height: 1.3;
+        }
+
+        .config-meta .dot {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background-color: var(--text-muted);
+        }
+
+        .config-right {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .config-value-wrap {
+            display: flex;
+            align-items: center;
+        }
+
+        .config-value {
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 12px;
+            color: var(--text-primary);
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            line-height: 1.3;
+        }
+
+        .config-value.expanded {
+            white-space: pre-wrap;
+            word-break: break-all;
+            overflow: visible;
+            text-align: left;
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-size: 11px;
+            line-height: 1.5;
+            max-width: 480px;
+        }
+
+        .value-actions {
+            display: flex;
+            gap: 3px;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+
+        .value-btn {
+            font-size: 11px;
+            color: var(--primary-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0 6px;
+            border-radius: 3px;
+            transition: all 0.15s ease;
+            font-family: inherit;
+            white-space: nowrap;
+            line-height: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .value-btn:hover {
+            background-color: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .value-meta {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        /* 开关组件 */
+        .switch {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            height: 24px;
+            vertical-align: middle;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .switch-slider {
+            position: relative;
+            display: inline-block;
+            width: 32px;
+            height: 18px;
+            background-color: #D1D5DB;
+            border-radius: 9px;
+            transition: background-color 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .switch-slider::before {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            left: 2px;
+            top: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+        }
+
+        .switch input:checked + .switch-slider {
+            background-color: var(--success);
+        }
+
+        .switch input:checked + .switch-slider::before {
+            transform: translateX(16px);
+        }
+
+        .switch input:disabled + .switch-slider {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .switch-label {
+            margin-left: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            min-width: 28px;
+            line-height: 18px;
+            display: flex;
+            align-items: center;
+            height: 18px;
+        }
+
+        .switch-on .switch-label {
+            color: var(--success);
+        }
+
+        .switch-off .switch-label {
+            color: var(--text-muted);
+        }
+
+        /* JSON Badge */
+        .json-badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 10px;
+            padding: 0 6px;
+            border-radius: 3px;
+            background-color: var(--primary-bg);
+            color: var(--primary);
+            font-weight: 500;
+            margin-left: 0;
+            vertical-align: middle;
+            height: 24px;
+            line-height: 1;
+        }
+
+        .json-badge.cookie {
+            background-color: var(--warning-bg);
+            color: var(--warning);
+        }
+
+        .value-meta {
+            font-size: 10px;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            height: 24px;
+            line-height: 1;
+        }
+
+        /* 操作按钮 */
+        .config-actions {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state p {
+            font-size: 13px;
+        }
+
+        /* 模态框 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            width: 90%;
+            max-width: 560px;
+            max-height: 85vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: background-color 0.15s ease;
+        }
+
+        .modal-close:hover {
+            background-color: var(--bg);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-family: inherit;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-bg);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+        }
+
+        .form-group .hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .modal-footer {
+            padding: 12px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* Toast */
+        .status-toast {
+            position: fixed;
+            top: 60px;
+            right: 24px;
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 2000;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.2s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .status-toast.success {
+            background-color: var(--success);
+            color: #fff;
+        }
+
+        .status-toast.error {
+            background-color: var(--danger);
+            color: #fff;
+        }
+
+        .value-toggle {
+            cursor: pointer;
+            color: var(--primary-light);
+            font-size: 11px;
+            margin-left: 6px;
+            user-select: none;
+        }
+
+        .value-toggle:hover {
+            color: var(--primary);
+        }
+
+        .json-badge {
+            display: inline-block;
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 3px;
+            background-color: var(--primary-bg);
+            color: var(--primary);
+            font-weight: 500;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-brand">Phantoms Backend</div>
+        <ul class="navbar-nav">
+            <li><a href="/accounts.html">账号管理</a></li>
+            <li><a href="/accounts-view.html">账号列表</a></li>
+            <li><a href="/housing-config.html">房屋监控</a></li>
+            <li><a href="/system-config.html" class="active">系统配置</a></li>
+        </ul>
+    </nav>
+
+    <!-- 页面头部 -->
+    <div class="header">
+        <div>
+            <h1>系统配置管理</h1>
+            <span class="subtitle">管理所有 SystemConfig 键值对配置</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="status" class="status-toast" style="display: none;"></div>
+
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <button class="btn btn-primary" onclick="openCreateModal()">+ 新建配置</button>
+                <button class="btn" onclick="loadConfigs()">刷新</button>
+            </div>
+            <div class="toolbar-right">
+                <span class="stats" id="statsInfo"></span>
+                <input type="text" class="search-input" id="searchInput" placeholder="搜索 Key 或描述..." oninput="renderTable()">
+            </div>
+        </div>
+
+        <div class="config-list" id="configList">
+            <div class="empty-state">
+                <h3>加载中</h3>
+                <p>正在获取配置列表...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑/新建模态框 -->
+    <div id="editModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">新建配置</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" onsubmit="handleSubmit(event)">
+                    <input type="hidden" id="editMode" value="create">
+                    <div class="form-group">
+                        <label for="editKey">配置 Key</label>
+                        <input type="text" id="editKey" placeholder="如 napcat.default-group-id" required>
+                        <div class="hint">使用点号分隔的命名空间，如 ff14.news.group-ids</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editValue">配置值</label>
+                        <textarea id="editValue" placeholder="输入配置值..."></textarea>
+                        <div class="hint">支持纯文本或 JSON 格式</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDescription">描述</label>
+                        <input type="text" id="editDescription" placeholder="简要描述该配置项的用途">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal()">取消</button>
+                <button class="btn btn-primary" onclick="handleSubmit(event)">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allConfigs = [];
+        let expandedRows = new Set();
+
+        async function loadConfigs() {
+            try {
+                const response = await fetch('/api/config');
+                const result = await response.json();
+                allConfigs = result || [];
+                renderTable();
+                updateStats();
+            } catch (error) {
+                console.error('加载配置失败:', error);
+                showToast('加载配置失败: ' + error.message, 'error');
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('statsInfo').textContent = `共 ${allConfigs.length} 条配置`;
+        }
+
+        function tryParseJson(str) {
+            if (!str) return null;
+            const trimmed = str.trim();
+            if ((trimmed.startsWith('{') && trimmed.endsWith('}')) ||
+                (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+                try {
+                    return JSON.parse(trimmed);
+                } catch {
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        function isJsonValue(str) {
+            return tryParseJson(str) !== null;
+        }
+
+        function formatJson(str) {
+            const obj = tryParseJson(str);
+            if (obj !== null) {
+                return JSON.stringify(obj, null, 2);
+            }
+            return str;
+        }
+
+        function renderTable() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const container = document.getElementById('configList');
+
+            let filtered = allConfigs;
+            if (search) {
+                filtered = allConfigs.filter(c =>
+                    (c.key && c.key.toLowerCase().includes(search)) ||
+                    (c.description && c.description.toLowerCase().includes(search)) ||
+                    (c.value && c.value.toLowerCase().includes(search))
+                );
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="empty-state"><h3>暂无配置</h3><p>${search ? '没有匹配的配置项' : '点击「新建配置」添加第一条配置'}</p></div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map((config, idx) => {
+                const rawValue = config.value || '';
+                const isBool = isBooleanValue(rawValue);
+                const isJson = !isBool && isJsonValue(rawValue);
+                const displayValue = isJson ? formatJson(rawValue) : rawValue;
+                const isLong = displayValue.length > 60 || displayValue.includes('\n');
+                const isExpanded = expandedRows.has(config.key);
+                const isCookie = config.key && config.key.toLowerCase().includes('cookie');
+
+                // Value display
+                let valueHtml;
+                if (isBool) {
+                    const boolVal = rawValue.trim().toLowerCase() === 'true';
+                    valueHtml = `<label class="switch ${boolVal ? 'switch-on' : 'switch-off'}" onclick="toggleBoolean('${escapeHtml(config.key)}')">
+                        <input type="checkbox" ${boolVal ? 'checked' : ''} data-key="${escapeHtml(config.key)}">
+                        <span class="switch-slider"></span>
+                        <span class="switch-label">${boolVal ? 'ON' : 'OFF'}</span>
+                    </label>`;
+                } else if (isExpanded) {
+                    valueHtml = `<div class="config-value expanded">${escapeHtml(displayValue)}</div>`;
+                } else {
+                    const preview = displayValue.length > 60 ? displayValue.substring(0, 60) + '...' : displayValue;
+                    valueHtml = `<div class="config-value" title="${escapeHtml(rawValue).replace(/"/g, '&quot;')}">${escapeHtml(preview)}</div>`;
+                }
+
+                // Action buttons
+                const actions = [];
+                if (!isBool && isLong) {
+                    actions.push(`<button class="value-btn" onclick="toggleRow('${escapeHtml(config.key)}')">${isExpanded ? '收起' : '展开'}</button>`);
+                }
+                if (!isBool) {
+                    actions.push(`<button class="value-btn" onclick="copyValue('${escapeHtml(config.key)}')">复制</button>`);
+                }
+                if (isJson) {
+                    actions.push(`<span class="json-badge">JSON</span>`);
+                }
+                if (isCookie) {
+                    actions.push(`<span class="json-badge cookie">COOKIE</span>`);
+                }
+
+                const lines = displayValue.split('\n').length;
+                if (isExpanded && lines > 1) {
+                    actions.push(`<span class="value-meta">${lines} 行 · ${displayValue.length} 字符</span>`);
+                }
+
+                // Left side
+                const leftHtml = `
+                    <div class="config-left">
+                        <div class="config-key-row">
+                            <span class="config-key">${escapeHtml(config.key || '')}</span>
+                        </div>
+                        <div class="config-desc">${escapeHtml(config.description || '')}</div>
+                        <div class="config-meta">
+                            <span>更新于 ${formatTime(config.updatedAt)}</span>
+                        </div>
+                    </div>`;
+
+                // Right side - single row horizontal layout
+                const rightHtml = `
+                    <div class="config-right">
+                        <div class="config-value-wrap">${valueHtml}</div>
+                        <div class="value-actions">${actions.join('')}</div>
+                        <div class="config-actions">
+                            <button class="btn btn-sm" onclick="openEditModal('${escapeHtml(config.key)}')">编辑</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteConfig('${escapeHtml(config.key)}')">删除</button>
+                        </div>
+                    </div>`;
+
+                return `<div class="config-card">${leftHtml}${rightHtml}</div>`;
+            }).join('');
+        }
+
+        function isBooleanValue(str) {
+            if (!str) return false;
+            const trimmed = str.trim().toLowerCase();
+            return trimmed === 'true' || trimmed === 'false';
+        }
+
+        async function toggleBoolean(key) {
+            const config = allConfigs.find(c => c.key === key);
+            if (!config) return;
+
+            const currentVal = (config.value || '').trim().toLowerCase();
+            const newVal = currentVal === 'true' ? 'false' : 'true';
+
+            try {
+                const response = await fetch('/api/config/' + encodeURIComponent(key), {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        key: config.key,
+                        value: newVal,
+                        description: config.description
+                    })
+                });
+
+                if (response.ok) {
+                    showToast(`已更新为 ${newVal.toUpperCase()}`, 'success');
+                    loadConfigs();
+                } else {
+                    const errText = await response.text();
+                    showToast('更新失败: ' + (errText || response.statusText), 'error');
+                }
+            } catch (error) {
+                showToast('更新失败: ' + error.message, 'error');
+            }
+        }
+
+        function toggleRow(key) {
+            if (expandedRows.has(key)) {
+                expandedRows.delete(key);
+            } else {
+                expandedRows.add(key);
+            }
+            renderTable();
+        }
+
+        function copyValue(key) {
+            const config = allConfigs.find(c => c.key === key);
+            if (!config) return;
+            const value = config.value || '';
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(value).then(() => {
+                    showToast('已复制到剪贴板', 'success');
+                }).catch(() => {
+                    fallbackCopy(value);
+                });
+            } else {
+                fallbackCopy(value);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast('已复制到剪贴板', 'success');
+            } catch {
+                showToast('复制失败', 'error');
+            }
+            document.body.removeChild(ta);
+        }
+
+        function openCreateModal() {
+            document.getElementById('modalTitle').textContent = '新建配置';
+            document.getElementById('editMode').value = 'create';
+            document.getElementById('editKey').value = '';
+            document.getElementById('editKey').disabled = false;
+            document.getElementById('editValue').value = '';
+            document.getElementById('editDescription').value = '';
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function openEditModal(key) {
+            const config = allConfigs.find(c => c.key === key);
+            if (!config) return;
+
+            document.getElementById('modalTitle').textContent = '编辑配置';
+            document.getElementById('editMode').value = 'edit';
+            document.getElementById('editKey').value = config.key;
+            document.getElementById('editKey').disabled = true;
+            document.getElementById('editValue').value = config.value || '';
+            document.getElementById('editDescription').value = config.description || '';
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('show');
+        }
+
+        async function handleSubmit(event) {
+            if (event) event.preventDefault();
+            const mode = document.getElementById('editMode').value;
+            const key = document.getElementById('editKey').value.trim();
+            const value = document.getElementById('editValue').value;
+            const description = document.getElementById('editDescription').value;
+
+            if (!key) {
+                showToast('配置 Key 不能为空', 'error');
+                return;
+            }
+
+            try {
+                let url, method;
+                if (mode === 'create') {
+                    url = '/api/config';
+                    method = 'POST';
+                } else {
+                    url = '/api/config/' + encodeURIComponent(key);
+                    method = 'PUT';
+                }
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key, value, description })
+                });
+
+                if (response.ok) {
+                    showToast(mode === 'create' ? '配置创建成功' : '配置更新成功', 'success');
+                    closeModal();
+                    loadConfigs();
+                } else {
+                    const errText = await response.text();
+                    showToast('操作失败: ' + (errText || response.statusText), 'error');
+                }
+            } catch (error) {
+                showToast('操作失败: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteConfig(key) {
+            if (!confirm(`确定要删除配置 "${key}" 吗？`)) return;
+            try {
+                const response = await fetch('/api/config/' + encodeURIComponent(key), {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    showToast('配置已删除', 'success');
+                    loadConfigs();
+                } else {
+                    showToast('删除失败', 'error');
+                }
+            } catch (error) {
+                showToast('删除失败: ' + error.message, 'error');
+            }
+        }
+
+        function formatTime(timeStr) {
+            if (!timeStr) return '-';
+
+            // Handle LocalDateTime array format: [year, month, day, hour, minute, second]
+            if (Array.isArray(timeStr)) {
+                const pad = n => String(n).padStart(2, '0');
+                return `${timeStr[0]}/${pad(timeStr[1])}/${pad(timeStr[2])} ${pad(timeStr[3])}:${pad(timeStr[4])}`;
+            }
+
+            // Handle string format
+            try {
+                const d = new Date(timeStr);
+                if (!isNaN(d.getTime())) {
+                    const pad = n => String(n).padStart(2, '0');
+                    return `${d.getFullYear()}/${pad(d.getMonth() + 1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+                }
+            } catch {}
+
+            // Handle ISO string from Jackson
+            if (typeof timeStr === 'string' && timeStr.includes('T')) {
+                try {
+                    const parts = timeStr.split('T');
+                    const datePart = parts[0];
+                    const timePart = parts[1] || '';
+                    const dateParts = datePart.split('-');
+                    const timeParts = timePart.split(':');
+                    if (dateParts.length >= 3) {
+                        return `${dateParts[0]}/${dateParts[1]}/${dateParts[2]} ${timeParts[0] || '00'}:${timeParts[1] || '00'}`;
+                    }
+                } catch {}
+            }
+
+            return String(timeStr);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function showToast(msg, type) {
+            const toast = document.getElementById('status');
+            toast.textContent = msg;
+            toast.className = 'status-toast ' + type;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+
+        // 点击遮罩关闭模态框
+        document.getElementById('editModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // 初始化
+        loadConfigs();
+    </script>
+</body>
+</html>
