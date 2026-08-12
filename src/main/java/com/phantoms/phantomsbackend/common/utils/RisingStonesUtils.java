@@ -59,6 +59,45 @@ public class RisingStonesUtils {
         return null;
     }
 
+    /**
+     * 获取所有已启用账号的cookies列表（用于部队相关API的权限回退）
+     * @return cookies列表，过滤掉空值
+     */
+    private static List<String> getAllEnabledAccountCookies() {
+        List<String> cookiesList = new ArrayList<>();
+        try {
+            RisingStonesAccountService accountService = SpringContextHolder.getBean(RisingStonesAccountService.class);
+            List<RisingStonesAccount> accounts = accountService.getEnabledAccounts();
+            for (RisingStonesAccount account : accounts) {
+                if (account.getCookies() != null && !account.getCookies().isEmpty()) {
+                    cookiesList.add(account.getCookies());
+                }
+            }
+        } catch (Exception e) {
+            logger.warn("获取所有已启用账号cookies失败", e);
+        }
+        return cookiesList;
+    }
+
+    /**
+     * 判断部队API响应是否需要重试（默认账号无权限时，尝试其他账号）
+     * 返回true表示需要尝试下一个账号的cookies
+     */
+    private static boolean shouldRetryGuildRequest(JSONObject response) {
+        if (response == null) {
+            return true;
+        }
+        Integer code = response.getInteger("code");
+        if (code == null) {
+            return true;
+        }
+        // 10000为成功码，其他均视为需要重试
+        // 常见需要重试的错误码：
+        // 10401 - 只有该部队成员才能查看相关信息
+        // 10103 - 请先绑定角色
+        return code != 10000;
+    }
+
     public static JSONObject getUserInfo(String uuid) throws IOException {
         String cookies = getDefaultApiCookies();
         if (cookies == null || cookies.isEmpty()) {
@@ -141,7 +180,45 @@ public class RisingStonesUtils {
     }
 
     public static JSONObject getGuildInfo(String guildId) throws IOException {
-        String cookies = getDefaultApiCookies();
+        String defaultCookies = getDefaultApiCookies();
+        if (defaultCookies == null || defaultCookies.isEmpty()) {
+            logger.error("未找到登录cookies，请先登录");
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+
+        // 先用默认账号尝试
+        JSONObject result = getGuildInfoWithCookies(defaultCookies, guildId);
+        if (!shouldRetryGuildRequest(result)) {
+            return result;
+        }
+        logger.warn("默认账号获取部队信息失败(code={})，msg={}，尝试使用其他已登录账号",
+                result != null ? result.getInteger("code") : null,
+                result != null ? result.getString("msg") : null);
+
+        // 默认账号失败，遍历所有已启用账号逐一尝试
+        List<String> allCookies = getAllEnabledAccountCookies();
+        for (String cookies : allCookies) {
+            // 跳过默认账号的cookies（避免重复尝试）
+            if (cookies.equals(defaultCookies)) {
+                continue;
+            }
+            try {
+                JSONObject retryResult = getGuildInfoWithCookies(cookies, guildId);
+                if (!shouldRetryGuildRequest(retryResult)) {
+                    logger.info("使用备用账号成功获取部队信息 guildId={}", guildId);
+                    return retryResult;
+                }
+            } catch (Exception e) {
+                logger.warn("备用账号获取部队信息异常，继续尝试下一个", e);
+            }
+        }
+
+        // 所有账号都失败了，返回最后一次默认账号的结果
+        logger.error("所有账号均无法获取部队信息 guildId={}，返回默认账号结果", guildId);
+        return result;
+    }
+
+    private static JSONObject getGuildInfoWithCookies(String cookies, String guildId) throws IOException {
         if (cookies == null || cookies.isEmpty()) {
             logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
@@ -153,7 +230,6 @@ public class RisingStonesUtils {
                 .addQueryParameter("tempsuid", tempsuid)
                 .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
             .cookieJar(new CookieJar() {
                 @Override
@@ -182,7 +258,45 @@ public class RisingStonesUtils {
     }
 
     public static JSONObject getGuildMember(String guildId) throws IOException {
-        String cookies = getDefaultApiCookies();
+        String defaultCookies = getDefaultApiCookies();
+        if (defaultCookies == null || defaultCookies.isEmpty()) {
+            logger.error("未找到登录cookies，请先登录");
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+
+        // 先用默认账号尝试
+        JSONObject result = getGuildMemberWithCookies(defaultCookies, guildId);
+        if (!shouldRetryGuildRequest(result)) {
+            return result;
+        }
+        logger.warn("默认账号获取部队成员失败(code={})，msg={}，尝试使用其他已登录账号",
+                result != null ? result.getInteger("code") : null,
+                result != null ? result.getString("msg") : null);
+
+        // 默认账号失败，遍历所有已启用账号逐一尝试
+        List<String> allCookies = getAllEnabledAccountCookies();
+        for (String cookies : allCookies) {
+            // 跳过默认账号的cookies（避免重复尝试）
+            if (cookies.equals(defaultCookies)) {
+                continue;
+            }
+            try {
+                JSONObject retryResult = getGuildMemberWithCookies(cookies, guildId);
+                if (!shouldRetryGuildRequest(retryResult)) {
+                    logger.info("使用备用账号成功获取部队成员 guildId={}", guildId);
+                    return retryResult;
+                }
+            } catch (Exception e) {
+                logger.warn("备用账号获取部队成员异常，继续尝试下一个", e);
+            }
+        }
+
+        // 所有账号都失败了，返回最后一次默认账号的结果
+        logger.error("所有账号均无法获取部队成员 guildId={}，返回默认账号结果", guildId);
+        return result;
+    }
+
+    private static JSONObject getGuildMemberWithCookies(String cookies, String guildId) throws IOException {
         if (cookies == null || cookies.isEmpty()) {
             logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
@@ -194,7 +308,6 @@ public class RisingStonesUtils {
                 .addQueryParameter("tempsuid", tempsuid)
                 .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
             .cookieJar(new CookieJar() {
                 @Override
@@ -235,7 +348,45 @@ public class RisingStonesUtils {
     }
 
     public static JSONObject getGuildMemberDynamic(String guildId, int page, int limit) throws IOException {
-        String cookies = getDefaultApiCookies();
+        String defaultCookies = getDefaultApiCookies();
+        if (defaultCookies == null || defaultCookies.isEmpty()) {
+            logger.error("未找到登录cookies，请先登录");
+            throw new IOException("未找到登录cookies，请先登录");
+        }
+
+        // 先用默认账号尝试
+        JSONObject result = getGuildMemberDynamicWithCookies(defaultCookies, guildId, page, limit);
+        if (!shouldRetryGuildRequest(result)) {
+            return result;
+        }
+        logger.warn("默认账号获取部队成员动态失败(code={})，msg={}，尝试使用其他已登录账号",
+                result != null ? result.getInteger("code") : null,
+                result != null ? result.getString("msg") : null);
+
+        // 默认账号失败，遍历所有已启用账号逐一尝试
+        List<String> allCookies = getAllEnabledAccountCookies();
+        for (String cookies : allCookies) {
+            // 跳过默认账号的cookies（避免重复尝试）
+            if (cookies.equals(defaultCookies)) {
+                continue;
+            }
+            try {
+                JSONObject retryResult = getGuildMemberDynamicWithCookies(cookies, guildId, page, limit);
+                if (!shouldRetryGuildRequest(retryResult)) {
+                    logger.info("使用备用账号成功获取部队成员动态 guildId={}", guildId);
+                    return retryResult;
+                }
+            } catch (Exception e) {
+                logger.warn("备用账号获取部队成员动态异常，继续尝试下一个", e);
+            }
+        }
+
+        // 所有账号都失败了，返回最后一次默认账号的结果
+        logger.error("所有账号均无法获取部队成员动态 guildId={}，返回默认账号结果", guildId);
+        return result;
+    }
+
+    private static JSONObject getGuildMemberDynamicWithCookies(String cookies, String guildId, int page, int limit) throws IOException {
         if (cookies == null || cookies.isEmpty()) {
             logger.error("未找到登录cookies，请先登录");
             throw new IOException("未找到登录cookies，请先登录");
@@ -249,7 +400,6 @@ public class RisingStonesUtils {
             .addQueryParameter("tempsuid", tempsuid)
             .build();
 
-        // 创建一个不使用内部cookieJar的新客户端，以避免cookie冲突
         OkHttpClient tempClient = client.newBuilder()
             .cookieJar(new CookieJar() {
                 @Override
