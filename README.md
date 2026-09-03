@@ -1,5 +1,15 @@
 # phantoms-backend
-_phantoms Java backend_
+
+Phantoms 社区的 Java 后端服务，基于 Spring Boot 3.1.4 和 Java 21。
+
+## 文档说明
+
+- `doc/project-overview.md`：当前项目结构、接口模块、定时任务和部署说明。
+- `doc/how-to-login.md`：当前网页扫码登录流程。
+- `doc/daoyu_login_flow.md`：当前后端实际使用的叨鱼/石之家登录 API 流程。
+- `doc/risingStones API samples.md`：外部石之家接口样例，可能随第三方服务变化。
+
+项目中的 `src/archive/`、`doc/Data extraction/` 和本地 JAR 文件属于历史代码、样例或运维材料，不应默认视为生产运行所必需。
 
 ![Alt](https://repobeats.axiom.co/api/embed/dd194003fcac6a0aef94580777d8891f99392778.svg "Repobeats analytics image")
 
@@ -8,7 +18,7 @@ _phantoms Java backend_
     - D1 / LeanCloud 相关交互
     - Supabase 相关交互
     - 操作 主数据源(PostgreSQL) 备份数据源(MySQL)
-    - 操作 Redis 缓存(Render)
+    - 操作 Redis 缓存（Render）
     - 发送电子邮件
     - 对接 Littlenightmare API
     - 对接 FFXIV API
@@ -30,7 +40,9 @@ _phantoms Java backend_
 ![Phantoms.jpg](doc/Phantoms.jpg)
 
 ## 开发备注:
-PS:由于Github的lfs存储空间有限，所以每次提交代码不保留旧版本文件
+> 注意：本项目包含 `.env`、数据库导出、缓存文件和外部服务配置。发布或迁移前必须检查并移除真实密码、Cookie、Token、邮箱凭据和数据库数据。
+
+由于Github的lfs存储空间有限，所以每次提交代码不保留旧版本文件
 ### 自动清理本地 LFS 文件
 
 需要配置本地项目路径下的.git/hooks/post-commit文件,手动添加下列代码:

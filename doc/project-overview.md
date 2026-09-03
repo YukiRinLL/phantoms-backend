@@ -1,5 +1,7 @@
 # Phantoms Backend 项目说明
 
+> 本文按当前源码和构建配置整理。第三方接口、部署地址、定时任务和数据库配置可能随环境变化；以源码、环境变量和实际部署配置为准。
+
 ## 1. 项目简介
 
 `phantoms-backend` 是一个围绕《最终幻想 XIV》（Final Fantasy XIV，简称 FF14）玩家社区构建的 Java 后端服务。
@@ -169,7 +171,7 @@ src/main/java/com/phantoms/phantomsbackend/service/scheduler/
 
 - JDK 21。
 - Maven 3.9 或更高版本。
-- 可访问的 PostgreSQL、MySQL 和 Redis 服务。
+- 可访问的 PostgreSQL、MySQL 和 Redis 服务。部分功能还需要外部 API、QQ/OneBot、SMTP 或石之家登录状态。
 - 已配置项目所需的环境变量。
 
 ### 8.2 Maven 构建
@@ -198,7 +200,7 @@ target/phantoms-backend-1.0-SNAPSHOT.jar
 java -jar target/phantoms-backend-1.0-SNAPSHOT.jar
 ```
 
-默认容器端口为 `8080`。实际端口、数据库连接和第三方服务配置以 `application.yml`、`application.properties` 及运行环境变量为准。
+`src/main/resources/application.yml` 当前配置应用端口为 `8081`。Dockerfile 的 `EXPOSE 8080` 与该配置不一致，`EXPOSE` 只是镜像元数据，不会自动改变 Spring Boot 监听端口；部署时应明确设置平台端口和 `server.port`，避免依赖该不一致配置。
 
 ## 9. Docker 部署
 
@@ -207,7 +209,7 @@ java -jar target/phantoms-backend-1.0-SNAPSHOT.jar
 1. 使用 Maven 和 Amazon Corretto 21 构建 Spring Boot JAR。
 2. 使用 Amazon Corretto 21 Alpine 镜像运行应用。
 3. 安装中文字体和通用字体，支持二维码、图片或文本渲染相关功能。
-4. 对外暴露 `8080` 端口。
+4. Dockerfile 元数据声明 `8080`，但当前 Spring 配置默认监听 `8081`，部署时必须统一二者。
 
 构建镜像：
 
@@ -227,10 +229,13 @@ docker build -t phantoms-backend .
 - `doc/Phantoms.jpg`、`doc/Phantoms.drawio`：系统架构图。
 - `doc/TODO.txt`：历史任务和待办记录。
 
+旧版主页和新版 Vue 前端分别位于同级目录 `FFXIV_Phantoms_MainPage/` 和 `ffxiv_phantoms_mainpage_vue/`，并非本 Maven 项目的子模块。
+
 ## 11. 注意事项
 
 - `.env`、配置文件和数据库备份中可能包含敏感信息，使用和分享项目时应检查是否存在真实密钥、Cookie、Token 或账号信息。
 - 石之家、QQ 机器人和其他第三方接口依赖外部登录状态，相关功能可能因 Cookie、key 过期或第三方接口变化而失效。
+- 当前源码中叨鱼登录状态监控为每 2 小时执行一次；DaoYu key 缓存、房屋通知和新闻相关任务多为每 5 分钟，数据同步为每 10 分钟，健康检查为每 1 分钟。具体以 `@Scheduled` 注解为准，注释中的旧周期可能不准确。
 - 招募抓取等功能可能受到 Cloudflare 或第三方服务访问限制。
 - 邮件发送是否可用取决于部署环境到 SMTP 服务器的网络连通性。
 - 项目中的 `src/archive/` 主要保存历史代码，不应默认视为当前生产逻辑。
