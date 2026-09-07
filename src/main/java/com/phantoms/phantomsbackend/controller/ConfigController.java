@@ -2,6 +2,7 @@ package com.phantoms.phantomsbackend.controller;
 
 import com.phantoms.phantomsbackend.pojo.entity.primary.SystemConfig;
 import com.phantoms.phantomsbackend.service.SystemConfigService;
+import com.phantoms.phantomsbackend.common.config.AdminApiAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +17,18 @@ public class ConfigController {
     @Autowired
     private SystemConfigService systemConfigService;
 
+    @Autowired
+    private AdminApiAccess adminApiAccess;
+
     @GetMapping
-    public ResponseEntity<List<SystemConfig>> getAllConfigs() {
+    public ResponseEntity<?> getAllConfigs(@RequestHeader(value = "X-Admin-Key", required = false) String adminKey) {
+        if (!adminApiAccess.isAllowed(adminKey)) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(systemConfigService.getAllConfigEntities());
     }
 
     @GetMapping("/{key}")
-    public ResponseEntity<SystemConfig> getConfig(@PathVariable String key) {
+    public ResponseEntity<?> getConfig(@PathVariable String key, @RequestHeader(value = "X-Admin-Key", required = false) String adminKey) {
+        if (!adminApiAccess.isAllowed(adminKey)) return ResponseEntity.status(403).build();
         SystemConfig config = systemConfigService.getConfigEntity(key);
         if (config != null) {
             return ResponseEntity.ok(config);
@@ -31,7 +37,8 @@ public class ConfigController {
     }
 
     @PostMapping
-    public ResponseEntity<SystemConfig> createConfig(@RequestBody Map<String, String> body) {
+    public ResponseEntity<?> createConfig(@RequestBody Map<String, String> body, @RequestHeader(value = "X-Admin-Key", required = false) String adminKey) {
+        if (!adminApiAccess.isAllowed(adminKey)) return ResponseEntity.status(403).build();
         String key = body.get("key");
         String value = body.get("value");
         String description = body.get("description");
@@ -55,7 +62,9 @@ public class ConfigController {
     @PutMapping("/{key}")
     public ResponseEntity<SystemConfig> updateConfig(
             @PathVariable String key,
-            @RequestBody Map<String, String> body) {
+            @RequestBody Map<String, String> body,
+            @RequestHeader(value = "X-Admin-Key", required = false) String adminKey) {
+        if (!adminApiAccess.isAllowed(adminKey)) return ResponseEntity.status(403).build();
         String value = body.get("value");
         String description = body.get("description");
 
@@ -73,7 +82,8 @@ public class ConfigController {
     }
 
     @DeleteMapping("/{key}")
-    public ResponseEntity<Void> deleteConfig(@PathVariable String key) {
+    public ResponseEntity<Void> deleteConfig(@PathVariable String key, @RequestHeader(value = "X-Admin-Key", required = false) String adminKey) {
+        if (!adminApiAccess.isAllowed(adminKey)) return ResponseEntity.status(403).build();
         systemConfigService.deleteConfig(key);
         return ResponseEntity.ok().build();
     }

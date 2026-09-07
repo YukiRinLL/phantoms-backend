@@ -3,6 +3,7 @@ package com.phantoms.phantomsbackend.controller;
 import com.phantoms.phantomsbackend.common.bean.ResultInfo;
 import com.phantoms.phantomsbackend.common.utils.EmailUtil;
 import com.phantoms.phantomsbackend.service.EmailService;
+import com.phantoms.phantomsbackend.common.config.AdminApiAccess;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
@@ -24,6 +25,9 @@ public class EmailController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private AdminApiAccess adminApiAccess;
+
     @GetMapping("/send-test-email")
     @Operation(
             summary = "Send test email",
@@ -33,7 +37,9 @@ public class EmailController {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid email address")
             }
     )
-    public ResponseEntity<String> sendEmail(@RequestParam String to) {
+    public ResponseEntity<String> sendEmail(@RequestParam String to,
+                                            @RequestHeader(value = "X-Admin-Key", required = false) String adminKey) {
+        if (!adminApiAccess.isAllowed(adminKey)) return ResponseEntity.status(403).build();
         String subject = "Test Subject";
         Map<String, Object> templateVariables = new HashMap<>();
         templateVariables.put("subject", subject);
@@ -58,9 +64,11 @@ public class EmailController {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Failed to send email")
             }
     )
-    public ResultInfo<String> sendEmailToAllUsers(@RequestBody EmailContent emailContent) {
+    public ResponseEntity<?> sendEmailToAllUsers(@RequestBody EmailContent emailContent,
+                                                 @RequestHeader(value = "X-Admin-Key", required = false) String adminKey) {
+        if (!adminApiAccess.isAllowed(adminKey)) return ResponseEntity.status(403).build();
         emailService.sendEmailToAllUsers(emailContent.getSubject(), emailContent.getText());
-        return ResultInfo.ok("Email sent to all users");
+        return ResponseEntity.ok(ResultInfo.ok("Email sent to all users"));
     }
 
     @Data
@@ -78,10 +86,11 @@ public class EmailController {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid email address")
             }
     )
-    public String newUser(@RequestBody AuthUserEmailDTO authUserEmailDTO) {
+    public ResponseEntity<?> newUser(@RequestBody AuthUserEmailDTO authUserEmailDTO,
+                                     @RequestHeader(value = "X-Admin-Key", required = false) String adminKey) {
+        if (!adminApiAccess.isAllowed(adminKey)) return ResponseEntity.status(403).build();
         emailService.sendAuthUserDetailEmail(authUserEmailDTO.getEmail());
-        System.out.println("Auth user info sent: " + authUserEmailDTO.getEmail());
-        return "Auth user info email sent successfully";
+        return ResponseEntity.ok("Auth user info email sent successfully");
     }
     @Data
     private static class AuthUserEmailDTO{
