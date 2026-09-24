@@ -95,6 +95,9 @@ spring:
       validation-timeout: 5000              # 验证超时（毫秒）
       connection-test-query: SELECT 1       # 连接验证查询
       initialization-fail-timeout: 0        # 初始化失败时不等待
+      startup-retry:                        # 启动期连接失败有界重试（应对冷启动瞬时握手中断）
+        max-attempts: 6                     # 最大尝试次数（含首次），重试耗尽后快速失败
+        interval-ms: 10000                  # 每次重试间隔（毫秒）
 
   jpa:
     properties:

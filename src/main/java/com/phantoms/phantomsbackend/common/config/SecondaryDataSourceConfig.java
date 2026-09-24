@@ -3,6 +3,8 @@ package com.phantoms.phantomsbackend.common.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -38,6 +40,8 @@ import com.phantoms.phantomsbackend.pojo.entity.secondary.UserProfile;
         basePackages = {"com.phantoms.phantomsbackend.repository.secondary"}
 )
 public class SecondaryDataSourceConfig {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecondaryDataSourceConfig.class);
 
     @Value("${spring.datasource.secondary.url}")
     private String secondaryUrl;
@@ -78,6 +82,12 @@ public class SecondaryDataSourceConfig {
     @Value("${spring.datasource.hikari.data-source-properties.prepareThreshold}")
     private int hikariPrepareThreshold;
 
+    @Value("${spring.datasource.hikari.startup-retry.max-attempts:6}")
+    private int startupRetryMaxAttempts;
+
+    @Value("${spring.datasource.hikari.startup-retry.interval-ms:10000}")
+    private long startupRetryIntervalMs;
+
     @Bean(name = "secondaryDataSource")
     public DataSource secondaryDataSource() {
         HikariConfig hikariConfig = new HikariConfig();
@@ -97,7 +107,42 @@ public class SecondaryDataSourceConfig {
         hikariConfig.addDataSourceProperty("preparedStatementCacheSizeMiB", hikariPreparedStatementCacheSizeMiB);
         hikariConfig.addDataSourceProperty("prepareThreshold", hikariPrepareThreshold);
 
-        return new HikariDataSource(hikariConfig);
+        return createDataSourceWithRetry(hikariConfig);
+    }
+
+    /**
+     * 创建 HikariDataSource，启动期连接失败时进行有界重试。
+     * 容器冷启动资源紧张时，首次 TLS 握手可能被对端中断，重试可避免一次瞬断直接终止整个应用；
+     * 重试耗尽后仍按原行为快速失败（抛出最后一次异常，由 Spring 终止启动）。
+     */
+    private HikariDataSource createDataSourceWithRetry(HikariConfig hikariConfig) {
+        int maxAttempts = Math.max(1, startupRetryMaxAttempts);
+        long intervalMs = Math.max(0L, startupRetryIntervalMs);
+        RuntimeException lastFailure = null;
+        for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+            try {
+                HikariDataSource dataSource = new HikariDataSource(hikariConfig);
+                if (attempt > 1) {
+                    LOGGER.info("{} - DataSource initialized successfully on attempt {}/{}",
+                            hikariPoolName, attempt, maxAttempts);
+                }
+                return dataSource;
+            } catch (RuntimeException ex) {
+                lastFailure = ex;
+                if (attempt >= maxAttempts) {
+                    break;
+                }
+                LOGGER.warn("{} - DataSource initialization attempt {}/{} failed, retrying in {} ms: {}",
+                        hikariPoolName, attempt, maxAttempts, intervalMs, ex.getMessage());
+                try {
+                    Thread.sleep(intervalMs);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw ex;
+                }
+            }
+        }
+        throw lastFailure;
     }
 
     @Bean(name = "secondaryEntityManagerFactory")
