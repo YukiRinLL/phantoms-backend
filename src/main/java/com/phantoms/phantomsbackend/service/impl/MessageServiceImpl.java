@@ -28,7 +28,7 @@ public class MessageServiceImpl implements MessageService {
     private UserService userService;
 
     @Override
-    @Transactional("primaryAuthUserRepository")
+    @Transactional("primaryTransactionManager")
     public List<MessageWithUserDTO> getAllMessagesWithUserDetails() {
         List<Message> messages = messageRepository.findAll();
         return messages.stream()

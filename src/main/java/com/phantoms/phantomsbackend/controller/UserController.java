@@ -34,7 +34,7 @@ public class UserController {
 //        return ResponseEntity.ok(userService.createUser(userDTO));
 //    }
 
-    @GetMapping
+    @PostMapping
     @Operation(summary = "Get user by ID", description = "Retrieves a user by their unique ID.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "User retrieved successfully",
