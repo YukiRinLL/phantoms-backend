@@ -14,7 +14,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@Component
+// [已停用 2026-09-30]水晶世界(QQ14)新闻抓取不再使用,恢复时取消注释 @Component
+// @Component
 public class FF14CrystalNewsUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(FF14CrystalNewsUtils.class);

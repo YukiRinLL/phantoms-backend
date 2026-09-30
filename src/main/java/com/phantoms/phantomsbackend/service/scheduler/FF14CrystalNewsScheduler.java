@@ -15,7 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+// [已停用 2026-09-30]水晶世界(QQ14)新闻推送功能不再使用
+// 恢复方式:取消下方 @Component @Scheduled 及 DelayedInitService FF14CrystalNewsUtils 中相关注释即可
+// @Component
 public class FF14CrystalNewsScheduler {
 
     private static final Logger logger = LoggerFactory.getLogger(FF14CrystalNewsScheduler.class);
@@ -76,7 +78,8 @@ public class FF14CrystalNewsScheduler {
         }
     }
 
-    @Scheduled(fixedRate = 5 * 60 * 1000)
+    // [已停用]水晶世界新闻定时推送,恢复时取消注释 @Scheduled
+//    @Scheduled(fixedRate = 5 * 60 * 1000)
     public void fetchAndSendFF14CrystalNews() {
         long start = System.currentTimeMillis();
         logger.info("开始获取FF14水晶世界新闻列表（耗时监控）");

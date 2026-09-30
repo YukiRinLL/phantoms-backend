@@ -1,6 +1,7 @@
 package com.phantoms.phantomsbackend.service;
 
-import com.phantoms.phantomsbackend.service.scheduler.FF14CrystalNewsScheduler;
+// [已停用 2026-09-30]水晶世界(QQ14)新闻功能不再使用,恢复时取消本文件相关注释
+// import com.phantoms.phantomsbackend.service.scheduler.FF14CrystalNewsScheduler;
 import com.phantoms.phantomsbackend.service.scheduler.FF14GlobalNewsScheduler;
 import com.phantoms.phantomsbackend.service.scheduler.FF14NewsScheduler;
 import jakarta.annotation.PostConstruct;
@@ -20,8 +21,9 @@ public class DelayedInitService {
     @Autowired(required = false)
     private FF14NewsScheduler ff14NewsScheduler;
 
-    @Autowired(required = false)
-    private FF14CrystalNewsScheduler ff14CrystalNewsScheduler;
+    // [已停用]水晶世界(QQ14)新闻缓存初始化
+//    @Autowired(required = false)
+//    private FF14CrystalNewsScheduler ff14CrystalNewsScheduler;
 
     @Autowired(required = false)
     private FF14GlobalNewsScheduler ff14GlobalNewsScheduler;
@@ -44,7 +46,8 @@ public class DelayedInitService {
         // 逐个初始化缓存，避免同时加载
         initDaoYuKeyCache();
         initFF14NewsCache();
-        initFF14CrystalNewsCache();
+        // [已停用]水晶世界(QQ14)新闻缓存初始化
+        // initFF14CrystalNewsCache();
         initFF14GlobalNewsCache();
 
         logger.info("延迟初始化缓存完成");
@@ -74,17 +77,18 @@ public class DelayedInitService {
         }
     }
 
-    private void initFF14CrystalNewsCache() {
-        if (ff14CrystalNewsScheduler != null) {
-            try {
-                logger.info("开始初始化FF14水晶世界新闻缓存");
-                ff14CrystalNewsScheduler.initCache();
-                logger.info("FF14水晶世界新闻缓存初始化完成");
-            } catch (Exception e) {
-                logger.error("初始化FF14水晶世界新闻缓存失败", e);
-            }
-        }
-    }
+    // [已停用]水晶世界(QQ14)新闻缓存初始化,恢复时取消整段注释
+//    private void initFF14CrystalNewsCache() {
+//        if (ff14CrystalNewsScheduler != null) {
+//            try {
+//                logger.info("开始初始化FF14水晶世界新闻缓存");
+//                ff14CrystalNewsScheduler.initCache();
+//                logger.info("FF14水晶世界新闻缓存初始化完成");
+//            } catch (Exception e) {
+//                logger.error("初始化FF14水晶世界新闻缓存失败", e);
+//            }
+//        }
+//    }
 
     private void initFF14GlobalNewsCache() {
         if (ff14GlobalNewsScheduler != null) {
