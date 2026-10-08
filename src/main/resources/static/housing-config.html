@@ -721,6 +721,7 @@
         </div>
     </div>
 
+    <script src="admin-auth.js"></script>
     <script>
         const SERVER_NAME_MAP = {
             "1167": "红玉海", "1081": "神意之地", "1042": "拉诺西亚", "1044": "幻影群岛",
@@ -754,7 +755,7 @@
 
         async function loadTargets() {
             try {
-                const response = await fetch('/api/housing/notify/targets');
+                const response = await adminFetch('/api/housing/notify/targets');
                 if (!response.ok) {
                     throw new Error('获取配置失败');
                 }
@@ -949,7 +950,7 @@
                 const url = id ? `/api/housing/notify/targets/${id}` : '/api/housing/notify/targets';
                 const method = id ? 'PUT' : 'POST';
                 
-                const response = await fetch(url, {
+                const response = await adminFetch(url, {
                     method,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
@@ -969,7 +970,7 @@
 
         async function toggleTarget(id, enabled) {
             try {
-                const response = await fetch(`/api/housing/notify/targets/${id}/toggle`, {
+                const response = await adminFetch(`/api/housing/notify/targets/${id}/toggle`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ enabled })
@@ -992,7 +993,7 @@
             }
 
             try {
-                const response = await fetch(`/api/housing/notify/targets/${id}`, {
+                const response = await adminFetch(`/api/housing/notify/targets/${id}`, {
                     method: 'DELETE'
                 });
 
