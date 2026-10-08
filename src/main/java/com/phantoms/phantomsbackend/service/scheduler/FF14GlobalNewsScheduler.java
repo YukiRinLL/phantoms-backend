@@ -186,8 +186,9 @@ public class FF14GlobalNewsScheduler {
                 String title = news.getTitle() != null ? news.getTitle() : "";
                 segments.add(NapCatQQUtil.textSegment("\n" + title + "\n"));
 
-                String description = unescapeHtml(news.getDescription() != null ? news.getDescription() : "");
-                if (!description.isEmpty()) {
+                // 正文为空、纯空白、或与标题相同
+                String description = unescapeHtml(news.getDescription() != null ? news.getDescription() : "").trim();
+                if (!description.isBlank() && !description.equals(title.trim())) {
                     String descImageBase64 = TextImageUtil.renderTextToBase64Png(description, null);
                     if (descImageBase64 != null) {
                         segments.add(NapCatQQUtil.imageSegment(descImageBase64));
