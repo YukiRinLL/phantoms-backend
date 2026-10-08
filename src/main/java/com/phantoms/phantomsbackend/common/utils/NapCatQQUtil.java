@@ -440,6 +440,45 @@ public class NapCatQQUtil {
     }
 
     /**
+     * 发送群聊多段消息（图片/文本混合，所有消息段在同一个消息气泡内）
+     * @param groupId 群号
+     * @param messageList OneBot v11 消息段数组，例如：
+     *                    [{"type":"image","data":{"file":"base64://..."}},
+     *                     {"type":"text","data":{"text":"标题\n"}}]
+     */
+    public String sendGroupMixedMessage(String groupId, List<Map<String, Object>> messageList) throws IOException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("group_id", groupId);
+        params.put("message", messageList);
+        return makeRequest("/send_group_msg", params);
+    }
+
+    /**
+     * 构造文本消息段
+     */
+    public static Map<String, Object> textSegment(String text) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("text", text);
+        Map<String, Object> segment = new HashMap<>();
+        segment.put("type", "text");
+        segment.put("data", data);
+        return segment;
+    }
+
+    /**
+     * 构造图片消息段（file 支持 http(s) URL 或 base64:// 编码）
+     */
+    public static Map<String, Object> imageSegment(String file) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("file", file);
+        data.put("summary", "[图片]");
+        Map<String, Object> segment = new HashMap<>();
+        segment.put("type", "image");
+        segment.put("data", data);
+        return segment;
+    }
+
+    /**
      * 发送群系统表情
      */
     public String sendGroupFace(String groupId, String faceId) throws IOException {
