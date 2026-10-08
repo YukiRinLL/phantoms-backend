@@ -84,6 +84,8 @@ public class ConfigController {
     @DeleteMapping("/{key}")
     public ResponseEntity<Void> deleteConfig(@PathVariable String key, @RequestHeader(value = "X-Admin-Key", required = false) String adminKey) {
         if (!adminApiAccess.isAllowed(adminKey)) return ResponseEntity.status(403).build();
+        // 管理密码配置项不允许删除，避免删除后管理接口全部无法访问；如需更换请直接编辑该项的值
+        if (AdminApiAccess.ADMIN_KEY_CONFIG.equals(key)) return ResponseEntity.badRequest().build();
         systemConfigService.deleteConfig(key);
         return ResponseEntity.ok().build();
     }
