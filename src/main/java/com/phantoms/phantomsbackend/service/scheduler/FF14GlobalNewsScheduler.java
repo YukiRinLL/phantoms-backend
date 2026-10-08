@@ -3,6 +3,7 @@ package com.phantoms.phantomsbackend.service.scheduler;
 import com.phantoms.phantomsbackend.common.utils.FF14GlobalNewsUtils;
 import com.phantoms.phantomsbackend.common.utils.NapCatQQUtil;
 import com.phantoms.phantomsbackend.common.utils.RedisUtil;
+import com.phantoms.phantomsbackend.common.utils.TextImageUtil;
 import com.phantoms.phantomsbackend.service.SystemConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,18 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.imageio.ImageIO;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -197,7 +188,7 @@ public class FF14GlobalNewsScheduler {
 
                 String description = unescapeHtml(news.getDescription() != null ? news.getDescription() : "");
                 if (!description.isEmpty()) {
-                    String descImageBase64 = renderDescriptionImage(description);
+                    String descImageBase64 = TextImageUtil.renderTextToBase64Png(description, null);
                     if (descImageBase64 != null) {
                         segments.add(NapCatQQUtil.imageSegment(descImageBase64));
                     }
@@ -228,91 +219,7 @@ public class FF14GlobalNewsScheduler {
         }
     }
 
-    // ==================== 正文摘要图片渲染 ====================
-
-    private static final int IMAGE_WIDTH = 720;
-    private static final int IMAGE_PADDING = 40;
-    private static final int CONTENT_WIDTH = IMAGE_WIDTH - IMAGE_PADDING * 2;
-    private static final int DESC_FONT_SIZE = 21;
-    private static final int DESC_LINE_HEIGHT = 34;
-
-    /**
-     * 将新闻正文摘要渲染为图片（长度不限，高度自适应），返回 NapCat 可直接发送的 base64 字符串；
-     * 正文为空时返回 null
-     */
-    private String renderDescriptionImage(String description) throws IOException {
-        Font descFont = getFontWithFallback("Noto Sans CJK JP", Font.PLAIN, DESC_FONT_SIZE);
-
-        // 临时画布用于文本测量和换行
-        BufferedImage tmpImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
-        Graphics2D tmpG = tmpImage.createGraphics();
-        tmpG.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        tmpG.setFont(descFont);
-        List<String> lines = wrapText(tmpG.getFontMetrics(), description, CONTENT_WIDTH);
-        tmpG.dispose();
-
-        if (lines.isEmpty()) {
-            return null;
-        }
-
-        int imageHeight = IMAGE_PADDING * 2 + lines.size() * DESC_LINE_HEIGHT;
-
-        BufferedImage image = new BufferedImage(IMAGE_WIDTH, imageHeight, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = image.createGraphics();
-        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-
-        // 背景
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, IMAGE_WIDTH, imageHeight);
-
-        // 正文
-        g.setFont(descFont);
-        g.setColor(new Color(0x33, 0x33, 0x33));
-        int y = IMAGE_PADDING;
-        for (String line : lines) {
-            g.drawString(line, IMAGE_PADDING, y + 22);
-            y += DESC_LINE_HEIGHT;
-        }
-
-        g.dispose();
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "PNG", baos);
-        baos.flush();
-        byte[] imageBytes = baos.toByteArray();
-        baos.close();
-
-        String result = "base64://" + Base64.getEncoder().encodeToString(imageBytes);
-        logger.info("生成FF14国际服新闻正文图片成功，共 {} 行，base64长度: {}", lines.size(), result.length());
-        return result;
-    }
-
-    /**
-     * 按像素宽度逐字符换行（适配日文/中文等无空格文本）
-     */
-    private List<String> wrapText(FontMetrics metrics, String text, int maxWidth) {
-        List<String> lines = new ArrayList<>();
-        for (String paragraph : text.split("\n", -1)) {
-            if (paragraph.isEmpty()) {
-                lines.add("");
-                continue;
-            }
-            StringBuilder line = new StringBuilder();
-            for (int i = 0; i < paragraph.length(); i++) {
-                char c = paragraph.charAt(i);
-                if (line.length() > 0 && metrics.stringWidth(line.toString() + c) > maxWidth) {
-                    lines.add(line.toString());
-                    line.setLength(0);
-                }
-                line.append(c);
-            }
-            if (line.length() > 0) {
-                lines.add(line.toString());
-            }
-        }
-        return lines;
-    }
+    // ==================== 文本清洗 ====================
 
     private String unescapeHtml(String text) {
         return text
@@ -323,34 +230,5 @@ public class FF14GlobalNewsScheduler {
             .replace("&quot;", "\"")
             .replace("&#39;", "'")
             .replace("&apos;", "'");
-    }
-
-    /**
-     * 获取字体并按优先级降级，适配 Alpine（Noto CJK）与 Windows 开发环境
-     */
-    private Font getFontWithFallback(String fontName, int style, int size) {
-        String[] fontPriorities = {
-            fontName,
-            "Noto Sans CJK JP",
-            "Noto Sans CJK SC",
-            "Microsoft YaHei",
-            "Yu Gothic",
-            "MS Gothic",
-            Font.SANS_SERIF
-        };
-
-        for (String currentFontName : fontPriorities) {
-            try {
-                Font font = new Font(currentFontName, style, size);
-                if (font.getFontName() != null && !font.getFontName().equals("Dialog")) {
-                    return font;
-                }
-            } catch (Exception e) {
-                logger.debug("加载字体 {} 失败: {}", currentFontName, e.getMessage());
-            }
-        }
-
-        logger.warn("所有字体加载失败，使用系统默认字体");
-        return new Font(Font.SANS_SERIF, style, size);
     }
 }

@@ -2,6 +2,7 @@ package com.phantoms.phantomsbackend.service.scheduler;
 
 import com.phantoms.phantomsbackend.common.utils.CyouClient;
 import com.phantoms.phantomsbackend.common.utils.RedisUtil;
+import com.phantoms.phantomsbackend.common.utils.TextImageUtil;
 import com.phantoms.phantomsbackend.pojo.entity.HousingSale;
 import com.phantoms.phantomsbackend.service.OneBotService;
 import com.phantoms.phantomsbackend.service.SystemConfigService;
@@ -17,18 +18,15 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
 import java.util.*;
-import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import javax.imageio.ImageIO;
 
 @Component
 public class HousingSaleScheduler {
@@ -819,10 +817,10 @@ public class HousingSaleScheduler {
         int cols = headers.length;
         int rows = houses.size() + 2; // 表头 + 数据 + 标题
         
-        // 设置字体，添加降级机制
-        Font headerFont = getFontWithFallback("Noto Sans CJK SC", Font.BOLD, 14);
-        Font dataFont = getFontWithFallback("Noto Sans CJK SC", Font.PLAIN, 12);
-        Font titleFont = getFontWithFallback("Noto Sans CJK SC", Font.BOLD, 24);
+        // 设置字体，使用公共 CJK 字体降级加载
+        Font headerFont = TextImageUtil.loadCjkFont("Noto Sans CJK SC", Font.BOLD, 14);
+        Font dataFont = TextImageUtil.loadCjkFont("Noto Sans CJK SC", Font.PLAIN, 12);
+        Font titleFont = TextImageUtil.loadCjkFont("Noto Sans CJK SC", Font.BOLD, 24);
         
         // 计算动态列宽
         int[] columnWidths = calculateColumnWidths(houses, headers, headerFont, dataFont);
@@ -955,22 +953,12 @@ public class HousingSaleScheduler {
         
         // 释放资源
         g2d.dispose();
-        
-        // 将图片转换为base64编码
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "PNG", baos);
-        baos.flush();
-        byte[] imageBytes = baos.toByteArray();
-        baos.close();
-        
-        // 使用Base64编码
-        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-        
-        // 添加base64://前缀，符合Napcat的要求
-        String result = "base64://" + base64Image;
-        
+
+        // 编码为 NapCat base64 图片
+        String result = TextImageUtil.toBase64Png(image);
+
         logger.info("生成房屋表格图片base64编码成功，长度: {}", result.length());
-        
+
         return result;
     }
     
@@ -1076,41 +1064,5 @@ public class HousingSaleScheduler {
     public void manualTriggerHousingDataFetch() {
         logger.info("手动触发房屋数据获取");
         fetchAndProcessHousingSales();
-    }
-    
-    /**
-     * 获取字体，添加降级机制
-     * @param fontName 字体名称
-     * @param style 字体样式
-     * @param size 字体大小
-     * @return 字体对象
-     */
-    private Font getFontWithFallback(String fontName, int style, int size) {
-        // 字体优先级列表，适用于 Alpine Linux 环境
-        String[] fontPriorities = {
-            fontName,          // 用户指定的字体
-            "Noto Sans CJK SC",    // 思源黑体（Google开源字体，现代无衬线字体）
-            "WenQuanYi Micro Hei", // 文泉驿微米黑（轻量中文字体）
-            "Droid Sans Fallback", // Android 回退字体
-            Font.SANS_SERIF         // 系统默认无衬线字体
-        };
-        
-        for (String currentFontName : fontPriorities) {
-            try {
-                // 尝试加载当前字体
-                Font font = new Font(currentFontName, style, size);
-                // 检查字体是否成功加载
-                if (font != null && !font.getFontName().equals("Dialog")) {
-                    return font;
-                }
-            } catch (Exception e) {
-                // 捕获字体加载异常，继续尝试下一个字体
-                logger.debug("加载字体 {} 失败: {}", currentFontName, e.getMessage());
-            }
-        }
-        
-        // 如果所有字体都加载失败，使用系统默认字体
-        logger.warn("所有字体加载失败，使用系统默认字体");
-        return new Font(Font.SANS_SERIF, style, size);
     }
 }
