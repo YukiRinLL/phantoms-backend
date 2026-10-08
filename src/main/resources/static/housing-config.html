@@ -854,7 +854,7 @@
                 const createdTime = formatTime(target.createdAt);
                 
                 return `
-                <div class="table-row">
+                <div class="table-row"${target.enabled ? '' : ' style="opacity: 0.55;"'}>
                     <div data-label="ID" style="font-weight: 600; color: var(--text-secondary);">${target.id}</div>
                     <div data-label="名称" title="${target.description || ''}" style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${target.name}</div>
                     <div data-label="服务器">${servers}</div>

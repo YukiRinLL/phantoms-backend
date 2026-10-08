@@ -21,6 +21,12 @@ public interface HousingNotifyTargetRepository extends JpaRepository<HousingNoti
     @Query("SELECT t FROM HousingNotifyTarget t LEFT JOIN FETCH t.servers LEFT JOIN FETCH t.areas LEFT JOIN FETCH t.groups WHERE t.enabled = true")
     List<HousingNotifyTarget> findAllWithBasicDetails();
 
+    @Query("SELECT t FROM HousingNotifyTarget t LEFT JOIN FETCH t.servers LEFT JOIN FETCH t.areas LEFT JOIN FETCH t.groups LEFT JOIN FETCH t.sizes")
+    List<HousingNotifyTarget> findAllAnyWithDetails();
+
+    @Query("SELECT t FROM HousingNotifyTarget t LEFT JOIN FETCH t.servers LEFT JOIN FETCH t.areas LEFT JOIN FETCH t.groups")
+    List<HousingNotifyTarget> findAllAnyWithBasicDetails();
+
     @Query("SELECT t FROM HousingNotifyTarget t LEFT JOIN FETCH t.servers LEFT JOIN FETCH t.areas LEFT JOIN FETCH t.groups LEFT JOIN FETCH t.sizes WHERE t.id = :id")
     Optional<HousingNotifyTarget> findByIdWithDetails(Long id);
 }

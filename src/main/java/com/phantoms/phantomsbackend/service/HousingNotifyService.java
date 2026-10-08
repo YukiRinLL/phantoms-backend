@@ -66,6 +66,32 @@ public class HousingNotifyService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 管理页面使用：直接查库返回全部配置（含已禁用），不走仅含启用项的推送缓存。
+     */
+    @Transactional(readOnly = true)
+    public List<TargetSummary> getAllTargetSummaries() {
+        List<HousingNotifyTarget> all;
+        try {
+            all = targetRepository.findAllAnyWithDetails();
+        } catch (Exception e) {
+            logger.warn("加载全部配置失败，尝试不带 sizes: {}", e.getMessage());
+            all = targetRepository.findAllAnyWithBasicDetails();
+        }
+        return all.stream()
+                .map(this::toSummary)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 管理页面使用：按 ID 查单条配置（含已禁用）。
+     */
+    @Transactional(readOnly = true)
+    public TargetSummary getTargetSummaryById(Long id) {
+        HousingNotifyTarget target = targetRepository.findByIdWithDetails(id).orElse(null);
+        return target != null ? toSummary(target) : null;
+    }
+
     @Transactional(readOnly = true)
     public HousingNotifyTarget getTargetById(Long id) {
         return targetRepository.findByIdWithDetails(id).orElse(null);
@@ -73,7 +99,7 @@ public class HousingNotifyService {
 
     @Transactional(readOnly = true)
     public List<HousingNotifyTarget> getAllTargets() {
-        return targetRepository.findAllEnabledWithDetails();
+        return targetRepository.findAllAnyWithDetails();
     }
 
     @Transactional

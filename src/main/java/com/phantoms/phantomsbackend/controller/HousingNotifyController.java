@@ -17,15 +17,12 @@ public class HousingNotifyController {
 
     @GetMapping("/targets")
     public ResponseEntity<List<HousingNotifyService.TargetSummary>> getAllTargets() {
-        return ResponseEntity.ok(housingNotifyService.getTargetSummaries());
+        return ResponseEntity.ok(housingNotifyService.getAllTargetSummaries());
     }
 
     @GetMapping("/targets/{id}")
     public ResponseEntity<HousingNotifyService.TargetSummary> getTarget(@PathVariable Long id) {
-        HousingNotifyService.TargetSummary summary = housingNotifyService.getTargetSummaries().stream()
-                .filter(t -> t.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        HousingNotifyService.TargetSummary summary = housingNotifyService.getTargetSummaryById(id);
         if (summary != null) {
             return ResponseEntity.ok(summary);
         }
@@ -57,13 +54,10 @@ public class HousingNotifyController {
             sizes = List.of(1, 2); // 默认 M 和 L
         }
 
-        housingNotifyService.createTarget(name, description, servers, areas, groups, sizes);
-        
-        HousingNotifyService.TargetSummary created = housingNotifyService.getTargetSummaries().stream()
-                .filter(t -> t.getName().equals(name))
-                .findFirst()
-                .orElse(null);
-        
+        HousingNotifyService.TargetSummary created =
+                housingNotifyService.getTargetSummaryById(
+                        housingNotifyService.createTarget(name, description, servers, areas, groups, sizes).getId());
+
         return ResponseEntity.ok(created);
     }
 
@@ -91,13 +85,9 @@ public class HousingNotifyController {
             sizes = List.of(1, 2); // 默认 M 和 L
         }
 
-        housingNotifyService.updateTarget(id, name, description, servers, areas, groups, sizes);
-        
-        HousingNotifyService.TargetSummary updated = housingNotifyService.getTargetSummaries().stream()
-                .filter(t -> t.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-        
+        HousingNotifyService.TargetSummary updated = housingNotifyService.getTargetSummaryById(
+                housingNotifyService.updateTarget(id, name, description, servers, areas, groups, sizes).getId());
+
         if (updated != null) {
             return ResponseEntity.ok(updated);
         }
@@ -119,13 +109,9 @@ public class HousingNotifyController {
             return ResponseEntity.badRequest().build();
         }
 
-        housingNotifyService.toggleTarget(id, enabled);
-        
-        HousingNotifyService.TargetSummary updated = housingNotifyService.getTargetSummaries().stream()
-                .filter(t -> t.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-        
+        HousingNotifyService.TargetSummary updated = housingNotifyService.getTargetSummaryById(
+                housingNotifyService.toggleTarget(id, enabled).getId());
+
         if (updated != null) {
             return ResponseEntity.ok(updated);
         }
