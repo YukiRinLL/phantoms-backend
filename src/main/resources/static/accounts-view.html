@@ -766,7 +766,6 @@
         </div>
     </div>
 
-    <script src="admin-auth.js"></script>
     <script>
         let accounts = [];
         let statusTimer = null;
@@ -795,7 +794,7 @@
         async function loadAccounts() {
             showStatus('正在加载账号列表...', 'info');
             try {
-                const response = await adminFetch('/api/ffxiv/signin/accounts');
+                const response = await fetch('/api/ffxiv/signin/accounts');
                 if (!response.ok) {
                     throw new Error('获取账号列表失败');
                 }
@@ -837,7 +836,7 @@
 
             const promises = accounts.filter(function(account) { return account.enabled; }).map(async function(account) {
                 try {
-                    const response = await adminFetch('/api/ffxiv/signin/accounts/' + account.accountId + '/user-info');
+                    const response = await fetch('/api/ffxiv/signin/accounts/' + account.accountId + '/user-info');
                     const data = await response.json();
 
                     if (data.success && data.data) {
@@ -1087,7 +1086,7 @@
             renderCharacterDetail(account, true);
 
             try {
-                const response = await adminFetch('/api/ffxiv/signin/accounts/' + accountId + '/user-info');
+                const response = await fetch('/api/ffxiv/signin/accounts/' + accountId + '/user-info');
                 const result = await response.json();
 
                 if (result.success && result.data) {

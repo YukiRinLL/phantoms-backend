@@ -11,18 +11,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
-    private AdminKeyInterceptor adminKeyInterceptor;
+    private AdminApiAccess adminApiAccess;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 房屋监控配置与账号管理接口需要管理员密码
-        registry.addInterceptor(adminKeyInterceptor)
-                .addPathPatterns(
-                        "/api/housing/notify/**",
-                        "/api/ffxiv/signin/accounts/**",
-                        "/api/ffxiv/signin/manual-signin/**",
-                        "/api/ffxiv/signin/manual-claim-rewards/**"
-                );
+        // 房屋监控配置：所有读写操作都需要管理员密码
+        registry.addInterceptor(new AdminKeyInterceptor(adminApiAccess, false))
+                .addPathPatterns("/api/housing/notify/**");
+
+        // 账号管理：列表/详情等只读操作公开，修改/删除/启停/设默认等写操作需要管理员密码
+        registry.addInterceptor(new AdminKeyInterceptor(adminApiAccess, true))
+                .addPathPatterns("/api/ffxiv/signin/accounts/**");
     }
 
     @Override
