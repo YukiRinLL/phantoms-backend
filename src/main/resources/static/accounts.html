@@ -1002,6 +1002,7 @@
         </div>
     </div>
 
+    <script src="loading.js"></script>
     <script src="admin-auth.js"></script>
     <script>
         let currentAccounts = [];
@@ -1025,9 +1026,9 @@
             }, 2800);
         }
 
-        async function loadAccounts(showLoading) {
-            if (showLoading !== false) {
-                showStatus('正在加载账号列表...', 'info');
+        async function loadAccounts(useOverlay) {
+            if (useOverlay !== false) {
+                showLoading('正在加载账号列表...', '首次唤醒服务时可能需要等待 1 分钟左右，请耐心等待');
             }
             try {
                 const response = await fetch('/api/ffxiv/signin/accounts');
@@ -1048,9 +1049,13 @@
                         '<div class="empty-state"><h3>加载失败</h3><p>请稍后重试</p></div>';
                 }
             } catch (error) {
-                showStatus('加载失败: ' + error.message, 'error');
+                showStatus('加载失败: ' + friendlyNetworkError(error), 'error');
                 document.getElementById('accountsGrid').innerHTML =
-                    '<div class="empty-state"><h3>加载失败</h3><p>请检查网络连接</p></div>';
+                    '<div class="empty-state"><h3>加载失败</h3><p>网络异常或服务正在唤醒，请稍后点击“检查登录状态”重试</p></div>';
+            } finally {
+                if (useOverlay !== false) {
+                    hideLoading();
+                }
             }
         }
 
@@ -1070,7 +1075,11 @@
                 account.loginError = false;
             });
 
-            const promises = currentAccounts.filter(account => account.enabled).map(async (account) => {
+            const enabledAccounts = currentAccounts.filter(account => account.enabled);
+            let finished = 0;
+            const total = enabledAccounts.length;
+
+            const promises = enabledAccounts.map(async (account) => {
                 try {
                     const response = await fetch('/api/ffxiv/signin/accounts/' + account.accountId + '/user-info');
                     const data = await response.json();
@@ -1118,6 +1127,11 @@
                     }
                 } catch (error) {
                     console.log('Failed to load details for account ' + account.accountId + ':', error);
+                } finally {
+                    finished++;
+                    if (total > 0) {
+                        updateLoading('正在获取角色信息（' + finished + '/' + total + '）...');
+                    }
                 }
             });
 
@@ -1354,6 +1368,7 @@
             const enabled = document.getElementById('editEnabled').value === 'true';
 
             try {
+                showLoading('正在保存账号信息...');
                 const response = await adminFetch('/api/ffxiv/signin/accounts/' + accountId, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
@@ -1369,7 +1384,9 @@
                     showStatus('更新失败: ' + result.message, 'error');
                 }
             } catch (error) {
-                showStatus('更新失败: ' + error.message, 'error');
+                showStatus('更新失败: ' + friendlyNetworkError(error), 'error');
+            } finally {
+                hideLoading();
             }
         }
 
@@ -1388,6 +1405,7 @@
             if (!deleteAccountId) return;
 
             try {
+                showLoading('正在删除账号...');
                 const response = await adminFetch('/api/ffxiv/signin/accounts/' + deleteAccountId, {
                     method: 'DELETE'
                 });
@@ -1401,12 +1419,15 @@
                     showStatus('删除失败: ' + result.message, 'error');
                 }
             } catch (error) {
-                showStatus('删除失败: ' + error.message, 'error');
+                showStatus('删除失败: ' + friendlyNetworkError(error), 'error');
+            } finally {
+                hideLoading();
             }
         }
 
         async function toggleAccountStatus(accountId, enabled) {
             try {
+                showLoading(enabled ? '正在启用账号...' : '正在停用账号...');
                 const response = await adminFetch('/api/ffxiv/signin/accounts/' + accountId + '/toggle', {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
@@ -1421,7 +1442,9 @@
                     showStatus('操作失败: ' + result.message, 'error');
                 }
             } catch (error) {
-                showStatus('操作失败: ' + error.message, 'error');
+                showStatus('操作失败: ' + friendlyNetworkError(error), 'error');
+            } finally {
+                hideLoading();
             }
         }
 
@@ -1429,9 +1452,9 @@
             const account = currentAccounts.find(function(a) { return a.accountId === accountId; });
             if (!account) return;
 
-            showStatus('正在为 ' + (account.nickname || account.accountId) + ' 执行签到...', 'info');
-
             try {
+                showLoading('正在为 ' + (account.nickname || account.accountId) + ' 执行签到...',
+                    '通常需要 10-60 秒，请耐心等待，不要重复点击');
                 const response = await fetch('/api/ffxiv/signin/manual-signin/' + accountId, {
                     method: 'POST'
                 });
@@ -1443,7 +1466,9 @@
                     showStatus((account.nickname || account.accountId) + ' 签到失败: ' + result.message, 'error');
                 }
             } catch (error) {
-                showStatus((account.nickname || account.accountId) + ' 签到失败: ' + error.message, 'error');
+                showStatus((account.nickname || account.accountId) + ' 签到失败: ' + friendlyNetworkError(error), 'error');
+            } finally {
+                hideLoading();
             }
         }
 
@@ -1451,9 +1476,9 @@
             const account = currentAccounts.find(function(a) { return a.accountId === accountId; });
             if (!account) return;
 
-            showStatus('正在为 ' + (account.nickname || account.accountId) + ' 领取奖励...', 'info');
-
             try {
+                showLoading('正在为 ' + (account.nickname || account.accountId) + ' 领取奖励...',
+                    '通常需要 10-60 秒，请耐心等待，不要重复点击');
                 const response = await fetch('/api/ffxiv/signin/manual-claim-rewards/' + accountId, {
                     method: 'POST'
                 });
@@ -1465,15 +1490,18 @@
                     showStatus((account.nickname || account.accountId) + ' 奖励领取失败: ' + result.message, 'error');
                 }
             } catch (error) {
-                showStatus((account.nickname || account.accountId) + ' 奖励领取失败: ' + error.message, 'error');
+                showStatus((account.nickname || account.accountId) + ' 奖励领取失败: ' + friendlyNetworkError(error), 'error');
+            } finally {
+                hideLoading();
             }
         }
 
         async function manualSignInAll() {
             const enabledCount = currentAccounts.filter(function(a) { return a.enabled; }).length;
-            showStatus('正在执行全部签到，请稍候（共 ' + enabledCount + ' 个账号）...', 'info');
 
             try {
+                showLoading('正在执行全部签到（共 ' + enabledCount + ' 个账号）...',
+                    '账号较多时可能需要数分钟，请耐心等待，不要关闭或刷新页面');
                 const response = await fetch('/api/ffxiv/signin/manual-signin', {
                     method: 'POST'
                 });
@@ -1485,15 +1513,18 @@
                     showStatus('全部签到失败: ' + result.message, 'error');
                 }
             } catch (error) {
-                showStatus('全部签到失败: ' + error.message, 'error');
+                showStatus('全部签到失败: ' + friendlyNetworkError(error), 'error');
+            } finally {
+                hideLoading();
             }
         }
 
         async function manualClaimRewards() {
             const enabledCount = currentAccounts.filter(function(a) { return a.enabled; }).length;
-            showStatus('正在领取奖励，请稍候（共 ' + enabledCount + ' 个账号）...', 'info');
 
             try {
+                showLoading('正在领取全部奖励（共 ' + enabledCount + ' 个账号）...',
+                    '账号较多时可能需要数分钟，请耐心等待，不要关闭或刷新页面');
                 const response = await fetch('/api/ffxiv/signin/manual-claim-rewards', {
                     method: 'POST'
                 });
@@ -1505,19 +1536,25 @@
                     showStatus('奖励领取失败: ' + result.message, 'error');
                 }
             } catch (error) {
-                showStatus('奖励领取失败: ' + error.message, 'error');
+                showStatus('奖励领取失败: ' + friendlyNetworkError(error), 'error');
+            } finally {
+                hideLoading();
             }
         }
 
         async function checkAllLoginStatus() {
-            showStatus('正在检查登录状态，请稍候...', 'info');
-            await loadAccounts(false);
-            showStatus('登录状态检查完成', 'success');
+            try {
+                showLoading('正在检查登录状态...', '需要逐个请求游戏接口，账号较多时请耐心等待');
+                await loadAccounts(false);
+                showStatus('登录状态检查完成', 'success');
+            } finally {
+                hideLoading();
+            }
         }
 
         async function setDefaultApiAccount(accountId) {
             try {
-                showStatus('正在设置默认API账号...', 'info');
+                showLoading('正在设置默认API账号...');
                 const response = await adminFetch('/api/ffxiv/signin/accounts/' + accountId + '/set-default-api', {
                     method: 'POST'
                 });
@@ -1530,12 +1567,13 @@
                     showStatus('设置失败: ' + result.message, 'error');
                 }
             } catch (error) {
-                showStatus('设置失败: ' + error.message, 'error');
+                showStatus('设置失败: ' + friendlyNetworkError(error), 'error');
+            } finally {
+                hideLoading();
             }
         }
 
         async function openCharacterDetail(accountId) {
-            showStatus('正在加载角色详情...', 'info');
             const account = currentAccounts.find(function(a) { return a.accountId === accountId; });
             if (!account) {
                 showStatus('未找到该账号信息', 'error');
@@ -1546,6 +1584,7 @@
             renderCharacterDetail(account, true);
 
             try {
+                showLoading('正在加载角色详情...');
                 const response = await fetch('/api/ffxiv/signin/accounts/' + accountId + '/user-info');
                 const result = await response.json();
 
@@ -1591,7 +1630,9 @@
                     showStatus('获取角色详情失败: ' + (result.message || '未知错误'), 'error');
                 }
             } catch (error) {
-                showStatus('获取角色详情失败: ' + error.message, 'error');
+                showStatus('获取角色详情失败: ' + friendlyNetworkError(error), 'error');
+            } finally {
+                hideLoading();
             }
         }
 

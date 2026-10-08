@@ -721,6 +721,7 @@
         </div>
     </div>
 
+    <script src="loading.js"></script>
     <script src="admin-auth.js"></script>
     <script>
         const SERVER_NAME_MAP = {
@@ -755,6 +756,7 @@
 
         async function loadTargets() {
             try {
+                showLoading('正在加载房屋监控配置...', '首次唤醒服务时可能需要等待 1 分钟左右，请耐心等待');
                 const response = await adminFetch('/api/housing/notify/targets');
                 if (!response.ok) {
                     throw new Error('获取配置失败');
@@ -762,9 +764,11 @@
                 targets = await response.json();
                 renderTable();
             } catch (error) {
-                showStatus('加载失败: ' + error.message, 'error');
-                document.getElementById('targetTable').innerHTML = 
-                    '<div class="table-row"><div style="grid-column: 1 / -1; text-align: center; padding: 40px;">加载失败，请检查网络连接</div></div>';
+                showStatus('加载失败: ' + friendlyNetworkError(error), 'error');
+                document.getElementById('targetTable').innerHTML =
+                    '<div class="table-row"><div style="grid-column: 1 / -1; text-align: center; padding: 40px;">网络异常或服务正在唤醒，请稍后刷新重试</div></div>';
+            } finally {
+                hideLoading();
             }
         }
 
@@ -947,9 +951,10 @@
             const data = { name, description, servers, areas, groups, sizes };
             
             try {
+                showLoading(id ? '正在更新配置...' : '正在创建配置...');
                 const url = id ? `/api/housing/notify/targets/${id}` : '/api/housing/notify/targets';
                 const method = id ? 'PUT' : 'POST';
-                
+
                 const response = await adminFetch(url, {
                     method,
                     headers: { 'Content-Type': 'application/json' },
@@ -964,12 +969,15 @@
                 closeModal();
                 loadTargets();
             } catch (error) {
-                showStatus('操作失败: ' + error.message, 'error');
+                showStatus('操作失败: ' + friendlyNetworkError(error), 'error');
+            } finally {
+                hideLoading();
             }
         }
 
         async function toggleTarget(id, enabled) {
             try {
+                showLoading(enabled ? '正在启用配置...' : '正在停用配置...');
                 const response = await adminFetch(`/api/housing/notify/targets/${id}/toggle`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
@@ -983,7 +991,9 @@
                 showStatus(enabled ? '配置已启用' : '配置已禁用', 'success');
                 loadTargets();
             } catch (error) {
-                showStatus('操作失败: ' + error.message, 'error');
+                showStatus('操作失败: ' + friendlyNetworkError(error), 'error');
+            } finally {
+                hideLoading();
             }
         }
 
@@ -993,6 +1003,7 @@
             }
 
             try {
+                showLoading('正在删除配置...');
                 const response = await adminFetch(`/api/housing/notify/targets/${id}`, {
                     method: 'DELETE'
                 });
@@ -1004,7 +1015,9 @@
                 showStatus('配置删除成功', 'success');
                 loadTargets();
             } catch (error) {
-                showStatus('删除失败: ' + error.message, 'error');
+                showStatus('删除失败: ' + friendlyNetworkError(error), 'error');
+            } finally {
+                hideLoading();
             }
         }
 
