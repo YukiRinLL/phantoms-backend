@@ -191,7 +191,7 @@ shiro:
 
 #NapCatQQUtil
 napcat:
-  http-server-url: ${NAPCAT_HTTP_SERVER_URL:https://napcat-phantoms-server.zeabur.app}
+  http-server-url: ${NAPCAT_HTTP_SERVER_URL:http://163.47.134.172:3100}
   access-token: ${NAPCAT_ACCESS_TOKEN:7saligia}
 
 xivapi:
